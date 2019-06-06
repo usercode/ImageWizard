@@ -36,6 +36,10 @@ namespace ImageWizard.Filters
                 {
                     parameterValues.Add(int.Parse(value));
                 }
+                else if(pi.ParameterType.IsEnum)
+                {
+                    parameterValues.Add(Enum.Parse(pi.ParameterType, value, true));
+                }
             }
 
             parameterValues.Add(filterContext);

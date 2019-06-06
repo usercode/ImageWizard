@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using ImageWizard.AspNetCore.Services;
 using Microsoft.Extensions.Options;
+using ImageWizard.SharedContract.FilterTypes;
 
 namespace ImageWizard.AspNetCore.Builder
 {
@@ -52,6 +53,62 @@ namespace ImageWizard.AspNetCore.Builder
         public ImageUrlBuilder Grayscale()
         {
             _filter.Add($"grayscale()");
+
+            return this;
+        }
+
+        public ImageUrlBuilder BlackWhite()
+        {
+            _filter.Add($"blackwhite()");
+
+            return this;
+        }
+
+        public ImageUrlBuilder Rotate(RotationMode mode)
+        {
+            _filter.Add($"rotate({(int)mode})");
+
+            return this;
+        }
+
+        public ImageUrlBuilder Flp(FlippingMode flippingMode)
+        {
+            _filter.Add($"flip({flippingMode.ToString().ToLower()})");
+
+            return this;
+        }
+
+        public ImageUrlBuilder Jpg()
+        {
+            _filter.Add("jpg()");
+
+            return this;
+        }
+
+        public ImageUrlBuilder Jpg(int quality)
+        {
+            _filter.Add($"jpg({quality})");
+
+            return this;
+        }
+
+        public ImageUrlBuilder Png()
+        {
+            _filter.Add("png()");
+
+            return this;
+        }
+
+        public ImageUrlBuilder Gif()
+        {
+            _filter.Add("gif()");
+
+            return this;
+        }
+
+        public ImageUrlBuilder Bmp()
+        {
+            _filter.Add("bmp()");
 
             return this;
         }

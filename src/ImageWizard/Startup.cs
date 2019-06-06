@@ -36,7 +36,10 @@ namespace ImageWizard
             filterManager.Register<ResizeFilter>();
             filterManager.Register<CropFilter>();
             filterManager.Register<GrayscaleFilter>();
+            filterManager.Register<BlackWhiteFilter>();
             filterManager.Register<TrimFilter>();
+            filterManager.Register<FlipFilter>();
+            filterManager.Register<RotateFilter>();
 
             //formats
             filterManager.Register<JpgFilter>();

@@ -19,6 +19,7 @@ using System.Net;
 using ImageWizard.Services.Types;
 using ImageWizard.ImageFormats;
 using ImageWizard.Filters.ImageFormats;
+using ImageWizard.SharedContract;
 
 namespace ImageWizard.Controllers
 {
@@ -161,7 +162,7 @@ namespace ImageWizard.Controllers
             byte[] buf = new byte[64];
             random.NextBytes(buf);
 
-            return Ok(CryptoService.ToBase64Url(buf));
+            return Ok(Base64Url.ToBase64Url(buf));
         }
     }
 }

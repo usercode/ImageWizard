@@ -52,6 +52,14 @@ namespace ImageWizard.Filters
                     {
                         builder.Append($@"""(?<{parameters[i].Name}>\w+)""");
                     }
+                    else if(parameters[i].ParameterType.IsEnum)
+                    {
+                        string[] enumValues = Enum.GetNames(parameters[i].ParameterType)
+                                                    .Select(x=> x.ToLower())
+                                                    .ToArray();
+
+                        builder.Append($"(?<{parameters[i].Name}>{string.Join('|', enumValues)})");
+                    }
                     else
                     {
                         throw new Exception();

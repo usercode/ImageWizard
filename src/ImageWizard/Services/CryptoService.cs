@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using ImageWizard.Settings;
+using ImageWizard.SharedContract;
 
 namespace ImageWizard.Services
 {
@@ -16,7 +17,7 @@ namespace ImageWizard.Services
     {
         public CryptoService(IOptions<ServiceSettings> options)
         {
-            Key = FromBase64Url(options.Value.Key);
+            Key = Base64Url.FromBase64Url(options.Value.Key);
         }
 
         /// <summary>
@@ -36,36 +37,9 @@ namespace ImageWizard.Services
             HMACSHA1 h = new HMACSHA1(Key);
             byte[] buf = h.ComputeHash(buffer);
 
-            return ToBase64Url(buf);
+            return Base64Url.ToBase64Url(buf);
 
             //return buf.Select(x => x.ToString("x2")).Aggregate(string.Empty, (a, b) => a += b);
-        }
-
-        /// <summary>
-        /// FromBase64Url
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public byte[] FromBase64Url(string value)
-        {
-            return Convert.FromBase64String(
-                                            value
-                                                .Replace('-', '+')
-                                                .Replace('_', '/')
-                );
-        }
-
-        /// <summary>
-        /// ToBase64Url
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public string ToBase64Url(byte[] data)
-        {
-            return Convert.ToBase64String(data)
-                                .Replace('+', '-')
-                                .Replace('/', '_')
-                                .Substring(0, 27); //remove padding '='
         }
     }
 }

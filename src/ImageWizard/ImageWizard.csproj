@@ -18,4 +18,8 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ImageWizard.SharedContract\ImageWizard.SharedContract.csproj" />
+  </ItemGroup>
+
 </Project>

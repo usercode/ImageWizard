@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using ImageWizard.SharedContract;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace ImageWizard.AspNetCore.Services
     {
         public CryptoService(IOptions<ImageWizardSettings> settings)
         {
-            Key = FromBase64Url(settings.Value.Key);
+            Key = Base64Url.FromBase64Url(settings.Value.Key);
         }
 
         /// <summary>
@@ -35,34 +36,7 @@ namespace ImageWizard.AspNetCore.Services
             HMACSHA1 h = new HMACSHA1(Key);
             byte[] buf = h.ComputeHash(buffer);
 
-            return ToBase64Url(buf);
-        }
-
-        /// <summary>
-        /// FromBase64Url
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public byte[] FromBase64Url(string value)
-        {
-            return Convert.FromBase64String(
-                                            value
-                                                .Replace('-', '+')
-                                                .Replace('_', '/')
-                );
-        }
-
-        /// <summary>
-        /// ToBase64Url
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public string ToBase64Url(byte[] data)
-        {
-            return Convert.ToBase64String(data)
-                                .Replace('+', '-')
-                                .Replace('/', '_')
-                                .Substring(0, 27);
+            return Base64Url.ToBase64Url(buf);
         }
     }
 }

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard", "ImageWizard\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.AspNetCore", "ImageWizard.AspNetCore\ImageWizard.AspNetCore.csproj", "{76E785D3-E3C4-4AED-AF68-0D32881D6362}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.SharedContract", "ImageWizard.SharedContract\ImageWizard.SharedContract.csproj", "{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{76E785D3-E3C4-4AED-AF68-0D32881D6362}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76E785D3-E3C4-4AED-AF68-0D32881D6362}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76E785D3-E3C4-4AED-AF68-0D32881D6362}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
