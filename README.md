@@ -13,6 +13,7 @@ Url parts:
 
 ## Available image filters
 
+- resize(size)
 - resize(width,height)
 - crop(x,y,width,height)
 - grayscale()
@@ -25,3 +26,17 @@ Url parts:
 - png()
 - gif()
 - bmp()
+
+## ASP.NET Core UrlBuilder
+
+https://www.nuget.org/packages/ImageWizard.AspNetCore/
+
+Example:
+```csharp
+@Html
+.ImageWizard(Url.RouteUrl("MyImage", new { mediaUrl = Model.MediaUrl }, Context.Request.Scheme))
+.Trim()
+.Resize(160,140)
+.Jpg(90)
+.BuildUrl()
+```
