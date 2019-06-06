@@ -17,7 +17,11 @@ Url parts:
 - resize(width,height)
 - crop(x,y,width,height)
 - grayscale()
+- blackwhite()
 - trim()
+- flip(horizontal)
+- flip(vertical)
+- rotate(value) //0 or 90 or 180 or 270
 
 ## Output formats
 
