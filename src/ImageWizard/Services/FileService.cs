@@ -1,4 +1,5 @@
-﻿using ImageWizard.Services.Types;
+﻿using ImageWizard.ImageFormats;
+using ImageWizard.Services.Types;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using System;
@@ -38,7 +39,7 @@ namespace ImageWizard.Services
             FileInfo fileInfo = new FileInfo(baseFilePath);
             FileInfo fileMetadata = new FileInfo(baseFilePath + ".json");
 
-            if (fileInfo.Exists == true)
+            if (fileInfo.Exists && fileMetadata.Exists)
             {
                 CachedImage cachedImage = new CachedImage();
                 cachedImage.Metadata = JsonConvert.DeserializeObject<ImageMetadata>(File.ReadAllText(fileMetadata.FullName, Encoding.UTF8));
@@ -52,7 +53,7 @@ namespace ImageWizard.Services
             }
         }
 
-        public async Task<CachedImage> SaveImage(string secretKey, OriginalImage originalImage, byte[] transformedImageData)
+        public async Task<CachedImage> SaveImageAsync(string secretKey, OriginalImage originalImage, IImageFormat imageFormat, byte[] transformedImageData)
         {
             string[] parts = SplitSecret(secretKey);
 
@@ -65,7 +66,7 @@ namespace ImageWizard.Services
 
             //create metadata file
             ImageMetadata imageMetadata = new ImageMetadata();
-            imageMetadata.MimeType = originalImage.MimeType;
+            imageMetadata.MimeType = imageFormat.MimeType;
             imageMetadata.Url = originalImage.Url;
             imageMetadata.SecretKey = secretKey;
 

@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageWizard.ImageFormats;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,10 @@ namespace ImageWizard.Filters
         /// Image
         /// </summary>
         public Image<Rgba32> Image { get; }
+
+        /// <summary>
+        /// ImageFormat
+        /// </summary>
+        public IImageFormat ImageFormat { get; set; }
     }
 }

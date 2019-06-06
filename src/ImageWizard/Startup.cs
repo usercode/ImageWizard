@@ -14,6 +14,7 @@ using ImageWizard.Filters;
 using ImageWizard.Helpers;
 using ImageWizard.Services;
 using ImageWizard.Settings;
+using ImageWizard.Filters.ImageFormats;
 
 namespace ImageWizard
 {
@@ -36,6 +37,12 @@ namespace ImageWizard
             filterManager.Register<CropFilter>();
             filterManager.Register<GrayscaleFilter>();
             filterManager.Register<TrimFilter>();
+
+            //formats
+            filterManager.Register<JpgFilter>();
+            filterManager.Register<PngFilter>();
+            filterManager.Register<GifFilter>();
+            filterManager.Register<BmpFilter>();
 
             services.AddSingleton(filterManager);
             services.AddHttpClient<ImageService>();

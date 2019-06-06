@@ -17,6 +17,8 @@ using ImageWizard.Services;
 using ImageWizard.Settings;
 using System.Net;
 using ImageWizard.Services.Types;
+using ImageWizard.ImageFormats;
+using ImageWizard.Filters.ImageFormats;
 
 namespace ImageWizard.Controllers
 {
@@ -56,18 +58,25 @@ namespace ImageWizard.Controllers
         /// </summary>
         private FileService FileService { get; }
 
-        // GET api/values
+        [HttpGet("favicon.ico")]
+        public IActionResult Favicon()
+        {
+            return NotFound();
+        }
+
         [HttpGet("{secretKeyByRequest}/{*path}")]
         [ResponseCache(Duration = 60 * 60 * 24 * 7)]
         public async Task<IActionResult> Get(string secretKeyByRequest, string path)
         {
             string secretKey = CryptoService.Encrypt(path);
 
+#if DEBUG == false
             //check secret
             if(secretKey != secretKeyByRequest)
             {
                 return StatusCode((int)HttpStatusCode.Forbidden);
             }
+#endif
 
             //try to get cached image
             CachedImage cachedImage = await FileService.GetImageAsync(secretKey);
@@ -88,9 +97,11 @@ namespace ImageWizard.Controllers
 
                 //download image
                 OriginalImage originalImage = await ImageDownloader.DownloadAsync(imageUrl);
+                
+                IImageFormat targetFormat = ImageFormatHelper.Parse(originalImage.MimeType);
 
                 //skip svg
-                if (originalImage.MimeType == "image/svg+xml")
+                if (targetFormat is SvgFormat)
                 {
                     transformedImageData = originalImage.Data;
                 }
@@ -100,6 +111,7 @@ namespace ImageWizard.Controllers
                     using (Image<Rgba32> image = Image.Load(originalImage.Data))
                     {
                         FilterContext filterContext = new FilterContext(image);
+                        filterContext.ImageFormat = targetFormat;
 
                         string filters = path.Substring(0, pos);
                         string[] segments = filters.Split("/", StringSplitOptions.RemoveEmptyEntries);
@@ -125,13 +137,18 @@ namespace ImageWizard.Controllers
                         }
 
                         MemoryStream mem = new MemoryStream();
-                        filterContext.Image.SaveAsJpeg(mem);
+
+                        //generate image
+                        filterContext.ImageFormat.SaveImage(image, mem);
 
                         transformedImageData = mem.ToArray();
+
+                        //target format is changed by user
+                        targetFormat = filterContext.ImageFormat;
                     }
                 }
 
-                cachedImage = await FileService.SaveImage(secretKey, originalImage, transformedImageData);
+                cachedImage = await FileService.SaveImageAsync(secretKey, originalImage, targetFormat, transformedImageData);
             }
 
             return File(cachedImage.Data, cachedImage.Metadata.MimeType);
