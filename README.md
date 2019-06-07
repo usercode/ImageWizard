@@ -21,7 +21,7 @@ Url parts:
 - trim()
 - flip(horizontal)
 - flip(vertical)
-- rotate(value) //0 or 90 or 180 or 270
+- rotate(value) //90, 180 or 270
 
 ## Output formats
 
@@ -43,4 +43,13 @@ Example:
 .Resize(160,140)
 .Jpg(90)
 .BuildUrl()
+```
+appsettings.json
+
+```json
+ "ImageWizard": {
+    "BaseUrl": "https://<your-domain>",
+    "Key": "34059567439574395435435567533453453523456756756735453890509==",
+    "Enabled": true
+  }
 ```
