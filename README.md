@@ -39,7 +39,7 @@ https://www.nuget.org/packages/ImageWizard.AspNetCore/
 
 Example:
 ```csharp
-@Html
+@Url
 .ImageWizard(Url.RouteUrl("MyImage", new { mediaUrl = Model.MediaUrl }, Context.Request.Scheme))
 .Trim()
 .Resize(160,140)
