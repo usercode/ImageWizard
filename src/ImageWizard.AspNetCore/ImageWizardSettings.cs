@@ -8,10 +8,13 @@ namespace ImageWizard.AspNetCore
     {
         public ImageWizardSettings()
         {
+            Enabled = true;
         }
 
         public string BaseUrl { get; set; }
 
         public string Key { get; set; }
+
+        public bool Enabled { get; set; }
     }
 }

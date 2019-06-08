@@ -14,9 +14,12 @@ namespace ImageWizard.AspNetCore.Services
     /// </summary>
     public class CryptoService
     {
-        public CryptoService(IOptions<ImageWizardSettings> settings)
+        public CryptoService(ImageWizardSettings settings)
         {
-            Key = Base64Url.FromBase64Url(settings.Value.Key);
+            if (settings.Enabled == true)
+            {
+                Key = Base64Url.FromBase64Url(settings.Key);
+            }
         }
 
         /// <summary>
@@ -31,6 +34,11 @@ namespace ImageWizard.AspNetCore.Services
         /// <returns></returns>
         public string Encrypt(string data)
         {
+            if(Key == null)
+            {
+                throw new Exception("No key available!");
+            }
+
             byte[] buffer = Encoding.Unicode.GetBytes(data);
 
             HMACSHA1 h = new HMACSHA1(Key);

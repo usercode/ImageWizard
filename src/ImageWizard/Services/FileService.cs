@@ -24,10 +24,12 @@ namespace ImageWizard.Services
 
         private string[] SplitSecret(string secret)
         {
-            string part1 = secret.Substring(0, 2);
-            string part2 = secret.Substring(2, 2);
+            string part1 = secret.Substring(0, 1);
+            string part2 = secret.Substring(1, 1);
+            string part3 = secret.Substring(2, 1);
+            string part4 = secret.Substring(3, 1);
 
-            return new[] { part1, part2 };
+            return new[] { part1, part2, part3, part4 };
         }
 
         public async Task<CachedImage> GetImageAsync(string secretKey)

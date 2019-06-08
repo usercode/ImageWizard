@@ -59,6 +59,12 @@ namespace ImageWizard.Controllers
         /// </summary>
         private FileService FileService { get; }
 
+        [HttpGet("/")]
+        public IActionResult Home()
+        {
+            return Ok("ImageWizard is started.");
+        }
+
         [HttpGet("favicon.ico")]
         public IActionResult Favicon()
         {
@@ -87,6 +93,11 @@ namespace ImageWizard.Controllers
             {
                 //find url
                 int pos = path.IndexOf("https://");
+
+                if(pos == -1)
+                {
+                    pos = path.IndexOf("http://");
+                }
 
                 if (pos == -1)
                 {

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ImageWizard.AspNetCore.Services;
 using Microsoft.Extensions.Options;
 using ImageWizard.SharedContract.FilterTypes;
+using System.Diagnostics;
 
 namespace ImageWizard.AspNetCore.Builder
 {
@@ -16,15 +17,16 @@ namespace ImageWizard.AspNetCore.Builder
         private CryptoService CryptoService { get; }
         private ImageWizardSettings Settings { get; }
 
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; }
 
         private List<string> _filter;
 
-        public ImageUrlBuilder(CryptoService cryptoService, IOptions<ImageWizardSettings> settings)
+        public ImageUrlBuilder(string imageUrl, ImageWizardSettings settings)
         {
-            CryptoService = cryptoService;
+            CryptoService = new CryptoService(settings);
 
-            Settings = settings.Value;
+            ImageUrl = imageUrl;
+            Settings = settings;
 
             _filter = new List<string>();
         }
@@ -115,9 +117,14 @@ namespace ImageWizard.AspNetCore.Builder
 
         public HtmlString BuildUrl()
         {
+            if (Settings.Enabled == false)
+            {
+                return new HtmlString(ImageUrl);
+            }
+
             StringBuilder url = new StringBuilder();
 
-            for(int i = 0; i< _filter.Count; i++)
+            for (int i = 0; i < _filter.Count; i++)
             {
                 url.Append(_filter[i]);
                 url.Append("/");

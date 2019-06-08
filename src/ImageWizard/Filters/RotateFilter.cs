@@ -19,10 +19,6 @@ namespace ImageWizard.Filters
 
             switch (rotateValue)
             {
-                case 0:
-                    rotateMode = RotateMode.None;
-                    break;
-
                 case 90:
                     rotateMode = RotateMode.Rotate90;
                     break;
