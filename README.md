@@ -15,12 +15,14 @@ Url parts:
 
 - resize(size)
 - resize(width,height)
+- resize(width,height,mode)
+  - mode: min, max, crop, pad, stretch
 - crop(x,y,width,height)
 - grayscale()
 - blackwhite()
 - trim()
-- flip(horizontal)
-- flip(vertical)
+- flip(type)
+  - type: horizontal, vertical
 - rotate(value) //90, 180 or 270
 
 ## Output formats
