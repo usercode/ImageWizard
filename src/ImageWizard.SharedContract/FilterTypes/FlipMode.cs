@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ImageWizard.SharedContract.FilterTypes
 {
-    public enum FlippingMode
+    public enum FlipMode
     {
         Horizontal,
         Vertical

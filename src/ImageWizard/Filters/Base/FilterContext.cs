@@ -1,4 +1,5 @@
 ﻿using ImageWizard.ImageFormats;
+using ImageWizard.ImageFormats.Base;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;

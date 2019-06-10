@@ -7,7 +7,7 @@ namespace ImageWizard.Services.Types
 {
     public class ImageMetadata
     {
-        public string SecretKey { get; set; }
+        public string Signature { get; set; }
         public string MimeType { get; set; }
         public string Url { get; set; }
     }

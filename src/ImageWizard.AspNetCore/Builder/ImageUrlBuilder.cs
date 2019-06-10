@@ -45,6 +45,13 @@ namespace ImageWizard.AspNetCore.Builder
             return this;
         }
 
+        public ImageUrlBuilder Resize(int width, int height, ResizeMode mode)
+        {
+            _filter.Add($"resize({width},{height},{mode.ToString().ToLower()})");
+
+            return this;
+        }
+
         public ImageUrlBuilder Trim()
         {
             _filter.Add("trim()");
@@ -66,14 +73,14 @@ namespace ImageWizard.AspNetCore.Builder
             return this;
         }
 
-        public ImageUrlBuilder Rotate(RotationMode mode)
+        public ImageUrlBuilder Rotate(RotateMode mode)
         {
             _filter.Add($"rotate({(int)mode})");
 
             return this;
         }
 
-        public ImageUrlBuilder Flp(FlippingMode flippingMode)
+        public ImageUrlBuilder Flp(FlipMode flippingMode)
         {
             _filter.Add($"flip({flippingMode.ToString().ToLower()})");
 

@@ -4,10 +4,12 @@ using System.Text;
 
 namespace ImageWizard.SharedContract.FilterTypes
 {
-    public enum RotationMode
+    public enum ResizeMode
     {
-        R90 = 90,
-        R180 = 180,
-        R270 = 270
+        Min,
+        Max,
+        Stretch,
+        Pad,
+        Crop
     }
 }

@@ -1,5 +1,4 @@
-﻿using ImageWizard.SharedContract.FilterTypes;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
@@ -14,17 +13,17 @@ namespace ImageWizard.Filters
     {
         public override string Name => "flip";
 
-        public void Execute(FlippingMode flippingMode, FilterContext context)
+        public void Execute(SharedContract.FilterTypes.FlipMode flippingMode, FilterContext context)
         {
             FlipMode flipMode;
 
             switch(flippingMode)
             {
-                case FlippingMode.Horizontal:
+                case SharedContract.FilterTypes.FlipMode.Horizontal:
                     flipMode = FlipMode.Horizontal;
                     break;
 
-                case FlippingMode.Vertical:
+                case SharedContract.FilterTypes.FlipMode.Vertical:
                     flipMode = FlipMode.Vertical;
                     break;
 

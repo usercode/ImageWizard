@@ -15,11 +15,13 @@ using ImageWizard.Filters;
 using ImageWizard.Helpers;
 using ImageWizard.Services;
 using ImageWizard.Settings;
-using System.Net;
 using ImageWizard.Services.Types;
 using ImageWizard.ImageFormats;
 using ImageWizard.Filters.ImageFormats;
 using ImageWizard.SharedContract;
+using System.Text;
+using ImageWizard.ImageFormats.Base;
+using Microsoft.AspNetCore.Http;
 
 namespace ImageWizard.Controllers
 {
@@ -28,16 +30,20 @@ namespace ImageWizard.Controllers
     public class ImageController : ControllerBase
     {
         public ImageController(
+            IOptions<ServiceSettings> settings,
             FilterManager filterManager,
             ImageService imageDownloader,
             CryptoService cryptoService,
-            FileService fileService)
+            FileStorage fileService)
         {
+            Settings = settings;
             FilterManager = filterManager;
             ImageDownloader = imageDownloader;
             CryptoService = cryptoService;
             FileService = fileService;
         }
+
+        private IOptions<ServiceSettings> Settings { get; }
 
         /// <summary>
         /// FilterManager
@@ -57,7 +63,7 @@ namespace ImageWizard.Controllers
         /// <summary>
         /// FileService
         /// </summary>
-        private FileService FileService { get; }
+        private FileStorage FileService { get; }
 
         [HttpGet("/")]
         public IActionResult Home()
@@ -71,22 +77,26 @@ namespace ImageWizard.Controllers
             return NotFound();
         }
 
-        [HttpGet("{secretKeyByRequest}/{*path}")]
+        [HttpGet("{signatureRequest}/{*path}")]
         [ResponseCache(Duration = 60 * 60 * 24 * 7)]
-        public async Task<IActionResult> Get(string secretKeyByRequest, string path)
+        public async Task<IActionResult> Get(string signatureRequest, string path)
         {
-            string secretKey = CryptoService.Encrypt(path);
+            string signature = CryptoService.Encrypt(path);
 
-#if DEBUG == false
-            //check secret
-            if(secretKey != secretKeyByRequest)
+            //check unsafe keyword or signature
+            if ((Settings.Value.AllowUnsafeUrl && signatureRequest == "unsafe") == false 
+                && 
+                (signature == signatureRequest) == false)
             {
-                return StatusCode((int)HttpStatusCode.Forbidden);
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
-#endif
+
+            //convert signature to hex for the filestore
+            byte[] buf = Encoding.UTF8.GetBytes(signature);
+            string signatureHex = buf.Aggregate(string.Empty, (a, b) => a += b.ToString("x2"));
 
             //try to get cached image
-            CachedImage cachedImage = await FileService.GetImageAsync(secretKey);
+            CachedImage cachedImage = await FileService.GetImageAsync(signatureHex);
 
             //no cached image found?
             if (cachedImage == null)
@@ -101,7 +111,7 @@ namespace ImageWizard.Controllers
 
                 if (pos == -1)
                 {
-                    throw new Exception();
+                    return StatusCode(StatusCodes.Status400BadRequest);
                 }
 
                 string imageUrl = path.Substring(pos);
@@ -144,7 +154,7 @@ namespace ImageWizard.Controllers
 
                             if (filterFound == false)
                             {
-                                return StatusCode((int)HttpStatusCode.BadRequest);
+                                return StatusCode(StatusCodes.Status400BadRequest);
                             }
                         }
 
@@ -160,7 +170,7 @@ namespace ImageWizard.Controllers
                     }
                 }
 
-                cachedImage = await FileService.SaveImageAsync(secretKey, originalImage, targetFormat, transformedImageData);
+                cachedImage = await FileService.SaveImageAsync(signatureHex, originalImage, targetFormat, transformedImageData);
             }
 
             return File(cachedImage.Data, cachedImage.Metadata.MimeType);

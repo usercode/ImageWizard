@@ -15,6 +15,7 @@ using ImageWizard.Helpers;
 using ImageWizard.Services;
 using ImageWizard.Settings;
 using ImageWizard.Filters.ImageFormats;
+using Microsoft.AspNetCore.Http;
 
 namespace ImageWizard
 {
@@ -40,6 +41,7 @@ namespace ImageWizard
             filterManager.Register<TrimFilter>();
             filterManager.Register<FlipFilter>();
             filterManager.Register<RotateFilter>();
+            filterManager.Register<BlurFilter>();
 
             //formats
             filterManager.Register<JpgFilter>();
@@ -51,9 +53,11 @@ namespace ImageWizard
             services.AddHttpClient<ImageService>();
 
             services.AddSingleton<CryptoService>();
-            services.AddSingleton<FileService>();
+            services.AddSingleton<FileStorage>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddHttpsRedirection(x => x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,7 +70,7 @@ namespace ImageWizard
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                //app.UseHsts();
             }
 
             app.UseHttpsRedirection();

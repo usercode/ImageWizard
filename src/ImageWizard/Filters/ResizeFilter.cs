@@ -1,5 +1,4 @@
-﻿using ImageWizard.SharedContract.FilterTypes;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
@@ -21,32 +20,32 @@ namespace ImageWizard.Filters
 
         public void Execute(int width, int height, FilterContext context)
         {
-            Execute(width, height, ResizingMode.Max, context);
+            Execute(width, height, SharedContract.FilterTypes.ResizeMode.Max, context);
         }
 
-        public void Execute(int width, int height, ResizingMode mode, FilterContext context)
+        public void Execute(int width, int height, SharedContract.FilterTypes.ResizeMode mode, FilterContext context)
         {
             ResizeMode mode2;
 
             switch (mode)
             {
-                case ResizingMode.Max:
+                case SharedContract.FilterTypes.ResizeMode.Max:
                     mode2 = ResizeMode.Max;
                     break;
 
-                case ResizingMode.Min:
+                case SharedContract.FilterTypes.ResizeMode.Min:
                     mode2 = ResizeMode.Min;
                     break;
 
-                case ResizingMode.Stretch:
+                case SharedContract.FilterTypes.ResizeMode.Stretch:
                     mode2 = ResizeMode.Stretch;
                     break;
 
-                case ResizingMode.Pad:
+                case SharedContract.FilterTypes.ResizeMode.Pad:
                     mode2 = ResizeMode.Pad;
                     break;
 
-                case ResizingMode.Crop:
+                case SharedContract.FilterTypes.ResizeMode.Crop:
                     mode2 = ResizeMode.Crop;
                     break;
 

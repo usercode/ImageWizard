@@ -15,8 +15,6 @@ namespace ImageWizard.Filters
 
         public MethodInfo TargetMethod { get; set; }
 
-        public IEnumerable<Type> ParameterTypes { get; set; }
-
         public bool TryExecute(string input, FilterContext filterContext)
         {
             Match match = Regex.Match(input);

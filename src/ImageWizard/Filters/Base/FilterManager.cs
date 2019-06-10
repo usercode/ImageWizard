@@ -76,7 +76,6 @@ namespace ImageWizard.Filters
                 FilterAction filterAction = new FilterAction();
                 filterAction.Filter = filter;
                 filterAction.TargetMethod = method;
-                filterAction.ParameterTypes = parameters.Select(x => x.ParameterType).ToArray();
                 filterAction.Regex = new Regex(builder.ToString());
 
                 FilterActions.Add(filterAction);

@@ -8,6 +8,13 @@ namespace ImageWizard.Settings
 {
     public class ServiceSettings
     {
+        public ServiceSettings()
+        {
+            AllowUnsafeUrl = false;
+        }
+
+        public bool AllowUnsafeUrl { get; set; }
+
         public string Key { get; set; }
 
     }
