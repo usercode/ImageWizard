@@ -18,12 +18,14 @@ Url parts:
 - resize(width,height,mode)
   - mode: min, max, crop, pad, stretch
 - crop(x,y,width,height)
-- grayscale()
-- blackwhite()
-- trim()
 - flip(type)
   - type: horizontal, vertical
-- rotate(value) //90, 180 or 270
+- rotate(value) 
+  - value: 90, 180 or 270
+- grayscale()
+- blackwhite()
+- blur()
+- trim()
 
 ## Output formats
 
