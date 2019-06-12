@@ -11,11 +11,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ImageWizard.Filters;
-using ImageWizard.Helpers;
 using ImageWizard.Services;
 using ImageWizard.Settings;
 using ImageWizard.Filters.ImageFormats;
 using Microsoft.AspNetCore.Http;
+using ImageWizard.ImageLoaders;
+using ImageWizard.ImageStorages;
+using ImageWizard.SharedContract;
 
 namespace ImageWizard
 {
@@ -42,6 +44,7 @@ namespace ImageWizard
             filterManager.Register<FlipFilter>();
             filterManager.Register<RotateFilter>();
             filterManager.Register<BlurFilter>();
+            filterManager.Register<TextFilter>();
 
             //formats
             filterManager.Register<JpgFilter>();
@@ -50,9 +53,10 @@ namespace ImageWizard
             filterManager.Register<BmpFilter>();
 
             services.AddSingleton(filterManager);
-            services.AddHttpClient<ImageService>();
 
-            services.AddSingleton<CryptoService>();
+            services.AddHttpClient<HttpLoader>();
+
+            services.AddSingleton(x => new CryptoService(x.GetRequiredService<IOptions<ServiceSettings>>().Value.Key));
             services.AddSingleton<FileStorage>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

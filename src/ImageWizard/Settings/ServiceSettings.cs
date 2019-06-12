@@ -15,6 +15,7 @@ namespace ImageWizard.Settings
 
         public bool AllowUnsafeUrl { get; set; }
 
+
         public string Key { get; set; }
 
     }

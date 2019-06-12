@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Filters
 {
-    public class CropFilter : FilterBase
+    public class BlackWhiteFilter : FilterBase
     {
-        public override string Name => "crop";
+        public override string Name => "blackwhite";
 
-        public void Execute(int x, int y, int width, int height, FilterContext context)
+        public void Execute(FilterContext context)
         {
-            context.Image.Mutate(m => m.Crop(new Rectangle(x, y, width, height)));
+            context.Image.Mutate(m => m.BlackWhite());
         }
     }
 }

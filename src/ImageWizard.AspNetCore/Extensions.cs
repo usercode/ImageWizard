@@ -1,5 +1,4 @@
 ﻿using ImageWizard.AspNetCore.Builder;
-using ImageWizard.AspNetCore.Services;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

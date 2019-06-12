@@ -6,14 +6,14 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Helpers
+namespace ImageWizard.ImageLoaders
 {
-    /// <summary>
+    /// <summary>in
     /// ImageDownloader
     /// </summary>
-    public class ImageService
+    public class HttpLoader : IImageLoader
     {
-        public ImageService(HttpClient httpCLient)
+        public HttpLoader(HttpClient httpCLient)
         {
             HttpClient = httpCLient;
         }
@@ -28,7 +28,7 @@ namespace ImageWizard.Helpers
         /// </summary>
         /// <param name="requestUri"></param>
         /// <returns></returns>
-        public async Task<OriginalImage> DownloadAsync(string requestUri)
+        public async Task<OriginalImage> GetAsync(string requestUri)
         {
             HttpResponseMessage response = await HttpClient.GetAsync(requestUri);
             byte[] data = await response.Content.ReadAsByteArrayAsync();

@@ -12,7 +12,6 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using ImageWizard.Filters;
-using ImageWizard.Helpers;
 using ImageWizard.Services;
 using ImageWizard.Settings;
 using ImageWizard.Services.Types;
@@ -22,6 +21,8 @@ using ImageWizard.SharedContract;
 using System.Text;
 using ImageWizard.ImageFormats.Base;
 using Microsoft.AspNetCore.Http;
+using ImageWizard.ImageLoaders;
+using ImageWizard.ImageStorages;
 
 namespace ImageWizard.Controllers
 {
@@ -32,15 +33,15 @@ namespace ImageWizard.Controllers
         public ImageController(
             IOptions<ServiceSettings> settings,
             FilterManager filterManager,
-            ImageService imageDownloader,
+            HttpLoader imageDownloader,
             CryptoService cryptoService,
             FileStorage fileService)
         {
             Settings = settings;
             FilterManager = filterManager;
-            ImageDownloader = imageDownloader;
+            ImageLoader = imageDownloader;
             CryptoService = cryptoService;
-            FileService = fileService;
+            FileStorage = fileService;
         }
 
         private IOptions<ServiceSettings> Settings { get; }
@@ -53,17 +54,17 @@ namespace ImageWizard.Controllers
         /// <summary>
         /// ImageDownloader
         /// </summary>
-        private ImageService ImageDownloader { get; }
+        private IImageLoader ImageLoader { get; }
+
+        /// <summary>
+        /// FileStorage
+        /// </summary>
+        private IImageStorage FileStorage { get; }
 
         /// <summary>
         /// CryptoService
         /// </summary>
         private CryptoService CryptoService { get; }
-
-        /// <summary>
-        /// FileService
-        /// </summary>
-        private FileStorage FileService { get; }
 
         [HttpGet("/")]
         public IActionResult Home()
@@ -96,7 +97,7 @@ namespace ImageWizard.Controllers
             string signatureHex = buf.Aggregate(string.Empty, (a, b) => a += b.ToString("x2"));
 
             //try to get cached image
-            CachedImage cachedImage = await FileService.GetImageAsync(signatureHex);
+            CachedImage cachedImage = await FileStorage.GetAsync(signatureHex);
 
             //no cached image found?
             if (cachedImage == null)
@@ -115,12 +116,13 @@ namespace ImageWizard.Controllers
                 }
 
                 string imageUrl = path.Substring(pos);
-                byte[] transformedImageData;
-
+                
                 //download image
-                OriginalImage originalImage = await ImageDownloader.DownloadAsync(imageUrl);
+                OriginalImage originalImage = await ImageLoader.GetAsync(imageUrl);
                 
                 IImageFormat targetFormat = ImageFormatHelper.Parse(originalImage.MimeType);
+
+                byte[] transformedImageData;
 
                 //skip svg
                 if (targetFormat is SvgFormat)
@@ -132,8 +134,7 @@ namespace ImageWizard.Controllers
                     //load image
                     using (Image<Rgba32> image = Image.Load(originalImage.Data))
                     {
-                        FilterContext filterContext = new FilterContext(image);
-                        filterContext.ImageFormat = targetFormat;
+                        FilterContext filterContext = new FilterContext(image, targetFormat);
 
                         string filters = path.Substring(0, pos);
                         string[] segments = filters.Split("/", StringSplitOptions.RemoveEmptyEntries);
@@ -158,19 +159,19 @@ namespace ImageWizard.Controllers
                             }
                         }
 
+                        //target format is changed by user
+                        targetFormat = filterContext.ImageFormat;
+
                         MemoryStream mem = new MemoryStream();
 
                         //generate image
-                        filterContext.ImageFormat.SaveImage(image, mem);
+                        targetFormat.SaveImage(image, mem);
 
                         transformedImageData = mem.ToArray();
-
-                        //target format is changed by user
-                        targetFormat = filterContext.ImageFormat;
                     }
                 }
 
-                cachedImage = await FileService.SaveImageAsync(signatureHex, originalImage, targetFormat, transformedImageData);
+                cachedImage = await FileStorage.SaveAsync(signatureHex, originalImage, targetFormat, transformedImageData);
             }
 
             return File(cachedImage.Data, cachedImage.Metadata.MimeType);

@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
-using ImageWizard.AspNetCore.Services;
 using Microsoft.Extensions.Options;
 using ImageWizard.SharedContract.FilterTypes;
 using System.Diagnostics;
+using ImageWizard.SharedContract;
 
 namespace ImageWizard.AspNetCore.Builder
 {
@@ -23,7 +23,7 @@ namespace ImageWizard.AspNetCore.Builder
 
         public ImageUrlBuilder(string imageUrl, ImageWizardSettings settings)
         {
-            CryptoService = new CryptoService(settings);
+            CryptoService = new CryptoService(settings.Key);
 
             ImageUrl = imageUrl;
             Settings = settings;

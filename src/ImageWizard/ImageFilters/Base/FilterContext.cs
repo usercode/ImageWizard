@@ -11,9 +11,10 @@ namespace ImageWizard.Filters
 {
     public class FilterContext
     {
-        public FilterContext(Image<Rgba32> image)
+        public FilterContext(Image<Rgba32> image, IImageFormat imageFormat)
         {
             Image = image;
+            ImageFormat = imageFormat;
         }
 
         /// <summary>

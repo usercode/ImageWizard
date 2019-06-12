@@ -1,5 +1,4 @@
 ﻿using ImageWizard.SharedContract;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +6,17 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.AspNetCore.Services
+namespace ImageWizard.SharedContract
 {
     /// <summary>
     /// CryptoService
     /// </summary>
     public class CryptoService
     {
-        public CryptoService(ImageWizardSettings settings)
+        public CryptoService(string key)
         {
-            if (settings.Enabled == true)
-            {
-                Key = Base64Url.FromBase64Url(settings.Key);
-            }
+            Key = Base64Url.FromBase64Url(key);
+
         }
 
         /// <summary>

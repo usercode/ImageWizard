@@ -10,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Services
+namespace ImageWizard.ImageStorages
 {
-    public class FileStorage
+    public class FileStorage : IImageStorage
     {
         public FileStorage(IHostingEnvironment env )
         {
@@ -31,7 +31,7 @@ namespace ImageWizard.Services
             return new[] { part1, part2, part3, part4 };
         }
 
-        public async Task<CachedImage> GetImageAsync(string key)
+        public async Task<CachedImage> GetAsync(string key)
         {
             string[] parts = SplitSecret(key);
 
@@ -68,7 +68,7 @@ namespace ImageWizard.Services
             return cachedImage;
         }
 
-        public async Task<CachedImage> SaveImageAsync(string key, OriginalImage originalImage, IImageFormat imageFormat, byte[] transformedImageData)
+        public async Task<CachedImage> SaveAsync(string key, OriginalImage originalImage, IImageFormat imageFormat, byte[] transformedImageData)
         {
             string[] parts = SplitSecret(key);
 

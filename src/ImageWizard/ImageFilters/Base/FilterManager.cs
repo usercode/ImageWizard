@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ImageWizard.Filters
 {
     /// <summary>
-    /// IFilterManager
+    /// FilterManager
     /// </summary>
     public class FilterManager
     {
@@ -29,7 +29,10 @@ namespace ImageWizard.Filters
         {
             TFilter filter = new TFilter();
 
-            MethodInfo[] methods = filter.GetType().GetMethods().Where(x=> x.Name == "Execute").ToArray();
+            MethodInfo[] methods = filter.GetType()
+                                            .GetMethods()
+                                            .Where(x=> x.Name == "Execute")
+                                            .ToArray();
 
             foreach(MethodInfo method in methods)
             {
@@ -44,13 +47,13 @@ namespace ImageWizard.Filters
                     {
                         builder.Append($@"(?<{parameters[i].Name}>[0-9]+)");
                     }
-                    else if (parameters[i].ParameterType == typeof(int))
+                    else if (parameters[i].ParameterType == typeof(double))
                     {
                         builder.Append($@"(?<{parameters[i].Name}>\d+\.\d+)"); //@"-?\d+(?:\.\d+)?"
                     }
                     else if(parameters[i].ParameterType == typeof(string))
                     {
-                        builder.Append($@"""(?<{parameters[i].Name}>\w+)""");
+                        builder.Append($@"'(?<{parameters[i].Name}>.+)'");
                     }
                     else if(parameters[i].ParameterType.IsEnum)
                     {
