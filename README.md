@@ -4,7 +4,11 @@ A webservice to manipulate your images dynamically.
 ## Overview
 
 Example:
+
 https://localhost/fgj9fej98DFKG4eja/trim()/resize(200,200)/jpg(90)/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
+
+unsafe version (if enabled):
+https://localhost/unsafe/trim()/resize(200,200)/jpg(90)/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 Url parts:
 - signature based on HMACSHA1
@@ -18,12 +22,14 @@ Url parts:
 - resize(width,height,mode)
   - mode: min, max, crop, pad, stretch
 - crop(x,y,width,height)
-- grayscale()
-- blackwhite()
-- trim()
 - flip(type)
   - type: horizontal, vertical
-- rotate(value) //90, 180 or 270
+- rotate(value) 
+  - value: 90, 180 or 270
+- trim()
+- grayscale()
+- blackwhite()
+- blur()
 
 ## Output formats
 
