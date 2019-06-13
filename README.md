@@ -21,7 +21,8 @@ Url parts:
 - resize(width,height)
 - resize(width,height,mode)
   - mode: min, max, crop, pad, stretch
-- crop(x,y,width,height)
+- crop(width,height)
+- crop(x,y,width,height) //int for absolute values, 0.0 to 1.0 for relative values
 - flip(type)
   - type: horizontal, vertical
 - rotate(value) 
