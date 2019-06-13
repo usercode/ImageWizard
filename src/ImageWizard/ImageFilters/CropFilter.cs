@@ -13,6 +13,21 @@ namespace ImageWizard.Filters
     {
         public override string Name => "crop";
 
+        public void Execute(double width, double height, FilterContext context)
+        {
+            Execute(0, 0, width, height, context);
+        }
+
+        public void Execute(double x, double y, double width, double height, FilterContext context)
+        {
+            Execute(
+                (int)(x * context.Image.Width),
+                (int)(y * context.Image.Height),
+                (int)(width * context.Image.Width),
+                (int)(height * context.Image.Height),
+                context);
+        }
+
         public void Execute(int width, int height, FilterContext context)
         {
             Execute(0, 0, width, height, context);

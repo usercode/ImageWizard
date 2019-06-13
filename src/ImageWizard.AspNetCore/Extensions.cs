@@ -24,7 +24,7 @@ namespace ImageWizard.AspNetCore
         {
             var settings = htmlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<IOptions<ImageWizardSettings>>();
 
-            return new ImageUrlBuilder(imageUrl, settings.Value);
+            return new ImageUrlBuilder(settings.Value).Image(imageUrl);
         }
     }
 }

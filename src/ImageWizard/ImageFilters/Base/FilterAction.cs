@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -32,7 +33,11 @@ namespace ImageWizard.Filters
 
                 if (pi.ParameterType == typeof(int))
                 {
-                    parameterValues.Add(int.Parse(value));
+                    parameterValues.Add(int.Parse(value, CultureInfo.InvariantCulture));
+                }
+                else if(pi.ParameterType == typeof(double))
+                {
+                    parameterValues.Add(double.Parse(value, CultureInfo.InvariantCulture));
                 }
                 else if(pi.ParameterType == typeof(string))
                 {

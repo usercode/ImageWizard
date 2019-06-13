@@ -17,18 +17,24 @@ namespace ImageWizard.AspNetCore.Builder
         private CryptoService CryptoService { get; }
         private ImageWizardSettings Settings { get; }
 
-        public string ImageUrl { get; }
+        private string ImageUrl { get; set; }
 
         private List<string> _filter;
 
-        public ImageUrlBuilder(string imageUrl, ImageWizardSettings settings)
+        public ImageUrlBuilder(ImageWizardSettings settings)
         {
             CryptoService = new CryptoService(settings.Key);
 
-            ImageUrl = imageUrl;
             Settings = settings;
 
             _filter = new List<string>();
+        }
+
+        public ImageUrlBuilder Image(string url)
+        {
+            ImageUrl = url;
+
+            return this;
         }
 
         public ImageUrlBuilder Resize(int size)
@@ -124,6 +130,11 @@ namespace ImageWizard.AspNetCore.Builder
 
         public HtmlString BuildUrl()
         {
+            if(string.IsNullOrEmpty(ImageUrl))
+            {
+                throw new Exception("No image is selected.");
+            }
+
             if (Settings.Enabled == false)
             {
                 return new HtmlString(ImageUrl);
