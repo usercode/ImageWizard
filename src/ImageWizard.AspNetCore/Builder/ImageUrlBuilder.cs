@@ -37,6 +37,34 @@ namespace ImageWizard.AspNetCore.Builder
             return this;
         }
 
+        public ImageUrlBuilder Crop(int width, int heigth)
+        {
+            Crop(0, 0, width, heigth);
+
+            return this;
+        }
+
+        public ImageUrlBuilder Crop(int x, int y, int width, int heigth)
+        {
+            _filter.Add($"crop({x},{y},{width},{heigth})");
+
+            return this;
+        }
+
+        public ImageUrlBuilder Crop(double width, double heigth)
+        {
+            Crop(0, 0, width, heigth);
+
+            return this;
+        }
+
+        public ImageUrlBuilder Crop(double x, double y, double width, double heigth)
+        {
+            _filter.Add($"crop({x:0.0},{y:0.0},{width:0.0},{heigth:0.0})");
+
+            return this;
+        }
+
         public ImageUrlBuilder Resize(int size)
         {
             _filter.Add($"resize({size})");
