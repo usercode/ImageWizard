@@ -45,11 +45,11 @@ namespace ImageWizard.Filters
                 {
                     if (parameters[i].ParameterType == typeof(int))
                     {
-                        builder.Append($@"(?<{parameters[i].Name}>[0-9]+)");
+                        builder.Append($@"(?<{parameters[i].Name}>\d+)");
                     }
                     else if (parameters[i].ParameterType == typeof(double))
                     {
-                        builder.Append($@"(?<{parameters[i].Name}>\d+\.\d+)"); //@"-?\d+(?:\.\d+)?"
+                        builder.Append($@"(?<{parameters[i].Name}>\d+\.\d+)");
                     }
                     else if(parameters[i].ParameterType == typeof(string))
                     {

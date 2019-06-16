@@ -82,6 +82,12 @@ namespace ImageWizard.Controllers
         [ResponseCache(Duration = 60 * 60 * 24 * 7)]
         public async Task<IActionResult> Get(string signatureRequest, string path)
         {
+            //add query to image url
+            if(Request.QueryString.HasValue)
+            {
+                path += Request.QueryString.Value;
+            }
+
             string signature = CryptoService.Encrypt(path);
 
             //check unsafe keyword or signature
@@ -184,7 +190,7 @@ namespace ImageWizard.Controllers
             byte[] buf = new byte[64];
             random.NextBytes(buf);
 
-            return Ok(Base64Url.ToBase64Url(buf));
+            return Ok(Convert.ToBase64String(buf));
         }
     }
 }
