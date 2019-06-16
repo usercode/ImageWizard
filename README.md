@@ -5,7 +5,7 @@ A webservice to manipulate your images dynamically.
 
 Example:
 
-https://localhost/fgj9fej98DFKG4eja/trim()/resize(200,200)/jpg(90)/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
+https://localhost/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(90)/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 unsafe version (if enabled):
 https://localhost/unsafe/trim()/resize(200,200)/jpg(90)/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
@@ -58,7 +58,7 @@ appsettings.json
 ```json
  "ImageWizard": {
     "BaseUrl": "https://<your-domain>",
-    "Key": "34059567439574395435435567533453453523456756756735453890509==",
+    "Key": "85s6JMcm9BqdvqKG1mePb8+KCfEfX/OtJRADVR28az4Ou27ATnNPhAxpmK6BDVoQtJPcYekTG5Onjf63Ip/94A==",
     "Enabled": true
   }
 ```
