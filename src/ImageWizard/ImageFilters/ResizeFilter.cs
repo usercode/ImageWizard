@@ -53,6 +53,17 @@ namespace ImageWizard.Filters
                     throw new Exception();
             }
 
+            //prevent upscaling
+            if(width > context.Image.Width)
+            {
+                width = context.Image.Width;
+            }
+
+            if(height > context.Image.Height)
+            {
+                height = context.Image.Height;
+            }
+
             context.Image.Mutate(m =>
             {                
                 m.Resize(new ResizeOptions()
