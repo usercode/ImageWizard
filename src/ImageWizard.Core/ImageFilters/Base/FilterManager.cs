@@ -38,7 +38,7 @@ namespace ImageWizard.Filters
             {
                 ParameterInfo[] parameters = method.GetParameters();
 
-                StringBuilder builder = new StringBuilder();
+                StringBuilder builder = new StringBuilder("^");
                 builder.Append($@"({filter.Name})\(");
 
                 for (int i = 0; i < parameters.Length - 1; i++)
@@ -61,7 +61,7 @@ namespace ImageWizard.Filters
                                                     .Select(x=> x.ToLower())
                                                     .ToArray();
 
-                        builder.Append($"(?<{parameters[i].Name}>{string.Join('|', enumValues)})");
+                        builder.Append($"(?<{parameters[i].Name}>{string.Join("|", enumValues)})");
                     }
                     else
                     {
@@ -74,7 +74,7 @@ namespace ImageWizard.Filters
                     }
                 }
 
-                builder.Append(@"\)");
+                builder.Append(@"\)$");
 
                 FilterAction filterAction = new FilterAction();
                 filterAction.Filter = filter;

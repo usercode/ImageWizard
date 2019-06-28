@@ -1,4 +1,5 @@
-﻿using ImageWizard.ImageFormats;
+﻿using ImageWizard.Core.ImageCaches;
+using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
 using Microsoft.AspNetCore.Hosting;
@@ -12,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageStorages
 {
-    public class FileStorage : IImageStorage
+    public class FileCache : IImageCache
     {
-        public FileStorage(IHostingEnvironment env )
+        public FileCache(FileCacheSettings settings)
         {
-            RootFolder = new DirectoryInfo(env.WebRootPath);
+            Settings = settings;
         }
 
-        public DirectoryInfo RootFolder { get; }
+        public FileCacheSettings Settings { get; }
 
         private string[] SplitSecret(string secret)
         {
@@ -31,11 +32,22 @@ namespace ImageWizard.ImageStorages
             return new[] { part1, part2, part3, part4 };
         }
 
-        public async Task<CachedImage> GetAsync(string key)
+        private string ToHex(string signature)
         {
-            string[] parts = SplitSecret(key);
+            //convert signature to hex for the filestore
+            byte[] buf = Encoding.UTF8.GetBytes(signature);
+            string signatureHex = buf.Aggregate(string.Empty, (a, b) => a += b.ToString("x2"));
 
-            string baseFilePath = Path.Combine(new[] { RootFolder.FullName }.Concat(parts).Concat(new[] { key }).ToArray());
+            return signatureHex;
+        }
+
+        public async Task<CachedImage> GetAsync(string signature)
+        {
+            string signatureHex = ToHex(signature);
+
+            string[] parts = SplitSecret(signatureHex);
+
+            string baseFilePath = Path.Combine(new[] { Settings.RootFolder.FullName }.Concat(parts).Concat(new[] { signatureHex }).ToArray());
 
             FileInfo fileInfo = new FileInfo(baseFilePath);
 
@@ -44,7 +56,7 @@ namespace ImageWizard.ImageStorages
                 return null;
             }
 
-            byte[] fileBuffer = await File.ReadAllBytesAsync(fileInfo.FullName);
+            byte[] fileBuffer = File.ReadAllBytes(fileInfo.FullName);
             BinaryReader reader = new BinaryReader(new MemoryStream(fileBuffer));
 
             //read version
@@ -68,9 +80,11 @@ namespace ImageWizard.ImageStorages
             return cachedImage;
         }
 
-        public async Task<CachedImage> SaveAsync(string key, OriginalImage originalImage, IImageFormat imageFormat, byte[] transformedImageData)
+        public async Task<CachedImage> SaveAsync(string signature, OriginalImage originalImage, IImageFormat imageFormat, byte[] transformedImageData)
         {
-            string[] parts = SplitSecret(key);
+            string signatureHex = ToHex(signature);
+
+            string[] parts = SplitSecret(signatureHex);
 
             MemoryStream cachedFileData = new MemoryStream();
             BinaryWriter writer = new BinaryWriter(cachedFileData);
@@ -82,7 +96,7 @@ namespace ImageWizard.ImageStorages
             ImageMetadata imageMetadata = new ImageMetadata();
             imageMetadata.MimeType = imageFormat.MimeType;
             imageMetadata.Url = originalImage.Url;
-            imageMetadata.Signature = key;
+            imageMetadata.Signature = signatureHex;
 
             string metadataJson = JsonConvert.SerializeObject(imageMetadata);
             byte[] metadataBuffer = Encoding.UTF8.GetBytes(metadataJson);
@@ -91,15 +105,15 @@ namespace ImageWizard.ImageStorages
             writer.Write(metadataBuffer);
 
             //store transformed image
-            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { RootFolder.FullName }.Concat(parts).ToArray()));
+            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { Settings.RootFolder.FullName }.Concat(parts).ToArray()));
 
             writer.Write(transformedImageData.Length);
             writer.Write(transformedImageData);
 
             //write to file
-            FileInfo file = new FileInfo(Path.Combine(sub.FullName, key));
+            FileInfo file = new FileInfo(Path.Combine(sub.FullName, signatureHex));
             
-            await File.WriteAllBytesAsync(file.FullName, cachedFileData.ToArray());
+            File.WriteAllBytes(file.FullName, cachedFileData.ToArray());
 
             return new CachedImage() { Data = transformedImageData, Metadata = imageMetadata };
         }

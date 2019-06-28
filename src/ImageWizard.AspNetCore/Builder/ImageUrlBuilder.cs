@@ -176,6 +176,7 @@ namespace ImageWizard.AspNetCore.Builder
                 url.Append("/");
             }
 
+            url.Append("fetch/");
             url.Append(ImageUrl);
 
             string secret = CryptoService.Encrypt(url.ToString());

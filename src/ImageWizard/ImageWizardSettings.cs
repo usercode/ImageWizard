@@ -4,11 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Settings
+namespace ImageWizard
 {
-    public class ServiceSettings
+    public class ImageWizardSettings
     {
-        public ServiceSettings()
+        public ImageWizardSettings()
         {
             AllowUnsafeUrl = false;
         }
@@ -17,6 +17,8 @@ namespace ImageWizard.Settings
 
 
         public string Key { get; set; }
+
+
 
     }
 }

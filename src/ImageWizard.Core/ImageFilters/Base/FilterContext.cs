@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Filters
 {
+    /// <summary>
+    /// FilterContext
+    /// </summary>
     public class FilterContext
     {
         public FilterContext(Image<Rgba32> image, IImageFormat imageFormat)

@@ -1,4 +1,5 @@
-﻿using ImageWizard.Services.Types;
+﻿using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Services.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,15 +14,21 @@ namespace ImageWizard.ImageLoaders
     /// </summary>
     public class HttpLoader : IImageLoader
     {
-        public HttpLoader(HttpClient httpCLient)
+        public HttpLoader(HttpClient httpCLient, HttpLoaderSettings settings)
         {
             HttpClient = httpCLient;
+            Settings = settings;
         }
 
         /// <summary>
         /// HttpClient
         /// </summary>
         private HttpClient HttpClient { get; }
+
+        /// <summary>
+        /// Settings
+        /// </summary>
+        public HttpLoaderSettings Settings { get; }
 
         /// <summary>
         /// Download
