@@ -63,7 +63,7 @@ Add settings to the appsettings.json
 
 ```json
  "ImageWizard": {
-    "BaseUrl": "https://<your-domain>",
+    "BaseUrl": "https://<your-domain>/image",
     "Key": "85s6JMcm9BqdvqKG1mePb8+KCfEfX/OtJRADVR28az4Ou27ATnNPhAxpmK6BDVoQtJPcYekTG5Onjf63Ip/94A==",
     "Enabled": true
   }
