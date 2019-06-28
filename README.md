@@ -5,14 +5,16 @@ A webservice to manipulate your images dynamically.
 
 Example:
 
-https://localhost/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(90)/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
+https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(90)/fetch/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 unsafe version (if enabled):
-https://localhost/unsafe/trim()/resize(200,200)/jpg(90)/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
+https://localhost/image/unsafe/trim()/resize(200,200)/jpg(90)/fetch/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 Url parts:
+- base path ("/image")
 - signature based on HMACSHA1
 - any filters
+- delivery type: fetch
 - absolute url of the original image
 
 ## Available image filters
