@@ -17,6 +17,17 @@ Url parts:
 - delivery type: fetch
 - absolute url of the original image
 
+## Integrate into existing ASP.NET Core applications
+
+https://www.nuget.org/packages/ImageWizard.Core/
+
+```csharp
+ services.AddImageWizard(new ImageWizardCoreSettings() { AllowUnsafeUrl = true, Key = "..." })
+              .AddDefaultFilters()
+              .AddFileCache(new FileCacheSettings(HostingEnvironment.WebRootPath))
+              .AddHttpLoader(new HttpLoaderSettings());
+```
+
 ## Available image filters
 
 - resize(size)
