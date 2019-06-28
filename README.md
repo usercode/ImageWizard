@@ -58,15 +58,8 @@ https://www.nuget.org/packages/ImageWizard.Core/
 https://www.nuget.org/packages/ImageWizard.AspNetCore/
 
 Example:
-```csharp
-@Url
-.ImageWizard(Url.RouteUrl("MyImage", new { mediaUrl = Model.MediaUrl }, Context.Request.Scheme))
-.Trim()
-.Resize(160,140)
-.Jpg(90)
-.BuildUrl()
-```
-appsettings.json
+
+Add settings to the appsettings.json
 
 ```json
  "ImageWizard": {
@@ -75,3 +68,21 @@ appsettings.json
     "Enabled": true
   }
 ```
+
+Register settings to services
+
+```csharp
+services.Configure<ImageWizardSettings>(Configuration.GetSection("ImageWizard"));
+```
+
+Create url with fluent api
+
+```csharp
+@Url
+.ImageWizard(Url.RouteUrl("MyImage", new { mediaUrl = Model.MediaUrl }, Context.Request.Scheme))
+.Trim()
+.Resize(160,140)
+.Jpg(90)
+.BuildUrl()
+```
+
