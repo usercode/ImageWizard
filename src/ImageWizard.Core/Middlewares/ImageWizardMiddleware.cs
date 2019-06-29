@@ -110,6 +110,18 @@ namespace ImageWizard.Middlewares
                 return;
             }
 
+            //check ETag from request
+            if (Settings.Value.UseETag)
+            {
+                bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == $"\"{signature}\"");
+
+                if (isValid == true)
+                {
+                    context.Response.StatusCode = StatusCodes.Status304NotModified;
+                    return;
+                }
+            }
+
             //try to get cached image
             CachedImage cachedImage = await FileCache.GetAsync(signature);
 
@@ -181,6 +193,11 @@ namespace ImageWizard.Middlewares
                     Public = true,
                     MaxAge = Settings.Value.ResponseCacheTime
                 };
+            }
+
+            if (Settings.Value.UseETag)
+            {
+                context.Response.GetTypedHeaders().ETag = new EntityTagHeaderValue($"\"{signature}\"");
             }
 
             context.Response.ContentLength = cachedImage.Data.Length;

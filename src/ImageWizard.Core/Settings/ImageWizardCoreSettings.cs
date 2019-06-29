@@ -15,6 +15,7 @@ namespace ImageWizard.Settings
         public ImageWizardCoreSettings()
         {
             BasePath = "/image";
+            UseETag = true;
             AllowUnsafeUrl = false;
             ResponseCacheTime = TimeSpan.FromDays(90);
         }
@@ -33,6 +34,11 @@ namespace ImageWizard.Settings
         /// AllowUnsafeUrl
         /// </summary>
         public bool AllowUnsafeUrl { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool UseETag { get; set; }
 
         /// <summary>
         /// Key

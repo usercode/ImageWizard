@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
 using System;
 
 namespace ImageWizard
@@ -29,7 +31,9 @@ namespace ImageWizard
 
             services.AddImageWizard(options => 
                                     {
+                                        options.BasePath = "/image";
                                         options.AllowUnsafeUrl = serviceSettings.AllowUnsafeUrl;
+                                        options.UseETag = true;
                                         options.Key = serviceSettings.Key;
                                         options.ResponseCacheTime = TimeSpan.FromDays(90);
                                     })

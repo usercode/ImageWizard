@@ -30,11 +30,7 @@ namespace ImageWizard
 
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services)
         {
-            return AddImageWizard(services, options => {
-                                                options.BasePath = "/image";
-                                                options.AllowUnsafeUrl = false;
-                                                options.ResponseCacheTime = TimeSpan.FromDays(90);
-                });
+            return AddImageWizard(services, options => { });
         }
 
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardCoreSettings> settingsSetup)
