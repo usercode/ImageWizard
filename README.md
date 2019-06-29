@@ -12,7 +12,7 @@ https://localhost/image/unsafe/trim()/resize(200,200)/jpg(90)/fetch/https://uplo
 
 Url parts:
 - base path ("/image")
-- signature based on HMACSHA1
+- signature based on HMACSHA1 and encoded in Base64Url
 - any filters
 - delivery type: fetch
 - absolute url of the original image
@@ -22,10 +22,19 @@ Url parts:
 https://www.nuget.org/packages/ImageWizard.Core/
 
 ```csharp
- services.AddImageWizard(new ImageWizardCoreSettings() { AllowUnsafeUrl = true, Key = "..." })
-              .AddDefaultFilters()
-              .AddFileCache(new FileCacheSettings(HostingEnvironment.WebRootPath))
-              .AddHttpLoader(new HttpLoaderSettings());
+services.AddImageWizard(options => 
+                       {
+                           options.AllowUnsafeUrl = true;
+                           options.Key = "DEMO-KEY...";
+                           options.ResponseCacheTime = TimeSpan.FromDays(90);
+                       })
+                       .AddDefaultFilters()
+                       .AddFileCache(options => options.RootFolder = env.WebRootPath)
+                       .AddHttpLoader();
+```
+
+```csharp
+app.UseImageWizard();
 ```
 
 ## Available image filters
@@ -64,7 +73,7 @@ Add settings to the appsettings.json
 ```json
  "ImageWizard": {
     "BaseUrl": "https://<your-domain>/image",
-    "Key": "85s6JMcm9BqdvqKG1mePb8+KCfEfX/OtJRADVR28az4Ou27ATnNPhAxpmK6BDVoQtJPcYekTG5Onjf63Ip/94A==",
+    "Key": "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==",
     "Enabled": true
   }
 ```
