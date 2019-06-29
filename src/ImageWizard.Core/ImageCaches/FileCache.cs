@@ -3,6 +3,7 @@ using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,12 @@ namespace ImageWizard.ImageStorages
 {
     public class FileCache : IImageCache
     {
-        public FileCache(FileCacheSettings settings)
+        public FileCache(IOptions<FileCacheSettings> settings)
         {
             Settings = settings;
         }
 
-        public FileCacheSettings Settings { get; }
+        public IOptions<FileCacheSettings> Settings { get; }
 
         private string[] SplitSecret(string secret)
         {
@@ -47,7 +48,7 @@ namespace ImageWizard.ImageStorages
 
             string[] parts = SplitSecret(signatureHex);
 
-            string baseFilePath = Path.Combine(new[] { Settings.RootFolder.FullName }.Concat(parts).Concat(new[] { signatureHex }).ToArray());
+            string baseFilePath = Path.Combine(new[] { Settings.Value.RootFolder }.Concat(parts).Concat(new[] { signatureHex }).ToArray());
 
             FileInfo fileInfo = new FileInfo(baseFilePath);
 
@@ -105,7 +106,7 @@ namespace ImageWizard.ImageStorages
             writer.Write(metadataBuffer);
 
             //store transformed image
-            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { Settings.RootFolder.FullName }.Concat(parts).ToArray()));
+            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { Settings.Value.RootFolder }.Concat(parts).ToArray()));
 
             writer.Write(transformedImageData.Length);
             writer.Write(transformedImageData);

@@ -12,12 +12,12 @@ namespace ImageWizard
     {
         public static IImageWizardBuilder AddHttpLoader(this IImageWizardBuilder wizardConfiguration)
         {
-            return AddHttpLoader(wizardConfiguration, new HttpLoaderSettings());
+            return AddHttpLoader(wizardConfiguration, options => { });
         }
 
-        public static IImageWizardBuilder AddHttpLoader(this IImageWizardBuilder wizardConfiguration, HttpLoaderSettings settings)
+        public static IImageWizardBuilder AddHttpLoader(this IImageWizardBuilder wizardConfiguration, Action<HttpLoaderSettings> settingsSetup)
         {
-            wizardConfiguration.Services.AddSingleton(settings);
+            wizardConfiguration.Services.Configure(settingsSetup);
             wizardConfiguration.Services.AddHttpClient<IImageLoader, HttpLoader>();
 
             return wizardConfiguration;

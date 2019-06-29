@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard
 {
-    public static class Extensions
+    public static class ImageWIzardExtensions
     {
         public static IApplicationBuilder UseImageWizard(this IApplicationBuilder app)
         {
@@ -28,10 +28,24 @@ namespace ImageWizard
             return app;
         }
 
-        public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, ImageWizardCoreSettings settings)
+        public static IImageWizardBuilder AddImageWizard(this IServiceCollection services)
         {
-            services.AddSingleton(x => new CryptoService(settings.Key));
-            services.AddSingleton(settings);
+            return AddImageWizard(services, options => {
+                                                options.BasePath = "/image";
+                                                options.AllowUnsafeUrl = false;
+                                                options.ResponseCacheTime = TimeSpan.FromDays(90);
+                });
+        }
+
+        public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardCoreSettings> settingsSetup)
+        {
+            services.Configure(settingsSetup);
+
+            services.AddSingleton(x =>
+            {
+                var settings = x.GetService<IOptions<ImageWizardCoreSettings>>();
+                return new CryptoService(settings.Value.Key);
+            });
 
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
 

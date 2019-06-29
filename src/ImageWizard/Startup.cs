@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace ImageWizard
 {
@@ -26,10 +27,15 @@ namespace ImageWizard
             ImageWizardSettings serviceSettings = new ImageWizardSettings();
             Configuration.GetSection("ImageWizard").Bind(serviceSettings);
 
-            services.AddImageWizard(new ImageWizardCoreSettings() { AllowUnsafeUrl = serviceSettings.AllowUnsafeUrl, Key = serviceSettings.Key })
+            services.AddImageWizard(options => 
+                                    {
+                                        options.AllowUnsafeUrl = serviceSettings.AllowUnsafeUrl;
+                                        options.Key = serviceSettings.Key;
+                                        options.ResponseCacheTime = TimeSpan.FromDays(90);
+                                    })
                         .AddDefaultFilters()
-                        .AddFileCache(new FileCacheSettings(HostingEnvironment.WebRootPath))
-                        .AddHttpLoader(new HttpLoaderSettings())
+                        .AddFileCache(options => options.RootFolder = HostingEnvironment.WebRootPath)
+                        .AddHttpLoader()
                        ;
 
             services.AddHttpsRedirection(x => x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);

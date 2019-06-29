@@ -9,6 +9,7 @@
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     <Version>1.1.1</Version>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
+    <Description>A middleware to manipulate your images dynamically.</Description>
   </PropertyGroup>
   
   <ItemGroup>

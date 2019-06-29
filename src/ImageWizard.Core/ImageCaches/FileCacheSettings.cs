@@ -10,25 +10,14 @@ namespace ImageWizard.Core.ImageCaches
     /// </summary>
     public class FileCacheSettings
     {
-        public FileCacheSettings(string rootFolder)
-            : this(new DirectoryInfo(rootFolder))
+        public FileCacheSettings()
         {
 
-        }
-
-         public FileCacheSettings(DirectoryInfo rootFolder)
-        { 
-            RootFolder = rootFolder;
-
-            if(RootFolder.Exists == false)
-            {
-                throw new Exception("Cache folder doesn't exists: " + RootFolder.Name);
-            }
         }
 
         /// <summary>
         /// RootFolder
         /// </summary>
-        public DirectoryInfo RootFolder { get; }
+        public string RootFolder { get; set; }
     }
 }

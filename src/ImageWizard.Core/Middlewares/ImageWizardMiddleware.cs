@@ -8,6 +8,7 @@ using ImageWizard.Services.Types;
 using ImageWizard.Settings;
 using ImageWizard.SharedContract;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -27,7 +28,7 @@ namespace ImageWizard.Middlewares
 
         public ImageWizardMiddleware(
             RequestDelegate next,
-            ImageWizardCoreSettings settings,
+            IOptions<ImageWizardCoreSettings> settings,
             FilterManager filterManager,
             IImageLoader imageDownloader,
             IImageCache fileCache,
@@ -42,10 +43,10 @@ namespace ImageWizard.Middlewares
 
             _next = next;
 
-            UrlRegex = new Regex($@"^{Settings.BasePath.Value}/(?<signature>[A-Za-z0-9-_]{{27}}|unsafe)/(?<path>(?<filter>[a-z]+\(.*?\)/)*fetch/(?<imagesource>.*))$");
+            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[A-Za-z0-9-_]{{27}}|unsafe)/(?<path>(?<filter>[a-z]+\(.*?\)/)*fetch/(?<imagesource>.*))$");
         }
 
-        private ImageWizardCoreSettings Settings { get; }
+        private IOptions<ImageWizardCoreSettings> Settings { get; }
 
         /// <summary>
         /// FilterManager
@@ -99,7 +100,7 @@ namespace ImageWizard.Middlewares
             string signature = CryptoService.Encrypt(url_path);
 
             //check unsafe keyword or signature
-            if ((Settings.AllowUnsafeUrl && url_signature == "unsafe") == false
+            if ((Settings.Value.AllowUnsafeUrl && url_signature == "unsafe") == false
                 &&
                 (signature == url_signature) == false)
             {
@@ -173,12 +174,12 @@ namespace ImageWizard.Middlewares
             }
 
             //send cached and transformed image
-            if (Settings.ResponseCacheTime != null)
+            if (Settings.Value.ResponseCacheTime != null)
             {
                 context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
                 {
                     Public = true,
-                    MaxAge = Settings.ResponseCacheTime
+                    MaxAge = Settings.Value.ResponseCacheTime
                 };
             }
 

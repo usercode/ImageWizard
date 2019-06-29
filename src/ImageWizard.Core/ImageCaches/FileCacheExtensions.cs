@@ -9,9 +9,15 @@ namespace ImageWizard.Core.ImageCaches
 {
     public static class FileCacheExtensions
     {
-        public static IImageWizardBuilder AddFileCache(this IImageWizardBuilder wizardConfiguration, FileCacheSettings fileCacheSettings)
+        public static IImageWizardBuilder AddFileCache(this IImageWizardBuilder wizardConfiguration)
         {
-            wizardConfiguration.Services.AddSingleton(fileCacheSettings);
+            return AddFileCache(wizardConfiguration, options => { });
+        }
+
+        public static IImageWizardBuilder AddFileCache(this IImageWizardBuilder wizardConfiguration, Action<FileCacheSettings> fileCacheSettingsSetup)
+        {
+            wizardConfiguration.Services.Configure(fileCacheSettingsSetup);
+
             wizardConfiguration.Services.AddSingleton<IImageCache, FileCache>();
 
             return wizardConfiguration;

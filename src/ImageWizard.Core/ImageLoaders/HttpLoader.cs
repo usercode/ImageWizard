@@ -1,5 +1,6 @@
 ﻿using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Services.Types;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +15,7 @@ namespace ImageWizard.ImageLoaders
     /// </summary>
     public class HttpLoader : IImageLoader
     {
-        public HttpLoader(HttpClient httpCLient, HttpLoaderSettings settings)
+        public HttpLoader(HttpClient httpCLient, IOptions<HttpLoaderSettings> settings)
         {
             HttpClient = httpCLient;
             Settings = settings;
@@ -28,7 +29,7 @@ namespace ImageWizard.ImageLoaders
         /// <summary>
         /// Settings
         /// </summary>
-        public HttpLoaderSettings Settings { get; }
+        public IOptions<HttpLoaderSettings> Settings { get; }
 
         /// <summary>
         /// Download
