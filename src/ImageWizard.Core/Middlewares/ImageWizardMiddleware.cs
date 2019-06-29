@@ -184,7 +184,7 @@ namespace ImageWizard.Middlewares
 
             context.Response.ContentLength = cachedImage.Data.Length;
             context.Response.ContentType = cachedImage.Metadata.MimeType;
-            context.Response.Body.Write(cachedImage.Data, 0, cachedImage.Data.Length);            
+            context.Response.Body.Write(cachedImage.Data, 0, cachedImage.Data.Length);
         }
     }
 }

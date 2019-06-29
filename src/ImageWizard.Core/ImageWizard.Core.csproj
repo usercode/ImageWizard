@@ -4,8 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>usercode</Authors>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+    <Version>1.1</Version>
   </PropertyGroup>
   
   <ItemGroup>
@@ -19,6 +21,12 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\ImageWizard.SharedContract\ImageWizard.SharedContract.csproj" />
+    <ProjectReference Include="..\ImageWizard.SharedContract\ImageWizard.SharedContract.csproj" PrivateAssets="All" />
   </ItemGroup>
+
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
 </Project>

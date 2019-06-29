@@ -16,7 +16,7 @@ namespace ImageWizard.Settings
         {
             BasePath = "/image";
             AllowUnsafeUrl = false;
-            ResponseCacheTime = TimeSpan.FromDays(7);
+            ResponseCacheTime = TimeSpan.FromDays(90);
         }
 
         /// <summary>
