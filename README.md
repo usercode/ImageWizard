@@ -25,6 +25,7 @@ https://www.nuget.org/packages/ImageWizard.Core/
 services.AddImageWizard(options => 
                        {
                            options.AllowUnsafeUrl = true;
+                           options.UseETag = true;
                            options.Key = "DEMO-KEY...";
                            options.ResponseCacheTime = TimeSpan.FromDays(90);
                        })
