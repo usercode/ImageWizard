@@ -19,7 +19,7 @@ https://localhost/image/unsafe/trim()/resize(200,200)/jpg(90)/fetch/https://uplo
 | absolute url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
 ## Image filters
-
+### Image transformations
 - resize(size)
 - resize(width,height)
 - resize(width,height,mode)
@@ -35,13 +35,18 @@ https://localhost/image/unsafe/trim()/resize(200,200)/jpg(90)/fetch/https://uplo
 - blackwhite()
 - blur()
 
-## Output formats
+### Output formats
 
 - jpg()
 - jpg(quality)
 - png()
 - gif()
 - bmp()
+
+## Image caches
+
+- filesystem (default: "wwwroot")
+- MongoDB
 
 ## Integrate into existing ASP.NET Core applications
 
@@ -56,7 +61,10 @@ services.AddImageWizard(options =>
                            options.ResponseCacheTime = TimeSpan.FromDays(90);
                        })
                        .AddDefaultFilters()
+                       //use file cache
                        .AddFileCache(options => options.RootFolder = env.WebRootPath)
+                       //or MongoDB cache
+                       .AddMongoDBCache(options => options.Hostname = "localhost")
                        .AddHttpLoader();
 ```
 
