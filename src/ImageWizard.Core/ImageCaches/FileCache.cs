@@ -57,8 +57,16 @@ namespace ImageWizard.ImageStorages
                 return null;
             }
 
-            byte[] fileBuffer = File.ReadAllBytes(fileInfo.FullName);
-            BinaryReader reader = new BinaryReader(new MemoryStream(fileBuffer));
+            //read cache image from disk
+            MemoryStream memImage = new MemoryStream();
+            using(Stream fs = fileInfo.OpenRead())
+            {
+                await fs.CopyToAsync(memImage);
+            }
+
+            memImage.Seek(0, SeekOrigin.Begin);
+
+            BinaryReader reader = new BinaryReader(memImage);
 
             //read version
             int version = reader.ReadInt32();
@@ -97,7 +105,7 @@ namespace ImageWizard.ImageStorages
             ImageMetadata imageMetadata = new ImageMetadata();
             imageMetadata.MimeType = imageFormat.MimeType;
             imageMetadata.Url = originalImage.Url;
-            imageMetadata.Signature = signatureHex;
+            imageMetadata.Signature = signature;
 
             string metadataJson = JsonConvert.SerializeObject(imageMetadata);
             byte[] metadataBuffer = Encoding.UTF8.GetBytes(metadataJson);
@@ -111,10 +119,15 @@ namespace ImageWizard.ImageStorages
             writer.Write(transformedImageData.Length);
             writer.Write(transformedImageData);
 
+            cachedFileData.Seek(0, SeekOrigin.Begin);
+
             //write to file
             FileInfo file = new FileInfo(Path.Combine(sub.FullName, signatureHex));
-            
-            File.WriteAllBytes(file.FullName, cachedFileData.ToArray());
+
+            using (Stream fs = file.OpenWrite())
+            {
+                await cachedFileData.CopyToAsync(fs);
+            }
 
             return new CachedImage() { Data = transformedImageData, Metadata = imageMetadata };
         }

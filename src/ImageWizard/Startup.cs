@@ -29,18 +29,17 @@ namespace ImageWizard
             ImageWizardSettings serviceSettings = new ImageWizardSettings();
             Configuration.GetSection("ImageWizard").Bind(serviceSettings);
 
-            services.AddImageWizard(options => 
+            services.AddImageWizard(options =>
                                     {
                                         options.BasePath = "/image";
                                         options.AllowUnsafeUrl = serviceSettings.AllowUnsafeUrl;
-                                        options.UseETag = true;
+                                        options.UseETag = serviceSettings.UseETag;
                                         options.Key = serviceSettings.Key;
                                         options.ResponseCacheTime = TimeSpan.FromDays(90);
                                     })
                         .AddDefaultFilters()
                         .AddFileCache(options => options.RootFolder = HostingEnvironment.WebRootPath)
-                        .AddHttpLoader()
-                       ;
+                        .AddHttpLoader();
 
             services.AddHttpsRedirection(x => x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);
         }

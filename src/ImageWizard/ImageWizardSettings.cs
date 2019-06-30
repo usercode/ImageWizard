@@ -11,10 +11,12 @@ namespace ImageWizard
         public ImageWizardSettings()
         {
             AllowUnsafeUrl = false;
+            UseETag = true;
         }
 
         public bool AllowUnsafeUrl { get; set; }
 
+        public bool UseETag { get; set; }
 
         public string Key { get; set; }
 
