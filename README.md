@@ -4,7 +4,7 @@ A webservice to manipulate your images dynamically.
 | Package                       | Release | 
 |--------------------------------|-----------------|
 | ImageWizard.Core               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
-| ImageWizard.MongoDB               |  |
+| ImageWizard.MongoDB               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
 | ImageWizard.AspNetCore               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.AspNetCore.svg)](https://www.nuget.org/packages/ImageWizard.AspNetCore/) |
 
 
