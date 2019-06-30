@@ -43,6 +43,11 @@ https://localhost/image/unsafe/trim()/resize(200,200)/jpg(90)/fetch/https://uplo
 - gif()
 - bmp()
 
+## Image caches
+
+- filesystem (default: "wwwroot")
+- MongoDB
+
 ## Integrate into existing ASP.NET Core applications
 
 https://www.nuget.org/packages/ImageWizard.Core/
