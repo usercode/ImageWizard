@@ -1,13 +1,20 @@
-﻿using System;
+﻿using ImageWizard.Core.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Services.Types
+namespace ImageWizard.Types
 {
     public class CachedImage
     {
+        public CachedImage()
+        {
+
+        }
+
         public byte[] Data { get; set; }
-        public ImageMetadata Metadata { get; set; }
+
+        public IImageMetadata Metadata { get; set; }
     }
 }

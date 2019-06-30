@@ -1,11 +1,12 @@
-﻿using ImageWizard.Core.Middlewares;
+﻿using ImageWizard.Core.ImageCaches;
+using ImageWizard.Core.Middlewares;
 using ImageWizard.ImageStorages;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageCaches
+namespace ImageWizard
 {
     public static class FileCacheExtensions
     {

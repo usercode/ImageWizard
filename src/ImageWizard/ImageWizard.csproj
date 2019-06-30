@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+    <ProjectReference Include="..\ImageWizard.MongoDB\ImageWizard.MongoDB.csproj" />
     <ProjectReference Include="..\ImageWizard.SharedContract\ImageWizard.SharedContract.csproj" />
   </ItemGroup>
 

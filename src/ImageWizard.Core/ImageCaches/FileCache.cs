@@ -1,7 +1,9 @@
 ﻿using ImageWizard.Core.ImageCaches;
+using ImageWizard.Core.Types;
 using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
+using ImageWizard.Types;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -33,18 +35,18 @@ namespace ImageWizard.ImageStorages
             return new[] { part1, part2, part3, part4 };
         }
 
-        private string ToHex(string signature)
+        private string ToHex(string key)
         {
             //convert signature to hex for the filestore
-            byte[] buf = Encoding.UTF8.GetBytes(signature);
+            byte[] buf = Encoding.UTF8.GetBytes(key);
             string signatureHex = buf.Aggregate(string.Empty, (a, b) => a += b.ToString("x2"));
 
             return signatureHex;
         }
 
-        public async Task<CachedImage> GetAsync(string signature)
+        public async Task<CachedImage> GetAsync(string key)
         {
-            string signatureHex = ToHex(signature);
+            string signatureHex = ToHex(key);
 
             string[] parts = SplitSecret(signatureHex);
 
@@ -89,9 +91,9 @@ namespace ImageWizard.ImageStorages
             return cachedImage;
         }
 
-        public async Task<CachedImage> SaveAsync(string signature, OriginalImage originalImage, IImageFormat imageFormat, byte[] transformedImageData)
+        public async Task<CachedImage> SaveAsync(string key, byte[] transformedImageData, IImageMetadata imageMetadata)
         {
-            string signatureHex = ToHex(signature);
+            string signatureHex = ToHex(key);
 
             string[] parts = SplitSecret(signatureHex);
 
@@ -100,12 +102,6 @@ namespace ImageWizard.ImageStorages
             
             //write file version
             writer.Write(1);
-
-            //create metadata
-            ImageMetadata imageMetadata = new ImageMetadata();
-            imageMetadata.MimeType = imageFormat.MimeType;
-            imageMetadata.Url = originalImage.Url;
-            imageMetadata.Signature = signature;
 
             string metadataJson = JsonConvert.SerializeObject(imageMetadata);
             byte[] metadataBuffer = Encoding.UTF8.GetBytes(metadataJson);

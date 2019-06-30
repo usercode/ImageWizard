@@ -1,5 +1,7 @@
-﻿using ImageWizard.ImageFormats.Base;
+﻿using ImageWizard.Core.Types;
+using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
+using ImageWizard.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +29,6 @@ namespace ImageWizard.ImageStorages
         /// <param name="imageFormat"></param>
         /// <param name="transformedImageData"></param>
         /// <returns></returns>
-        Task<CachedImage> SaveAsync(string key, OriginalImage originalImage, IImageFormat imageFormat, byte[] transformedImageData);
+        Task<CachedImage> SaveAsync(string key, byte[] transformedImageData, IImageMetadata imageMetadata);
     }
 }

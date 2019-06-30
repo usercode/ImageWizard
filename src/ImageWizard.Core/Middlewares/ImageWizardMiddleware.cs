@@ -7,6 +7,7 @@ using ImageWizard.ImageStorages;
 using ImageWizard.Services.Types;
 using ImageWizard.Settings;
 using ImageWizard.SharedContract;
+using ImageWizard.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
@@ -182,7 +183,13 @@ namespace ImageWizard.Middlewares
                     }
                 }
 
-                cachedImage = await FileCache.SaveAsync(signature, originalImage, targetFormat, transformedImageData);
+                //create metadata
+                ImageMetadata imageMetadata = new ImageMetadata();
+                imageMetadata.MimeType = targetFormat.MimeType;
+                imageMetadata.Url = originalImage.Url;
+                imageMetadata.Signature = signature;
+
+                cachedImage = await FileCache.SaveAsync(signature, transformedImageData, imageMetadata);
             }
 
             //send cached and transformed image

@@ -21,7 +21,7 @@ namespace ImageWizard.ImageFormats
         /// </summary>
         public int Quality { get; set; }
 
-        public string MimeType => "image/jpg";
+        public string MimeType => "image/jpeg";
 
         public void SaveImage(Image<Rgba32> image, Stream stream)
         {

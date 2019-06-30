@@ -1,7 +1,4 @@
-﻿using ImageWizard.Core.ImageCaches;
-using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Settings;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using System;
+using ImageWizard.MongoDB;
 
 namespace ImageWizard
 {
@@ -38,7 +36,8 @@ namespace ImageWizard
                                         options.ResponseCacheTime = TimeSpan.FromDays(90);
                                     })
                         .AddDefaultFilters()
-                        .AddFileCache(options => options.RootFolder = HostingEnvironment.WebRootPath)
+                        //.AddFileCache(options => options.RootFolder = HostingEnvironment.WebRootPath)
+                        .AddMongoDBCache(options => options.Hostname = "localhost")
                         .AddHttpLoader();
 
             services.AddHttpsRedirection(x => x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);

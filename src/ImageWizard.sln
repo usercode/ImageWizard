@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.AspNetCore", "I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.SharedContract", "ImageWizard.SharedContract\ImageWizard.SharedContract.csproj", "{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.Core", "ImageWizard.Core\ImageWizard.Core.csproj", "{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Core", "ImageWizard.Core\ImageWizard.Core.csproj", "{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.MongoDB", "ImageWizard.MongoDB\ImageWizard.MongoDB.csproj", "{718CC6EF-4F72-4D4C-8372-4F4D26148AA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{718CC6EF-4F72-4D4C-8372-4F4D26148AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{718CC6EF-4F72-4D4C-8372-4F4D26148AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{718CC6EF-4F72-4D4C-8372-4F4D26148AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{718CC6EF-4F72-4D4C-8372-4F4D26148AA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
