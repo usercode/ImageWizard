@@ -19,7 +19,7 @@ https://localhost/image/unsafe/trim()/resize(200,200)/jpg(90)/fetch/https://uplo
 | absolute url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
 ## Image filters
-
+### Image transformations
 - resize(size)
 - resize(width,height)
 - resize(width,height,mode)
@@ -35,7 +35,7 @@ https://localhost/image/unsafe/trim()/resize(200,200)/jpg(90)/fetch/https://uplo
 - blackwhite()
 - blur()
 
-## Output formats
+### Output formats
 
 - jpg()
 - jpg(quality)
