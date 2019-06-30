@@ -1,19 +1,23 @@
 # ImageWizard
 A webservice to manipulate your images dynamically.
 
+| Package                       | Release | 
+|--------------------------------|-----------------|
+| ImageWizard.Core               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
+| ImageWizard.MongoDB               |  |
+| ImageWizard.AspNetCore               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.AspNetCore.svg)](https://www.nuget.org/packages/ImageWizard.AspNetCore/) |
+
+
 ## Overview
 
 Example:
 
 https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(90)/fetch/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
-unsafe version (if enabled):
-https://localhost/image/unsafe/trim()/resize(200,200)/jpg(90)/fetch/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
-
 | Description         | Url segment |
 |---------------------|-----------------|
 | base path | "image" |
-| signature based on HMACSHA1 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" |
+| signature based on HMACSHA1 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
 | any filters | "trim()/resize(200,200)/jpg(90)" |
 | delivery type | "fetch" |
 | absolute url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
