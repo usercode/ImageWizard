@@ -10,35 +10,15 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 unsafe version (if enabled):
 https://localhost/image/unsafe/trim()/resize(200,200)/jpg(90)/fetch/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
-Url parts:
-- base path ("/image")
-- signature based on HMACSHA1 and encoded in Base64Url
-- any filters
-- delivery type: fetch
-- absolute url of the original image
+| Description         | Url segment |
+|---------------------|-----------------|
+| base path | "image" |
+| signature based on HMACSHA1 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" |
+| any filters | "trim()/resize(200,200)/jpg(90)" |
+| delivery type | "fetch" |
+| absolute url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
-## Integrate into existing ASP.NET Core applications
-
-https://www.nuget.org/packages/ImageWizard.Core/
-
-```csharp
-services.AddImageWizard(options => 
-                       {
-                           options.AllowUnsafeUrl = true;
-                           options.UseETag = true;
-                           options.Key = "DEMO-KEY...";
-                           options.ResponseCacheTime = TimeSpan.FromDays(90);
-                       })
-                       .AddDefaultFilters()
-                       .AddFileCache(options => options.RootFolder = env.WebRootPath)
-                       .AddHttpLoader();
-```
-
-```csharp
-app.UseImageWizard();
-```
-
-## Available image filters
+## Image filters
 
 - resize(size)
 - resize(width,height)
@@ -62,6 +42,27 @@ app.UseImageWizard();
 - png()
 - gif()
 - bmp()
+
+## Integrate into existing ASP.NET Core applications
+
+https://www.nuget.org/packages/ImageWizard.Core/
+
+```csharp
+services.AddImageWizard(options => 
+                       {
+                           options.AllowUnsafeUrl = true;                           
+                           options.Key = "DEMO-KEY...";
+                           options.UseETag = true;
+                           options.ResponseCacheTime = TimeSpan.FromDays(90);
+                       })
+                       .AddDefaultFilters()
+                       .AddFileCache(options => options.RootFolder = env.WebRootPath)
+                       .AddHttpLoader();
+```
+
+```csharp
+app.UseImageWizard();
+```
 
 ## ASP.NET Core UrlBuilder
 
