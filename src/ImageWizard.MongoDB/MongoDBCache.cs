@@ -57,8 +57,7 @@ namespace ImageWizard.MongoDB
         {
             ImageMetadataModel foundMetadata = await ImageMetadatas
                                                             .AsQueryable()
-                                                            .Where(x => x.Signature == key)
-                                                            .FirstOrDefaultAsync();
+                                                            .FirstOrDefaultAsync(x => x.Signature == key);
 
             if(foundMetadata == null)
             {

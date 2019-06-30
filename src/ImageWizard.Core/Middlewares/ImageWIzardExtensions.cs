@@ -33,22 +33,22 @@ namespace ImageWizard
             return AddImageWizard(services, options => { });
         }
 
-        public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardCoreSettings> settingsSetup)
+        public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardSettings> settingsSetup)
         {
             services.Configure(settingsSetup);
 
             services.AddSingleton(x =>
             {
-                var settings = x.GetService<IOptions<ImageWizardCoreSettings>>();
+                var settings = x.GetService<IOptions<ImageWizardSettings>>();
                 return new CryptoService(settings.Value.Key);
             });
 
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
+            configuration.AddDefaultFilters();
 
             services.AddSingleton(configuration);
 
             return configuration;
-        }
-   
+        }   
     }
 }

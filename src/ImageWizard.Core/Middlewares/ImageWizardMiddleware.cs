@@ -29,17 +29,17 @@ namespace ImageWizard.Middlewares
 
         public ImageWizardMiddleware(
             RequestDelegate next,
-            IOptions<ImageWizardCoreSettings> settings,
+            IOptions<ImageWizardSettings> settings,
             FilterManager filterManager,
-            IImageLoader imageDownloader,
-            IImageCache fileCache,
+            IImageLoader imageLoader,
+            IImageCache imageCache,
             CryptoService cryptoService
             )
         {
             Settings = settings;
             FilterManager = filterManager;
-            ImageLoader = imageDownloader;
-            FileCache = fileCache;
+            ImageLoader = imageLoader;
+            ImageCache = imageCache;
             CryptoService = cryptoService;
 
             _next = next;
@@ -47,7 +47,7 @@ namespace ImageWizard.Middlewares
             UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[A-Za-z0-9-_]{{27}}|unsafe)/(?<path>(?<filter>[a-z]+\(.*?\)/)*fetch/(?<imagesource>.*))$");
         }
 
-        private IOptions<ImageWizardCoreSettings> Settings { get; }
+        private IOptions<ImageWizardSettings> Settings { get; }
 
         /// <summary>
         /// FilterManager
@@ -62,7 +62,7 @@ namespace ImageWizard.Middlewares
         /// <summary>
         /// FileStorage
         /// </summary>
-        private IImageCache FileCache { get; }
+        private IImageCache ImageCache { get; }
 
         /// <summary>
         /// CryptoService
@@ -73,6 +73,13 @@ namespace ImageWizard.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
+            if (context.Request.Path.StartsWithSegments(Settings.Value.BasePath) == false)
+            {
+                await _next(context);
+
+                return;
+            }
+
             string path = context.Request.Path.Value;
 
             if (context.Request.QueryString.HasValue)
@@ -84,7 +91,7 @@ namespace ImageWizard.Middlewares
 
             if (match.Success == false)
             {
-                await _next(context);
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
                 return;
             }
@@ -119,12 +126,13 @@ namespace ImageWizard.Middlewares
                 if (isValid == true)
                 {
                     context.Response.StatusCode = StatusCodes.Status304NotModified;
+
                     return;
                 }
             }
 
             //try to get cached image
-            CachedImage cachedImage = await FileCache.GetAsync(signature);
+            CachedImage cachedImage = await ImageCache.GetAsync(signature);
 
             //no cached image found?
             if (cachedImage == null)
@@ -189,7 +197,7 @@ namespace ImageWizard.Middlewares
                 imageMetadata.Url = originalImage.Url;
                 imageMetadata.Signature = signature;
 
-                cachedImage = await FileCache.SaveAsync(signature, transformedImageData, imageMetadata);
+                cachedImage = await ImageCache.SaveAsync(signature, transformedImageData, imageMetadata);
             }
 
             //send cached and transformed image

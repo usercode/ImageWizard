@@ -7,6 +7,8 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using System;
 using ImageWizard.MongoDB;
+using ImageWizard.Core.ImageCaches;
+using ImageWizard.Settings;
 
 namespace ImageWizard
 {
@@ -24,20 +26,18 @@ namespace ImageWizard
 
         public void ConfigureServices(IServiceCollection services)
         {
-            ImageWizardSettings serviceSettings = new ImageWizardSettings();
-            Configuration.GetSection("ImageWizard").Bind(serviceSettings);
+            services.Configure<ImageWizardSettings>(Configuration.GetSection("General"));
+            services.Configure<FileCacheSettings>(Configuration.GetSection("FileCache"));
+            services.Configure<MongoDBCacheSettings>(Configuration.GetSection("MongoDBCache"));
 
             services.AddImageWizard(options =>
                                     {
                                         options.BasePath = "/image";
-                                        options.AllowUnsafeUrl = serviceSettings.AllowUnsafeUrl;
-                                        options.UseETag = serviceSettings.UseETag;
-                                        options.Key = serviceSettings.Key;
+                                        options.UseETag = true;
                                         options.ResponseCacheTime = TimeSpan.FromDays(90);
                                     })
-                        .AddDefaultFilters()
                         //.AddFileCache(options => options.RootFolder = HostingEnvironment.WebRootPath)
-                        .AddMongoDBCache(options => options.Hostname = "localhost")
+                        .AddMongoDBCache()
                         .AddHttpLoader();
 
             services.AddHttpsRedirection(x => x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);

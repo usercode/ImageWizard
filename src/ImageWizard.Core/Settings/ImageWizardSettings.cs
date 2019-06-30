@@ -10,9 +10,9 @@ namespace ImageWizard.Settings
     /// <summary>
     /// ServiceSettings
     /// </summary>
-    public class ImageWizardCoreSettings
+    public class ImageWizardSettings
     {
-        public ImageWizardCoreSettings()
+        public ImageWizardSettings()
         {
             BasePath = "/image";
             UseETag = true;

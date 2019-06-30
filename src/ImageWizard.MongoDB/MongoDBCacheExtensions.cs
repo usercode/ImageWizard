@@ -9,6 +9,11 @@ namespace ImageWizard.MongoDB
 {
     public static class MongoDBCacheExtensions
     {
+        public static IImageWizardBuilder AddMongoDBCache(this IImageWizardBuilder wizardConfiguration)
+        {
+            return AddMongoDBCache(wizardConfiguration, options => { });
+        }
+
         public static IImageWizardBuilder AddMongoDBCache(this IImageWizardBuilder wizardConfiguration, Action<MongoDBCacheSettings> cacheSettingsSetup)
         {
             wizardConfiguration.Services.Configure(cacheSettingsSetup);
