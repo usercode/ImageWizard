@@ -60,7 +60,6 @@ services.AddImageWizard(options =>
                            options.UseETag = true;
                            options.ResponseCacheTime = TimeSpan.FromDays(90);
                        })
-                       .AddDefaultFilters()
                        //use file cache
                        .AddFileCache(options => options.RootFolder = env.WebRootPath)
                        //or MongoDB cache
