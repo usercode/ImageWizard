@@ -49,12 +49,14 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 
 ## Image caches
 
-- filesystem (default: "wwwroot")
+- file cache
+- distributed cache
 - MongoDB
 
 ## Integrate into existing ASP.NET Core applications
 
 https://www.nuget.org/packages/ImageWizard.Core/
+
 
 ```csharp
 services.AddImageWizard(options => 
@@ -68,6 +70,8 @@ services.AddImageWizard(options =>
                        .AddFileCache(options => options.RootFolder = env.WebRootPath)
                        //or MongoDB cache
                        .AddMongoDBCache(options => options.Hostname = "localhost")
+                       //or distributed cache
+                       .AddDistributedCache()
                        .AddHttpLoader();
 ```
 
