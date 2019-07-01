@@ -19,7 +19,7 @@ namespace ImageWizard.ImageStorages
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        Task<CachedImage> GetAsync(string key);
+        Task<CachedImage> ReadAsync(string key);
 
         /// <summary>
         /// SaveAsync
@@ -29,6 +29,6 @@ namespace ImageWizard.ImageStorages
         /// <param name="imageFormat"></param>
         /// <param name="transformedImageData"></param>
         /// <returns></returns>
-        Task<CachedImage> SaveAsync(string key, byte[] transformedImageData, IImageMetadata imageMetadata);
+        Task WriteAsync(string key, CachedImage cachedImage);
     }
 }

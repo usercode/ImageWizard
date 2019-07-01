@@ -10,18 +10,25 @@ namespace ImageWizard
 {
     public static class FileCacheExtensions
     {
-        public static IImageWizardBuilder AddFileCache(this IImageWizardBuilder wizardConfiguration)
+        public static IImageWizardBuilder AddDistributedCache(this IImageWizardBuilder wizardBuilder)
         {
-            return AddFileCache(wizardConfiguration, options => { });
+            wizardBuilder.Services.AddTransient<IImageCache, DistributedCache>();
+
+            return wizardBuilder;
         }
 
-        public static IImageWizardBuilder AddFileCache(this IImageWizardBuilder wizardConfiguration, Action<FileCacheSettings> fileCacheSettingsSetup)
+        public static IImageWizardBuilder AddFileCache(this IImageWizardBuilder wizardBuilder)
         {
-            wizardConfiguration.Services.Configure(fileCacheSettingsSetup);
+            return AddFileCache(wizardBuilder, options => { });
+        }
 
-            wizardConfiguration.Services.AddSingleton<IImageCache, FileCache>();
+        public static IImageWizardBuilder AddFileCache(this IImageWizardBuilder wizardBuilder, Action<FileCacheSettings> fileCacheSettingsSetup)
+        {
+            wizardBuilder.Services.Configure(fileCacheSettingsSetup);
 
-            return wizardConfiguration;
+            wizardBuilder.Services.AddSingleton<IImageCache, FileCache>();
+
+            return wizardBuilder;
         }
     }
 }

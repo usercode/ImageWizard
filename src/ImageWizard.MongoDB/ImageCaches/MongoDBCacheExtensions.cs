@@ -1,5 +1,6 @@
 ﻿using ImageWizard.Core.Middlewares;
 using ImageWizard.ImageStorages;
+using ImageWizard.MongoDB.ImageCaches;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

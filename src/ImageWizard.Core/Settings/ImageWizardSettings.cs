@@ -18,6 +18,7 @@ namespace ImageWizard.Settings
             UseETag = true;
             AllowUnsafeUrl = false;
             ResponseCacheTime = TimeSpan.FromDays(90);
+            Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
         }
 
         /// <summary>

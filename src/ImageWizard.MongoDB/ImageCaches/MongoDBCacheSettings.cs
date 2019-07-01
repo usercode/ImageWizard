@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.MongoDB
+namespace ImageWizard.MongoDB.ImageCaches
 {
     /// <summary>
     /// MongoDBCacheSettings

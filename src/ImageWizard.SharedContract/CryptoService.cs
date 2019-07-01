@@ -16,7 +16,6 @@ namespace ImageWizard.SharedContract
         public CryptoService(string key)
         {
             Key = Base64Url.FromBase64Url(key);
-
         }
 
         /// <summary>

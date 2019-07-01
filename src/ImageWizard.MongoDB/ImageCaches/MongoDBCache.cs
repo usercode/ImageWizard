@@ -13,7 +13,7 @@ using ImageWizard.MongoDB.Models;
 using ImageWizard.Types;
 using ImageWizard.Core.Types;
 
-namespace ImageWizard.MongoDB
+namespace ImageWizard.MongoDB.ImageCaches
 {
     /// <summary>
     /// MongoDBCache
@@ -53,7 +53,7 @@ namespace ImageWizard.MongoDB
         /// </summary>
         public IGridFSBucket ImageBuffer { get; }
 
-        public async Task<CachedImage> GetAsync(string key)
+        public async Task<CachedImage> ReadAsync(string key)
         {
             ImageMetadataModel foundMetadata = await ImageMetadatas
                                                             .AsQueryable()
@@ -73,22 +73,20 @@ namespace ImageWizard.MongoDB
             return cachedImage;
         }
 
-        public async Task<CachedImage> SaveAsync(string key, byte[] transformedImageData, IImageMetadata imageMetadata)
+        public async Task WriteAsync(string key, CachedImage cachedImage)
         {
             ImageMetadataModel model = new ImageMetadataModel()
             {
-                Signature = imageMetadata.Signature,
-                MimeType = imageMetadata.MimeType,
-                Url = imageMetadata.Url
+                Signature = cachedImage.Metadata.Signature,
+                MimeType = cachedImage.Metadata.MimeType,
+                Url = cachedImage.Metadata.Url
             };
 
             //upload image metadata
             await ImageMetadatas.ReplaceOneAsync(Builders<ImageMetadataModel>.Filter.Where(x => x.Signature == key), model, new UpdateOptions() { IsUpsert = true });
 
             //upload transformed image
-            await ImageBuffer.UploadFromBytesAsync(key, transformedImageData);
-
-            return new CachedImage() { Metadata = imageMetadata, Data = transformedImageData };
+            await ImageBuffer.UploadFromBytesAsync(key, cachedImage.Data);
         }
     }
 }

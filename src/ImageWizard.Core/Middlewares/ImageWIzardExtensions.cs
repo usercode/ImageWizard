@@ -37,14 +37,10 @@ namespace ImageWizard
         {
             services.Configure(settingsSetup);
 
-            services.AddSingleton(x =>
-            {
-                var settings = x.GetService<IOptions<ImageWizardSettings>>();
-                return new CryptoService(settings.Value.Key);
-            });
-
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
             configuration.AddDefaultFilters();
+            configuration.AddFileCache();
+            configuration.AddHttpLoader();
 
             services.AddSingleton(configuration);
 

@@ -9,6 +9,7 @@ using System;
 using ImageWizard.MongoDB;
 using ImageWizard.Core.ImageCaches;
 using ImageWizard.Settings;
+using ImageWizard.MongoDB.ImageCaches;
 
 namespace ImageWizard
 {
@@ -30,14 +31,12 @@ namespace ImageWizard
             services.Configure<FileCacheSettings>(Configuration.GetSection("FileCache"));
             services.Configure<MongoDBCacheSettings>(Configuration.GetSection("MongoDBCache"));
 
-            services.AddImageWizard(options =>
-                                    {
-                                        options.BasePath = "/image";
-                                        options.UseETag = true;
-                                        options.ResponseCacheTime = TimeSpan.FromDays(90);
-                                    })
+            services.AddDistributedMemoryCache();
+
+            services.AddImageWizard()
                         //.AddFileCache(options => options.RootFolder = HostingEnvironment.WebRootPath)
-                        .AddMongoDBCache()
+                        //.AddMongoDBCache()
+                        .AddDistributedCache()
                         .AddHttpLoader();
 
             services.AddHttpsRedirection(x => x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);

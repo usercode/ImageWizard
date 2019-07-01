@@ -32,17 +32,17 @@ namespace ImageWizard.Middlewares
             IOptions<ImageWizardSettings> settings,
             FilterManager filterManager,
             IImageLoader imageLoader,
-            IImageCache imageCache,
-            CryptoService cryptoService
+            IImageCache imageCache
             )
         {
             Settings = settings;
             FilterManager = filterManager;
             ImageLoader = imageLoader;
             ImageCache = imageCache;
-            CryptoService = cryptoService;
 
             _next = next;
+
+            CryptoService = new CryptoService(Settings.Value.Key);
 
             UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[A-Za-z0-9-_]{{27}}|unsafe)/(?<path>(?<filter>[a-z]+\(.*?\)/)*fetch/(?<imagesource>.*))$");
         }
@@ -132,7 +132,7 @@ namespace ImageWizard.Middlewares
             }
 
             //try to get cached image
-            CachedImage cachedImage = await ImageCache.GetAsync(signature);
+            CachedImage cachedImage = await ImageCache.ReadAsync(signature);
 
             //no cached image found?
             if (cachedImage == null)
@@ -197,7 +197,11 @@ namespace ImageWizard.Middlewares
                 imageMetadata.Url = originalImage.Url;
                 imageMetadata.Signature = signature;
 
-                cachedImage = await ImageCache.SaveAsync(signature, transformedImageData, imageMetadata);
+                cachedImage = new CachedImage();
+                cachedImage.Metadata = imageMetadata;
+                cachedImage.Data = transformedImageData;
+
+                await ImageCache.WriteAsync(signature, cachedImage);
             }
 
             //send cached and transformed image
