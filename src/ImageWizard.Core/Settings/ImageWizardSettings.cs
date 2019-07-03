@@ -17,7 +17,7 @@ namespace ImageWizard.Settings
             BasePath = "/image";
             UseETag = true;
             AllowUnsafeUrl = false;
-            ResponseCacheTime = TimeSpan.FromDays(90);
+            ResponseCacheTime = TimeSpan.FromDays(365);
             Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
         }
 

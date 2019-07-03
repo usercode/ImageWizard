@@ -33,11 +33,27 @@ namespace ImageWizard
 
             services.AddDistributedMemoryCache();
 
-            services.AddImageWizard()
-                        //.AddFileCache(options => options.RootFolder = HostingEnvironment.WebRootPath)
-                        //.AddMongoDBCache()
-                        .AddDistributedCache()
-                        .AddHttpLoader();
+            string cache = Configuration.GetSection("General")["Cache"];
+
+            var imageWizard = services.AddImageWizard();
+
+            switch(cache)
+            {
+                case "InMemory":
+                    imageWizard.AddDistributedCache();
+                    break;
+
+                case "File":
+                    imageWizard.AddFileCache();
+                    break;
+
+                case "MongoDB":
+                    imageWizard.AddMongoDBCache();
+                    break;
+
+                default:
+                    throw new Exception("unknown cache type selected");
+            }
 
             services.AddHttpsRedirection(x => x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);
         }

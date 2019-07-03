@@ -41,7 +41,7 @@ namespace ImageWizard
             configuration.AddDefaultFilters();
             configuration.AddFileCache();
             configuration.AddHttpLoader();
-
+            
             services.AddSingleton(configuration);
 
             return configuration;

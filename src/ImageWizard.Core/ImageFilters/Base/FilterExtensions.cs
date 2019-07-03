@@ -35,6 +35,9 @@ namespace ImageWizard
             builder.FilterManager.Register<RotateFilter>();
             builder.FilterManager.Register<BlurFilter>();
             builder.FilterManager.Register<TextFilter>();
+            builder.FilterManager.Register<InvertFilter>();
+            builder.FilterManager.Register<BrightnessFilter>();
+            builder.FilterManager.Register<ContrastFilter>();
 
             //formats
             builder.FilterManager.Register<JpgFilter>();
