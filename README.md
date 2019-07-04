@@ -38,6 +38,9 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 - grayscale()
 - blackwhite()
 - blur()
+- invert()
+- brightness(value)
+- contrast(value)
 
 ### Output formats
 
