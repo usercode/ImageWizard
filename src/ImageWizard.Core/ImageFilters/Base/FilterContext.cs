@@ -1,5 +1,6 @@
 ﻿using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
+using ImageWizard.Settings;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
@@ -14,11 +15,17 @@ namespace ImageWizard.Filters
     /// </summary>
     public class FilterContext
     {
-        public FilterContext(Image<Rgba32> image, IImageFormat imageFormat)
+        public FilterContext(ImageWizardSettings settings, Image<Rgba32> image, IImageFormat imageFormat)
         {
+            Settings = settings;
             Image = image;
             ImageFormat = imageFormat;
         }
+
+        /// <summary>
+        /// Settings
+        /// </summary>
+        public ImageWizardSettings Settings { get; }
 
         /// <summary>
         /// Image

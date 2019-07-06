@@ -31,7 +31,7 @@ namespace ImageWizard
             services.Configure<FileCacheSettings>(Configuration.GetSection("FileCache"));
             services.Configure<MongoDBCacheSettings>(Configuration.GetSection("MongoDBCache"));
 
-            services.AddDistributedMemoryCache();
+            services.AddDistributedMemoryCache(x => x.SizeLimit = 1024 * 1024 * 256); //256 MB
 
             string cache = Configuration.GetSection("General")["Cache"];
 

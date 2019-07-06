@@ -7,6 +7,7 @@ using ImageWizard.ImageStorages;
 using ImageWizard.Services.Types;
 using ImageWizard.Settings;
 using ImageWizard.SharedContract;
+using ImageWizard.SharedContract.FilterTypes;
 using ImageWizard.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -44,7 +45,7 @@ namespace ImageWizard.Middlewares
 
             CryptoService = new CryptoService(Settings.Value.Key);
 
-            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[A-Za-z0-9-_]{{27}}|unsafe)/(?<path>(?<filter>[a-z]+\(.*?\)/)*fetch/(?<imagesource>.*))$");
+            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,]*\)/)*fetch/(?<imagesource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         private IOptions<ImageWizardSettings> Settings { get; }
@@ -154,7 +155,7 @@ namespace ImageWizard.Middlewares
                     //load image
                     using (Image<Rgba32> image = Image.Load(originalImage.Data))
                     {
-                        FilterContext filterContext = new FilterContext(image, targetFormat);
+                        FilterContext filterContext = new FilterContext(Settings.Value, image, targetFormat);
 
                         //execute filters
                         foreach (string filter in url_filters)
@@ -177,6 +178,29 @@ namespace ImageWizard.Middlewares
 
                                 return;
                             }
+                        }
+
+                        //check max width and height
+                        bool change = false;
+
+                        int width = image.Width;
+                        int height = image.Height;
+
+                        if (Settings.Value.ImageMaxWidth != null && width > Settings.Value.ImageMaxWidth)
+                        {
+                            change = true;
+                            width = Settings.Value.ImageMaxWidth.Value;
+                        }
+
+                        if(Settings.Value.ImageMaxHeight != null && height > Settings.Value.ImageMaxHeight)
+                        {
+                            change = true;
+                            height = Settings.Value.ImageMaxHeight.Value;
+                        }
+
+                        if (change == true)
+                        {
+                            new ResizeFilter().Execute(width, height, ResizeMode.Max, filterContext);
                         }
 
                         //target format is changed by user
@@ -210,7 +234,8 @@ namespace ImageWizard.Middlewares
                 context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
                 {
                     Public = true,
-                    MaxAge = Settings.Value.ResponseCacheTime
+                    MustRevalidate = true,
+                    MaxAge = Settings.Value.ResponseCacheTime                    
                 };
             }
 
@@ -221,7 +246,8 @@ namespace ImageWizard.Middlewares
 
             context.Response.ContentLength = cachedImage.Data.Length;
             context.Response.ContentType = cachedImage.Metadata.MimeType;
-            context.Response.Body.Write(cachedImage.Data, 0, cachedImage.Data.Length);
+
+            await context.Response.Body.WriteAsync(cachedImage.Data, 0, cachedImage.Data.Length);
         }
     }
 }

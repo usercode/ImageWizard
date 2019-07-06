@@ -19,6 +19,9 @@ namespace ImageWizard.Settings
             AllowUnsafeUrl = false;
             ResponseCacheTime = TimeSpan.FromDays(365);
             Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
+
+            ImageMaxWidth = 2500;
+            ImageMaxHeight = 2500;
         }
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace ImageWizard.Settings
         public bool AllowUnsafeUrl { get; set; }
 
         /// <summary>
-        /// 
+        /// UseETag
         /// </summary>
         public bool UseETag { get; set; }
 
@@ -45,6 +48,16 @@ namespace ImageWizard.Settings
         /// Key
         /// </summary>
         public string Key { get; set; }
+
+        /// <summary>
+        /// ImageMaxWidth
+        /// </summary>
+        public int? ImageMaxWidth { get; set; }
+
+        /// <summary>
+        /// ImageMaxHeight
+        /// </summary>
+        public int? ImageMaxHeight { get; set; }
 
     }
 }

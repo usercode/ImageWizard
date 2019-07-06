@@ -79,7 +79,7 @@ namespace ImageWizard.Filters
                 FilterAction filterAction = new FilterAction();
                 filterAction.Filter = filter;
                 filterAction.TargetMethod = method;
-                filterAction.Regex = new Regex(builder.ToString());
+                filterAction.Regex = new Regex(builder.ToString(), RegexOptions.Compiled);
 
                 FilterActions.Add(filterAction);
             }
