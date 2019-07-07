@@ -45,7 +45,7 @@ namespace ImageWizard.Middlewares
 
             CryptoService = new CryptoService(Settings.Value.Key);
 
-            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,]*\)/)*fetch/(?<imagesource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.]*\)/)*fetch/(?<imagesource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         private IOptions<ImageWizardSettings> Settings { get; }
@@ -70,6 +70,9 @@ namespace ImageWizard.Middlewares
         /// </summary>
         private CryptoService CryptoService { get; }
 
+        /// <summary>
+        /// UrlRegex
+        /// </summary>
         private Regex UrlRegex { get; }
 
         public async Task InvokeAsync(HttpContext context)

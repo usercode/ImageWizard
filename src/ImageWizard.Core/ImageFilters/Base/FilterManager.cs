@@ -65,7 +65,7 @@ namespace ImageWizard.Filters
                     }
                     else
                     {
-                        throw new Exception();
+                        throw new Exception("unknown parameter type");
                     }
 
                     if (i < parameters.Length - 2)
