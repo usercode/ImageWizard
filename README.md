@@ -50,6 +50,9 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 - gif()
 - bmp()
 
+## Image loaders
+- HTTP ("fetch")
+
 ## Image caches
 
 - file cache
