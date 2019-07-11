@@ -74,13 +74,13 @@ services.AddImageWizard(options =>
                            options.ResponseCacheControlMaxAge = TimeSpan.FromDays(90);
                        })
                        //use file cache
-                       .SetFileCache(options => options.RootFolder = env.WebRootPath)
+                       .SetFileCache(options => options.Folder = "FileCache")
                        //or MongoDB cache
                        .SetMongoDBCache(options => options.Hostname = "localhost")
                        //or distributed cache
                        .SetDistributedCache()
                        .AddHttpLoader()
-                       .AddFileLoader();
+                       .AddFileLoader(options => options.Folder = "FileStorage");
 ```
 
 ```csharp
