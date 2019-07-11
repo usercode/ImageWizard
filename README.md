@@ -19,7 +19,7 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 | base path | "image" |
 | signature based on HMACSHA1 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
 | any filters | "trim()/resize(200,200)/jpg(90)" |
-| delivery type | "fetch" |
+| delivery type | "fetch" or "upload" |
 | absolute url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
 ## Image filters
@@ -51,7 +51,8 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 - bmp()
 
 ## Image loaders
-- HTTP ("fetch")
+- HTTP loader ("fetch")
+- file loader ("upload")
 
 ## Image caches
 
@@ -70,15 +71,16 @@ services.AddImageWizard(options =>
                            options.AllowUnsafeUrl = true;                           
                            options.Key = "DEMO-KEY...";
                            options.UseETag = true;
-                           options.ResponseCacheTime = TimeSpan.FromDays(90);
+                           options.ResponseCacheControlMaxAge = TimeSpan.FromDays(90);
                        })
                        //use file cache
-                       .AddFileCache(options => options.RootFolder = env.WebRootPath)
+                       .SetFileCache(options => options.RootFolder = env.WebRootPath)
                        //or MongoDB cache
-                       .AddMongoDBCache(options => options.Hostname = "localhost")
+                       .SetMongoDBCache(options => options.Hostname = "localhost")
                        //or distributed cache
-                       .AddDistributedCache()
-                       .AddHttpLoader();
+                       .SetDistributedCache()
+                       .AddHttpLoader()
+                       .AddFileLoader();
 ```
 
 ```csharp
