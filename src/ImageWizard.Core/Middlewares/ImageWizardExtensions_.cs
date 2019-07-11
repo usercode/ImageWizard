@@ -11,6 +11,7 @@ using ImageWizard.Settings;
 using ImageWizard.SharedContract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -39,8 +40,8 @@ namespace ImageWizard
 
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
             configuration.AddDefaultFilters();
-            configuration.AddFileCache();
             configuration.AddHttpLoader();
+            configuration.SetDistributedCache();
             
             services.AddSingleton(configuration);
 

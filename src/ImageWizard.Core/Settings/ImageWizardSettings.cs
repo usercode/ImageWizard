@@ -17,7 +17,7 @@ namespace ImageWizard.Settings
             BasePath = "/image";
             UseETag = true;
             AllowUnsafeUrl = false;
-            ResponseCacheTime = TimeSpan.FromDays(365);
+            ResponseCacheControlMaxAge = TimeSpan.FromDays(365);
             Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
 
             ImageMaxWidth = 2500;
@@ -32,7 +32,7 @@ namespace ImageWizard.Settings
         /// <summary>
         /// ResponseCacheTime
         /// </summary>
-        public TimeSpan? ResponseCacheTime { get; set; }
+        public TimeSpan? ResponseCacheControlMaxAge { get; set; }
 
         /// <summary>
         /// AllowUnsafeUrl

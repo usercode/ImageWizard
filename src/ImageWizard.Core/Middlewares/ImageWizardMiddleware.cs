@@ -11,6 +11,7 @@ using ImageWizard.SharedContract.FilterTypes;
 using ImageWizard.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -18,6 +19,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System;
 
 namespace ImageWizard.Middlewares
 {
@@ -31,21 +34,17 @@ namespace ImageWizard.Middlewares
         public ImageWizardMiddleware(
             RequestDelegate next,
             IOptions<ImageWizardSettings> settings,
-            FilterManager filterManager,
-            IImageLoader imageLoader,
-            IImageCache imageCache
+            FilterManager filterManager
             )
         {
             Settings = settings;
             FilterManager = filterManager;
-            ImageLoader = imageLoader;
-            ImageCache = imageCache;
 
             _next = next;
 
             CryptoService = new CryptoService(Settings.Value.Key);
 
-            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.]*\)/)*fetch/(?<imagesource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.]*\)/)*(?<deliveryType>[a-z]+)/(?<imagesource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         private IOptions<ImageWizardSettings> Settings { get; }
@@ -54,16 +53,6 @@ namespace ImageWizard.Middlewares
         /// FilterManager
         /// </summary>
         private FilterManager FilterManager { get; }
-
-        /// <summary>
-        /// ImageDownloader
-        /// </summary>
-        private IImageLoader ImageLoader { get; }
-
-        /// <summary>
-        /// FileStorage
-        /// </summary>
-        private IImageCache ImageCache { get; }
 
         /// <summary>
         /// CryptoService
@@ -103,7 +92,7 @@ namespace ImageWizard.Middlewares
             string url_signature = match.Groups["signature"].Value;
             string url_imagesource = match.Groups["imagesource"].Value;
             string url_path = match.Groups["path"].Value;
-
+            string url_deliveryType = match.Groups["deliveryType"].Value;
             string[] url_filters = match.Groups["filter"].Captures.OfType<Capture>()
                                                                             .Select(x => x.Value)
                                                                             .Select(x => x.Substring(0, x.Length -1)) //remove "/"
@@ -135,14 +124,34 @@ namespace ImageWizard.Middlewares
                 }
             }
 
+            IImageCache imageCache = context.RequestServices.GetService<IImageCache>();
+
+            if(imageCache == null)
+            {
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                await context.Response.WriteAsync("image cache not found");
+
+                return;
+            }
+
             //try to get cached image
-            CachedImage cachedImage = await ImageCache.ReadAsync(signature);
+            CachedImage cachedImage = await imageCache.ReadAsync(signature);
 
             //no cached image found?
             if (cachedImage == null)
             {
+                IImageLoader loader = context.RequestServices.GetServices<IImageLoader>().FirstOrDefault(x => x.DeliveryType == url_deliveryType);
+
+                if(loader == null)
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    await context.Response.WriteAsync("image loader not found: " + url_deliveryType);
+
+                    return;
+                }
+
                 //download image
-                OriginalImage originalImage = await ImageLoader.GetAsync(url_imagesource);
+                OriginalImage originalImage = await loader.GetAsync(url_imagesource);
 
                 IImageFormat targetFormat = ImageFormatHelper.Parse(originalImage.MimeType);
 
@@ -228,17 +237,17 @@ namespace ImageWizard.Middlewares
                 cachedImage.Metadata = imageMetadata;
                 cachedImage.Data = transformedImageData;
 
-                await ImageCache.WriteAsync(signature, cachedImage);
+                await imageCache.WriteAsync(signature, cachedImage);
             }
 
             //send cached and transformed image
-            if (Settings.Value.ResponseCacheTime != null)
+            if (Settings.Value.ResponseCacheControlMaxAge != null)
             {
                 context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
                 {
                     Public = true,
                     MustRevalidate = true,
-                    MaxAge = Settings.Value.ResponseCacheTime                    
+                    MaxAge = Settings.Value.ResponseCacheControlMaxAge                    
                 };
             }
 

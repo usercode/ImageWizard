@@ -32,6 +32,11 @@ namespace ImageWizard.ImageLoaders
         public IOptions<HttpLoaderSettings> Settings { get; }
 
         /// <summary>
+        /// DeliveryType
+        /// </summary>
+        public string DeliveryType => "fetch";
+
+        /// <summary>
         /// Download
         /// </summary>
         /// <param name="requestUri"></param>

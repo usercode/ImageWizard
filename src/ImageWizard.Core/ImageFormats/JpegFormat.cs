@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ImageWizard.Core.Types;
 using ImageWizard.ImageFormats.Base;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -21,7 +22,7 @@ namespace ImageWizard.ImageFormats
         /// </summary>
         public int Quality { get; set; }
 
-        public string MimeType => "image/jpeg";
+        public string MimeType => MimeTypes.Jpeg;
 
         public void SaveImage(Image<Rgba32> image, Stream stream)
         {

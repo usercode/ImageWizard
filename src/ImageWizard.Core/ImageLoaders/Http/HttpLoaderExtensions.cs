@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ImageWizard
 {
@@ -15,9 +16,9 @@ namespace ImageWizard
             return AddHttpLoader(wizardConfiguration, options => { });
         }
 
-        public static IImageWizardBuilder AddHttpLoader(this IImageWizardBuilder wizardConfiguration, Action<HttpLoaderSettings> settingsSetup)
+        public static IImageWizardBuilder AddHttpLoader(this IImageWizardBuilder wizardConfiguration, Action<HttpLoaderSettings> setup)
         {
-            wizardConfiguration.Services.Configure(settingsSetup);
+            wizardConfiguration.Services.Configure(setup);
             wizardConfiguration.Services.AddHttpClient<IImageLoader, HttpLoader>();
 
             return wizardConfiguration;

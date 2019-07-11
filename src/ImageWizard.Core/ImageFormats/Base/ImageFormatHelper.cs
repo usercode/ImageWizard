@@ -1,4 +1,5 @@
-﻿using ImageWizard.ImageFormats;
+﻿using ImageWizard.Core.Types;
+using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using System;
 using System.Collections.Generic;
@@ -15,23 +16,23 @@ namespace ImageWizard.Filters.ImageFormats
 
             switch (mimeType)
             {
-                case "image/jpeg":
+                case MimeTypes.Jpeg:
                     imageFormat = new JpegFormat();
                     break;
 
-                case "image/png":
+                case MimeTypes.Png:
                     imageFormat = new PngFormat();
                     break;
 
-                case "image/gif":
+                case MimeTypes.Gif:
                     imageFormat = new GifFormat();
                     break;
 
-                case "image/bmp":
+                case MimeTypes.Bitmap:
                     imageFormat = new BmpFormat();
                     break;
 
-                case "image/svg+xml":
+                case MimeTypes.Svg:
                     imageFormat = new SvgFormat();
                     break;
 

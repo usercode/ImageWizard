@@ -4,9 +4,11 @@ using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
 using ImageWizard.Types;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,9 +22,11 @@ namespace ImageWizard.ImageStorages
     /// </summary>
     public class FileCache : IImageCache
     {
-        public FileCache(IOptions<FileCacheSettings> settings)
+        public FileCache(IOptions<FileCacheSettings> settings, IHostingEnvironment hostingEnvironment)
         {
             Settings = settings;
+            HostingEnvironment = hostingEnvironment;
+
             Serializer = new CachedFileSerializer();
         }
 
@@ -30,6 +34,11 @@ namespace ImageWizard.ImageStorages
         /// Settings
         /// </summary>
         public IOptions<FileCacheSettings> Settings { get; }
+
+        /// <summary>
+        /// HostingEnvironment
+        /// </summary>
+        private IHostingEnvironment HostingEnvironment { get; }
 
         /// <summary>
         /// Serializer
@@ -61,7 +70,7 @@ namespace ImageWizard.ImageStorages
 
             string[] parts = SplitSecret(signatureHex);
 
-            string baseFilePath = Path.Combine(new[] { Settings.Value.RootFolder }.Concat(parts).Concat(new[] { signatureHex }).ToArray());
+            string baseFilePath = Path.Combine(new[] { HostingEnvironment.ContentRootPath }.Concat(new[] { Settings.Value.Folder  }).Concat(parts).Concat(new[] { signatureHex }).ToArray());
 
             FileInfo fileInfo = new FileInfo(baseFilePath);
 
@@ -71,9 +80,9 @@ namespace ImageWizard.ImageStorages
             }
 
             //read cache image from disk
-            MemoryStream memImage = new MemoryStream();
+            MemoryStream memImage = new MemoryStream((int)fileInfo.Length);
 
-            using(Stream fs = fileInfo.OpenRead())
+            using (Stream fs = fileInfo.OpenRead())
             {
                 await fs.CopyToAsync(memImage);
             }
@@ -94,7 +103,7 @@ namespace ImageWizard.ImageStorages
             string[] parts = SplitSecret(signatureHex);
 
             //store transformed image
-            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { Settings.Value.RootFolder }.Concat(parts).ToArray()));
+            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { HostingEnvironment.ContentRootPath }.Concat(new[] { Settings.Value.Folder }).Concat(parts).ToArray()));
 
             //write to file
             FileInfo file = new FileInfo(Path.Combine(sub.FullName, signatureHex));

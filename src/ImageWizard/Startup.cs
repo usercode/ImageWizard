@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
-using Microsoft.Net.Http.Headers;
 using System;
 using ImageWizard.MongoDB;
 using ImageWizard.Core.ImageCaches;
 using ImageWizard.Settings;
 using ImageWizard.MongoDB.ImageCaches;
+using System.Collections.Generic;
+using ImageWizard.ImageStorages;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using ImageWizard.Core.ImageLoaders.File;
+using ImageWizard.Core.Middlewares;
 
 namespace ImageWizard
 {
@@ -29,33 +32,34 @@ namespace ImageWizard
         {
             services.Configure<ImageWizardSettings>(Configuration.GetSection("General"));
             services.Configure<FileCacheSettings>(Configuration.GetSection("FileCache"));
+            services.Configure<FileLoaderSettings>(Configuration.GetSection("FileLoader"));
             services.Configure<MongoDBCacheSettings>(Configuration.GetSection("MongoDBCache"));
-
-            services.AddDistributedMemoryCache(x => x.SizeLimit = 1024 * 1024 * 256); //256 MB
-
+            
             string cache = Configuration.GetSection("General")["Cache"];
 
-            var imageWizard = services.AddImageWizard();
+            IImageWizardBuilder imageWizard = services.AddImageWizard()
+                                                        .AddHttpLoader()
+                                                        .AddFileLoader();
 
-            switch(cache)
+            switch (cache)
             {
                 case "InMemory":
-                    imageWizard.AddDistributedCache();
+                    imageWizard.SetDistributedCache();
                     break;
 
                 case "File":
-                    imageWizard.AddFileCache();
+                    imageWizard.SetFileCache();
                     break;
 
                 case "MongoDB":
-                    imageWizard.AddMongoDBCache();
+                    imageWizard.SetMongoDBCache();
                     break;
 
                 default:
                     throw new Exception("unknown cache type selected");
             }
 
-            services.AddHttpsRedirection(x => x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);
+            services.AddHttpsRedirection(x => { x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect; x.HttpsPort = 443; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

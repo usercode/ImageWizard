@@ -12,12 +12,12 @@ namespace ImageWizard.Core.ImageCaches
     {
         public FileCacheSettings()
         {
-            RootFolder = "wwwroot";
+            Folder = "FileCache";
         }
 
         /// <summary>
         /// RootFolder
         /// </summary>
-        public string RootFolder { get; set; }
+        public string Folder { get; set; }
     }
 }

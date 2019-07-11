@@ -12,6 +12,11 @@ namespace ImageWizard.ImageLoaders
     public interface IImageLoader
     {
         /// <summary>
+        /// DeliveryType
+        /// </summary>
+        string DeliveryType { get; }
+
+        /// <summary>
         /// GetAsync
         /// </summary>
         /// <param name="requestUri"></param>
