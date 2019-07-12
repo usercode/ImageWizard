@@ -111,6 +111,8 @@ Register settings to services
 
 ```csharp
 services.Configure<ImageWizardSettings>(Configuration.GetSection("ImageWizard"));
+
+services.AddImageWizard();
 ```
 
 Create url with fluent api
