@@ -52,13 +52,17 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 
 ## Image loaders
 - HTTP loader ("fetch")
+  - absolute url of the original image
 - file loader ("upload")
+  - relative url to file
 
 ## Image caches
 
 - file cache
 - distributed cache
-- MongoDB
+  - MS SQL
+  - Redis
+- MongoDB cache
 
 ## Integrate into existing ASP.NET Core applications
 
@@ -107,13 +111,28 @@ Register settings to services
 
 ```csharp
 services.Configure<ImageWizardSettings>(Configuration.GetSection("ImageWizard"));
+
+services.AddImageWizard();
+
+//or
+
+services.AddImageWizard(options => 
+{
+    options.BaseUrl = "https://<your-domain>/image";
+    options.Key = "..";
+    options.Enabled = true;
+});
 ```
 
 Create url with fluent api
 
 ```csharp
 @Url
-.ImageWizard(Url.RouteUrl("MyImage", new { mediaUrl = Model.MediaUrl }, Context.Request.Scheme))
+.ImageWizard()
+//use HTTP loader
+.Fetch("https://<your-domain>/test/picture.jpg")
+//or file loader
+.Upload("test/picture.jpg")
 .Trim()
 .Resize(160,140)
 .Jpg(90)
