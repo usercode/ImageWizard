@@ -9,147 +9,160 @@ using Microsoft.Extensions.Options;
 using ImageWizard.SharedContract.FilterTypes;
 using System.Diagnostics;
 using ImageWizard.SharedContract;
+using ImageWizard.AspNetCore.Builder.Types;
+using Microsoft.AspNetCore.Http;
 
 namespace ImageWizard.AspNetCore.Builder
 {
-    public class ImageUrlBuilder
+    public class ImageUrlBuilder : IImageSelector, IImageFilters
     {
         private CryptoService CryptoService { get; }
-        private ImageWizardSettings Settings { get; }
+        private IOptions<ImageWizardSettings> Settings { get; }
 
         private string ImageUrl { get; set; }
 
         private List<string> _filter;
 
-        public ImageUrlBuilder(ImageWizardSettings settings)
+        private string DeliveryType { get; set; }
+
+        public ImageUrlBuilder(IOptions<ImageWizardSettings> settings)
         {
-            CryptoService = new CryptoService(settings.Key);
+            CryptoService = new CryptoService(settings.Value.Key);
 
             Settings = settings;
 
             _filter = new List<string>();
         }
 
-        public ImageUrlBuilder Image(string url)
+        public IImageFilters Fetch(string url)
         {
             ImageUrl = url;
+            DeliveryType = "fetch";
 
             return this;
         }
 
-        public ImageUrlBuilder Crop(int width, int heigth)
+        public IImageFilters Upload(string path)
+        {
+            ImageUrl = path;
+            DeliveryType = "upload";
+
+            return this;
+        }
+
+        public IImageFilters Crop(int width, int heigth)
         {
             Crop(0, 0, width, heigth);
 
             return this;
         }
 
-        public ImageUrlBuilder Crop(int x, int y, int width, int heigth)
+        public IImageFilters Crop(int x, int y, int width, int heigth)
         {
             _filter.Add($"crop({x},{y},{width},{heigth})");
 
             return this;
         }
 
-        public ImageUrlBuilder Crop(double width, double heigth)
+        public IImageFilters Crop(double width, double heigth)
         {
             Crop(0, 0, width, heigth);
 
             return this;
         }
 
-        public ImageUrlBuilder Crop(double x, double y, double width, double heigth)
+        public IImageFilters Crop(double x, double y, double width, double heigth)
         {
             _filter.Add($"crop({x:0.0},{y:0.0},{width:0.0},{heigth:0.0})");
 
             return this;
         }
 
-        public ImageUrlBuilder Resize(int size)
+        public IImageFilters Resize(int size)
         {
             _filter.Add($"resize({size})");
 
             return this;
         }
 
-        public ImageUrlBuilder Resize(int width, int height)
+        public IImageFilters Resize(int width, int height)
         {
             _filter.Add($"resize({width},{height})");
 
             return this;
         }
 
-        public ImageUrlBuilder Resize(int width, int height, ResizeMode mode)
+        public IImageFilters Resize(int width, int height, ResizeMode mode)
         {
             _filter.Add($"resize({width},{height},{mode.ToString().ToLower()})");
 
             return this;
         }
 
-        public ImageUrlBuilder Trim()
+        public IImageFilters Trim()
         {
             _filter.Add("trim()");
 
             return this;
         }
 
-        public ImageUrlBuilder Grayscale()
+        public IImageFilters Grayscale()
         {
             _filter.Add($"grayscale()");
 
             return this;
         }
 
-        public ImageUrlBuilder BlackWhite()
+        public IImageFilters BlackWhite()
         {
             _filter.Add($"blackwhite()");
 
             return this;
         }
 
-        public ImageUrlBuilder Rotate(RotateMode mode)
+        public IImageFilters Rotate(RotateMode mode)
         {
             _filter.Add($"rotate({(int)mode})");
 
             return this;
         }
 
-        public ImageUrlBuilder Flp(FlipMode flippingMode)
+        public IImageFilters Flip(FlipMode flippingMode)
         {
             _filter.Add($"flip({flippingMode.ToString().ToLower()})");
 
             return this;
         }
 
-        public ImageUrlBuilder Jpg()
+        public IImageBuildUrl Jpg()
         {
             _filter.Add("jpg()");
 
             return this;
         }
 
-        public ImageUrlBuilder Jpg(int quality)
+        public IImageBuildUrl Jpg(int quality)
         {
             _filter.Add($"jpg({quality})");
 
             return this;
         }
 
-        public ImageUrlBuilder Png()
+        public IImageBuildUrl Png()
         {
             _filter.Add("png()");
 
             return this;
         }
 
-        public ImageUrlBuilder Gif()
+        public IImageBuildUrl Gif()
         {
             _filter.Add("gif()");
 
             return this;
         }
 
-        public ImageUrlBuilder Bmp()
+        public IImageBuildUrl Bmp()
         {
             _filter.Add("bmp()");
 
@@ -163,7 +176,7 @@ namespace ImageWizard.AspNetCore.Builder
                 throw new Exception("No image is selected.");
             }
 
-            if (Settings.Enabled == false)
+            if (Settings.Value.Enabled == false)
             {
                 return new HtmlString(ImageUrl);
             }
@@ -176,7 +189,7 @@ namespace ImageWizard.AspNetCore.Builder
                 url.Append("/");
             }
 
-            url.Append("fetch/");
+            url.Append($"{DeliveryType}/");
             url.Append(ImageUrl);
 
             string secret = CryptoService.Encrypt(url.ToString());
@@ -184,7 +197,7 @@ namespace ImageWizard.AspNetCore.Builder
             url.Insert(0, "/");
             url.Insert(0, secret);
             url.Insert(0, "/");
-            url.Insert(0, Settings.BaseUrl);
+            url.Insert(0, Settings.Value.BaseUrl);
 
             return new HtmlString(url.ToString());
         }

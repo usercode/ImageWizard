@@ -1,4 +1,5 @@
 ﻿using ImageWizard.AspNetCore.Builder;
+using ImageWizard.AspNetCore.Builder.Types;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,19 +13,25 @@ namespace ImageWizard.AspNetCore
 {
     public static class Extensions
     {
-        public static IServiceCollection AddImageWizard(this IServiceCollection  services)
+        public static IServiceCollection AddImageWizard(this IServiceCollection services)
         {
-            //services.AddSingleton<CryptoService>();
-            //services.AddTransient<ImageUrlBuilder>();
+            return AddImageWizard(services, x => { });
+        }
+
+        public static IServiceCollection AddImageWizard(this IServiceCollection services, Action<ImageWizardSettings> setup)
+        {
+            services.Configure(setup);
+
+            services.AddTransient<ImageUrlBuilder>();
 
             return services;
         }
 
-        public static ImageUrlBuilder ImageWizard(this IUrlHelper htmlHelper, string imageUrl)
+        public static IImageSelector ImageWizard(this IUrlHelper htmlHelper)
         {
-            var settings = htmlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<IOptions<ImageWizardSettings>>();
+            ImageUrlBuilder imageWizard = htmlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<ImageUrlBuilder>();
 
-            return new ImageUrlBuilder(settings.Value).Image(imageUrl);
+            return imageWizard;
         }
     }
 }

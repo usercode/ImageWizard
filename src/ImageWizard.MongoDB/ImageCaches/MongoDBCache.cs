@@ -22,7 +22,14 @@ namespace ImageWizard.MongoDB.ImageCaches
     {
         public MongoDBCache(IOptions<MongoDBCacheSettings> settings)
         {
-            Client = new Mongo.MongoClient(new Mongo.MongoClientSettings() { Server = new Mongo.MongoServerAddress(settings.Value.Hostname) });
+            var mongoSetttings = new Mongo.MongoClientSettings() { Server = new Mongo.MongoServerAddress(settings.Value.Hostname) };
+            
+            if(settings.Value.Username != null)
+            {
+                mongoSetttings.Credential = MongoCredential.CreateCredential(settings.Value.Database, settings.Value.Username, settings.Value.Password);
+            }
+
+            Client = new Mongo.MongoClient(mongoSetttings);
 
             Database = Client.GetDatabase(settings.Value.Database);
 
