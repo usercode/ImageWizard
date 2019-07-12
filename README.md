@@ -117,7 +117,11 @@ Create url with fluent api
 
 ```csharp
 @Url
-.ImageWizard(Url.RouteUrl("MyImage", new { mediaUrl = Model.MediaUrl }, Context.Request.Scheme))
+.ImageWizard()
+//use HTTP loader
+.Fetch(Url.RouteUrl("MyImage", new { mediaUrl = Model.MediaUrl }, Context.Request.Scheme))
+//or file loader
+.Upload("/test/bild.jpg")
 .Trim()
 .Resize(160,140)
 .Jpg(90)
