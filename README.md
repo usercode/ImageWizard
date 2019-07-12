@@ -113,6 +113,15 @@ Register settings to services
 services.Configure<ImageWizardSettings>(Configuration.GetSection("ImageWizard"));
 
 services.AddImageWizard();
+
+//or
+
+services.AddImageWizard(options => 
+{
+    options.BaseUrl = "https://<your-domain>/image";
+    options.Key = "..";
+    options.Enabled = true;
+});
 ```
 
 Create url with fluent api
