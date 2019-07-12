@@ -52,13 +52,17 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 
 ## Image loaders
 - HTTP loader ("fetch")
+  - absolute url of the original image
 - file loader ("upload")
+  - relative url to file
 
 ## Image caches
 
 - file cache
 - distributed cache
-- MongoDB
+  - MS SQL
+  - Redis
+- MongoDB cache
 
 ## Integrate into existing ASP.NET Core applications
 
