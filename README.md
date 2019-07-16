@@ -19,7 +19,7 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 | base path | "image" |
 | signature based on HMACSHA1 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
 | any filters | "trim()/resize(200,200)/jpg(90)" |
-| delivery type | "fetch" or "upload" |
+| delivery type | "fetch" |
 | absolute url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
 ## Image filters
@@ -55,6 +55,8 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
   - absolute url of the original image
 - file loader ("upload")
   - relative url to file
+- youtube loader ("youtube")
+  - video id
 
 ## Image caches
 
@@ -75,7 +77,6 @@ services.AddImageWizard(options =>
                            options.AllowUnsafeUrl = true;                           
                            options.Key = "DEMO-KEY...";
                            options.UseETag = true;
-                           options.ResponseCacheControlMaxAge = TimeSpan.FromDays(90);
                        })
                        //use file cache
                        .SetFileCache(options => options.Folder = "FileCache")
@@ -83,7 +84,9 @@ services.AddImageWizard(options =>
                        .SetMongoDBCache(options => options.Hostname = "localhost")
                        //or distributed cache
                        .SetDistributedCache()
+                       //add some loaders
                        .AddHttpLoader()
+                       .AddYoutube()
                        .AddFileLoader(options => options.Folder = "FileStorage");
 ```
 
