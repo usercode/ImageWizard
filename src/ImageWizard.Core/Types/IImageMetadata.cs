@@ -8,6 +8,7 @@ namespace ImageWizard.Core.Types
     {
         string Signature { get; set; }
         string MimeType { get; set; }
-        string Url { get; set; }
+        string ImageSource { get; set; }
+        double? DPR { get; }
     }
 }

@@ -12,6 +12,6 @@ namespace ImageWizard.AspNetCore.Builder.Types
 
         IImageFilters Upload(string path);
 
-        
+        IImageFilters Youtube(string id);
     }
 }

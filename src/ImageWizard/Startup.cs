@@ -13,6 +13,7 @@ using ImageWizard.ImageStorages;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ImageWizard.Core.ImageLoaders.File;
 using ImageWizard.Core.Middlewares;
+using ImageWizard.Core.ImageLoaders;
 
 namespace ImageWizard
 {
@@ -31,6 +32,7 @@ namespace ImageWizard
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ImageWizardSettings>(Configuration.GetSection("General"));
+            services.Configure<HttpLoaderSettings>(Configuration.GetSection("HttpLoader"));
             services.Configure<FileCacheSettings>(Configuration.GetSection("FileCache"));
             services.Configure<FileLoaderSettings>(Configuration.GetSection("FileLoader"));
             services.Configure<MongoDBCacheSettings>(Configuration.GetSection("MongoDBCache"));
@@ -39,7 +41,8 @@ namespace ImageWizard
 
             IImageWizardBuilder imageWizard = services.AddImageWizard()
                                                         .AddHttpLoader()
-                                                        .AddFileLoader();
+                                                        .AddFileLoader()
+                                                        .AddYoutubeLoader();
 
             switch (cache)
             {

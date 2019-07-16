@@ -11,6 +11,7 @@ using System.Diagnostics;
 using ImageWizard.SharedContract;
 using ImageWizard.AspNetCore.Builder.Types;
 using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace ImageWizard.AspNetCore.Builder
 {
@@ -50,6 +51,21 @@ namespace ImageWizard.AspNetCore.Builder
             return this;
         }
 
+        public IImageFilters Youtube(string id)
+        {
+            ImageUrl = id;
+            DeliveryType = "youtube";
+
+            return this;
+        }
+
+        public IImageFilters DPR(double value)
+        {
+            _filter.Add($"dpr({value.ToString("0.0", CultureInfo.InvariantCulture)})");
+
+            return this;
+        }
+
         public IImageFilters Crop(int width, int heigth)
         {
             Crop(0, 0, width, heigth);
@@ -73,7 +89,7 @@ namespace ImageWizard.AspNetCore.Builder
 
         public IImageFilters Crop(double x, double y, double width, double heigth)
         {
-            _filter.Add($"crop({x:0.0},{y:0.0},{width:0.0},{heigth:0.0})");
+            _filter.Add($"crop({x.ToString("0.0", CultureInfo.InvariantCulture)},{y.ToString("0.0", CultureInfo.InvariantCulture)},{width.ToString("0.0", CultureInfo.InvariantCulture)},{heigth.ToString("0.0", CultureInfo.InvariantCulture)})");
 
             return this;
         }

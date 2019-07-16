@@ -35,6 +35,29 @@ namespace ImageWizard.Filters
         /// <summary>
         /// ImageFormat
         /// </summary>
-        public IImageFormat ImageFormat { get; set; }
+        public IImageFormat ImageFormat { get; set; }        
+
+        private double? _dpr;
+
+        /// <summary>
+        /// Device Pixel Ratio
+        /// </summary>
+        public double? DPR
+        {
+            get => _dpr;
+            set
+            {
+                double? found = Settings.AllowedDPR
+                                            .Cast<double?>()
+                                            .FirstOrDefault(x => x >= value);
+                
+                if(found == null)
+                {
+                    found = Settings.AllowedDPR.LastOrDefault();
+                }
+
+                _dpr = found;
+            }
+        }
     }
 }

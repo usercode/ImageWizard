@@ -1,4 +1,5 @@
 ﻿using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Core.ImageLoaders.Http;
 using ImageWizard.Services.Types;
 using Microsoft.Extensions.Options;
 using System;
@@ -19,6 +20,11 @@ namespace ImageWizard.ImageLoaders
         {
             HttpClient = httpCLient;
             Settings = settings;
+
+            foreach (HttpHeaderItem header in Settings.Value.Headers)
+            {
+                HttpClient.DefaultRequestHeaders.Add(header.Name, header.Value);
+            }
         }
 
         /// <summary>

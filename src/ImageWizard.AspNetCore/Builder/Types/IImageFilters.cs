@@ -32,6 +32,8 @@ namespace ImageWizard.AspNetCore.Builder.Types
 
         IImageFilters Flip(FlipMode flippingMode);
 
+        IImageFilters DPR(double value);
+
         IImageBuildUrl Jpg();
 
         IImageBuildUrl Jpg(int quality);

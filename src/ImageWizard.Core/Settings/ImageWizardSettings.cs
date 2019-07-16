@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ImageWizard.Core.Settings;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,22 +18,26 @@ namespace ImageWizard.Settings
             BasePath = "/image";
             UseETag = true;
             AllowUnsafeUrl = false;
-            ResponseCacheControlMaxAge = TimeSpan.FromDays(365);
+           
             Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
 
-            ImageMaxWidth = 2500;
-            ImageMaxHeight = 2500;
+            ImageMaxWidth = 3500;
+            ImageMaxHeight = 3500;
+
+            AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0 };
+
+            CacheControl = new CacheControl();
         }
+
+        /// <summary>
+        /// CacheControl
+        /// </summary>
+        public CacheControl CacheControl { get; }
 
         /// <summary>
         /// Segment
         /// </summary>
         public PathString BasePath { get; set; }
-
-        /// <summary>
-        /// ResponseCacheTime
-        /// </summary>
-        public TimeSpan? ResponseCacheControlMaxAge { get; set; }
 
         /// <summary>
         /// AllowUnsafeUrl
@@ -48,6 +53,11 @@ namespace ImageWizard.Settings
         /// Key
         /// </summary>
         public string Key { get; set; }
+
+        /// <summary>
+        /// AllowedDPR
+        /// </summary>
+        public double[] AllowedDPR { get; set; }
 
         /// <summary>
         /// ImageMaxWidth

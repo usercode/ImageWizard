@@ -86,7 +86,8 @@ namespace ImageWizard.MongoDB.ImageCaches
             {
                 Signature = cachedImage.Metadata.Signature,
                 MimeType = cachedImage.Metadata.MimeType,
-                Url = cachedImage.Metadata.Url
+                ImageSource = cachedImage.Metadata.ImageSource,
+                DPR = cachedImage.Metadata.DPR
             };
 
             //upload image metadata

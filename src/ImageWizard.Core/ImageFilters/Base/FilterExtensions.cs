@@ -1,4 +1,5 @@
-﻿using ImageWizard.Core.Middlewares;
+﻿using ImageWizard.Core.ImageFilters.Options;
+using ImageWizard.Core.Middlewares;
 using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
 using System;
@@ -38,6 +39,7 @@ namespace ImageWizard
             builder.FilterManager.Register<InvertFilter>();
             builder.FilterManager.Register<BrightnessFilter>();
             builder.FilterManager.Register<ContrastFilter>();
+            builder.FilterManager.Register<DPRFilter>();
 
             //formats
             builder.FilterManager.Register<JpgFilter>();

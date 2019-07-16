@@ -53,6 +53,13 @@ namespace ImageWizard.Filters
                     throw new Exception();
             }
 
+            //apply dpr value
+            if (context.DPR != null)
+            {
+                width = (int)(width * context.DPR);
+                height = (int)(height * context.DPR);
+            }
+
             //prevent upscaling
             if(width > context.Image.Width)
             {

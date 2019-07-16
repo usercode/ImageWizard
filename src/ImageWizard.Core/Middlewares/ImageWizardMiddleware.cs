@@ -21,6 +21,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
+using Microsoft.Extensions.Logging;
+using System.Globalization;
 
 namespace ImageWizard.Middlewares
 {
@@ -34,11 +36,13 @@ namespace ImageWizard.Middlewares
         public ImageWizardMiddleware(
             RequestDelegate next,
             IOptions<ImageWizardSettings> settings,
+            ILogger<ImageWizardMiddleware> logger,
             FilterManager filterManager
             )
         {
             Settings = settings;
             FilterManager = filterManager;
+            Logger = logger;
 
             _next = next;
 
@@ -58,6 +62,11 @@ namespace ImageWizard.Middlewares
         /// CryptoService
         /// </summary>
         private CryptoService CryptoService { get; }
+
+        /// <summary>
+        /// Logger
+        /// </summary>
+        private ILogger<ImageWizardMiddleware> Logger { get; }
 
         /// <summary>
         /// UrlRegex
@@ -129,7 +138,7 @@ namespace ImageWizard.Middlewares
             if(imageCache == null)
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                await context.Response.WriteAsync("image cache not found");
+                await context.Response.WriteAsync("Image cache not found");
 
                 return;
             }
@@ -140,6 +149,8 @@ namespace ImageWizard.Middlewares
             //no cached image found?
             if (cachedImage == null)
             {
+                Logger.LogTrace("Create cached image");
+
                 IImageLoader loader = context.RequestServices.GetServices<IImageLoader>().FirstOrDefault(x => x.DeliveryType == url_deliveryType);
 
                 if(loader == null)
@@ -150,6 +161,8 @@ namespace ImageWizard.Middlewares
                     return;
                 }
 
+                Logger.LogTrace("Get original image: " + url_imagesource);
+
                 //download image
                 OriginalImage originalImage = await loader.GetAsync(url_imagesource);
 
@@ -157,9 +170,18 @@ namespace ImageWizard.Middlewares
 
                 byte[] transformedImageData;
 
+                //create metadata
+                ImageMetadata imageMetadata = new ImageMetadata();
+                imageMetadata.ImageSource = originalImage.Url;
+                imageMetadata.Signature = signature;
+                imageMetadata.MimeType = targetFormat.MimeType;
+                imageMetadata.DPR = null;
+
                 //skip svg
                 if (targetFormat is SvgFormat)
                 {
+                    Logger.LogTrace("SVG file: skip filters");
+
                     transformedImageData = originalImage.Data;
                 }
                 else
@@ -168,6 +190,14 @@ namespace ImageWizard.Middlewares
                     using (Image<Rgba32> image = Image.Load(originalImage.Data))
                     {
                         FilterContext filterContext = new FilterContext(Settings.Value, image, targetFormat);
+
+                        //check DPR value from request
+                        string dprString = context.Request.Headers["DPR"].FirstOrDefault();
+
+                        if(dprString != null)
+                        {
+                            filterContext.DPR = double.Parse(dprString, CultureInfo.InvariantCulture);
+                        }
 
                         //execute filters
                         foreach (string filter in url_filters)
@@ -178,6 +208,8 @@ namespace ImageWizard.Middlewares
                             {
                                 if (action.TryExecute(filter, filterContext))
                                 {
+                                    Logger.LogTrace("Filter executed: " + filter);
+
                                     filterFound = true;
                                     break;
                                 }
@@ -215,51 +247,62 @@ namespace ImageWizard.Middlewares
                             new ResizeFilter().Execute(width, height, ResizeMode.Max, filterContext);
                         }
 
-                        //target format is changed by user
-                        targetFormat = filterContext.ImageFormat;
-
                         MemoryStream mem = new MemoryStream();
 
                         //generate image
-                        targetFormat.SaveImage(image, mem);
+                        filterContext.ImageFormat.SaveImage(image, mem);
 
                         transformedImageData = mem.ToArray();
+
+                        //update some metadata
+                        imageMetadata.DPR = filterContext.DPR;
+                        imageMetadata.MimeType = filterContext.ImageFormat.MimeType;
                     }
                 }
-
-                //create metadata
-                ImageMetadata imageMetadata = new ImageMetadata();
-                imageMetadata.MimeType = targetFormat.MimeType;
-                imageMetadata.Url = originalImage.Url;
-                imageMetadata.Signature = signature;
-
+                
                 cachedImage = new CachedImage();
                 cachedImage.Metadata = imageMetadata;
                 cachedImage.Data = transformedImageData;
 
+                Logger.LogTrace("Save new cached image");
+
                 await imageCache.WriteAsync(signature, cachedImage);
             }
+            else
+            {
+                Logger.LogTrace("Cached image found");
+            }
 
-            //send cached and transformed image
-            if (Settings.Value.ResponseCacheControlMaxAge != null)
+            //set cache control header
+            if (Settings.Value.CacheControl.IsEnabled)
             {
                 context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
                 {
-                    Public = true,
-                    MustRevalidate = true,
-                    MaxAge = Settings.Value.ResponseCacheControlMaxAge                    
+                    Public = Settings.Value.CacheControl.Public,
+                    MustRevalidate = Settings.Value.CacheControl.MustRevalidate,
+                    MaxAge = Settings.Value.CacheControl.MaxAge
                 };
             }
 
+            //set ETag header
             if (Settings.Value.UseETag)
             {
                 context.Response.GetTypedHeaders().ETag = new EntityTagHeaderValue($"\"{signature}\"");
+            }
+
+            //DPR
+            if (cachedImage.Metadata.DPR != null)
+            {
+                context.Response.Headers.Add("Content-DPR", cachedImage.Metadata.DPR.ToString());
+                context.Response.Headers.Add("Vary", "DPR");
             }
 
             context.Response.ContentLength = cachedImage.Data.Length;
             context.Response.ContentType = cachedImage.Metadata.MimeType;
 
             await context.Response.Body.WriteAsync(cachedImage.Data, 0, cachedImage.Data.Length);
+
+            Logger.LogTrace("Operation completed");
         }
     }
 }

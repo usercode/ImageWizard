@@ -59,9 +59,14 @@ namespace ImageWizard.ImageStorages
         {
             //convert signature to hex for the filestore
             byte[] buf = Encoding.UTF8.GetBytes(key);
-            string signatureHex = buf.Aggregate(string.Empty, (a, b) => a += b.ToString("x2"));
 
-            return signatureHex;
+            StringBuilder stringBuilder = new StringBuilder(buf.Length * 2);
+            for(int i = 0; i < buf.Length; i++)
+            {
+                stringBuilder.Append(buf[i].ToString("x2"));
+            }
+
+            return stringBuilder.ToString();
         }
 
         public async Task<CachedImage> ReadAsync(string key)
