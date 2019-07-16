@@ -86,7 +86,7 @@ services.AddImageWizard(options =>
                        .SetDistributedCache()
                        //add some loaders
                        .AddHttpLoader()
-                       .AddYoutube()
+                       .AddYoutubeLoader()
                        .AddFileLoader(options => options.Folder = "FileStorage");
 ```
 
