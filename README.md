@@ -115,11 +115,11 @@ Register settings to services
 ```csharp
 services.Configure<ImageWizardSettings>(Configuration.GetSection("ImageWizard"));
 
-services.AddImageWizard();
+services.AddImageWizardClient();
 
 //or
 
-services.AddImageWizard(options => 
+services.AddImageWizardClient(options => 
 {
     options.BaseUrl = "https://<your-domain>/image";
     options.Key = "..";
