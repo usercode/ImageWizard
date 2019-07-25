@@ -13,12 +13,12 @@ namespace ImageWizard.AspNetCore
 {
     public static class Extensions
     {
-        public static IServiceCollection AddImageWizard(this IServiceCollection services)
+        public static IServiceCollection AddImageWizardClient(this IServiceCollection services)
         {
-            return AddImageWizard(services, x => { });
+            return AddImageWizardClient(services, x => { });
         }
 
-        public static IServiceCollection AddImageWizard(this IServiceCollection services, Action<ImageWizardSettings> setup)
+        public static IServiceCollection AddImageWizardClient(this IServiceCollection services, Action<ImageWizardSettings> setup)
         {
             services.Configure(setup);
 
