@@ -15,10 +15,13 @@ using System.Globalization;
 
 namespace ImageWizard.AspNetCore.Builder
 {
+    /// <summary>
+    /// ImageUrlBuilder
+    /// </summary>
     public class ImageUrlBuilder : IImageSelector, IImageFilters
     {
         private CryptoService CryptoService { get; }
-        private IOptions<ImageWizardSettings> Settings { get; }
+        private IOptions<ImageWizardClientSettings> Settings { get; }
 
         private string ImageUrl { get; set; }
 
@@ -26,9 +29,12 @@ namespace ImageWizard.AspNetCore.Builder
 
         private string DeliveryType { get; set; }
 
-        public ImageUrlBuilder(IOptions<ImageWizardSettings> settings)
+        public ImageUrlBuilder(IOptions<ImageWizardClientSettings> settings)
         {
-            CryptoService = new CryptoService(settings.Value.Key);
+            if (settings.Value.Key != null)
+            {
+                CryptoService = new CryptoService(settings.Value.Key);
+            }
 
             Settings = settings;
 
@@ -205,13 +211,24 @@ namespace ImageWizard.AspNetCore.Builder
                 url.Append("/");
             }
 
-            url.Append($"{DeliveryType}/");
+            url.Append($"{DeliveryType}");
+
+            if (ImageUrl.StartsWith("/") == false)
+            {
+                url.Append("/");
+            }
+
             url.Append(ImageUrl);
 
-            string secret = CryptoService.Encrypt(url.ToString());
+            string signature = "unsafe";
+
+            if (CryptoService != null)
+            {
+                signature = CryptoService.Encrypt(url.ToString());
+            }
 
             url.Insert(0, "/");
-            url.Insert(0, secret);
+            url.Insert(0, signature);
             url.Insert(0, "/");
             url.Insert(0, Settings.Value.BaseUrl);
 

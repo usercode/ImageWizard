@@ -18,6 +18,8 @@ namespace ImageWizard
 
         public static IImageWizardBuilder AddHttpLoader(this IImageWizardBuilder wizardConfiguration, Action<HttpLoaderSettings> setup)
         {
+            wizardConfiguration.Services.AddHttpContextAccessor();
+
             wizardConfiguration.Services.Configure(setup);
             wizardConfiguration.Services.AddHttpClient<IImageLoader, HttpLoader>();
 

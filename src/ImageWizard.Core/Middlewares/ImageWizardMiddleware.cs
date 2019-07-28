@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
+using ImageWizard.Core.ImageFilters.Base;
 
 namespace ImageWizard.Middlewares
 {
@@ -204,7 +205,7 @@ namespace ImageWizard.Middlewares
                         {
                             bool filterFound = false;
 
-                            foreach (FilterAction action in FilterManager.FilterActions)
+                            foreach (IFilterAction action in FilterManager.FilterActions)
                             {
                                 if (action.TryExecute(filter, filterContext))
                                 {

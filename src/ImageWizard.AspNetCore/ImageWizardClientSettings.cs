@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ImageWizard.AspNetCore
 {
-    public class ImageWizardSettings
+    public class ImageWizardClientSettings
     {
-        public ImageWizardSettings()
+        public ImageWizardClientSettings()
         {
             Enabled = true;
         }

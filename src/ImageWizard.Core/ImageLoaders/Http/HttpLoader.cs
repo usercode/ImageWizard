@@ -1,12 +1,14 @@
 ﻿using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.ImageLoaders.Http;
 using ImageWizard.Services.Types;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ImageWizard.ImageLoaders
@@ -16,10 +18,11 @@ namespace ImageWizard.ImageLoaders
     /// </summary>
     public class HttpLoader : IImageLoader
     {
-        public HttpLoader(HttpClient httpCLient, IOptions<HttpLoaderSettings> settings)
+        public HttpLoader(HttpClient httpCLient, IOptions<HttpLoaderSettings> settings, IHttpContextAccessor httpContextAccessor)
         {
             HttpClient = httpCLient;
             Settings = settings;
+            HttpContextAccessor = httpContextAccessor;
 
             foreach (HttpHeaderItem header in Settings.Value.Headers)
             {
@@ -38,6 +41,11 @@ namespace ImageWizard.ImageLoaders
         public IOptions<HttpLoaderSettings> Settings { get; }
 
         /// <summary>
+        /// HttpContextAccessor
+        /// </summary>
+        public IHttpContextAccessor HttpContextAccessor { get; }
+
+        /// <summary>
         /// DeliveryType
         /// </summary>
         public string DeliveryType => "fetch";
@@ -49,6 +57,12 @@ namespace ImageWizard.ImageLoaders
         /// <returns></returns>
         public async Task<OriginalImage> GetAsync(string requestUri)
         {
+            //is relative url?
+            if(Regex.Match(requestUri, "^https?://").Success == false)
+            {
+                requestUri = $"{HttpContextAccessor.HttpContext.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{requestUri}";
+            }
+
             HttpResponseMessage response = await HttpClient.GetAsync(requestUri);
             byte[] data = await response.Content.ReadAsByteArrayAsync();
 

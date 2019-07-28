@@ -20,7 +20,7 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 | signature based on HMACSHA1 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
 | any filters | "trim()/resize(200,200)/jpg(90)" |
 | delivery type | "fetch" |
-| absolute url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
+| absolute or relative url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
 ## Image filters
 ### Image transformations
@@ -52,7 +52,7 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 
 ## Image loaders
 - HTTP loader ("fetch")
-  - absolute url of the original image
+  - absolute or relative url of the original image
 - file loader ("upload")
   - relative url to file
 - youtube loader ("youtube")
@@ -113,7 +113,7 @@ Add settings to the appsettings.json
 Register settings to services
 
 ```csharp
-services.Configure<ImageWizardSettings>(Configuration.GetSection("ImageWizard"));
+services.Configure<ImageWizardClientSettings>(Configuration.GetSection("ImageWizard"));
 
 services.AddImageWizardClient();
 

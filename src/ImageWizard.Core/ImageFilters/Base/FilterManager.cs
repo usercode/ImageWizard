@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageWizard.Core.ImageFilters.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,10 +16,10 @@ namespace ImageWizard.Filters
     {
         public FilterManager()
         {
-            FilterActions = new List<FilterAction>();
+            FilterActions = new List<IFilterAction>();
         }
 
-        public IList<FilterAction> FilterActions { get; set; }
+        public IList<IFilterAction> FilterActions { get; set; }
 
         /// <summary>
         /// Register
@@ -39,9 +40,9 @@ namespace ImageWizard.Filters
                 ParameterInfo[] parameters = method.GetParameters();
 
                 StringBuilder builder = new StringBuilder("^");
-                builder.Append($@"({filter.Name})\(");
+                builder.Append($@"{filter.Name}\(");
 
-                for (int i = 0; i < parameters.Length - 1; i++)
+                for (int i = 0; i < parameters.Length; i++)
                 {
                     if (parameters[i].ParameterType == typeof(int))
                     {
@@ -63,9 +64,13 @@ namespace ImageWizard.Filters
 
                         builder.Append($"(?<{parameters[i].Name}>{string.Join("|", enumValues)})");
                     }
+                    else if(parameters[i].ParameterType == typeof(FilterContext))
+                    {
+                        //skip this parameter
+                    }
                     else
                     {
-                        throw new Exception("unknown parameter type");
+                        throw new Exception("parameter type is not supported: " + parameters[i].ParameterType.Name);
                     }
 
                     if (i < parameters.Length - 2)
@@ -76,14 +81,13 @@ namespace ImageWizard.Filters
 
                 builder.Append(@"\)$");
 
-                FilterAction filterAction = new FilterAction();
-                filterAction.Filter = filter;
-                filterAction.TargetMethod = method;
-                filterAction.Regex = new Regex(builder.ToString(), RegexOptions.Compiled);
+                FilterAction<TFilter> filterAction = new FilterAction<TFilter>(
+                                                    new Regex(builder.ToString(), RegexOptions.Compiled),
+                                                    method,
+                                                    filter);
 
                 FilterActions.Add(filterAction);
             }
-
         }        
     }
 }

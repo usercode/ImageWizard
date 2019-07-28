@@ -18,7 +18,7 @@ namespace ImageWizard.AspNetCore
             return AddImageWizardClient(services, x => { });
         }
 
-        public static IServiceCollection AddImageWizardClient(this IServiceCollection services, Action<ImageWizardSettings> setup)
+        public static IServiceCollection AddImageWizardClient(this IServiceCollection services, Action<ImageWizardClientSettings> setup)
         {
             services.Configure(setup);
 
