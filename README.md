@@ -77,6 +77,10 @@ services.AddImageWizard(options =>
                            options.AllowUnsafeUrl = true;                           
                            options.Key = "DEMO-KEY...";
                            options.UseETag = true;
+                           options.CacheControl.IsEnabled = true;
+                           options.CacheControl.MaxAge = TimeSpan.FromDays(30);
+                           options.CacheControl.MustRevalidate = false;
+                           options.CacheControl.Public = true;
                        })
                        //use file cache
                        .SetFileCache(options => options.Folder = "FileCache")
