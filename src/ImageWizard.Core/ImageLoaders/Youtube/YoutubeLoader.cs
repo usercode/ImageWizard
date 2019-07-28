@@ -23,12 +23,6 @@ namespace ImageWizard.Core.ImageLoaders.Youtube
         /// </summary>
         private HttpClient Client { get; }
 
-        /// <summary>
-        /// DeliveryType
-        /// </summary>
-        public string DeliveryType => "youtube";
-
-
         public async Task<OriginalImage> GetAsync(string requestUri)
         {
             string url = $"https://i.ytimg.com/vi/{requestUri}/maxresdefault.jpg";

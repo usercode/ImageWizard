@@ -34,8 +34,6 @@ namespace ImageWizard
             configuration.AddDefaultFilters();
             configuration.AddHttpLoader();
             configuration.SetDistributedCache();
-            
-            services.AddSingleton(configuration);
 
             return configuration;
         }   

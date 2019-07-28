@@ -1,4 +1,5 @@
-﻿using ImageWizard.Filters;
+﻿using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Filters;
 using ImageWizard.ImageLoaders;
 using ImageWizard.ImageStorages;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,11 @@ namespace ImageWizard.Core.Middlewares
         /// FilterManager
         /// </summary>
         FilterManager FilterManager { get; }
+
+        /// <summary>
+        /// ImageLoaderManager
+        /// </summary>
+        ImageLoaderManager ImageLoaderManager { get; }
 
     }
 }

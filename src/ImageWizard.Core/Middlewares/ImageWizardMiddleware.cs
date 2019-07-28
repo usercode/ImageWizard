@@ -24,6 +24,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using ImageWizard.Core.ImageFilters.Base;
+using ImageWizard.Core.ImageLoaders;
 
 namespace ImageWizard.Middlewares
 {
@@ -38,11 +39,13 @@ namespace ImageWizard.Middlewares
             RequestDelegate next,
             IOptions<ImageWizardSettings> settings,
             ILogger<ImageWizardMiddleware> logger,
-            FilterManager filterManager
+            FilterManager filterManager,
+            ImageLoaderManager imageLoaderManager
             )
         {
             Settings = settings;
             FilterManager = filterManager;
+            ImageLoaderManager = imageLoaderManager;
             Logger = logger;
 
             _next = next;
@@ -58,6 +61,11 @@ namespace ImageWizard.Middlewares
         /// FilterManager
         /// </summary>
         private FilterManager FilterManager { get; }
+
+        /// <summary>
+        /// ImageLoaderManager
+        /// </summary>
+        private ImageLoaderManager ImageLoaderManager { get; }
 
         /// <summary>
         /// CryptoService
@@ -152,7 +160,8 @@ namespace ImageWizard.Middlewares
             {
                 Logger.LogTrace("Create cached image");
 
-                IImageLoader loader = context.RequestServices.GetServices<IImageLoader>().FirstOrDefault(x => x.DeliveryType == url_deliveryType);
+                Type imageLoaderType = ImageLoaderManager.Get(url_deliveryType);
+                IImageLoader loader = (IImageLoader)context.RequestServices.GetService(imageLoaderType);
 
                 if(loader == null)
                 {
@@ -294,7 +303,7 @@ namespace ImageWizard.Middlewares
             //DPR
             if (cachedImage.Metadata.DPR != null)
             {
-                context.Response.Headers.Add("Content-DPR", cachedImage.Metadata.DPR.ToString());
+                context.Response.Headers.Add("Content-DPR", cachedImage.Metadata.DPR.Value.ToString(CultureInfo.InvariantCulture));
                 context.Response.Headers.Add("Vary", "DPR");
             }
 

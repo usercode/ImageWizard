@@ -21,7 +21,8 @@ namespace ImageWizard
             wizardConfiguration.Services.AddHttpContextAccessor();
 
             wizardConfiguration.Services.Configure(setup);
-            wizardConfiguration.Services.AddHttpClient<IImageLoader, HttpLoader>();
+            wizardConfiguration.Services.AddHttpClient<HttpLoader>();
+            wizardConfiguration.ImageLoaderManager.Register<HttpLoader>("fetch");
 
             return wizardConfiguration;
         }

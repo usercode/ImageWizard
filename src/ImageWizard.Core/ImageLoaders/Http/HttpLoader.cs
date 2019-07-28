@@ -46,11 +46,6 @@ namespace ImageWizard.ImageLoaders
         public IHttpContextAccessor HttpContextAccessor { get; }
 
         /// <summary>
-        /// DeliveryType
-        /// </summary>
-        public string DeliveryType => "fetch";
-
-        /// <summary>
         /// Download
         /// </summary>
         /// <param name="requestUri"></param>

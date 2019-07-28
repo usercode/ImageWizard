@@ -12,7 +12,8 @@ namespace ImageWizard
     {
         public static IImageWizardBuilder AddYoutubeLoader(this IImageWizardBuilder wizardConfiguration)
         {
-            wizardConfiguration.Services.AddHttpClient<IImageLoader, YoutubeLoader>();
+            wizardConfiguration.Services.AddHttpClient<YoutubeLoader>();
+            wizardConfiguration.ImageLoaderManager.Register<YoutubeLoader>("youtube");
 
             return wizardConfiguration;
         }

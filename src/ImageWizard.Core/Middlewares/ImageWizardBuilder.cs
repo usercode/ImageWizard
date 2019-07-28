@@ -1,4 +1,5 @@
-﻿using ImageWizard.Core.Middlewares;
+﻿using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Core.Middlewares;
 using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
 using ImageWizard.ImageLoaders;
@@ -21,8 +22,10 @@ namespace ImageWizard.Core.Settings
             Services = services;
 
             FilterManager = new FilterManager();
+            ImageLoaderManager = new ImageLoaderManager();
 
             Services.AddSingleton(FilterManager);
+            Services.AddSingleton(ImageLoaderManager);
         }
 
         /// <summary>
@@ -34,6 +37,11 @@ namespace ImageWizard.Core.Settings
         /// FilterManager
         /// </summary>
         public FilterManager FilterManager { get; }
+
+        /// <summary>
+        /// ImageLoaderManager
+        /// </summary>
+        public ImageLoaderManager ImageLoaderManager { get; }
 
         
     }

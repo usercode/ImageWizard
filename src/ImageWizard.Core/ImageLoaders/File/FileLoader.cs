@@ -32,12 +32,7 @@ namespace ImageWizard.Core.ImageLoaders.File
         /// <summary>
         /// HostingEnvironment
         /// </summary>
-        private IHostingEnvironment HostingEnvironment { get; } 
-
-        /// <summary>
-        /// DeliveryType
-        /// </summary>
-        public string DeliveryType => "upload";
+        private IHostingEnvironment HostingEnvironment { get; }
 
         public async Task<OriginalImage> GetAsync(string requestUri)
         {
