@@ -21,10 +21,10 @@ namespace ImageWizard.Settings
            
             Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
 
-            ImageMaxWidth = 3500;
-            ImageMaxHeight = 3500;
+            ImageMaxWidth = 4000;
+            ImageMaxHeight = 4000;
 
-            AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0 };
+            AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
 
             CacheControl = new CacheControl();
         }

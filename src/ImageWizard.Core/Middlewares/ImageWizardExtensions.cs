@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace ImageWizard
 {
-    public static class ImageWIzardExtensions
+    public static class ImageWizardExtensions
     {
         public static IApplicationBuilder UseImageWizard(this IApplicationBuilder app)
         {

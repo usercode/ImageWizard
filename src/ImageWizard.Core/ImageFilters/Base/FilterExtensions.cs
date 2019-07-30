@@ -40,6 +40,7 @@ namespace ImageWizard
             builder.FilterManager.Register<BrightnessFilter>();
             builder.FilterManager.Register<ContrastFilter>();
             builder.FilterManager.Register<DPRFilter>();
+            builder.FilterManager.Register<AutoOrientFilter>();
 
             //formats
             builder.FilterManager.Register<JpgFilter>();
