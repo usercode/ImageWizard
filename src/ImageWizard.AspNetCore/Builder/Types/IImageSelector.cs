@@ -10,8 +10,12 @@ namespace ImageWizard.AspNetCore.Builder.Types
     {
         IImageFilters Fetch(string url);
 
-        IImageFilters Upload(string path);
+        IImageFilters FetchStaticFile(string path);
+
+        IImageFilters File(string path);
 
         IImageFilters Youtube(string id);
+
+        IImageFilters Gravatar(string hash);
     }
 }

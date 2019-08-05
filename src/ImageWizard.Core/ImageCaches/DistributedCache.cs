@@ -1,5 +1,6 @@
 ﻿using ImageWizard.Core.Types;
 using ImageWizard.ImageStorages;
+using ImageWizard.Services.Types;
 using ImageWizard.Types;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
@@ -19,7 +20,6 @@ namespace ImageWizard.Core.ImageCaches
         public DistributedCache(IDistributedCache distributedCache)
         {
             Cache = distributedCache;
-            Serializer = new CachedFileSerializer();
         }
 
         /// <summary>
@@ -27,28 +27,30 @@ namespace ImageWizard.Core.ImageCaches
         /// </summary>
         public IDistributedCache Cache { get; }
 
-        /// <summary>
-        /// Serializer
-        /// </summary>
-        private CachedFileSerializer Serializer { get; }
-
-        public async Task<CachedImage> ReadAsync(string key)
+        public async Task<ICachedImage> ReadAsync(string key)
         {
-            byte[] buffer = await Cache.GetAsync(key);
+            string json = await Cache.GetStringAsync($"{key}#meta");
 
-            if(buffer == null)
+            if (json == null)
             {
                 return null;
             }
 
-            CachedImage cachedImage = Serializer.Read(buffer);
+            IImageMetadata metadata = JsonConvert.DeserializeObject<ImageMetadata>(json);
 
-            return cachedImage;
+            return new CachedImage(metadata, async () =>
+            {
+                byte[] b = await Cache.GetAsync(key);
+
+                return new MemoryStream(b);
+            });
         }
 
-        public async Task WriteAsync(string key, CachedImage cachedImage)
+        public async Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer)
         {
-            byte[] buffer = Serializer.Write(cachedImage);
+            string json = JsonConvert.SerializeObject(metadata);
+
+            await Cache.SetStringAsync($"{key}#meta", json);
 
             await Cache.SetAsync(key, buffer);
         }

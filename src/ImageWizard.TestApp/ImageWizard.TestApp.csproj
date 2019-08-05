@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="FileStorage\bat-eared-fox.jpg" />
+    <None Remove="FileStorage\chair.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="FileStorage\bat-eared-fox.jpg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="FileStorage\chair.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageWizard.AspNetCore\ImageWizard.AspNetCore.csproj" />
+    <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+    <ProjectReference Include="..\ImageWizard.SharedContract\ImageWizard.SharedContract.csproj" />
+  </ItemGroup>
+
+</Project>

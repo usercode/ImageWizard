@@ -1,4 +1,5 @@
 ﻿using ImageWizard.SharedContract;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace ImageWizard.SharedContract
     {
         public CryptoService(string key)
         {
-            Key = Base64Url.FromBase64Url(key);
+            Key = WebEncoders.Base64UrlDecode(key);
         }
 
         /// <summary>
@@ -35,12 +36,12 @@ namespace ImageWizard.SharedContract
                 throw new Exception("No key available!");
             }
 
-            byte[] buffer = Encoding.Unicode.GetBytes(data);
+            byte[] buffer = Encoding.UTF8.GetBytes(data);
 
-            HMACSHA1 h = new HMACSHA1(Key);
+            HMACSHA256 h = new HMACSHA256(Key);
             byte[] buf = h.ComputeHash(buffer);
 
-            return Base64Url.ToBase64Url(buf);
+            return WebEncoders.Base64UrlEncode(buf);
         }
     }
 }

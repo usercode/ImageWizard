@@ -1,4 +1,5 @@
 ﻿using ImageWizard.Core.Types;
+using ImageWizard.Filters.ImageFormats;
 using ImageWizard.ImageLoaders;
 using ImageWizard.Services.Types;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +11,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core.ImageLoaders.File
+namespace ImageWizard.Core.ImageLoaders.Files
 {
     /// <summary>
     /// FileLoader
@@ -50,30 +51,7 @@ namespace ImageWizard.Core.ImageLoaders.File
                 await stream.CopyToAsync(mem);
             }
 
-            string extension = Path.GetExtension(fileInfo.Name).ToLower();
-            string mimeType;
-
-            switch (extension)
-            {
-                case ".jpg":
-                    mimeType = MimeTypes.Jpeg;
-                    break;
-
-                case ".png":
-                    mimeType = MimeTypes.Png;
-                    break;
-
-                case ".gif":
-                    mimeType = MimeTypes.Gif;
-                    break;
-
-                case ".bmp":
-                    mimeType = MimeTypes.Bitmap;
-                    break;
-
-                default:
-                    throw new Exception("unknown file extension");
-            }
+            string mimeType = ImageFormatHelper.GetMimeTypeByExtension(fileInfo.Name);            
 
             return new OriginalImage(requestUri, mimeType, mem.ToArray());
         }

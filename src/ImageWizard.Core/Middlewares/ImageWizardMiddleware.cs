@@ -25,6 +25,8 @@ using Microsoft.Extensions.Logging;
 using System.Globalization;
 using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Core.Types;
+using System.Threading;
 
 namespace ImageWizard.Middlewares
 {
@@ -153,7 +155,7 @@ namespace ImageWizard.Middlewares
             }
 
             //try to get cached image
-            CachedImage cachedImage = await imageCache.ReadAsync(signature);
+            ICachedImage cachedImage = await imageCache.ReadAsync(signature);
 
             //no cached image found?
             if (cachedImage == null)
@@ -181,11 +183,14 @@ namespace ImageWizard.Middlewares
                 byte[] transformedImageData;
 
                 //create metadata
-                ImageMetadata imageMetadata = new ImageMetadata();
-                imageMetadata.ImageSource = originalImage.Url;
-                imageMetadata.Signature = signature;
-                imageMetadata.MimeType = targetFormat.MimeType;
-                imageMetadata.DPR = null;
+                var imageMetadata = new ImageMetadata()
+                {
+                    CreatedAt = DateTime.UtcNow,
+                    ImageSource = originalImage.Url,
+                    Signature = signature,
+                    MimeType = targetFormat.MimeType,
+                    DPR = null
+                };
 
                 //skip svg
                 if (targetFormat is SvgFormat)
@@ -269,14 +274,12 @@ namespace ImageWizard.Middlewares
                         imageMetadata.MimeType = filterContext.ImageFormat.MimeType;
                     }
                 }
-                
-                cachedImage = new CachedImage();
-                cachedImage.Metadata = imageMetadata;
-                cachedImage.Data = transformedImageData;
 
                 Logger.LogTrace("Save new cached image");
 
-                await imageCache.WriteAsync(signature, cachedImage);
+                await imageCache.WriteAsync(signature, imageMetadata, transformedImageData);
+
+                cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(transformedImageData)));
             }
             else
             {
@@ -307,10 +310,14 @@ namespace ImageWizard.Middlewares
                 context.Response.Headers.Add("Vary", "DPR");
             }
 
-            context.Response.ContentLength = cachedImage.Data.Length;
-            context.Response.ContentType = cachedImage.Metadata.MimeType;
+            //prepare response stream
+            using (Stream stream = await cachedImage.OpenReadAsync())
+            {
+                context.Response.ContentLength = stream.Length;
+                context.Response.ContentType = cachedImage.Metadata.MimeType;
 
-            await context.Response.Body.WriteAsync(cachedImage.Data, 0, cachedImage.Data.Length);
+                await stream.CopyToAsync(context.Response.Body);
+            }
 
             Logger.LogTrace("Operation completed");
         }

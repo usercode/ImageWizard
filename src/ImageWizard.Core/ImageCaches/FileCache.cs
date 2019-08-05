@@ -1,10 +1,13 @@
 ﻿using ImageWizard.Core.ImageCaches;
+using ImageWizard.Core.ImageLoaders.Files;
 using ImageWizard.Core.Types;
 using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
 using ImageWizard.Types;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -27,7 +30,7 @@ namespace ImageWizard.ImageStorages
             Settings = settings;
             HostingEnvironment = hostingEnvironment;
 
-            Serializer = new CachedFileSerializer();
+            FileProvider = new PhysicalFileProvider(Path.Combine(hostingEnvironment.ContentRootPath, settings.Value.Folder));
         }
 
         /// <summary>
@@ -41,18 +44,19 @@ namespace ImageWizard.ImageStorages
         private IHostingEnvironment HostingEnvironment { get; }
 
         /// <summary>
-        /// Serializer
+        /// FileProvider
         /// </summary>
-        private CachedFileSerializer Serializer { get; }
+        private IFileProvider FileProvider { get; }
 
-        private string[] SplitSecret(string secret)
+        private string[] SplitKey(string secret)
         {
             string part1 = secret.Substring(0, 1);
             string part2 = secret.Substring(1, 1);
             string part3 = secret.Substring(2, 1);
             string part4 = secret.Substring(3, 1);
+            string part_last = secret.Substring(4);
 
-            return new[] { part1, part2, part3, part4 };
+            return new[] { part1, part2, part3, part4, part_last };
         }
 
         private string ToHex(string key)
@@ -69,53 +73,63 @@ namespace ImageWizard.ImageStorages
             return stringBuilder.ToString();
         }
 
-        public async Task<CachedImage> ReadAsync(string key)
+        public async Task<ICachedImage> ReadAsync(string key)
         {
             string signatureHex = ToHex(key);
 
-            string[] parts = SplitSecret(signatureHex);
+            string[] parts = SplitKey(signatureHex);
 
-            string baseFilePath = Path.Combine(new[] { HostingEnvironment.ContentRootPath }.Concat(new[] { Settings.Value.Folder  }).Concat(parts).Concat(new[] { signatureHex }).ToArray());
+            string basePath = Path.Combine(parts);
 
-            FileInfo fileInfo = new FileInfo(baseFilePath);
+            IFileInfo fileInfoData = FileProvider.GetFileInfo(basePath);
+            IFileInfo fileInfoMetadata = FileProvider.GetFileInfo(basePath + ".meta");
 
-            if (fileInfo.Exists == false)
+            if (fileInfoMetadata.Exists == false || fileInfoData.Exists == false)
             {
                 return null;
             }
 
-            //read cache image from disk
-            MemoryStream memImage = new MemoryStream((int)fileInfo.Length);
+            MemoryStream mem = new MemoryStream((int)fileInfoMetadata.Length);
 
-            using (Stream fs = fileInfo.OpenRead())
+            using (Stream fs = fileInfoMetadata.CreateReadStream())
             {
-                await fs.CopyToAsync(memImage);
+                await fs.CopyToAsync(mem);
             }
 
-            memImage.Seek(0, SeekOrigin.Begin);
+            string json = Encoding.UTF8.GetString(mem.ToArray());
 
-            CachedImage cachedImage = Serializer.Read(memImage);
+            IImageMetadata metadata = JsonConvert.DeserializeObject<ImageMetadata>(json);
 
-            return cachedImage;
+            return new CachedImage(metadata, () => Task.FromResult(fileInfoData.CreateReadStream()));
         }
 
-        public async Task WriteAsync(string key, CachedImage cachedImage)
+        public async Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer)
         {
-            byte[] buffer = Serializer.Write(cachedImage);
-
             string signatureHex = ToHex(key);
 
-            string[] parts = SplitSecret(signatureHex);
+            string[] parts = SplitKey(signatureHex);
 
             //store transformed image
-            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { HostingEnvironment.ContentRootPath }.Concat(new[] { Settings.Value.Folder }).Concat(parts).ToArray()));
+            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { HostingEnvironment.ContentRootPath }.Concat(new[] { Settings.Value.Folder }).Concat(parts.Take(parts.Length-1)).ToArray()));
 
             //write to file
-            FileInfo file = new FileInfo(Path.Combine(sub.FullName, signatureHex));
+            FileInfo fileInfoMetadata = new FileInfo(Path.Combine(sub.FullName, parts.Last() + ".meta"));
+            
+            //write metadata
+            string json = JsonConvert.SerializeObject(metadata);
+            byte[] metadataBuffer = Encoding.UTF8.GetBytes(json);
 
-            using (Stream fs = file.OpenWrite())
+            using (Stream fs = fileInfoMetadata.OpenWrite())
             {
-                await fs.WriteAsync(buffer, 0, buffer.Length);
+                await fs.WriteAsync(metadataBuffer, 0, metadataBuffer.Length);
+            }
+
+            //write data
+            FileInfo fileInfoData = new FileInfo(Path.Combine(sub.FullName, parts.Last()));
+
+            using (Stream fs = fileInfoData.OpenWrite())
+            {
+                await new MemoryStream(buffer).CopyToAsync(fs);
             }
         }
     }

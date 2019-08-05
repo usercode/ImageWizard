@@ -1,5 +1,7 @@
 ﻿using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.ImageLoaders.Http;
+using ImageWizard.Core.Types;
+using ImageWizard.Filters.ImageFormats;
 using ImageWizard.Services.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -53,7 +55,7 @@ namespace ImageWizard.ImageLoaders
         public async Task<OriginalImage> GetAsync(string requestUri)
         {
             //is relative url?
-            if(Regex.Match(requestUri, "^https?://").Success == false)
+            if (Regex.Match(requestUri, "^https?://").Success == false)
             {
                 requestUri = $"{HttpContextAccessor.HttpContext.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{requestUri}";
             }
@@ -61,7 +63,24 @@ namespace ImageWizard.ImageLoaders
             HttpResponseMessage response = await HttpClient.GetAsync(requestUri);
             byte[] data = await response.Content.ReadAsByteArrayAsync();
 
-            return new OriginalImage(requestUri, response.Content.Headers.ContentType.MediaType, data);
+            string mimeType = response.Content.Headers.ContentType?.MediaType;
+
+            if (mimeType == null)
+            {
+                //mimeType = ImageFormatHelper.GetMimeTypeByExtension(requestUri);
+
+                throw new Exception("no content-type available");
+            }
+
+            CacheSettings cacheSettings = new CacheSettings()
+            {
+                NoStore = response.Headers.CacheControl?.NoStore,
+                NoCache = response.Headers.CacheControl?.NoCache,
+                MaxAge = response.Headers.CacheControl?.MaxAge,
+                ETag = response.Headers.ETag?.Tag
+            };
+
+            return new OriginalImage(requestUri, mimeType, data, cacheSettings);
         }
     }
 }

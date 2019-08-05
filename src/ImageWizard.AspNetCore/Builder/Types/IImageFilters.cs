@@ -8,6 +8,8 @@ namespace ImageWizard.AspNetCore.Builder.Types
 {
     public interface IImageFilters : IImageBuildUrl
     {
+        IImageFilters Blur();
+
         IImageFilters Crop(int width, int heigth);
 
         IImageFilters Crop(int x, int y, int width, int heigth);

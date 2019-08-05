@@ -19,7 +19,7 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 | base path | "image" |
 | signature based on HMACSHA1 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
 | any filters | "trim()/resize(200,200)/jpg(90)" |
-| delivery type | "fetch" |
+| loader type | "fetch" |
 | absolute or relative url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
 ## Image filters
@@ -53,7 +53,7 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 ## Image loaders
 - HTTP loader ("fetch")
   - absolute or relative url of the original image
-- file loader ("upload")
+- file loader ("file")
   - relative url to file
 - youtube loader ("youtube")
   - video id
@@ -72,15 +72,19 @@ https://www.nuget.org/packages/ImageWizard.Core/
 
 
 ```csharp
+services.AddImageWizard(); //use only http loader and distributed cache
+
+//or
+
 services.AddImageWizard(options => 
                        {
                            options.AllowUnsafeUrl = true;                           
                            options.Key = "DEMO-KEY...";
                            options.UseETag = true;
-                           options.ImageMaxWidth = 3500;
-                           options.ImageMaxHeight = 3500;                           
+                           options.ImageMaxWidth = 4000;
+                           options.ImageMaxHeight = 4000;                           
                            options.CacheControl.IsEnabled = true;
-                           options.CacheControl.MaxAge = TimeSpan.FromDays(30);
+                           options.CacheControl.MaxAge = TimeSpan.FromDays(365);
                            options.CacheControl.MustRevalidate = false;
                            options.CacheControl.Public = true;
                        })
@@ -91,7 +95,9 @@ services.AddImageWizard(options =>
                        //or distributed cache
                        .SetDistributedCache()
                        //add some loaders
-                       .AddHttpLoader()
+                       .AddHttpLoader(options => 
+                                               //add custom http header like apikey to prevent that user can download the original image
+                                               options.SetHeader("ApiKey", "123456")) 
                        .AddYoutubeLoader()
                        .AddFileLoader(options => options.Folder = "FileStorage");
 ```

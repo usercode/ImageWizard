@@ -11,9 +11,9 @@ using ImageWizard.MongoDB.ImageCaches;
 using System.Collections.Generic;
 using ImageWizard.ImageStorages;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using ImageWizard.Core.ImageLoaders.File;
 using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Core.ImageLoaders.Files;
 
 namespace ImageWizard
 {

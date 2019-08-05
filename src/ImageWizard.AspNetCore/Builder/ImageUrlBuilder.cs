@@ -12,6 +12,14 @@ using ImageWizard.SharedContract;
 using ImageWizard.AspNetCore.Builder.Types;
 using Microsoft.AspNetCore.Http;
 using System.Globalization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Caching.Memory;
+using System.Security.Cryptography;
+using System.IO;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace ImageWizard.AspNetCore.Builder
 {
@@ -22,6 +30,9 @@ namespace ImageWizard.AspNetCore.Builder
     {
         private CryptoService CryptoService { get; }
         private IOptions<ImageWizardClientSettings> Settings { get; }
+        private IHostingEnvironment HostingEnvironment { get; }
+        private IHttpContextAccessor HttpContextAccessor { get; }
+        private IFileVersionProvider FileVersionProvider { get; }
 
         private string ImageUrl { get; set; }
 
@@ -29,7 +40,10 @@ namespace ImageWizard.AspNetCore.Builder
 
         private string DeliveryType { get; set; }
 
-        public ImageUrlBuilder(IOptions<ImageWizardClientSettings> settings)
+        public ImageUrlBuilder(IOptions<ImageWizardClientSettings> settings, 
+            IHostingEnvironment env, 
+            IHttpContextAccessor httpContextAccessor,
+            IFileVersionProvider fileVersionProvider)
         {
             if (settings.Value.Key != null)
             {
@@ -37,10 +51,18 @@ namespace ImageWizard.AspNetCore.Builder
             }
 
             Settings = settings;
+            HostingEnvironment = env;
+            HttpContextAccessor = httpContextAccessor;
+            FileVersionProvider = fileVersionProvider;
 
             _filter = new List<string>();
         }
 
+        /// <summary>
+        /// Fetch file from absolute or relative url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public IImageFilters Fetch(string url)
         {
             ImageUrl = url;
@@ -49,12 +71,50 @@ namespace ImageWizard.AspNetCore.Builder
             return this;
         }
 
-        public IImageFilters Upload(string path)
+        /// <summary>
+        /// Fetch file from wwwroot folder
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="addFingerprint"></param>
+        /// <returns></returns>
+        public IImageFilters FetchStaticFile(string path)
         {
-            ImageUrl = path;
-            DeliveryType = "upload";
+            string newPath = FileVersionProvider.AddFileVersionToPath(HttpContextAccessor.HttpContext.Request.PathBase, path);
+
+            ImageUrl = newPath;
+            DeliveryType = "fetch";
 
             return this;
+        }
+
+        public IImageFilters File(string path)
+        {
+            ImageUrl = path;
+            DeliveryType = "file";
+
+            return this;
+        }
+
+        public IImageFilters Gravatar(string email)
+        {
+            var md5 = MD5.Create();
+            byte[] hash = md5.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
+
+            ImageUrl = GetHashString(hash);
+            DeliveryType = "gravatar";
+
+            return this;
+        }
+
+        public static string GetHashString(byte[] hash)
+        {
+            StringBuilder sb = new StringBuilder(hash.Length * 2);
+            foreach (byte b in hash)
+            {
+                sb.Append(b.ToString("x2"));
+            }
+
+            return sb.ToString();
         }
 
         public IImageFilters Youtube(string id)
@@ -96,6 +156,12 @@ namespace ImageWizard.AspNetCore.Builder
         public IImageFilters Crop(double x, double y, double width, double heigth)
         {
             _filter.Add($"crop({x.ToString("0.0", CultureInfo.InvariantCulture)},{y.ToString("0.0", CultureInfo.InvariantCulture)},{width.ToString("0.0", CultureInfo.InvariantCulture)},{heigth.ToString("0.0", CultureInfo.InvariantCulture)})");
+
+            return this;
+        }
+        public IImageFilters Blur()
+        {
+            _filter.Add($"blur()");
 
             return this;
         }

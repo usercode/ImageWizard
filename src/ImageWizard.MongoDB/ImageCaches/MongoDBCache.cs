@@ -12,6 +12,7 @@ using MongoDB.Driver.GridFS;
 using ImageWizard.MongoDB.Models;
 using ImageWizard.Types;
 using ImageWizard.Core.Types;
+using System.IO;
 
 namespace ImageWizard.MongoDB.ImageCaches
 {
@@ -38,6 +39,7 @@ namespace ImageWizard.MongoDB.ImageCaches
 
             //create index
             ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Signature)));
+            ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.CreatedAt)));
         }
 
         /// <summary>
@@ -60,7 +62,7 @@ namespace ImageWizard.MongoDB.ImageCaches
         /// </summary>
         public IGridFSBucket ImageBuffer { get; }
 
-        public async Task<CachedImage> ReadAsync(string key)
+        public async Task<ICachedImage> ReadAsync(string key)
         {
             ImageMetadataModel foundMetadata = await ImageMetadatas
                                                             .AsQueryable()
@@ -73,28 +75,26 @@ namespace ImageWizard.MongoDB.ImageCaches
 
             byte[] data = await ImageBuffer.DownloadAsBytesByNameAsync(key);
 
-            CachedImage cachedImage = new CachedImage();
-            cachedImage.Metadata = foundMetadata;
-            cachedImage.Data = data;
+            CachedImage cachedImage = new CachedImage(foundMetadata, async () => await ImageBuffer.OpenDownloadStreamByNameAsync(key));
 
             return cachedImage;
         }
 
-        public async Task WriteAsync(string key, CachedImage cachedImage)
+        public async Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer)
         {
             ImageMetadataModel model = new ImageMetadataModel()
             {
-                Signature = cachedImage.Metadata.Signature,
-                MimeType = cachedImage.Metadata.MimeType,
-                ImageSource = cachedImage.Metadata.ImageSource,
-                DPR = cachedImage.Metadata.DPR
+                Signature = metadata.Signature,
+                MimeType = metadata.MimeType,
+                ImageSource = metadata.ImageSource,
+                DPR = metadata.DPR
             };
 
             //upload image metadata
             await ImageMetadatas.ReplaceOneAsync(Builders<ImageMetadataModel>.Filter.Where(x => x.Signature == key), model, new UpdateOptions() { IsUpsert = true });
 
             //upload transformed image
-            await ImageBuffer.UploadFromBytesAsync(key, cachedImage.Data);
+            await ImageBuffer.UploadFromBytesAsync(key, buffer);
         }
     }
 }

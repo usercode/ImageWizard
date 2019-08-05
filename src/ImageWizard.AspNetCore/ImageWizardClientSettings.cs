@@ -9,6 +9,7 @@ namespace ImageWizard.AspNetCore
         public ImageWizardClientSettings()
         {
             Enabled = true;
+            BaseUrl = "/image";
         }
 
         public string BaseUrl { get; set; }

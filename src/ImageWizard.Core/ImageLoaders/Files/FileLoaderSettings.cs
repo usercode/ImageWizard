@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageLoaders.File
+namespace ImageWizard.Core.ImageLoaders.Files
 {
     public class FileLoaderSettings
     {

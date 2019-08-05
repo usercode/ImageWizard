@@ -24,6 +24,8 @@ namespace ImageWizard.AspNetCore
 
             services.AddTransient<ImageUrlBuilder>();
 
+            services.AddHttpContextAccessor();
+
             return services;
         }
 
