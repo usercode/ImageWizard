@@ -26,19 +26,19 @@ namespace ImageWizard.AspNetCore.Builder
     /// <summary>
     /// ImageUrlBuilder
     /// </summary>
-    public class ImageUrlBuilder : IImageSelector, IImageFilters
+    public class ImageUrlBuilder : IImageUrlBuilder, IImageFilters, IImageDeliveryType
     {
-        private CryptoService CryptoService { get; }
-        private IOptions<ImageWizardClientSettings> Settings { get; }
-        private IHostingEnvironment HostingEnvironment { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private IFileVersionProvider FileVersionProvider { get; }
+        public CryptoService CryptoService { get; }
+        public IOptions<ImageWizardClientSettings> Settings { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
+        public IHttpContextAccessor HttpContextAccessor { get; }
+        public IFileVersionProvider FileVersionProvider { get; }
 
-        private string ImageUrl { get; set; }
+        public string ImageUrl { get; set; }
 
-        private List<string> _filter;
+        public List<string> Filters { get; set; }
 
-        private string DeliveryType { get; set; }
+        public string DeliveryType { get; set; }
 
         public ImageUrlBuilder(IOptions<ImageWizardClientSettings> settings, 
             IHostingEnvironment env, 
@@ -55,204 +55,20 @@ namespace ImageWizard.AspNetCore.Builder
             HttpContextAccessor = httpContextAccessor;
             FileVersionProvider = fileVersionProvider;
 
-            _filter = new List<string>();
+            Filters = new List<string>();
         }
 
-        /// <summary>
-        /// Fetch file from absolute or relative url
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public IImageFilters Fetch(string url)
+        public IImageFilters Image(string deliveryType, string url)
         {
+            DeliveryType = deliveryType;
             ImageUrl = url;
-            DeliveryType = "fetch";
 
             return this;
         }
 
-        /// <summary>
-        /// Fetch file from wwwroot folder
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="addFingerprint"></param>
-        /// <returns></returns>
-        public IImageFilters FetchStaticFile(string path)
+        public IImageFilters Filter(string filter)
         {
-            string newPath = FileVersionProvider.AddFileVersionToPath(HttpContextAccessor.HttpContext.Request.PathBase, path);
-
-            ImageUrl = newPath;
-            DeliveryType = "fetch";
-
-            return this;
-        }
-
-        public IImageFilters File(string path)
-        {
-            ImageUrl = path;
-            DeliveryType = "file";
-
-            return this;
-        }
-
-        public IImageFilters Gravatar(string email)
-        {
-            var md5 = MD5.Create();
-            byte[] hash = md5.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
-
-            ImageUrl = GetHashString(hash);
-            DeliveryType = "gravatar";
-
-            return this;
-        }
-
-        public static string GetHashString(byte[] hash)
-        {
-            StringBuilder sb = new StringBuilder(hash.Length * 2);
-            foreach (byte b in hash)
-            {
-                sb.Append(b.ToString("x2"));
-            }
-
-            return sb.ToString();
-        }
-
-        public IImageFilters Youtube(string id)
-        {
-            ImageUrl = id;
-            DeliveryType = "youtube";
-
-            return this;
-        }
-
-        public IImageFilters DPR(double value)
-        {
-            _filter.Add($"dpr({value.ToString("0.0", CultureInfo.InvariantCulture)})");
-
-            return this;
-        }
-
-        public IImageFilters Crop(int width, int heigth)
-        {
-            Crop(0, 0, width, heigth);
-
-            return this;
-        }
-
-        public IImageFilters Crop(int x, int y, int width, int heigth)
-        {
-            _filter.Add($"crop({x},{y},{width},{heigth})");
-
-            return this;
-        }
-
-        public IImageFilters Crop(double width, double heigth)
-        {
-            Crop(0, 0, width, heigth);
-
-            return this;
-        }
-
-        public IImageFilters Crop(double x, double y, double width, double heigth)
-        {
-            _filter.Add($"crop({x.ToString("0.0", CultureInfo.InvariantCulture)},{y.ToString("0.0", CultureInfo.InvariantCulture)},{width.ToString("0.0", CultureInfo.InvariantCulture)},{heigth.ToString("0.0", CultureInfo.InvariantCulture)})");
-
-            return this;
-        }
-        public IImageFilters Blur()
-        {
-            _filter.Add($"blur()");
-
-            return this;
-        }
-
-        public IImageFilters Resize(int size)
-        {
-            _filter.Add($"resize({size})");
-
-            return this;
-        }
-
-        public IImageFilters Resize(int width, int height)
-        {
-            _filter.Add($"resize({width},{height})");
-
-            return this;
-        }
-
-        public IImageFilters Resize(int width, int height, ResizeMode mode)
-        {
-            _filter.Add($"resize({width},{height},{mode.ToString().ToLower()})");
-
-            return this;
-        }
-
-        public IImageFilters Trim()
-        {
-            _filter.Add("trim()");
-
-            return this;
-        }
-
-        public IImageFilters Grayscale()
-        {
-            _filter.Add($"grayscale()");
-
-            return this;
-        }
-
-        public IImageFilters BlackWhite()
-        {
-            _filter.Add($"blackwhite()");
-
-            return this;
-        }
-
-        public IImageFilters Rotate(RotateMode mode)
-        {
-            _filter.Add($"rotate({(int)mode})");
-
-            return this;
-        }
-
-        public IImageFilters Flip(FlipMode flippingMode)
-        {
-            _filter.Add($"flip({flippingMode.ToString().ToLower()})");
-
-            return this;
-        }
-
-        public IImageBuildUrl Jpg()
-        {
-            _filter.Add("jpg()");
-
-            return this;
-        }
-
-        public IImageBuildUrl Jpg(int quality)
-        {
-            _filter.Add($"jpg({quality})");
-
-            return this;
-        }
-
-        public IImageBuildUrl Png()
-        {
-            _filter.Add("png()");
-
-            return this;
-        }
-
-        public IImageBuildUrl Gif()
-        {
-            _filter.Add("gif()");
-
-            return this;
-        }
-
-        public IImageBuildUrl Bmp()
-        {
-            _filter.Add("bmp()");
+            Filters.Add(filter);
 
             return this;
         }
@@ -271,9 +87,9 @@ namespace ImageWizard.AspNetCore.Builder
 
             StringBuilder url = new StringBuilder();
 
-            for (int i = 0; i < _filter.Count; i++)
+            for (int i = 0; i < Filters.Count; i++)
             {
-                url.Append(_filter[i]);
+                url.Append(Filters[i]);
                 url.Append("/");
             }
 

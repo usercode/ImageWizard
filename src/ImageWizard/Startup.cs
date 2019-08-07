@@ -42,7 +42,8 @@ namespace ImageWizard
             IImageWizardBuilder imageWizard = services.AddImageWizard()
                                                         .AddHttpLoader()
                                                         .AddFileLoader()
-                                                        .AddYoutubeLoader();
+                                                        .AddYoutubeLoader()
+                                                        .AddGravatarLoader();
 
             switch (cache)
             {

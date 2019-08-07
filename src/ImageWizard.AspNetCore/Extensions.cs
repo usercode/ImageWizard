@@ -29,7 +29,7 @@ namespace ImageWizard.AspNetCore
             return services;
         }
 
-        public static IImageSelector ImageWizard(this IUrlHelper htmlHelper)
+        public static IImageDeliveryType ImageWizard(this IUrlHelper htmlHelper)
         {
             ImageUrlBuilder imageWizard = htmlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<ImageUrlBuilder>();
 

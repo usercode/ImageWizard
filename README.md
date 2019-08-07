@@ -79,7 +79,7 @@ services.AddImageWizard(); //use only http loader and distributed cache
 services.AddImageWizard(options => 
                        {
                            options.AllowUnsafeUrl = true;                           
-                           options.Key = "DEMO-KEY...";
+                           options.Key = "DEMO-KEY..."; //64 byte key encoded in Base64Url
                            options.UseETag = true;
                            options.ImageMaxWidth = 4000;
                            options.ImageMaxHeight = 4000;                           
@@ -96,7 +96,8 @@ services.AddImageWizard(options =>
                        .SetDistributedCache()
                        //add some loaders
                        .AddHttpLoader(options => 
-                                               //add custom http header like apikey to prevent that user can download the original image
+                                               //add custom http header like apikey to prevent 
+                                               //that user can download the original image
                                                options.SetHeader("ApiKey", "123456")) 
                        .AddYoutubeLoader()
                        .AddFileLoader(options => options.Folder = "FileStorage");

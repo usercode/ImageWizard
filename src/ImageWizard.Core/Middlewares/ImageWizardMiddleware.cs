@@ -310,7 +310,7 @@ namespace ImageWizard.Middlewares
                 context.Response.Headers.Add("Vary", "DPR");
             }
 
-            //prepare response stream
+            //send response stream
             using (Stream stream = await cachedImage.OpenReadAsync())
             {
                 context.Response.ContentLength = stream.Length;
