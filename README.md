@@ -100,7 +100,7 @@ services.AddImageWizard(options =>
                                                //that user can download the original image
                                                options.SetHeader("ApiKey", "123456")) 
                        .AddYoutubeLoader()
-					   .AddGravatarLoader()
+		       .AddGravatarLoader()
                        .AddFileLoader(options => options.Folder = "FileStorage");
 ```
 
