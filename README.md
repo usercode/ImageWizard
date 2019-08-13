@@ -50,6 +50,9 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 - gif()
 - bmp()
 
+### Special options
+- DPR(value) //set allowed device pixel ratio: 1.0, 1.5, 2.0, 3.0, 4.0
+
 ## Image loaders
 - HTTP loader ("fetch")
   - absolute or relative url of the original image
