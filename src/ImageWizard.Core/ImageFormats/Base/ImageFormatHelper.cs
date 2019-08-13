@@ -36,6 +36,10 @@ namespace ImageWizard.Filters.ImageFormats
                     mimeType = MimeTypes.Bitmap;
                     break;
 
+                case ".svg":
+                    mimeType = MimeTypes.Svg;
+                    break;
+
                 default:
                     throw new Exception("unknown file extension");
             }
