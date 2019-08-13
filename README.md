@@ -17,7 +17,7 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
 | Description         | Url segment |
 |---------------------|-----------------|
 | base path | "image" |
-| signature based on HMACSHA1 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
+| signature based on HMACSHA256 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
 | any filters | "trim()/resize(200,200)/jpg(90)" |
 | loader type | "fetch" |
 | absolute or relative url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
@@ -100,6 +100,7 @@ services.AddImageWizard(options =>
                                                //that user can download the original image
                                                options.SetHeader("ApiKey", "123456")) 
                        .AddYoutubeLoader()
+					   .AddGravatarLoader()
                        .AddFileLoader(options => options.Folder = "FileStorage");
 ```
 
@@ -148,7 +149,7 @@ Create url with fluent api
 //use HTTP loader
 .Fetch("https://<your-domain>/test/picture.jpg")
 //or file loader
-.Upload("test/picture.jpg")
+.File("test/picture.jpg")
 .Trim()
 .Resize(160,140)
 .Jpg(90)

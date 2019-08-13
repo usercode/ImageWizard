@@ -13,7 +13,7 @@ namespace ImageWizard.Services.Types
     {
         public ImageMetadata()
         {
-            CacheSettings = new CacheSettings();
+            Cache = new CacheSettings();
         }
 
         /// <summary>
@@ -27,14 +27,19 @@ namespace ImageWizard.Services.Types
         public string Signature { get; set; }
 
         /// <summary>
+        /// Hash
+        /// </summary>
+        public string Hash { get; set; }
+
+        /// <summary>
         /// MimeType
         /// </summary>
         public string MimeType { get; set; }
 
         /// <summary>
-        /// ImageSource
+        /// FileLength
         /// </summary>
-        public string ImageSource { get; set; }
+        public int FileLength { get; set; }
 
         /// <summary>
         /// DPR
@@ -44,6 +49,21 @@ namespace ImageWizard.Services.Types
         /// <summary>
         /// CacheSettings
         /// </summary>
-        public CacheSettings CacheSettings { get; set; }
+        public CacheSettings Cache { get; set; }
+
+        /// <summary>
+        /// Filters
+        /// </summary>
+        public string[] Filters { get; set; }
+
+        /// <summary>
+        /// DeliveryType
+        /// </summary>
+        public string LoaderType { get; set; }
+
+        /// <summary>
+        /// ImageSource
+        /// </summary>
+        public string LoaderSource { get; set; }
     }
 }

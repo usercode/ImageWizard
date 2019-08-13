@@ -27,6 +27,8 @@ using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.Types;
 using System.Threading;
+using System.Security.Cryptography;
+using ImageWizard.Core;
 
 namespace ImageWizard.Middlewares
 {
@@ -54,7 +56,7 @@ namespace ImageWizard.Middlewares
 
             CryptoService = new CryptoService(Settings.Value.Key);
 
-            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.]*\)/)*(?<deliveryType>[a-z]+)/(?<imagesource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.]*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         private IOptions<ImageWizardSettings> Settings { get; }
@@ -110,9 +112,9 @@ namespace ImageWizard.Middlewares
             }
 
             string url_signature = match.Groups["signature"].Value;
-            string url_imagesource = match.Groups["imagesource"].Value;
             string url_path = match.Groups["path"].Value;
-            string url_deliveryType = match.Groups["deliveryType"].Value;
+            string url_loaderSource = match.Groups["loaderSource"].Value;
+            string url_loaderType = match.Groups["loaderType"].Value;
             string[] url_filters = match.Groups["filter"].Captures.OfType<Capture>()
                                                                             .Select(x => x.Value)
                                                                             .Select(x => x.Substring(0, x.Length -1)) //remove "/"
@@ -129,19 +131,6 @@ namespace ImageWizard.Middlewares
                 await context.Response.WriteAsync("signature is not valid!");
 
                 return;
-            }
-
-            //check ETag from request
-            if (Settings.Value.UseETag)
-            {
-                bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == $"\"{signature}\"");
-
-                if (isValid == true)
-                {
-                    context.Response.StatusCode = StatusCodes.Status304NotModified;
-
-                    return;
-                }
             }
 
             IImageCache imageCache = context.RequestServices.GetService<IImageCache>();
@@ -162,32 +151,35 @@ namespace ImageWizard.Middlewares
             {
                 Logger.LogTrace("Create cached image");
 
-                Type imageLoaderType = ImageLoaderManager.Get(url_deliveryType);
+                Type imageLoaderType = ImageLoaderManager.Get(url_loaderType);
                 IImageLoader loader = (IImageLoader)context.RequestServices.GetService(imageLoaderType);
 
                 if(loader == null)
                 {
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    await context.Response.WriteAsync("image loader not found: " + url_deliveryType);
+                    await context.Response.WriteAsync("image loader not found: " + url_loaderType);
 
                     return;
                 }
 
-                Logger.LogTrace("Get original image: " + url_imagesource);
+                Logger.LogTrace("Get original image: " + url_loaderSource);
 
                 //download image
-                OriginalImage originalImage = await loader.GetAsync(url_imagesource);
+                OriginalImage originalImage = await loader.GetAsync(url_loaderSource);
 
                 IImageFormat targetFormat = ImageFormatHelper.Parse(originalImage.MimeType);
 
                 byte[] transformedImageData;
 
                 //create metadata
-                var imageMetadata = new ImageMetadata()
+                ImageMetadata imageMetadata = new ImageMetadata()
                 {
+                    Cache = originalImage.CacheSettings,
                     CreatedAt = DateTime.UtcNow,
-                    ImageSource = originalImage.Url,
                     Signature = signature,
+                    Filters = url_filters,
+                    LoaderSource = url_loaderSource,
+                    LoaderType = url_loaderType,
                     MimeType = targetFormat.MimeType,
                     DPR = null
                 };
@@ -217,20 +209,14 @@ namespace ImageWizard.Middlewares
                         //execute filters
                         foreach (string filter in url_filters)
                         {
-                            bool filterFound = false;
+                            //find and execute filter
+                            IFilterAction foundFilter = FilterManager.FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
 
-                            foreach (IFilterAction action in FilterManager.FilterActions)
+                            if (foundFilter != null)
                             {
-                                if (action.TryExecute(filter, filterContext))
-                                {
-                                    Logger.LogTrace("Filter executed: " + filter);
-
-                                    filterFound = true;
-                                    break;
-                                }
+                                Logger.LogTrace("Filter executed: " + filter);
                             }
-
-                            if (filterFound == false)
+                            else
                             {
                                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                                 await context.Response.WriteAsync($"filter was not found: {filter}");
@@ -277,6 +263,14 @@ namespace ImageWizard.Middlewares
 
                 Logger.LogTrace("Save new cached image");
 
+                //create hash of cached image
+                SHA256 sha = SHA256.Create();
+                byte[] hash = sha.ComputeHash(transformedImageData);
+
+                imageMetadata.Hash = hash.ToHexcode();
+                imageMetadata.FileLength = transformedImageData.Length;
+
+                //save cached image
                 await imageCache.WriteAsync(signature, imageMetadata, transformedImageData);
 
                 cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(transformedImageData)));
@@ -284,6 +278,21 @@ namespace ImageWizard.Middlewares
             else
             {
                 Logger.LogTrace("Cached image found");
+
+                //check ETag from request
+                if (Settings.Value.UseETag)
+                {
+                    bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == $"\"{cachedImage.Metadata.Hash}\"");
+
+                    if (isValid == true)
+                    {
+                        Logger.LogTrace("Operation completed: 304 Not modified");
+
+                        context.Response.StatusCode = StatusCodes.Status304NotModified;
+
+                        return;
+                    }
+                }
             }
 
             //set cache control header
@@ -300,7 +309,7 @@ namespace ImageWizard.Middlewares
             //set ETag header
             if (Settings.Value.UseETag)
             {
-                context.Response.GetTypedHeaders().ETag = new EntityTagHeaderValue($"\"{signature}\"");
+                context.Response.GetTypedHeaders().ETag = new EntityTagHeaderValue($"\"{cachedImage.Metadata.Hash}\"");
             }
 
             //DPR

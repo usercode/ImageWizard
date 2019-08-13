@@ -27,26 +27,26 @@ namespace ImageWizard
         /// </summary>
         public static IImageWizardBuilder AddDefaultFilters(this IImageWizardBuilder builder)
         {
-            builder.FilterManager.Register<ResizeFilter>();
-            builder.FilterManager.Register<CropFilter>();
-            builder.FilterManager.Register<GrayscaleFilter>();
-            builder.FilterManager.Register<BlackWhiteFilter>();
-            builder.FilterManager.Register<TrimFilter>();
-            builder.FilterManager.Register<FlipFilter>();
-            builder.FilterManager.Register<RotateFilter>();
-            builder.FilterManager.Register<BlurFilter>();
-            builder.FilterManager.Register<TextFilter>();
-            builder.FilterManager.Register<InvertFilter>();
-            builder.FilterManager.Register<BrightnessFilter>();
-            builder.FilterManager.Register<ContrastFilter>();
-            builder.FilterManager.Register<DPRFilter>();
-            builder.FilterManager.Register<AutoOrientFilter>();
+            builder.AddFilter<ResizeFilter>();
+            builder.AddFilter<CropFilter>();
+            builder.AddFilter<GrayscaleFilter>();
+            builder.AddFilter<BlackWhiteFilter>();
+            builder.AddFilter<TrimFilter>();
+            builder.AddFilter<FlipFilter>();
+            builder.AddFilter<RotateFilter>();
+            builder.AddFilter<BlurFilter>();
+            builder.AddFilter<TextFilter>();
+            builder.AddFilter<InvertFilter>();
+            builder.AddFilter<BrightnessFilter>();
+            builder.AddFilter<ContrastFilter>();
+            builder.AddFilter<DPRFilter>();
+            builder.AddFilter<AutoOrientFilter>();
 
             //formats
-            builder.FilterManager.Register<JpgFilter>();
-            builder.FilterManager.Register<PngFilter>();
-            builder.FilterManager.Register<GifFilter>();
-            builder.FilterManager.Register<BmpFilter>();
+            builder.AddFilter<JpgFilter>();
+            builder.AddFilter<PngFilter>();
+            builder.AddFilter<GifFilter>();
+            builder.AddFilter<BmpFilter>();
 
             return builder;
         }

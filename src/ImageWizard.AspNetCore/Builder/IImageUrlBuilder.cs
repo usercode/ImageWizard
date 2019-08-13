@@ -3,6 +3,7 @@ using ImageWizard.SharedContract;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,5 @@ namespace ImageWizard.AspNetCore.Builder
         IHostingEnvironment HostingEnvironment { get; }
         IHttpContextAccessor HttpContextAccessor { get; }
         IFileVersionProvider FileVersionProvider { get; }
-
-        
     }
 }

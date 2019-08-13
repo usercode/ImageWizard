@@ -14,7 +14,7 @@ namespace ImageWizard.AspNetCore
         /// <param name="path"></param>
         /// <param name="addFingerprint"></param>
         /// <returns></returns>
-        public static IImageFilters FetchStaticFile(this IImageDeliveryType imageBuilder, string path)
+        public static IImageFilters FetchLocalFile(this IImageLoaderType imageBuilder, string path)
         {
             string newPath = imageBuilder.FileVersionProvider.AddFileVersionToPath(imageBuilder.HttpContextAccessor.HttpContext.Request.PathBase, path);
 

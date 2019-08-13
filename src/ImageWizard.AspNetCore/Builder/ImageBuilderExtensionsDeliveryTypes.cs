@@ -19,21 +19,21 @@ namespace ImageWizard.AspNetCore
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static IImageFilters Fetch(this IImageDeliveryType imageUrlBuilder, string url)
+        public static IImageFilters Fetch(this IImageLoaderType imageUrlBuilder, string url)
         {
             imageUrlBuilder.Image("fetch", url);
 
             return (IImageFilters)imageUrlBuilder;
         }
 
-        public static IImageFilters File(this IImageDeliveryType imageUrlBuilder, string path)
+        public static IImageFilters File(this IImageLoaderType imageUrlBuilder, string path)
         {
             imageUrlBuilder.Image("file", path);
 
             return (IImageFilters)imageUrlBuilder;
         }
 
-        public static IImageFilters Gravatar(this IImageDeliveryType imageUrlBuilder, string email)
+        public static IImageFilters Gravatar(this IImageLoaderType imageUrlBuilder, string email)
         {
             string GetHashString(byte[] hash)
             {
@@ -54,7 +54,7 @@ namespace ImageWizard.AspNetCore
             return (IImageFilters)imageUrlBuilder;
         }
 
-        public static IImageFilters Youtube(this IImageDeliveryType imageUrlBuilder, string id)
+        public static IImageFilters Youtube(this IImageLoaderType imageUrlBuilder, string id)
         {
             imageUrlBuilder.Image("youtube", id);
 

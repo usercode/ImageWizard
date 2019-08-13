@@ -9,20 +9,20 @@
         <p>Use the standalone version or middleware.</p>
 
 
-        <h2>Fetch static file (from wwwroot folder)</h2>
+        <h2>Fetch local file (from wwwroot folder)</h2>
 
-        <p>@@Url.ImageWizard().FetchStaticFile("/img/bat-eared-fox.jpg").Resize(400,400).BuildUrl()</p>
-        <p>@Url.ImageWizard().FetchStaticFile("/img/bat-eared-fox.jpg").Resize(400, 400).BuildUrl()</p>
+        <p>@@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).BuildUrl()</p>
+        <p>@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400, 400).BuildUrl()</p>
 
         <div class="row">
             <div class="col-lg-4">
-                <img src="@Url.ImageWizard().FetchStaticFile("/img/bat-eared-fox.jpg").Resize(400,400).BuildUrl()" class="auto-scale" />
+                <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).BuildUrl()" class="auto-scale" />
             </div>
             <div class="col-lg-4">
-                <img src="@Url.ImageWizard().FetchStaticFile("/img/bat-eared-fox.jpg").Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+                <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
             </div>
             <div class="col-lg-4">
-                <img src="@Url.ImageWizard().FetchStaticFile("/img/bat-eared-fox.jpg").Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
+                <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
             </div>
         </div>
 

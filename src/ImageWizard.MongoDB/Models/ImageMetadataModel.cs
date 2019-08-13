@@ -11,18 +11,19 @@ namespace ImageWizard.MongoDB.Models
         public ImageMetadataModel()
         {
             Id = ObjectId.GenerateNewId();
-            CacheSettings = new CacheSettings();
+            Cache = new CacheSettings();
         }
 
         public ObjectId Id { get; set; }
-
         public DateTime? CreatedAt { get; set; }
         public string Signature { get; set; }
+        public string Hash { get; set; }
         public string MimeType { get; set; }
-        public string ImageSource { get; set; }
         public double? DPR { get; set; }
-
-        public CacheSettings CacheSettings { get; set; }
-
+        public int FileLength { get; set; }
+        public CacheSettings Cache { get; set; }
+        public string[] Filters { get; set; }
+        public string LoaderSource { get; set; }
+        public string LoaderType { get; set; }
     }
 }

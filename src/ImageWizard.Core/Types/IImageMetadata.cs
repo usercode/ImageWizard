@@ -8,10 +8,13 @@ namespace ImageWizard.Core.Types
     {
         DateTime? CreatedAt { get; set; }
         string Signature { get; set; }
+        string Hash { get; set; }
         string MimeType { get; set; }
-        string ImageSource { get; set; }
+        string[] Filters { get; set; }
+        string LoaderSource { get; set; }
+        string LoaderType { get; set; }
         double? DPR { get; set; }
-
-        CacheSettings CacheSettings { get; }
+        int FileLength { get; set; }
+        CacheSettings Cache { get; }
     }
 }

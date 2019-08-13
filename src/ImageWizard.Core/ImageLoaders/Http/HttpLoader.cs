@@ -72,13 +72,16 @@ namespace ImageWizard.ImageLoaders
                 throw new Exception("no content-type available");
             }
 
-            CacheSettings cacheSettings = new CacheSettings()
+            CacheSettings cacheSettings = new CacheSettings();
+
+            if (response.Headers.CacheControl != null)
             {
-                NoStore = response.Headers.CacheControl?.NoStore,
-                NoCache = response.Headers.CacheControl?.NoCache,
-                MaxAge = response.Headers.CacheControl?.MaxAge,
-                ETag = response.Headers.ETag?.Tag
-            };
+                cacheSettings.NoStore = response.Headers.CacheControl.NoStore;
+                cacheSettings.NoCache = response.Headers.CacheControl.NoCache;
+                cacheSettings.MaxAge = response.Headers.CacheControl.MaxAge;
+            }
+
+            cacheSettings.ETag = response.Headers.ETag?.Tag;
 
             return new OriginalImage(requestUri, mimeType, data, cacheSettings);
         }

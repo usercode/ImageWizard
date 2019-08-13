@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using ImageWizard.AspNetCore;
+using ImageWizard.MongoDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +29,7 @@ namespace ImageWizard.TestApp
                 x.AllowUnsafeUrl = true;
             })
                 //.SetFileCache()
+                //.SetMongoDBCache()
                 .AddFileLoader(x => x.Folder = "FileStorage")
                 .AddYoutubeLoader()
                 .AddGravatarLoader();

@@ -1,4 +1,5 @@
-﻿using ImageWizard.Core.ImageCaches;
+﻿using ImageWizard.Core;
+using ImageWizard.Core.ImageCaches;
 using ImageWizard.Core.ImageLoaders.Files;
 using ImageWizard.Core.Types;
 using ImageWizard.ImageFormats;
@@ -59,25 +60,11 @@ namespace ImageWizard.ImageStorages
             return new[] { part1, part2, part3, part4, part_last };
         }
 
-        private string ToHex(string key)
-        {
-            //convert signature to hex for the filestore
-            byte[] buf = Encoding.UTF8.GetBytes(key);
-
-            StringBuilder stringBuilder = new StringBuilder(buf.Length * 2);
-            for(int i = 0; i < buf.Length; i++)
-            {
-                stringBuilder.Append(buf[i].ToString("x2"));
-            }
-
-            return stringBuilder.ToString();
-        }
-
         public async Task<ICachedImage> ReadAsync(string key)
         {
-            string signatureHex = ToHex(key);
+            string keyHex = key.ToHexcode();
 
-            string[] parts = SplitKey(signatureHex);
+            string[] parts = SplitKey(keyHex);
 
             string basePath = Path.Combine(parts);
 
@@ -105,9 +92,9 @@ namespace ImageWizard.ImageStorages
 
         public async Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer)
         {
-            string signatureHex = ToHex(key);
+            string keyHex = key.ToHexcode();
 
-            string[] parts = SplitKey(signatureHex);
+            string[] parts = SplitKey(keyHex);
 
             //store transformed image
             DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { HostingEnvironment.ContentRootPath }.Concat(new[] { Settings.Value.Folder }).Concat(parts.Take(parts.Length-1)).ToArray()));
@@ -116,7 +103,7 @@ namespace ImageWizard.ImageStorages
             FileInfo fileInfoMetadata = new FileInfo(Path.Combine(sub.FullName, parts.Last() + ".meta"));
             
             //write metadata
-            string json = JsonConvert.SerializeObject(metadata);
+            string json = JsonConvert.SerializeObject(metadata, Formatting.Indented);
             byte[] metadataBuffer = Encoding.UTF8.GetBytes(json);
 
             using (Stream fs = fileInfoMetadata.OpenWrite())

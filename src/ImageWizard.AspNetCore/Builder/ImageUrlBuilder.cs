@@ -26,7 +26,7 @@ namespace ImageWizard.AspNetCore.Builder
     /// <summary>
     /// ImageUrlBuilder
     /// </summary>
-    public class ImageUrlBuilder : IImageUrlBuilder, IImageFilters, IImageDeliveryType
+    public class ImageUrlBuilder : IImageUrlBuilder, IImageFilters, IImageLoaderType
     {
         public CryptoService CryptoService { get; }
         public IOptions<ImageWizardClientSettings> Settings { get; }
@@ -38,9 +38,10 @@ namespace ImageWizard.AspNetCore.Builder
 
         public List<string> Filters { get; set; }
 
-        public string DeliveryType { get; set; }
+        public string LoaderType { get; set; }
 
-        public ImageUrlBuilder(IOptions<ImageWizardClientSettings> settings, 
+        public ImageUrlBuilder(
+            IOptions<ImageWizardClientSettings> settings, 
             IHostingEnvironment env, 
             IHttpContextAccessor httpContextAccessor,
             IFileVersionProvider fileVersionProvider)
@@ -54,13 +55,12 @@ namespace ImageWizard.AspNetCore.Builder
             HostingEnvironment = env;
             HttpContextAccessor = httpContextAccessor;
             FileVersionProvider = fileVersionProvider;
-
             Filters = new List<string>();
         }
 
-        public IImageFilters Image(string deliveryType, string url)
+        public IImageFilters Image(string loaderType, string url)
         {
-            DeliveryType = deliveryType;
+            LoaderType = loaderType;
             ImageUrl = url;
 
             return this;
@@ -93,7 +93,7 @@ namespace ImageWizard.AspNetCore.Builder
                 url.Append("/");
             }
 
-            url.Append($"{DeliveryType}");
+            url.Append($"{LoaderType}");
 
             if (ImageUrl.StartsWith("/") == false)
             {

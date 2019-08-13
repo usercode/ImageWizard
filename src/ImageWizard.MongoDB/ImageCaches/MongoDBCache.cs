@@ -73,8 +73,6 @@ namespace ImageWizard.MongoDB.ImageCaches
                 return null;
             }
 
-            byte[] data = await ImageBuffer.DownloadAsBytesByNameAsync(key);
-
             CachedImage cachedImage = new CachedImage(foundMetadata, async () => await ImageBuffer.OpenDownloadStreamByNameAsync(key));
 
             return cachedImage;
@@ -84,9 +82,14 @@ namespace ImageWizard.MongoDB.ImageCaches
         {
             ImageMetadataModel model = new ImageMetadataModel()
             {
+                CreatedAt = metadata.CreatedAt,
+                Cache = metadata.Cache,
+                Hash = metadata.Hash,
                 Signature = metadata.Signature,
+                LoaderSource = metadata.LoaderSource,
+                Filters = metadata.Filters,
+                LoaderType = metadata.LoaderType,
                 MimeType = metadata.MimeType,
-                ImageSource = metadata.ImageSource,
                 DPR = metadata.DPR
             };
 
