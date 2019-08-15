@@ -81,7 +81,8 @@ services.AddImageWizard(); //use only http loader and distributed cache
 
 services.AddImageWizard(options => 
                        {
-                           options.AllowUnsafeUrl = true;                           
+                           options.AllowUnsafeUrl = true;             
+			   options.AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
                            options.Key = "DEMO-KEY..."; //64 byte key encoded in Base64Url
                            options.UseETag = true;
                            options.ImageMaxWidth = 4000;
@@ -109,6 +110,38 @@ services.AddImageWizard(options =>
 
 ```csharp
 app.UseImageWizard();
+```
+
+## Create custom filter
+
+Simple example for resizing images:
+
+- implements IFilter (or use base class 'FilterBase')
+- use DPR attribute for parameters which are depended on device pixel ratio value
+- add filter context parameter to get access to image and settings
+
+```csharp
+ public class ResizeFilter : FilterBase
+    {
+        public override string Name => "resize";
+
+        public void Execute([DPR]int width, [DPR]int height, FilterContext context)
+        {   
+            context.Image.Mutate(m =>
+            {                
+                m.Resize(new ResizeOptions()
+                {
+                    Size = new Size(width, height)
+                });
+            });
+        }
+    }
+```
+
+Register filter:
+```csharp
+services.AddImageWizard()
+	.AddFilter<ResizeFilter>();
 ```
 
 ## ASP.NET Core UrlBuilder
