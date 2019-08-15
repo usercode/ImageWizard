@@ -11,8 +11,14 @@ A ASP.NET Core middleware to manipulate your images dynamically.
 ## Overview
 
 Example:
-
-https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/resize(200,200)/grayscale()/jpg(90)/fetch/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
+<p align="center">
+https://localhost/  <br/>
+image/  <br/>
+WZy86ixQq9EogpyHwMYd7F5wKa0/  <br/>
+resize(200,200)/grayscale()/jpg(90)/  <br/>
+fetch/  <br/>
+https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
+</p>
 
 | Description         | Url segment |
 |---------------------|-----------------|
