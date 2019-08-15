@@ -137,8 +137,24 @@ namespace ImageWizard.Filters
                                                     throw new Exception("Parameter type is not supported: " + x.ParameterType.Name);
                                                 }
 
+                                                List<Expression> results = new List<Expression>();
+
+                                                results.Add(Expression.Assign(propertyExpression, parseCall));
+
+                                                //check dpr attribute
+                                                if (x.GetCustomAttribute<DPRAttribute>() != null)
+                                                {
+                                                    //multiply parameter with dpr value
+                                                    results.Add(
+                                                    Expression.IfThen(Expression.NotEqual(Expression.Property(filterContextParameter, nameof(FilterContext.DPR)), Expression.Constant(null)),
+                                                    Expression.Assign(propertyExpression,
+                                                        Expression.Convert(
+                                                            Expression.Multiply(Expression.Convert(propertyExpression, typeof(double)), Expression.Property(Expression.Property(filterContextParameter, nameof(FilterContext.DPR)), nameof(Nullable<double>.Value))),
+                                                            x.ParameterType))));
+                                                }
+
                                                 //set parsed value to variable
-                                                return new { PropertyExpression = propertyExpression, AssignExpression = (Expression)Expression.Assign(propertyExpression, parseCall) };
+                                                return new { PropertyExpression = propertyExpression, AssignExpression = results.ToArray() };
                                             })
                                             .ToArray();
 
@@ -146,7 +162,7 @@ namespace ImageWizard.Filters
                                                 .Select(x => x.PropertyExpression)
                                                 .ToArray();
             Expression[] assigns = parsedVariables
-                                                .Select(x => x.AssignExpression)
+                                                .SelectMany(x => x.AssignExpression)
                                                 //call filter method with parsed values
                                                 .Concat(new [] { Expression.Call(
                                                                             filterParameter,

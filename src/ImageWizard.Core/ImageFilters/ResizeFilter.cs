@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageWizard.Core.ImageFilters.Base;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
@@ -13,17 +14,17 @@ namespace ImageWizard.Filters
     {
         public override string Name => "resize";
 
-        public void Execute(int size, FilterContext context)
+        public void Execute([DPR]int size, FilterContext context)
         {
             Execute(size, size, context);
         }
 
-        public void Execute(int width, int height, FilterContext context)
+        public void Execute([DPR]int width, [DPR]int height, FilterContext context)
         {
             Execute(width, height, SharedContract.FilterTypes.ResizeMode.Max, context);
         }
 
-        public void Execute(int width, int height, SharedContract.FilterTypes.ResizeMode mode, FilterContext context)
+        public void Execute([DPR]int width, [DPR]int height, SharedContract.FilterTypes.ResizeMode mode, FilterContext context)
         {
             ResizeMode mode2;
 
@@ -54,11 +55,11 @@ namespace ImageWizard.Filters
             }
 
             //apply dpr value
-            if (context.DPR != null)
-            {
-                width = (int)(width * context.DPR);
-                height = (int)(height * context.DPR);
-            }
+            //if (context.DPR != null)
+            //{
+            //    width = (int)(width * context.DPR);
+            //    height = (int)(height * context.DPR);
+            //}
 
             //prevent upscaling
             if(width > context.Image.Width)

@@ -17,6 +17,7 @@ namespace ImageWizard.Settings
         {
             BasePath = "/image";
             UseETag = true;
+            UseClintHints = true;
             AllowUnsafeUrl = false;
            
             Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
@@ -48,6 +49,11 @@ namespace ImageWizard.Settings
         /// UseETag
         /// </summary>
         public bool UseETag { get; set; }
+
+        /// <summary>
+        /// UseClintHints
+        /// </summary>
+        public bool UseClintHints { get; set; }
 
         /// <summary>
         /// Key

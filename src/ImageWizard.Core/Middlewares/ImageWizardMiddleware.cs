@@ -198,12 +198,29 @@ namespace ImageWizard.Middlewares
                     {
                         FilterContext filterContext = new FilterContext(Settings.Value, image, targetFormat);
 
-                        //check DPR value from request
-                        string dprString = context.Request.Headers["DPR"].FirstOrDefault();
-
-                        if(dprString != null)
+                        //use clint hints?
+                        if (Settings.Value.UseClintHints)
                         {
-                            filterContext.DPR = double.Parse(dprString, CultureInfo.InvariantCulture);
+                            //check DPR value from request
+                            string ch_dpr = context.Request.Headers["DPR"].FirstOrDefault();
+                            string ch_width = context.Request.Headers["Width"].FirstOrDefault();
+                            string ch_viewportWidth = context.Request.Headers["Viewport-Width"].FirstOrDefault();
+
+                            if (ch_dpr != null)
+                            {
+                                filterContext.ClientHints.DPR = double.Parse(ch_dpr, CultureInfo.InvariantCulture);
+                                filterContext.DPR = filterContext.ClientHints.DPR;
+                            }
+
+                            if (ch_width != null)
+                            {
+                                filterContext.ClientHints.Width = int.Parse(ch_width, CultureInfo.InvariantCulture);
+                            }
+
+                            if (ch_viewportWidth != null)
+                            {
+                                filterContext.ClientHints.ViewportWidth = int.Parse(ch_viewportWidth, CultureInfo.InvariantCulture);
+                            }
                         }
 
                         //execute filters

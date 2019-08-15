@@ -1,4 +1,5 @@
-﻿using ImageWizard.ImageFormats;
+﻿using ImageWizard.Core.Settings;
+using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.Settings;
 using SixLabors.ImageSharp;
@@ -20,6 +21,7 @@ namespace ImageWizard.Filters
             Settings = settings;
             Image = image;
             ImageFormat = imageFormat;
+            ClientHints = new ClientHints();
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace ImageWizard.Filters
         private double? _dpr;
 
         /// <summary>
-        /// Device Pixel Ratio
+        /// Current device pixel ratio value
         /// </summary>
         public double? DPR
         {
@@ -59,5 +61,10 @@ namespace ImageWizard.Filters
                 _dpr = found;
             }
         }
+
+        /// <summary>
+        /// ClientHints
+        /// </summary>
+        public ClientHints ClientHints { get; set; }
     }
 }
