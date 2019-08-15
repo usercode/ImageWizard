@@ -26,7 +26,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | signature based on HMACSHA256 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
 | any filters | "resize(200,200)/grayscale()/jpg(90)" |
 | loader type | "fetch" |
-| absolute or relative url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
+| loader source | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
 ## Image filters
 ### Image transformations
