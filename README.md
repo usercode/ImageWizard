@@ -1,24 +1,24 @@
 # ImageWizard
-A webservice to manipulate your images dynamically.
+A ASP.NET Core middleware to manipulate your images dynamically.
 
 | Package                       | Release | 
 |--------------------------------|-----------------|
 | ImageWizard.Core               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
 | ImageWizard.MongoDB               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
-| ImageWizard.AspNetCore               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.AspNetCore.svg)](https://www.nuget.org/packages/ImageWizard.AspNetCore/) |
+| ImageWizard.AspNetCore (URL Builder)        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.AspNetCore.svg)](https://www.nuget.org/packages/ImageWizard.AspNetCore/) |
 
 
 ## Overview
 
 Example:
 
-https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(90)/fetch/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
+https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/resize(200,200)/grayscale()/jpg(90)/fetch/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 | Description         | Url segment |
 |---------------------|-----------------|
 | base path | "image" |
 | signature based on HMACSHA256 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
-| any filters | "trim()/resize(200,200)/jpg(90)" |
+| any filters | "resize(200,200)/grayscale()/jpg(90)" |
 | loader type | "fetch" |
 | absolute or relative url of the original image | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
@@ -34,7 +34,6 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
   - type: horizontal, vertical
 - rotate(value) 
   - value: 90, 180 or 270
-- trim()
 - grayscale()
 - blackwhite()
 - blur()
@@ -60,6 +59,7 @@ https://localhost/image/WZy86ixQq9EogpyHwMYd7F5wKa0/trim()/resize(200,200)/jpg(9
   - relative url to file
 - youtube loader ("youtube")
   - video id
+- gravatar loader ("gravatar")
 
 ## Image caches
 
