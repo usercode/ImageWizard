@@ -123,7 +123,8 @@ app.UseImageWizard();
 Simple example for resizing images:
 
 - implements IFilter (or use base class 'FilterBase')
-- use DPR attribute for parameters which are depended on device pixel ratio value
+- add method with the name "Execute" and the parameters (supported types: string, int, double, enum)
+- use DPR attribute for parameters which are depended on the device pixel ratio value
 - add filter context parameter to get access to image and settings
 
 ```csharp
