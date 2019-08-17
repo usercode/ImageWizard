@@ -56,7 +56,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - bmp()
 
 ### Special options
-- dpr(value) //set allowed device pixel ratio: 1.0, 1.5, 2.0, 3.0, 4.0
+- dpr(value) //set allowed device pixel ratio
 
 ## Image loaders
 - HTTP loader ("fetch")
@@ -149,6 +149,10 @@ Register filter:
 ```csharp
 services.AddImageWizard()
 	.AddFilter<ResizeFilter>();
+```
+URL segment: 
+```csharp
+"/resize(200,100)/"
 ```
 
 ## ASP.NET Core UrlBuilder
