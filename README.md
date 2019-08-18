@@ -1,5 +1,5 @@
 # ImageWizard
-A ASP.NET Core middleware to manipulate your images dynamically.
+A ASP.NET Core service / middleware to manipulate your images dynamically as alternative for thumbor.
 
 | Package                       | Release | 
 |--------------------------------|-----------------|
