@@ -57,6 +57,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 ### Special options
 - dpr(value) //set allowed device pixel ratio
+- nocache() //do not store the transformed image
 
 ## Image loaders
 - HTTP loader ("fetch")
