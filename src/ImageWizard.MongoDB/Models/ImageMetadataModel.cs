@@ -20,6 +20,7 @@ namespace ImageWizard.MongoDB.Models
         public string Hash { get; set; }
         public string MimeType { get; set; }
         public double? DPR { get; set; }
+        public bool NoCache { get; set; }
         public int FileLength { get; set; }
         public CacheSettings Cache { get; set; }
         public string[] Filters { get; set; }

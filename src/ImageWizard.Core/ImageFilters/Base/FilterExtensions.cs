@@ -40,6 +40,7 @@ namespace ImageWizard
             builder.AddFilter<BrightnessFilter>();
             builder.AddFilter<ContrastFilter>();
             builder.AddFilter<DPRFilter>();
+            builder.AddFilter<NoCacheFilter>();
             builder.AddFilter<AutoOrientFilter>();
 
             //formats

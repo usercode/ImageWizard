@@ -13,6 +13,7 @@ namespace ImageWizard.Services.Types
     {
         public ImageMetadata()
         {
+            NoCache = false;
             Cache = new CacheSettings();
         }
 
@@ -46,6 +47,10 @@ namespace ImageWizard.Services.Types
         /// </summary>
         public double? DPR { get; set; }
 
+        /// <summary>
+        /// NoCache
+        /// </summary>
+        public bool NoCache { get; set; }
         /// <summary>
         /// CacheSettings
         /// </summary>

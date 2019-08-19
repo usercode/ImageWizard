@@ -90,7 +90,8 @@ namespace ImageWizard.MongoDB.ImageCaches
                 Filters = metadata.Filters,
                 LoaderType = metadata.LoaderType,
                 MimeType = metadata.MimeType,
-                DPR = metadata.DPR
+                DPR = metadata.DPR,
+                NoCache = metadata.NoCache
             };
 
             //upload image metadata

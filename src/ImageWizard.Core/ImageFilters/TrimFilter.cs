@@ -1,4 +1,5 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
@@ -51,7 +52,7 @@ namespace ImageWizard.Filters
                     }
                 }
             });
-
+            
             Task.WhenAll(topTask).Wait();
             
             //context.Image.Mutate(m => m.Crop(new Rectangle(x, y, width, height)));

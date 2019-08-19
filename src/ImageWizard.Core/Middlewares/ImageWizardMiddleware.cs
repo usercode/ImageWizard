@@ -154,7 +154,7 @@ namespace ImageWizard.Middlewares
                 Type imageLoaderType = ImageLoaderManager.Get(url_loaderType);
                 IImageLoader loader = (IImageLoader)context.RequestServices.GetService(imageLoaderType);
 
-                if(loader == null)
+                if (loader == null)
                 {
                     context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     await context.Response.WriteAsync("image loader not found: " + url_loaderType);
@@ -254,7 +254,7 @@ namespace ImageWizard.Middlewares
                             width = Settings.Value.ImageMaxWidth.Value;
                         }
 
-                        if(Settings.Value.ImageMaxHeight != null && height > Settings.Value.ImageMaxHeight)
+                        if (Settings.Value.ImageMaxHeight != null && height > Settings.Value.ImageMaxHeight)
                         {
                             change = true;
                             height = Settings.Value.ImageMaxHeight.Value;
@@ -275,6 +275,7 @@ namespace ImageWizard.Middlewares
                         //update some metadata
                         imageMetadata.DPR = filterContext.DPR;
                         imageMetadata.MimeType = filterContext.ImageFormat.MimeType;
+                        imageMetadata.NoCache = filterContext.NoCache;
                     }
                 }
 
@@ -287,8 +288,12 @@ namespace ImageWizard.Middlewares
                 imageMetadata.Hash = hash.ToHexcode();
                 imageMetadata.FileLength = transformedImageData.Length;
 
-                //save cached image
-                await imageCache.WriteAsync(signature, imageMetadata, transformedImageData);
+                //disable cache?
+                if (imageMetadata.NoCache == false)
+                {
+                    //save cached image
+                    await imageCache.WriteAsync(signature, imageMetadata, transformedImageData);
+                }
 
                 cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(transformedImageData)));
             }
@@ -312,14 +317,26 @@ namespace ImageWizard.Middlewares
                 }
             }
 
-            //set cache control header
-            if (Settings.Value.CacheControl.IsEnabled)
+            if (cachedImage.Metadata.NoCache == false)
+            {
+                //set cache control header
+                if (Settings.Value.CacheControl.IsEnabled)
+                {
+                    context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
+                    {
+                        Public = Settings.Value.CacheControl.Public,
+                        MustRevalidate = Settings.Value.CacheControl.MustRevalidate,
+                        MaxAge = Settings.Value.CacheControl.MaxAge
+                    };
+                }
+            }
+            else
             {
                 context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
                 {
-                    Public = Settings.Value.CacheControl.Public,
-                    MustRevalidate = Settings.Value.CacheControl.MustRevalidate,
-                    MaxAge = Settings.Value.CacheControl.MaxAge
+                    Public = true,
+                    //NoStore = true,
+                    NoCache = true
                 };
             }
 

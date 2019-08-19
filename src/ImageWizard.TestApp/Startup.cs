@@ -56,7 +56,6 @@ namespace ImageWizard.TestApp
             app.UseHttpsRedirection();
             app.UseImageWizard();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             app.UseMvc();
         }

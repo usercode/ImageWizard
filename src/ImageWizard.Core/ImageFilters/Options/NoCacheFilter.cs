@@ -6,15 +6,15 @@ using System.Text;
 namespace ImageWizard.Core.ImageFilters.Options
 {
     /// <summary>
-    /// DPRFilter
+    /// NoCacheFilter
     /// </summary>
-    public class DPRFilter : FilterBase
+    public class NoCacheFilter : FilterBase
     {
-        public override string Name => "dpr";
+        public override string Name => "nocache";
 
-        public void Execute(double dpr, FilterContext context)
+        public void Execute(FilterContext context)
         {
-            context.DPR = dpr;
+            context.NoCache = true;
         }
     }
 }

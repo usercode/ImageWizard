@@ -21,6 +21,13 @@ namespace ImageWizard.AspNetCore
             return imageUrlBuilder;
         }
 
+        public static IImageFilters NoCache(this IImageFilters imageUrlBuilder)
+        {
+            imageUrlBuilder.Filter($"nocache()");
+
+            return imageUrlBuilder;
+        }
+
         public static IImageFilters Crop(this IImageFilters imageUrlBuilder, int width, int heigth)
         {
             Crop(imageUrlBuilder, 0, 0, width, heigth);

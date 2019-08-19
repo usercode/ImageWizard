@@ -21,6 +21,7 @@ namespace ImageWizard.Filters
             Settings = settings;
             Image = image;
             ImageFormat = imageFormat;
+            NoCache = false;
             ClientHints = new ClientHints();
         }
 
@@ -38,6 +39,11 @@ namespace ImageWizard.Filters
         /// ImageFormat
         /// </summary>
         public IImageFormat ImageFormat { get; set; }        
+
+        /// <summary>
+        /// NoCache
+        /// </summary>
+        public bool NoCache { get; set; }
 
         private double? _dpr;
 
