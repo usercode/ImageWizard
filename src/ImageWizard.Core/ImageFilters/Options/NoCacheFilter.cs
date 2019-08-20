@@ -14,7 +14,7 @@ namespace ImageWizard.Core.ImageFilters.Options
 
         public void Execute(FilterContext context)
         {
-            context.NoCache = true;
+            context.NoImageCache = true;
         }
     }
 }

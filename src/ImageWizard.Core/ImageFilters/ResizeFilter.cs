@@ -72,15 +72,11 @@ namespace ImageWizard.Filters
                 height = context.Image.Height;
             }
 
-            context.Image.Mutate(m =>
-            {                
-                m.Resize(new ResizeOptions()
-                {
-                    Mode = mode2,
-                    Size = new Size(width, height)
-                });
-                m.BackgroundColor(Rgba32.White);
-            });
+            context.Image.Mutate(m => m.Resize(new ResizeOptions()
+                                                {
+                                                    Mode = mode2,
+                                                    Size = new Size(width, height)
+                                                }));
         }
     }
 }

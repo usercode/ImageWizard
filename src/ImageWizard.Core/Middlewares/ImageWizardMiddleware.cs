@@ -29,6 +29,7 @@ using ImageWizard.Core.Types;
 using System.Threading;
 using System.Security.Cryptography;
 using ImageWizard.Core;
+using ImageWizard.Core.Middlewares;
 
 namespace ImageWizard.Middlewares
 {
@@ -110,6 +111,8 @@ namespace ImageWizard.Middlewares
 
                 return;
             }
+
+            IEnumerable<IImageWizardInterceptor> interceptors = context.RequestServices.GetServices<IImageWizardInterceptor>();
 
             string url_signature = match.Groups["signature"].Value;
             string url_path = match.Groups["path"].Value;
@@ -275,7 +278,7 @@ namespace ImageWizard.Middlewares
                         //update some metadata
                         imageMetadata.DPR = filterContext.DPR;
                         imageMetadata.MimeType = filterContext.ImageFormat.MimeType;
-                        imageMetadata.NoCache = filterContext.NoCache;
+                        imageMetadata.NoImageCache = filterContext.NoImageCache;
                     }
                 }
 
@@ -289,7 +292,7 @@ namespace ImageWizard.Middlewares
                 imageMetadata.FileLength = transformedImageData.Length;
 
                 //disable cache?
-                if (imageMetadata.NoCache == false)
+                if (imageMetadata.NoImageCache == false)
                 {
                     //save cached image
                     await imageCache.WriteAsync(signature, imageMetadata, transformedImageData);
@@ -317,29 +320,19 @@ namespace ImageWizard.Middlewares
                 }
             }
 
-            if (cachedImage.Metadata.NoCache == false)
-            {
-                //set cache control header
-                if (Settings.Value.CacheControl.IsEnabled)
-                {
-                    context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
-                    {
-                        Public = Settings.Value.CacheControl.Public,
-                        MustRevalidate = Settings.Value.CacheControl.MustRevalidate,
-                        MaxAge = Settings.Value.CacheControl.MaxAge
-                    };
-                }
-            }
-            else
+            //set cache control header
+            if (Settings.Value.CacheControl.IsEnabled)
             {
                 context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
                 {
-                    Public = true,
-                    //NoStore = true,
-                    NoCache = true
+                    Public = Settings.Value.CacheControl.Public,
+                    MustRevalidate = Settings.Value.CacheControl.MustRevalidate,
+                    MaxAge = Settings.Value.CacheControl.MaxAge,
+                    NoCache = Settings.Value.CacheControl.NoCache,
+                    NoStore = Settings.Value.CacheControl.NoStore
                 };
             }
-
+            
             //set ETag header
             if (Settings.Value.UseETag)
             {
@@ -358,6 +351,8 @@ namespace ImageWizard.Middlewares
             {
                 context.Response.ContentLength = stream.Length;
                 context.Response.ContentType = cachedImage.Metadata.MimeType;
+
+                interceptors.Foreach(x => x.OnResponseSending(context.Response, cachedImage));
 
                 await stream.CopyToAsync(context.Response.Body);
             }

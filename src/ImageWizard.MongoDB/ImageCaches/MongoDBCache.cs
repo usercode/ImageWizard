@@ -91,7 +91,7 @@ namespace ImageWizard.MongoDB.ImageCaches
                 LoaderType = metadata.LoaderType,
                 MimeType = metadata.MimeType,
                 DPR = metadata.DPR,
-                NoCache = metadata.NoCache
+                NoImageCache = metadata.NoImageCache
             };
 
             //upload image metadata

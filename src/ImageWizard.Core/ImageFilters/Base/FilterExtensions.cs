@@ -28,6 +28,7 @@ namespace ImageWizard
         public static IImageWizardBuilder AddDefaultFilters(this IImageWizardBuilder builder)
         {
             builder.AddFilter<ResizeFilter>();
+            builder.AddFilter<BackgroundColorFilter>();
             builder.AddFilter<CropFilter>();
             builder.AddFilter<GrayscaleFilter>();
             builder.AddFilter<BlackWhiteFilter>();

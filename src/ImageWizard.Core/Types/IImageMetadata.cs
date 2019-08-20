@@ -14,7 +14,7 @@ namespace ImageWizard.Core.Types
         string LoaderSource { get; set; }
         string LoaderType { get; set; }
         double? DPR { get; set; }
-        bool NoCache { get; set; }
+        bool NoImageCache { get; set; }
         int FileLength { get; set; }
         CacheSettings Cache { get; }
     }

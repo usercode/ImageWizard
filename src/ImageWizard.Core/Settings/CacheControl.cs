@@ -12,6 +12,8 @@ namespace ImageWizard.Core.Settings
             Public = true;
             MaxAge = TimeSpan.FromDays(365);
             MustRevalidate = false;
+            NoCache = false;
+            NoStore = false;
         }
 
         /// <summary>
@@ -33,5 +35,15 @@ namespace ImageWizard.Core.Settings
         /// CacheControlMustRevalidate
         /// </summary>
         public bool MustRevalidate { get; set; }
+
+        /// <summary>
+        /// NoCache
+        /// </summary>
+        public bool NoCache { get; set; }
+
+        /// <summary>
+        /// NoStore
+        /// </summary>
+        public bool NoStore { get; set; }
     }
 }

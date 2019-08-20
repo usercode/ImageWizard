@@ -36,6 +36,8 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
   - mode: min, max, crop, pad, stretch
 - crop(width,height)
 - crop(x,y,width,height) //int for absolute values, 0.0 to 1.0 for relative values
+- backgroundcolor(r,g,b)
+  - int (0 to 255) or double (0.0 to 1.0)
 - flip(type)
   - type: horizontal, vertical
 - rotate(value) 
@@ -98,6 +100,8 @@ services.AddImageWizard(options =>
                            options.CacheControl.MaxAge = TimeSpan.FromDays(365);
                            options.CacheControl.MustRevalidate = false;
                            options.CacheControl.Public = true;
+                           options.CacheControl.NoCache = false;
+                           options.CacheControl.NoStore = false;
                        })
                        //use file cache
                        .SetFileCache(options => options.Folder = "FileCache")
@@ -106,13 +110,15 @@ services.AddImageWizard(options =>
                        //or distributed cache
                        .SetDistributedCache()
                        //add some loaders
+                       .AddFileLoader(options => options.Folder = "FileStorage")
                        .AddHttpLoader(options => 
                                                //add custom http header like apikey to prevent 
                                                //that user can download the original image
                                                options.SetHeader("ApiKey", "123456")) 
                        .AddYoutubeLoader()
-		       .AddGravatarLoader()
-                       .AddFileLoader(options => options.Folder = "FileStorage");
+		                   .AddGravatarLoader()
+		                   .AddInterceptor<MyInterceptor>()
+                       ;
 ```
 
 ```csharp
@@ -135,13 +141,7 @@ Simple example for resizing images:
 
         public void Execute([DPR]int width, [DPR]int height, FilterContext context)
         {   
-            context.Image.Mutate(m =>
-            {                
-                m.Resize(new ResizeOptions()
-                {
-                    Size = new Size(width, height)
-                });
-            });
+            context.Image.Mutate(m => m.Resize(width, height));
         }
     }
 ```
