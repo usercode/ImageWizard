@@ -57,7 +57,7 @@ namespace ImageWizard.Middlewares
 
             CryptoService = new CryptoService(Settings.Value.Key);
 
-            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.]*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.=']*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         private IOptions<ImageWizardSettings> Settings { get; }
@@ -355,6 +355,8 @@ namespace ImageWizard.Middlewares
                 interceptors.Foreach(x => x.OnResponseSending(context.Response, cachedImage));
 
                 await stream.CopyToAsync(context.Response.Body);
+
+                interceptors.Foreach(x => x.OnResponseCompleted(cachedImage));
             }
 
             Logger.LogTrace("Operation completed");

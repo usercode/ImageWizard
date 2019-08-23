@@ -1,4 +1,5 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
+using ImageWizard.Core.ImageFilters.Base.Attributes;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;

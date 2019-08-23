@@ -14,7 +14,7 @@ Example:
 <p align="center">
 https://localhost/  <br/>
 image/  <br/>
-WZy86ixQq9EogpyHwMYd7F5wKa0/  <br/>
+cGiAwFYGYWx0SzO0YyCidWIfkdlUYrVgBwbm7bcTOjE/  <br/>
 resize(200,200)/grayscale()/jpg(90)/  <br/>
 fetch/  <br/>
 https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
@@ -23,7 +23,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | Description         | Url segment |
 |---------------------|-----------------|
 | base path | "image" |
-| signature based on HMACSHA256 | "WZy86ixQq9EogpyHwMYd7F5wKa0" or "unsafe" (if enabled) |
+| signature based on HMACSHA256 | "cGiAwFYGYWx0SzO0YyCidWIfkdlUYrVgBwbm7bcTOjE" or "unsafe" (if enabled) |
 | any filters | "resize(200,200)/grayscale()/jpg(90)" |
 | loader type | "fetch" |
 | loader source | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
@@ -35,7 +35,9 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - resize(width,height,mode)
   - mode: min, max, crop, pad, stretch
 - crop(width,height)
-- crop(x,y,width,height) //int for absolute values, 0.0 to 1.0 for relative values
+  - int for absolute values, 0.0 to 1.0 for relative values
+- crop(x,y,width,height)
+  - int for absolute values, 0.0 to 1.0 for relative values
 - backgroundcolor(r,g,b)
   - int (0 to 255) or double (0.0 to 1.0)
 - flip(type)
@@ -43,6 +45,8 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - rotate(value) 
   - value: 90, 180 or 270
 - grayscale()
+- grayscale(amount)
+  - amount: 0.0 to 1.0
 - blackwhite()
 - blur()
 - invert()
@@ -116,8 +120,8 @@ services.AddImageWizard(options =>
                                                //that user can download the original image
                                                options.SetHeader("ApiKey", "123456")) 
                        .AddYoutubeLoader()
-		                   .AddGravatarLoader()
-		                   .AddInterceptor<MyInterceptor>()
+                       .AddGravatarLoader()
+                       .AddInterceptor<MyInterceptor>()
                        ;
 ```
 
@@ -127,33 +131,98 @@ app.UseImageWizard();
 
 ## Create custom filter
 
-Simple example for resizing images:
-
 - implements IFilter (or use base class 'FilterBase')
-- add method with the name "Execute" and the parameters (supported types: string, int, double, enum)
-- use DPR attribute for parameters which are depended on the device pixel ratio value
+- add method with the name "Execute" and the needed parameters
+  - at url level are the following types possible for method overloading: 
+    - integer ("0")
+    - floating-point number ("0.0")
+    - bool ("True" or "False")
+    - enum (value)
+    - string ('Hello')
 - add filter context parameter to get access to image and settings
 
 ```csharp
- public class ResizeFilter : FilterBase
+ public class BackgroundColorFilter : FilterBase
     {
-        public override string Name => "resize";
+        public override string Name => "backgroundcolor";
 
-        public void Execute([DPR]int width, [DPR]int height, FilterContext context)
-        {   
-            context.Image.Mutate(m => m.Resize(width, height));
+        public void Execute(byte r, byte g, byte b, FilterContext context)
+        {
+            context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
+        }
+
+        public void Execute(float r, float g, float b, FilterContext context)
+        {
+            context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
         }
     }
 ```
 
 Register filter:
+
 ```csharp
 services.AddImageWizard()
 	.AddFilter<ResizeFilter>();
 ```
+
+URL segments: 
+
+```csharp
+"/backgroundcolor(255,255,255)/"
+"/backgroundcolor(1.0,1.0,1.0)/"
+```
+
+### How to use the DPR (device pixel ratio) attribute
+
+- use dpr filter to set the value or enable the client hints
+- all parameter with DPR attribute will be multiplied by the DPR factor
+
+```csharp
+ public class ResizeFilter : FilterBase
+ {
+      public override string Name => "resize";
+
+      public void Execute([DPR]int width, [DPR]int height, FilterContext context)
+      {
+          context.Image.Mutate(m => m.Resize(width, height));
+      }
+ }
+```
+
 URL segment: 
 ```csharp
-"/resize(200,100)/"
+"/dpr(2.0)/resize(200,100)/"  //calls resize filter with the resolution 400 x 200
+```
+
+### How to use optional parameters
+
+- use rather method overloading if possible
+- if all parameter have default values you can set all parameters by name
+
+Example:
+
+```csharp
+ public class TextFilter : FilterBase
+ {
+      public override string Name => "drawText";
+
+      public void Execute(int x = 0, int y = 0, string text = "", int size = 12, string font = "Arial", FilterContext context = null)
+      {
+          context.Image.Mutate(m =>
+          {
+              m.DrawText(
+                  text,
+                  new Font(SystemFonts.Find(font), size),
+                  Rgba32.Black,
+                  new PointF(x, y));
+          });
+      }
+ }
+```
+
+URL segment: 
+```csharp
+"/drawText(text='Hello',x=10,y=20)/"
 ```
 
 ## ASP.NET Core UrlBuilder

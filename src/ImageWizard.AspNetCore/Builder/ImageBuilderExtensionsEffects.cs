@@ -13,7 +13,21 @@ namespace ImageWizard.AspNetCore
     /// ImageBuilderExtensionsEffects
     /// </summary>
     public static class ImageBuilderExtensionsEffects
-    {       
+    {
+        public static IImageFilters BackgroundColor(this IImageFilters imageUrlBuilder, double r, double g, double b)
+        {
+            imageUrlBuilder.Filter($"backgroundcolor({r.ToString("0.0", CultureInfo.InvariantCulture)},{g.ToString("0.0", CultureInfo.InvariantCulture)},{b.ToString("0.0", CultureInfo.InvariantCulture)})");
+
+            return imageUrlBuilder;
+        }
+
+        public static IImageFilters BackgroundColor(this IImageFilters imageUrlBuilder, byte r, byte g, byte b)
+        {
+            imageUrlBuilder.Filter($"backgroundcolor({r},{g},{b})");
+
+            return imageUrlBuilder;
+        }
+
         public static IImageFilters DPR(this IImageFilters imageUrlBuilder, double value)
         {
             imageUrlBuilder.Filter($"dpr({value.ToString("0.0", CultureInfo.InvariantCulture)})");

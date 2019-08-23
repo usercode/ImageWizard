@@ -8,7 +8,7 @@ namespace ImageWizard.Core.ImageFilters.Options
     /// <summary>
     /// NoCacheFilter
     /// </summary>
-    public class NoCacheFilter : FilterBase
+    public class NoImageCacheFilter : FilterBase
     {
         public override string Name => "nocache";
 

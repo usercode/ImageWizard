@@ -93,7 +93,7 @@ namespace ImageWizard.AspNetCore.Builder
                 url.Append("/");
             }
 
-            url.Append($"{LoaderType}");
+            url.Append(LoaderType);
 
             if (ImageUrl.StartsWith("/") == false)
             {

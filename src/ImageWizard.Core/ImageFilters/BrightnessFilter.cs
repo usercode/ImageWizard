@@ -12,9 +12,9 @@ namespace ImageWizard.Filters
     {
         public override string Name => "brightness";
 
-        public void Execute(double value, FilterContext context)
+        public void Execute(float value, FilterContext context)
         {
-            context.Image.Mutate(m => m.Brightness((float)value));
+            context.Image.Mutate(m => m.Brightness(value));
         }
     }
 }

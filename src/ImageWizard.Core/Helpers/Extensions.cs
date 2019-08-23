@@ -7,7 +7,7 @@ namespace ImageWizard.Core
     /// <summary>
     /// Extenions
     /// </summary>
-    public static class Extenions
+    public static class Extensions
     {
         public static string ToHexcode(this string value)
         {

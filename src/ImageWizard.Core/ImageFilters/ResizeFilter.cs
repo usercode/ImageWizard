@@ -1,4 +1,5 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
+using ImageWizard.Core.ImageFilters.Base.Attributes;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -53,13 +54,6 @@ namespace ImageWizard.Filters
                 default:
                     throw new Exception();
             }
-
-            //apply dpr value
-            //if (context.DPR != null)
-            //{
-            //    width = (int)(width * context.DPR);
-            //    height = (int)(height * context.DPR);
-            //}
 
             //prevent upscaling
             if(width > context.Image.Width)

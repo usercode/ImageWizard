@@ -1,4 +1,5 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
+using ImageWizard.Core.ImageFilters.Base.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -105,41 +106,67 @@ namespace ImageWizard.Filters
                                             {
                                                 ParameterExpression propertyExpression = Expression.Variable(x.ParameterType, x.Name);
 
-                                                Expression parseCall;
+                                                Expression groupSuccess = Expression.Property(Expression.Property(groupsParameter, groupCollectionItemStringProperty, Expression.Constant(x.Name)), nameof(Group.Success));
+                                                Expression groupValue = Expression.Property(Expression.Property(groupsParameter, groupCollectionItemStringProperty, Expression.Constant(x.Name)), nameof(Group.Value));
+                                                Expression defaultValue = x.DefaultValue is DBNull ? (Expression)Expression.Default(x.ParameterType) : (Expression)Expression.Constant(x.DefaultValue);
 
-                                                if (x.ParameterType == typeof(int) || x.ParameterType == typeof(double))
+                                                Expression result = null;
+                                                Expression parsedValue = null;
+
+                                                if (x.ParameterType == typeof(bool))
+                                                {
+                                                    MethodInfo parseMethodInfo = x.ParameterType.GetMethod(nameof(bool.Parse), new[] { typeof(string) });
+
+                                                    parsedValue = Expression.Call(
+                                                                                parseMethodInfo, 
+                                                                                groupValue);
+                                                }
+                                                else if (x.ParameterType.IsPrimitive)
                                                 {
                                                     MethodInfo parseMethodInfo = x.ParameterType.GetMethod(nameof(int.Parse), new[] { typeof(string), typeof(CultureInfo) });
-                                                    parseCall = Expression.Call(parseMethodInfo,
-                                                                       Expression.Property(Expression.Property(groupsParameter, groupCollectionItemStringProperty, Expression.Constant(x.Name)), nameof(Group.Value)),
-                                                                       Expression.Constant(CultureInfo.InvariantCulture));
+
+                                                    parsedValue = Expression.Call(
+                                                                               parseMethodInfo,
+                                                                               groupValue,
+                                                                               Expression.Constant(CultureInfo.InvariantCulture));
                                                 }
                                                 else if (x.ParameterType.IsEnum)
                                                 {
                                                     MethodInfo parseMethodInfo = typeof(Enum).GetMethod(nameof(Enum.Parse), new[] { typeof(Type), typeof(string), typeof(bool) });
-                                                    parseCall = Expression.Convert(
-                                                                        Expression.Call(parseMethodInfo,
-                                                                               Expression.Constant(x.ParameterType),
-                                                                               Expression.Property(Expression.Property(groupsParameter, groupCollectionItemStringProperty, Expression.Constant(x.Name)), nameof(Group.Value)),
-                                                                               Expression.Constant(true)),
-                                                                x.ParameterType);
+
+                                                    parsedValue = Expression.Convert(
+                                                                                Expression.Call(
+                                                                                        parseMethodInfo,
+                                                                                        Expression.Constant(x.ParameterType),
+                                                                                        groupValue,
+                                                                                        Expression.Constant(true)), 
+                                                                               x.ParameterType);
                                                 }
                                                 else if (x.ParameterType == typeof(string))
                                                 {
-                                                    parseCall = Expression.Property(Expression.Property(groupsParameter, groupCollectionItemStringProperty, Expression.Constant(x.Name)), nameof(Group.Value));
+                                                    parsedValue = groupValue;
                                                 }
                                                 else if (x.ParameterType == typeof(FilterContext))
                                                 {
-                                                    parseCall = filterContextParameter;
+                                                    result = filterContextParameter;
                                                 }
                                                 else
                                                 {
                                                     throw new Exception("Parameter type is not supported: " + x.ParameterType.Name);
                                                 }
 
+                                                if (parsedValue != null)
+                                                {
+                                                    result = Expression.Condition(
+                                                                              groupSuccess,
+                                                                              parsedValue,
+                                                                              defaultValue
+                                                                              );
+                                                }
+
                                                 List<Expression> results = new List<Expression>();
 
-                                                results.Add(Expression.Assign(propertyExpression, parseCall));
+                                                results.Add(Expression.Assign(propertyExpression, result));
 
                                                 //check dpr attribute
                                                 if (x.GetCustomAttribute<DPRAttribute>() != null)
@@ -164,7 +191,7 @@ namespace ImageWizard.Filters
             Expression[] assigns = parsedVariables
                                                 .SelectMany(x => x.AssignExpression)
                                                 //call filter method with parsed values
-                                                .Concat(new [] { Expression.Call(
+                                                .Concat(new[] { Expression.Call(
                                                                             filterParameter,
                                                                             Method,
                                                                             variables) }).ToArray();

@@ -9,5 +9,7 @@ namespace ImageWizard.Core.Middlewares
     public interface IImageWizardInterceptor
     {
         void OnResponseSending(HttpResponse response, ICachedImage cachedImage);
+
+        void OnResponseCompleted(ICachedImage cachedImage);
     }
 }

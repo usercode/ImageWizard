@@ -16,5 +16,10 @@ namespace ImageWizard.Filters
         {
             context.Image.Mutate(m => m.Grayscale());
         }
+
+        public void Execute(float amount, FilterContext context)
+        {
+            context.Image.Mutate(m => m.Grayscale(amount));
+        }
     }
 }

@@ -12,9 +12,9 @@ namespace ImageWizard.Filters
     {
         public override string Name => "contrast";
 
-        public void Execute(double value, FilterContext context)
+        public void Execute(float value, FilterContext context)
         {
-            context.Image.Mutate(m => m.Contrast((float)value));
+            context.Image.Mutate(m => m.Contrast(value));
         }
     }
 }

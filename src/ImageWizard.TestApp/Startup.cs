@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using ImageWizard.AspNetCore;
 using ImageWizard.MongoDB;
@@ -34,7 +35,7 @@ namespace ImageWizard.TestApp
                 .AddYoutubeLoader()
                 .AddGravatarLoader();
 
-            services.AddImageWizardClient();
+            services.AddImageWizardClient(x => x.Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==");
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

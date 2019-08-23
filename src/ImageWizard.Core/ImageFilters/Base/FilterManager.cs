@@ -1,4 +1,6 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
+using ImageWizard.Core.ImageFilters.Base.Attributes;
+using ImageWizard.Core.ImageFilters.Base.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,32 +41,51 @@ namespace ImageWizard.Filters
             {
                 ParameterInfo[] parameters = method.GetParameters();
 
-                StringBuilder builder = new StringBuilder("^");
-                builder.Append($@"{filter.Name}\(");
+                Type[] integerTypes = new Type[] { typeof(byte), typeof(short), typeof(int), typeof(long) };
+                Type[] floatingNumberTypes = new Type[] { typeof(float), typeof(double), typeof(decimal) };
+
+                ParameterItem CreateParameter(ParameterInfo pi, string pattern)
+                {
+                    return new ParameterItem() { Name = pi.Name, Pattern = $@"(?<{pi.Name}>{pattern})" };
+                }
+
+                List<ParameterItem> pp = new List<ParameterItem>();
 
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    if (parameters[i].ParameterType == typeof(int))
-                    {
-                        builder.Append($@"(?<{parameters[i].Name}>\d+)");
-                    }
-                    else if (parameters[i].ParameterType == typeof(double))
-                    {
-                        builder.Append($@"(?<{parameters[i].Name}>\d+\.\d+)");
-                    }
-                    else if(parameters[i].ParameterType == typeof(string))
-                    {
-                        builder.Append($@"'(?<{parameters[i].Name}>.+)'");
-                    }
-                    else if(parameters[i].ParameterType.IsEnum)
-                    {
-                        string[] enumValues = Enum.GetNames(parameters[i].ParameterType)
-                                                    .Select(x=> x.ToLower())
-                                                    .ToArray();
+                    ParameterInfo currentParameter = parameters[i];
 
-                        builder.Append($"(?<{parameters[i].Name}>{string.Join("|", enumValues)})");
+                    if (integerTypes.Any(x => x == currentParameter.ParameterType))
+                    {
+                        pp.Add(CreateParameter(currentParameter, @"\d+"));
                     }
-                    else if(parameters[i].ParameterType == typeof(FilterContext))
+                    else if (floatingNumberTypes.Any(x => x == currentParameter.ParameterType))
+                    {
+                        pp.Add(CreateParameter(currentParameter, @"\d+\.\d+"));
+                    }
+                    else if (currentParameter.ParameterType == typeof(bool))
+                    {
+                        pp.Add(CreateParameter(parameters[i], "True|False"));
+                    }
+                    else if (currentParameter.ParameterType == typeof(string))
+                    {
+                        ParameterItem p = CreateParameter(parameters[i], ".+");
+
+                        p.Pattern = $"'{p.Pattern}'";
+
+                        pp.Add(p);
+                    }
+                    else if (currentParameter.ParameterType.IsEnum)
+                    {
+                        //@"[a-z]{1}[a-z0-9]*"
+
+                        string[] enumValues = Enum.GetNames(parameters[i].ParameterType)
+                                                  .Select(x => x.ToLower())
+                                                  .ToArray();
+
+                        pp.Add(CreateParameter(parameters[i], string.Join("|", enumValues)));
+                    }
+                    else if (parameters[i].ParameterType == typeof(FilterContext))
                     {
                         //skip this parameter
                     }
@@ -72,13 +93,27 @@ namespace ImageWizard.Filters
                     {
                         throw new Exception("parameter type is not supported: " + parameters[i].ParameterType.Name);
                     }
-
-                    if (i < parameters.Length - 2)
-                    {
-                        builder.Append(",");
-                    }
                 }
 
+                StringBuilder builder = new StringBuilder("^");
+
+                //function begin
+                builder.Append($@"{filter.Name}\(");
+
+                bool optionalParmeterCall = parameters.All(x => (x.DefaultValue is DBNull) == false);
+
+                if (optionalParmeterCall)
+                {
+                    //add optional parameters
+                    builder.Append($"(,|{string.Join("|", pp.Select(x => $"({x.Name}={x.Pattern})").ToArray())})*");
+                }
+                else
+                {
+                    //add all parameters
+                    builder.Append(string.Join(",", pp.Select(x => x.Pattern).ToArray()));
+                }
+
+                //function end
                 builder.Append(@"\)$");
 
                 FilterAction<TFilter> filterAction = new FilterAction<TFilter>(

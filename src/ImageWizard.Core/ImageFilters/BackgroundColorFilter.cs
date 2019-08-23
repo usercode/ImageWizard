@@ -12,14 +12,14 @@ namespace ImageWizard.Filters
     {
         public override string Name => "backgroundcolor";
 
-        public void Execute(int r, int g, int b, FilterContext context)
+        public void Execute(byte r, byte g, byte b, FilterContext context)
         {
-            context.Image.Mutate(m => m.BackgroundColor(new Rgba32((byte)r, (byte)g, (byte)b)));
+            context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
         }
 
-        public void Execute(double r, double g, double b, FilterContext context)
+        public void Execute(float r, float g, float b, FilterContext context)
         {
-            context.Image.Mutate(m => m.BackgroundColor(new Rgba32((float)r, (float)g, (float)b)));
+            context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
         }
     }
 }
