@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -12,9 +13,8 @@ namespace ImageWizard.Filters
 {
     public class TrimFilter : FilterBase
     {
-        public override string Name => "trim";
-
-        public void Execute(FilterContext context)
+        [Filter]
+        public void Trim(FilterContext context)
         {
             //find whitespace
 

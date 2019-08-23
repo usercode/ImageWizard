@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
@@ -11,9 +12,8 @@ namespace ImageWizard.Filters
 {
     public class AutoOrientFilter : FilterBase
     {
-        public override string Name => "autoorient";
-
-        public void Execute(FilterContext context)
+        [Filter]
+        public void AutoOrient(FilterContext context)
         {
             context.Image.Mutate(m => m.AutoOrient());
         }

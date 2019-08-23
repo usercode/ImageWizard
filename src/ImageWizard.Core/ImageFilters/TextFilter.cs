@@ -15,9 +15,8 @@ namespace ImageWizard.Filters
 {
     public class TextFilter : FilterBase
     {
-        public override string Name => "drawText";
-
-        public void Execute(int x = 0, int y = 0, string text = "", int size = 12, string font = "Arial", FilterContext context = null)
+        [Filter]
+        public void DrawText(int x = 0, int y = 0, string text = "", int size = 12, string font = "Arial", FilterContext context = null)
         {
             context.Image.Mutate(m =>
             {

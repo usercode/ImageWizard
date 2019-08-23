@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
@@ -11,9 +12,8 @@ namespace ImageWizard.Filters
 {
     public class RotateFilter : FilterBase
     {
-        public override string Name => "rotate";
-
-        public void Execute(int rotateValue, FilterContext context)
+        [Filter]
+        public void Rotate(int rotateValue, FilterContext context)
         {
             RotateMode rotateMode;
 

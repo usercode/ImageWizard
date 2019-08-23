@@ -13,19 +13,20 @@ namespace ImageWizard.Filters
 {
     public class ResizeFilter : FilterBase
     {
-        public override string Name => "resize";
-
-        public void Execute([DPR]int size, FilterContext context)
+        [Filter]
+        public void Resize([DPR]int size, FilterContext context)
         {
-            Execute(size, size, context);
+            Resize(size, size, context);
         }
 
-        public void Execute([DPR]int width, [DPR]int height, FilterContext context)
+        [Filter]
+        public void Resize([DPR]int width, [DPR]int height, FilterContext context)
         {
-            Execute(width, height, SharedContract.FilterTypes.ResizeMode.Max, context);
+            Resize(width, height, SharedContract.FilterTypes.ResizeMode.Max, context);
         }
 
-        public void Execute([DPR]int width, [DPR]int height, SharedContract.FilterTypes.ResizeMode mode, FilterContext context)
+        [Filter]
+        public void Resize([DPR]int width, [DPR]int height, SharedContract.FilterTypes.ResizeMode mode, FilterContext context)
         {
             ResizeMode mode2;
 

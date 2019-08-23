@@ -132,7 +132,7 @@ app.UseImageWizard();
 ## Create custom filter
 
 - implements IFilter (or use base class 'FilterBase')
-- add method with the name "Execute" and the needed parameters
+- add a public method which is marked with the filter attribute
   - at url level are the following types possible for method overloading: 
     - integer ("0")
     - floating-point number ("0.0")
@@ -144,14 +144,14 @@ app.UseImageWizard();
 ```csharp
  public class BackgroundColorFilter : FilterBase
     {
-        public override string Name => "backgroundcolor";
-
-        public void Execute(byte r, byte g, byte b, FilterContext context)
+        [Filter]
+        public void BackgroundColor(byte r, byte g, byte b, FilterContext context)
         {
             context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
         }
 
-        public void Execute(float r, float g, float b, FilterContext context)
+        [Filter]
+        public void BackgroundColor(float r, float g, float b, FilterContext context)
         {
             context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
         }
@@ -180,9 +180,8 @@ URL segments:
 ```csharp
  public class ResizeFilter : FilterBase
  {
-      public override string Name => "resize";
-
-      public void Execute([DPR]int width, [DPR]int height, FilterContext context)
+      [Filter]
+      public void Resize([DPR]int width, [DPR]int height, FilterContext context)
       {
           context.Image.Mutate(m => m.Resize(width, height));
       }
@@ -204,9 +203,8 @@ Example:
 ```csharp
  public class TextFilter : FilterBase
  {
-      public override string Name => "drawText";
-
-      public void Execute(int x = 0, int y = 0, string text = "", int size = 12, string font = "Arial", FilterContext context = null)
+      [Filter]
+      public void DrawText(int x = 0, int y = 0, string text = "", int size = 12, string font = "Arial", FilterContext context = null)
       {
           context.Image.Mutate(m =>
           {
@@ -222,7 +220,7 @@ Example:
 
 URL segment: 
 ```csharp
-"/drawText(text='Hello',x=10,y=20)/"
+"/drawtext(text='Hello',x=10,y=20)/"
 ```
 
 ## ASP.NET Core UrlBuilder

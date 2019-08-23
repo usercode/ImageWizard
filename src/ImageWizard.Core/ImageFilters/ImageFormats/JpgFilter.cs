@@ -1,4 +1,5 @@
-﻿using ImageWizard.ImageFormats;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using ImageWizard.ImageFormats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,14 @@ namespace ImageWizard.Filters.ImageFormats
 {
     public class JpgFilter : FilterBase
     {
-        public override string Name => "jpg";
-
-        public void Execute(FilterContext context)
+        [Filter]
+        public void Jpg(FilterContext context)
         {
             context.ImageFormat = new JpegFormat();
         }
 
-        public void Execute(int quality, FilterContext context)
+        [Filter]
+        public void Jpg(int quality, FilterContext context)
         {
             context.ImageFormat = new JpegFormat() { Quality = quality };
         }

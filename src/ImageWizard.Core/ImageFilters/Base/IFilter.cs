@@ -7,6 +7,5 @@ namespace ImageWizard.Filters
 {
     public interface IFilter
     {
-        string Name { get; }
     }
 }

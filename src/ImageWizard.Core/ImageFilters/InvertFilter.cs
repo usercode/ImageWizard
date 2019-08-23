@@ -12,14 +12,14 @@ namespace ImageWizard.Filters
 {
     public class InvertFilter : FilterBase
     {
-        public override string Name => "invert";
-
-        public void Execute(FilterContext context)
+        [Filter]
+        public void Invert(FilterContext context)
         {
             context.Image.Mutate(m => m.Invert());
         }
 
-        public void Execute([DPR]int x, [DPR]int y, [DPR]int width, [DPR]int height, FilterContext context)
+        [Filter]
+        public void Invert([DPR]int x, [DPR]int y, [DPR]int width, [DPR]int height, FilterContext context)
         {
             context.Image.Mutate(m => m.Invert(new SixLabors.Primitives.Rectangle(x, y, width, height)));
         }

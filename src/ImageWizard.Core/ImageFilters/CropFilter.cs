@@ -13,16 +13,16 @@ namespace ImageWizard.Filters
 {
     public class CropFilter : FilterBase
     {
-        public override string Name => "crop";
-
-        public void Execute([DPR]double width, [DPR]double height, FilterContext context)
+        [Filter]
+        public void Crop([DPR]double width, [DPR]double height, FilterContext context)
         {
-            Execute(0, 0, width, height, context);
+            Crop(0, 0, width, height, context);
         }
 
-        public void Execute([DPR]double x, [DPR]double y, [DPR]double width, [DPR]double height, FilterContext context)
+        [Filter]
+        public void Crop([DPR]double x, [DPR]double y, [DPR]double width, [DPR]double height, FilterContext context)
         {
-            Execute(
+            Crop(
                 (int)(x * context.Image.Width),
                 (int)(y * context.Image.Height),
                 (int)(width * context.Image.Width),
@@ -30,12 +30,14 @@ namespace ImageWizard.Filters
                 context);
         }
 
-        public void Execute([DPR]int width, [DPR]int height, FilterContext context)
+        [Filter]
+        public void Crop([DPR]int width, [DPR]int height, FilterContext context)
         {
-            Execute(0, 0, width, height, context);
+            Crop(0, 0, width, height, context);
         }
 
-        public void Execute([DPR]int x, [DPR]int y, [DPR]int width, [DPR]int height, FilterContext context)
+        [Filter]
+        public void Crop([DPR]int x, [DPR]int y, [DPR]int width, [DPR]int height, FilterContext context)
         {
             context.Image.Mutate(m => m.Crop(new Rectangle(x, y, width, height)));
         }

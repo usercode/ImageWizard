@@ -12,6 +12,5 @@ namespace ImageWizard.Filters
 
         }
 
-        public abstract string Name { get; }
     }
 }

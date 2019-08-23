@@ -1,4 +1,5 @@
-﻿using ImageWizard.ImageFormats;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using ImageWizard.ImageFormats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,8 @@ namespace ImageWizard.Filters.ImageFormats
 {
     public class GifFilter : FilterBase
     {
-        public override string Name => "gif";
-
-        public void Execute(FilterContext context)
+        [Filter]
+        public void Gif(FilterContext context)
         {
             context.ImageFormat = new GifFormat();
         }

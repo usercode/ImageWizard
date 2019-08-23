@@ -1,4 +1,5 @@
-﻿using ImageWizard.ImageFormats;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using ImageWizard.ImageFormats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,8 @@ namespace ImageWizard.Filters.ImageFormats
 {
     public class BmpFilter : FilterBase
     {
-        public override string Name => "bmp";
-
-        public void Execute(FilterContext context)
+        [Filter]
+        public void Bmp(FilterContext context)
         {
             context.ImageFormat = new BmpFormat();
         }

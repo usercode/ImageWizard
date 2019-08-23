@@ -265,7 +265,7 @@ namespace ImageWizard.Middlewares
 
                         if (change == true)
                         {
-                            new ResizeFilter().Execute(width, height, ResizeMode.Max, filterContext);
+                            new ResizeFilter().Resize(width, height, ResizeMode.Max, filterContext);
                         }
 
                         MemoryStream mem = new MemoryStream();

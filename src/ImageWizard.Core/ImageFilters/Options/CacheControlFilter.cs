@@ -11,9 +11,8 @@ namespace ImageWizard.Core.ImageFilters.Options
     /// </summary>
     public class CacheControlFilter : FilterBase
     {
-        public override string Name => "cachecontrol";
-
-        public void Execute(int maxAge = 2, int noCache = 0, bool isCached = true, FilterContext context = null)
+        [Filter]
+        public void CacheControl(int maxAge = 2, int noCache = 0, bool isCached = true, FilterContext context = null)
         {
             context.NoImageCache = true;
         }

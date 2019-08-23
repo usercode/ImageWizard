@@ -34,7 +34,8 @@ namespace ImageWizard.Filters
 
             MethodInfo[] methods = filter.GetType()
                                             .GetMethods()
-                                            .Where(x=> x.Name == "Execute")
+                                            .Where(x => x.IsPublic)
+                                            .Where(x=> x.GetCustomAttribute<FilterAttribute>() != null)
                                             .ToArray();
 
             foreach(MethodInfo method in methods)
@@ -98,7 +99,7 @@ namespace ImageWizard.Filters
                 StringBuilder builder = new StringBuilder("^");
 
                 //function begin
-                builder.Append($@"{filter.Name}\(");
+                builder.Append($@"{method.Name.ToLower()}\(");
 
                 bool optionalParmeterCall = parameters.All(x => (x.DefaultValue is DBNull) == false);
 

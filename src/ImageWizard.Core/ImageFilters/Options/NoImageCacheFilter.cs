@@ -1,4 +1,5 @@
-﻿using ImageWizard.Filters;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using ImageWizard.Filters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +11,8 @@ namespace ImageWizard.Core.ImageFilters.Options
     /// </summary>
     public class NoImageCacheFilter : FilterBase
     {
-        public override string Name => "nocache";
-
-        public void Execute(FilterContext context)
+        [Filter]
+        public void NoCache(FilterContext context)
         {
             context.NoImageCache = true;
         }

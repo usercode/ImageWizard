@@ -59,34 +59,6 @@ namespace ImageWizard.Filters
 
             MethodDelegate(match.Groups, Filter, filterContext);
 
-            //List<object> parameterValues = new List<object>();
-
-            //foreach(ParameterInfo pi in TargetMethod.GetParameters())
-            //{
-            //    string value = match.Groups[pi.Name].Value;
-
-            //    if (pi.ParameterType == typeof(int))
-            //    {
-            //        parameterValues.Add(int.Parse(value, CultureInfo.InvariantCulture));
-            //    }
-            //    else if(pi.ParameterType == typeof(double))
-            //    {
-            //        parameterValues.Add(double.Parse(value, CultureInfo.InvariantCulture));
-            //    }
-            //    else if(pi.ParameterType == typeof(string))
-            //    {
-            //        parameterValues.Add(value);
-            //    }
-            //    else if(pi.ParameterType.IsEnum)
-            //    {
-            //        parameterValues.Add(Enum.Parse(pi.ParameterType, value, true));
-            //    }
-            //}
-
-            //parameterValues.Add(filterContext);
-
-            //TargetMethod.Invoke(Filter, parameterValues.ToArray());
-
             return true;
         }
 

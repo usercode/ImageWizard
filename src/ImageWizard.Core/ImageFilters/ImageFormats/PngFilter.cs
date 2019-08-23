@@ -1,4 +1,5 @@
-﻿using ImageWizard.ImageFormats;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using ImageWizard.ImageFormats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,8 @@ namespace ImageWizard.Filters.ImageFormats
 {
     public class PngFilter : FilterBase
     {
-        public override string Name => "png";
-
-        public void Execute(FilterContext context)
+        [Filter]
+        public void Png(FilterContext context)
         {
             context.ImageFormat = new PngFormat();
         }

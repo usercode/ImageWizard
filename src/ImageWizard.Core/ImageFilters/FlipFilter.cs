@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
@@ -11,9 +12,8 @@ namespace ImageWizard.Filters
 {
     public class FlipFilter : FilterBase
     {
-        public override string Name => "flip";
-
-        public void Execute(SharedContract.FilterTypes.FlipMode flippingMode, FilterContext context)
+        [Filter]
+        public void Flip(SharedContract.FilterTypes.FlipMode flippingMode, FilterContext context)
         {
             FlipMode flipMode;
 

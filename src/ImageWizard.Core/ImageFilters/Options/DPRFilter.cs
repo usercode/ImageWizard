@@ -1,4 +1,5 @@
-﻿using ImageWizard.Filters;
+﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+using ImageWizard.Filters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +11,8 @@ namespace ImageWizard.Core.ImageFilters.Options
     /// </summary>
     public class DPRFilter : FilterBase
     {
-        public override string Name => "dpr";
-
-        public void Execute(double dpr, FilterContext context)
+        [Filter]
+        public void DPR(double dpr, FilterContext context)
         {
             context.DPR = dpr;
         }
