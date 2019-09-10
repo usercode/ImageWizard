@@ -14,7 +14,7 @@ namespace ImageWizard.Filters
     public class CropFilter : FilterBase
     {
         [Filter]
-        public void Crop([DPR]double width, [DPR]double height, FilterContext context)
+        public void Crop(double width, double height, FilterContext context)
         {
             Crop(0, 0, width, height, context);
         }
@@ -31,13 +31,13 @@ namespace ImageWizard.Filters
         }
 
         [Filter]
-        public void Crop([DPR]int width, [DPR]int height, FilterContext context)
+        public void Crop(int width, int height, FilterContext context)
         {
             Crop(0, 0, width, height, context);
         }
 
         [Filter]
-        public void Crop([DPR]int x, [DPR]int y, [DPR]int width, [DPR]int height, FilterContext context)
+        public void Crop(int x, int y, int width, int height, FilterContext context)
         {
             context.Image.Mutate(m => m.Crop(new Rectangle(x, y, width, height)));
         }
