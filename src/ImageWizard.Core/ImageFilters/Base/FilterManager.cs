@@ -99,7 +99,7 @@ namespace ImageWizard.Filters
                 StringBuilder builder = new StringBuilder("^");
 
                 //function begin
-                builder.Append($@"{method.Name.ToLower()}\(");
+                builder.Append($@"{method.Name.ToLowerInvariant()}\(");
 
                 bool optionalParmeterCall = parameters.All(x => (x.DefaultValue is DBNull) == false);
 

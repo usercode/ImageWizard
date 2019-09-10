@@ -20,7 +20,7 @@ namespace ImageWizard.Filters
         }
 
         [Filter]
-        public void Crop([DPR]double x, [DPR]double y, [DPR]double width, [DPR]double height, FilterContext context)
+        public void Crop(double x, double y, double width, double height, FilterContext context)
         {
             Crop(
                 (int)(x * context.Image.Width),
