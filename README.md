@@ -162,7 +162,7 @@ Register filter:
 
 ```csharp
 services.AddImageWizard()
-	.AddFilter<ResizeFilter>();
+	.AddFilter<BackgroundColorFilter >();
 ```
 
 URL segments: 
@@ -263,9 +263,10 @@ Create url with fluent api
 .ImageWizard()
 //use HTTP loader
 .Fetch("https://<your-domain>/test/picture.jpg")
+//fetch local file from wwwroot folder (with fingerprint)
+.FetchLocal("picture.jpg")
 //or file loader
 .File("test/picture.jpg")
-.Trim()
 .Resize(160,140)
 .Jpg(90)
 .BuildUrl()

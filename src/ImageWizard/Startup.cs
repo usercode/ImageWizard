@@ -14,12 +14,13 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.ImageLoaders.Files;
+using Microsoft.Extensions.Hosting;
 
 namespace ImageWizard
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             HostingEnvironment = env;
@@ -27,7 +28,7 @@ namespace ImageWizard
 
         public IConfiguration Configuration { get; }
 
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -63,11 +64,11 @@ namespace ImageWizard
                     throw new Exception("unknown cache type selected");
             }
 
-            services.AddHttpsRedirection(x => { x.RedirectStatusCode = StatusCodes.Status308PermanentRedirect; x.HttpsPort = 443; });
+            services.AddHttpsRedirection(x => { x.RedirectStatusCode = StatusCodes.Status301MovedPermanently; x.HttpsPort = 443; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
