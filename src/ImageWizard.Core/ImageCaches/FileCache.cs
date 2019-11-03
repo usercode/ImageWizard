@@ -26,7 +26,7 @@ namespace ImageWizard.ImageStorages
     /// </summary>
     public class FileCache : IImageCache
     {
-        public FileCache(IOptions<FileCacheSettings> settings, IHostingEnvironment hostingEnvironment)
+        public FileCache(IOptions<FileCacheSettings> settings, IWebHostEnvironment hostingEnvironment)
         {
             Settings = settings;
             HostingEnvironment = hostingEnvironment;
@@ -42,7 +42,7 @@ namespace ImageWizard.ImageStorages
         /// <summary>
         /// HostingEnvironment
         /// </summary>
-        private IHostingEnvironment HostingEnvironment { get; }
+        private IWebHostEnvironment HostingEnvironment { get; }
 
         /// <summary>
         /// FileProvider

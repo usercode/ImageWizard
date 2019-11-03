@@ -15,7 +15,6 @@ namespace ImageWizard.Settings
     {
         public ImageWizardSettings()
         {
-            BasePath = "/image";
             UseETag = true;
             UseClintHints = true;
             AllowUnsafeUrl = false;
@@ -34,11 +33,6 @@ namespace ImageWizard.Settings
         /// CacheControl
         /// </summary>
         public CacheControl CacheControl { get; }
-
-        /// <summary>
-        /// Segment
-        /// </summary>
-        public PathString BasePath { get; set; }
 
         /// <summary>
         /// AllowUnsafeUrl

@@ -30,13 +30,14 @@ using System.Threading;
 using System.Security.Cryptography;
 using ImageWizard.Core;
 using ImageWizard.Core.Middlewares;
+using Microsoft.AspNetCore.Routing;
 
 namespace ImageWizard.Middlewares
 {
     /// <summary>
     /// ImageWizardMiddleware
     /// </summary>
-    public class ImageWizardMiddleware
+    class ImageWizardMiddleware
     {
         private readonly RequestDelegate _next;
 
@@ -57,7 +58,7 @@ namespace ImageWizard.Middlewares
 
             CryptoService = new CryptoService(Settings.Value.Key);
 
-            UrlRegex = new Regex($@"^{Settings.Value.BasePath.Value}/(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.=']*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            UrlRegex = new Regex($@"^(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.=']*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         private IOptions<ImageWizardSettings> Settings { get; }
@@ -89,14 +90,7 @@ namespace ImageWizard.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Path.StartsWithSegments(Settings.Value.BasePath) == false)
-            {
-                await _next(context);
-
-                return;
-            }
-
-            string path = context.Request.Path.Value;
+            string path = (string)context.GetRouteValue("imagePath");
 
             if (context.Request.QueryString.HasValue)
             {

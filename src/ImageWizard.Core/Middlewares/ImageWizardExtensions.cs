@@ -4,6 +4,7 @@ using ImageWizard.Middlewares;
 using ImageWizard.Settings;
 using ImageWizard.SharedContract;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
@@ -14,10 +15,17 @@ namespace ImageWizard
 {
     public static class ImageWizardExtensions
     {
-        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder app)
+        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder app, string path)
         {
-            app.UseMiddleware<ImageWizardMiddleware>();
+            app.UseEndpoints(endpoints =>
+            {
+                RequestDelegate pipeline = endpoints.CreateApplicationBuilder()
+                                        .UseMiddleware<ImageWizardMiddleware>()
+                                        .Build();
 
+                endpoints.Map($"{path}/{{*imagePath}}", pipeline).WithDisplayName("ImageWizard");
+            });
+            
             return app;
         }
 
