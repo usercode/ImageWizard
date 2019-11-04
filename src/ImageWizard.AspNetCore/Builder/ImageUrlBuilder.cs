@@ -28,21 +28,22 @@ namespace ImageWizard.AspNetCore.Builder
     /// </summary>
     public class ImageUrlBuilder : IImageUrlBuilder, IImageFilters, IImageLoaderType
     {
-        public CryptoService CryptoService { get; }
         public IOptions<ImageWizardClientSettings> Settings { get; }
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
         public IHttpContextAccessor HttpContextAccessor { get; }
         public IFileVersionProvider FileVersionProvider { get; }
 
-        public string ImageUrl { get; set; }
+        private CryptoService CryptoService { get; }
+       
+        private string LoaderSource { get; set; }
 
-        public List<string> Filters { get; set; }
+        private List<string> Filters { get; set; }
 
-        public string LoaderType { get; set; }
+        private string LoaderType { get; set; }
 
         public ImageUrlBuilder(
-            IOptions<ImageWizardClientSettings> settings, 
-            IHostingEnvironment env, 
+            IOptions<ImageWizardClientSettings> settings,
+            IWebHostEnvironment env, 
             IHttpContextAccessor httpContextAccessor,
             IFileVersionProvider fileVersionProvider)
         {
@@ -58,10 +59,10 @@ namespace ImageWizard.AspNetCore.Builder
             Filters = new List<string>();
         }
 
-        public IImageFilters Image(string loaderType, string url)
+        public IImageFilters Image(string loaderType, string loaderSource)
         {
             LoaderType = loaderType;
-            ImageUrl = url;
+            LoaderSource = loaderSource;
 
             return this;
         }
@@ -75,14 +76,14 @@ namespace ImageWizard.AspNetCore.Builder
 
         public HtmlString BuildUrl()
         {
-            if(string.IsNullOrEmpty(ImageUrl))
+            if(string.IsNullOrEmpty(LoaderSource))
             {
                 throw new Exception("No image is selected.");
             }
 
             if (Settings.Value.Enabled == false)
             {
-                return new HtmlString(ImageUrl);
+                return new HtmlString(LoaderSource);
             }
 
             StringBuilder url = new StringBuilder();
@@ -95,12 +96,12 @@ namespace ImageWizard.AspNetCore.Builder
 
             url.Append(LoaderType);
 
-            if (ImageUrl.StartsWith("/") == false)
+            if (LoaderSource.StartsWith("/") == false)
             {
                 url.Append("/");
             }
 
-            url.Append(ImageUrl);
+            url.Append(LoaderSource);
 
             string signature = "unsafe";
 

@@ -13,7 +13,7 @@ namespace ImageWizard.AspNetCore.Builder
 {
     public interface IImageUrlBuilder
     {
-        IHostingEnvironment HostingEnvironment { get; }
+        IWebHostEnvironment HostingEnvironment { get; }
         IHttpContextAccessor HttpContextAccessor { get; }
         IFileVersionProvider FileVersionProvider { get; }
     }

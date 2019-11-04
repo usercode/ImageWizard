@@ -78,7 +78,7 @@ namespace ImageWizard
             }
 
             app.UseHttpsRedirection();
-            app.UseImageWizard("/image");
+            app.UseImageWizard();
         }
     }
 }

@@ -15,13 +15,19 @@ namespace ImageWizard
 {
     public static class ImageWizardExtensions
     {
+
+        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder app)
+        {
+            return UseImageWizard(app, "/image");
+        }
+
         public static IApplicationBuilder UseImageWizard(this IApplicationBuilder app, string path)
         {
             app.UseEndpoints(endpoints =>
             {
                 RequestDelegate pipeline = endpoints.CreateApplicationBuilder()
-                                        .UseMiddleware<ImageWizardMiddleware>()
-                                        .Build();
+                                                        .UseMiddleware<ImageWizardMiddleware>()
+                                                        .Build();
 
                 endpoints.Map($"{path}/{{*imagePath}}", pipeline).WithDisplayName("ImageWizard");
             });
