@@ -10,13 +10,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ImageWizard.ImageStorages
@@ -85,7 +85,7 @@ namespace ImageWizard.ImageStorages
 
             string json = Encoding.UTF8.GetString(mem.ToArray());
 
-            IImageMetadata metadata = JsonConvert.DeserializeObject<ImageMetadata>(json);
+            IImageMetadata metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
 
             return new CachedImage(metadata, () => Task.FromResult(fileInfoData.CreateReadStream()));
         }
@@ -103,7 +103,7 @@ namespace ImageWizard.ImageStorages
             FileInfo fileInfoMetadata = new FileInfo(Path.Combine(sub.FullName, parts.Last() + ".meta"));
             
             //write metadata
-            string json = JsonConvert.SerializeObject(metadata, Formatting.Indented);
+            string json = JsonSerializer.Serialize(metadata, new JsonSerializerOptions() { WriteIndented = true } );
             byte[] metadataBuffer = Encoding.UTF8.GetBytes(json);
 
             using (Stream fs = fileInfoMetadata.OpenWrite())

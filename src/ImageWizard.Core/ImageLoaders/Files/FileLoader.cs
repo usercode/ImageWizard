@@ -18,7 +18,7 @@ namespace ImageWizard.Core.ImageLoaders.Files
     /// </summary>
     public class FileLoader : IImageLoader
     {
-        public FileLoader(IOptions<FileLoaderSettings> settings, IHostingEnvironment hostingEnvironment)
+        public FileLoader(IOptions<FileLoaderSettings> settings, IWebHostEnvironment hostingEnvironment)
         {
             HostingEnvironment = hostingEnvironment;
 
@@ -33,7 +33,7 @@ namespace ImageWizard.Core.ImageLoaders.Files
         /// <summary>
         /// HostingEnvironment
         /// </summary>
-        private IHostingEnvironment HostingEnvironment { get; }
+        private IWebHostEnvironment HostingEnvironment { get; }
 
         public async Task<OriginalImage> GetAsync(string requestUri)
         {

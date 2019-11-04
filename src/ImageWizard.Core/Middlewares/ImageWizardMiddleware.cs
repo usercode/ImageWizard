@@ -1,4 +1,9 @@
-﻿using ImageWizard.Filters;
+﻿using ImageWizard.Core;
+using ImageWizard.Core.ImageFilters.Base;
+using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Core.Middlewares;
+using ImageWizard.Core.Types;
+using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
 using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
@@ -10,27 +15,21 @@ using ImageWizard.SharedContract;
 using ImageWizard.SharedContract.FilterTypes;
 using ImageWizard.Types;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
-using Microsoft.Extensions.Logging;
-using System.Globalization;
-using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.Types;
-using System.Threading;
-using System.Security.Cryptography;
-using ImageWizard.Core;
-using ImageWizard.Core.Middlewares;
-using Microsoft.AspNetCore.Routing;
 
 namespace ImageWizard.Middlewares
 {

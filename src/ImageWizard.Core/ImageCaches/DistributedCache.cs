@@ -3,11 +3,11 @@ using ImageWizard.ImageStorages;
 using ImageWizard.Services.Types;
 using ImageWizard.Types;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ImageWizard.Core.ImageCaches
@@ -36,7 +36,7 @@ namespace ImageWizard.Core.ImageCaches
                 return null;
             }
 
-            IImageMetadata metadata = JsonConvert.DeserializeObject<ImageMetadata>(json);
+            IImageMetadata metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
 
             return new CachedImage(metadata, async () =>
             {
@@ -48,7 +48,7 @@ namespace ImageWizard.Core.ImageCaches
 
         public async Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer)
         {
-            string json = JsonConvert.SerializeObject(metadata);
+            string json = JsonSerializer.Serialize(metadata);
 
             await Cache.SetStringAsync($"{key}#meta", json);
 

@@ -162,7 +162,7 @@ Register filter:
 
 ```csharp
 services.AddImageWizard()
-	.AddFilter<BackgroundColorFilter >();
+	.AddFilter<BackgroundColorFilter>();
 ```
 
 URL segments: 

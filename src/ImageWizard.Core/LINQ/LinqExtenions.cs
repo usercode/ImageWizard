@@ -8,7 +8,7 @@ namespace ImageWizard.Core
     {
         public static void Foreach<T>(this IEnumerable<T> items, Action<T> action)
         {
-            foreach(var item in items)
+            foreach(T item in items)
             {
                 action(item);
             }
