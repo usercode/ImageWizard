@@ -193,6 +193,11 @@ URL segment:
 "/dpr(2.0)/resize(200,100)/"  //calls resize filter with the resolution 400 x 200
 ```
 
+Response header:
+```csharp
+Content-DPR: 2
+```
+
 ### How to use optional parameters
 
 - use rather method overloading if possible
