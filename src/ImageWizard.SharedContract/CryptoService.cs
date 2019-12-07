@@ -16,7 +16,14 @@ namespace ImageWizard.SharedContract
     {
         public CryptoService(string key)
         {
-            Key = WebEncoders.Base64UrlDecode(key);
+            try
+            {
+                Key = WebEncoders.Base64UrlDecode(key);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("No valid key: " + ex.Message);
+            }
         }
 
         /// <summary>

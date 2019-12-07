@@ -50,7 +50,7 @@ namespace ImageWizard
             IHttpContextAccessor httpContextAccessor,
             IFileVersionProvider fileVersionProvider)
         {
-            if (settings.Value.Key != null)
+            if (settings.Value.UseUnsafeUrl == false)
             {
                 CryptoService = new CryptoService(settings.Value.Key);
             }
@@ -107,9 +107,13 @@ namespace ImageWizard
 
             url.Append(LoaderSource);
 
-            string signature = "unsafe";
+            string signature;
 
-            if (CryptoService != null)
+            if (Settings.Value.UseUnsafeUrl == true)
+            {
+                signature = "unsafe";
+            }
+            else
             {
                 signature = CryptoService.Encrypt(url.ToString());
             }

@@ -5,6 +5,7 @@ using ImageWizard.Settings;
 using ImageWizard.SharedContract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
@@ -16,23 +17,18 @@ namespace ImageWizard
     public static class ImageWizardExtensions
     {
 
-        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder app)
+        public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
         {
-            return UseImageWizard(app, "/image");
+            return MapImageWizard(endpoints, "/image");
         }
 
-        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder app, string path)
+        public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, string path)
         {
-            app.UseEndpoints(endpoints =>
-            {
-                RequestDelegate pipeline = endpoints.CreateApplicationBuilder()
-                                                        .UseMiddleware<ImageWizardMiddleware>()
-                                                        .Build();
+            RequestDelegate pipeline = endpoints.CreateApplicationBuilder()
+                                                         .UseMiddleware<ImageWizardMiddleware>()
+                                                         .Build();
 
-                endpoints.Map($"{path}/{{*imagePath}}", pipeline).WithDisplayName("ImageWizard");
-            });
-            
-            return app;
+            return endpoints.Map($"{path}/{{*imagePath}}", pipeline).WithDisplayName("ImageWizard");
         }
 
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services)

@@ -27,16 +27,14 @@ namespace ImageWizard.TestApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddImageWizard(x => {
-                x.AllowUnsafeUrl = true;
-            })
+            services.AddImageWizard(x => x.AllowUnsafeUrl = true)
                 //.SetFileCache()
                 //.SetMongoDBCache()
                 .AddFileLoader(x => x.Folder = "FileStorage")
                 .AddYoutubeLoader()
                 .AddGravatarLoader();
 
-            services.AddImageWizardClient(x => x.Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==");
+            services.AddImageWizardClient(x => x.UseUnsafeUrl = true);
 
             services.AddRazorPages();
         }
@@ -44,8 +42,6 @@ namespace ImageWizard.TestApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseRouting();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -58,10 +54,13 @@ namespace ImageWizard.TestApp
             }
 
             app.UseHttpsRedirection();
-            app.UseImageWizard("/image");
             app.UseStaticFiles();
-
-            app.UseEndpoints(x => x.MapRazorPages());
+            app.UseRouting();
+            app.UseEndpoints(x =>
+            {
+                x.MapRazorPages();
+                x.MapImageWizard();
+            });
         }
     }
 }
