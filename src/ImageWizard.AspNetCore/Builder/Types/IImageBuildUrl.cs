@@ -7,6 +7,6 @@ namespace ImageWizard.AspNetCore.Builder.Types
 {
     public interface IImageBuildUrl
     {
-        HtmlString BuildUrl();
+        string BuildUrl();
     }
 }

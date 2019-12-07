@@ -20,8 +20,10 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc;
+using ImageWizard.AspNetCore;
 
-namespace ImageWizard.AspNetCore.Builder
+namespace ImageWizard
 {
     /// <summary>
     /// ImageUrlBuilder
@@ -32,6 +34,7 @@ namespace ImageWizard.AspNetCore.Builder
         public IWebHostEnvironment HostingEnvironment { get; }
         public IHttpContextAccessor HttpContextAccessor { get; }
         public IFileVersionProvider FileVersionProvider { get; }
+        public IUrlHelper UrlHelper { get; internal set; }
 
         private CryptoService CryptoService { get; }
        
@@ -56,6 +59,7 @@ namespace ImageWizard.AspNetCore.Builder
             HostingEnvironment = env;
             HttpContextAccessor = httpContextAccessor;
             FileVersionProvider = fileVersionProvider;
+
             Filters = new List<string>();
         }
 
@@ -74,7 +78,7 @@ namespace ImageWizard.AspNetCore.Builder
             return this;
         }
 
-        public HtmlString BuildUrl()
+        public string BuildUrl()
         {
             if(string.IsNullOrEmpty(LoaderSource))
             {
@@ -83,7 +87,7 @@ namespace ImageWizard.AspNetCore.Builder
 
             if (Settings.Value.Enabled == false)
             {
-                return new HtmlString(LoaderSource);
+                return LoaderSource;
             }
 
             StringBuilder url = new StringBuilder();
@@ -115,7 +119,7 @@ namespace ImageWizard.AspNetCore.Builder
             url.Insert(0, "/");
             url.Insert(0, Settings.Value.BaseUrl);
 
-            return new HtmlString(url.ToString());
+            return url.ToString();
         }
     }
 }

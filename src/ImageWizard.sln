@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Core", "ImageWi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.MongoDB", "ImageWizard.MongoDB\ImageWizard.MongoDB.csproj", "{718CC6EF-4F72-4D4C-8372-4F4D26148AA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.TestApp", "ImageWizard.TestApp\ImageWizard.TestApp.csproj", "{A4BEC44D-7004-4F38-BDB3-E1B277083B7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.TestApp", "ImageWizard.TestApp\ImageWizard.TestApp.csproj", "{A4BEC44D-7004-4F38-BDB3-E1B277083B7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.Piranha", "ImageWizard.Piranha\ImageWizard.Piranha.csproj", "{07E5C893-676D-4AB9-8A61-93194F301893}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{A4BEC44D-7004-4F38-BDB3-E1B277083B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4BEC44D-7004-4F38-BDB3-E1B277083B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4BEC44D-7004-4F38-BDB3-E1B277083B7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07E5C893-676D-4AB9-8A61-93194F301893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07E5C893-676D-4AB9-8A61-93194F301893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07E5C893-676D-4AB9-8A61-93194F301893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07E5C893-676D-4AB9-8A61-93194F301893}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

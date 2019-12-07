@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.AspNetCore
+namespace ImageWizard
 {
     public class ImageWizardClientSettings
     {

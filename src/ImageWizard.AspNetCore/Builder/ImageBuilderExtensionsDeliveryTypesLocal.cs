@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.AspNetCore
+namespace ImageWizard
 {
     public static class ImageBuilderExtensionsDeliveryTypesLocal
     {

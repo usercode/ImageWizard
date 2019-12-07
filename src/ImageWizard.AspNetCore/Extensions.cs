@@ -1,15 +1,10 @@
-﻿using ImageWizard.AspNetCore.Builder;
+﻿using ImageWizard.AspNetCore;
 using ImageWizard.AspNetCore.Builder.Types;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ImageWizard.AspNetCore
+namespace ImageWizard
 {
     public static class Extensions
     {
@@ -32,6 +27,7 @@ namespace ImageWizard.AspNetCore
         public static IImageLoaderType ImageWizard(this IUrlHelper htmlHelper)
         {
             ImageUrlBuilder imageWizard = htmlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<ImageUrlBuilder>();
+            imageWizard.UrlHelper = htmlHelper;
 
             return imageWizard;
         }

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>usercode</Authors>
+    <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
+    <Version>1.3.4</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    
+    <PackageReference Include="Piranha" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageWizard.AspNetCore\ImageWizard.AspNetCore.csproj" />
+  </ItemGroup>
+
+</Project>
