@@ -275,4 +275,12 @@ Create url with fluent api
 .Jpg(90)
 .BuildUrl()
 ```
+## Plugin for Piranha CMS 8.0
 
+ImageWizard.Piranha [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/)
+
+Useful to resize imagefields.
+
+```csharp
+<img src="@Url.ImageWizard().Fetch(Model.Body).Grayscale().Resize(900,900).Blur().BuildUrl()">
+```
