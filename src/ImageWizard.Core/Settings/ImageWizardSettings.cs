@@ -18,8 +18,7 @@ namespace ImageWizard.Settings
             UseETag = true;
             UseClintHints = true;
             AllowUnsafeUrl = false;
-           
-            Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
+            Key = null;
 
             ImageMaxWidth = 4000;
             ImageMaxHeight = 4000;

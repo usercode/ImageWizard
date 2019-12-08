@@ -12,6 +12,6 @@ namespace ImageWizard.ImageFormats.Base
     {
         string MimeType { get; }
 
-        void SaveImage(Image<Rgba32> image, Stream stream);
+        void SaveImage(Image image, Stream stream);
     }
 }

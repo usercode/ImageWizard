@@ -28,6 +28,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -55,8 +56,6 @@ namespace ImageWizard.Middlewares
 
             _next = next;
 
-            CryptoService = new CryptoService(Settings.Value.Key);
-
             UrlRegex = new Regex($@"^(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.=']*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
@@ -71,11 +70,6 @@ namespace ImageWizard.Middlewares
         /// ImageLoaderManager
         /// </summary>
         private ImageLoaderManager ImageLoaderManager { get; }
-
-        /// <summary>
-        /// CryptoService
-        /// </summary>
-        private CryptoService CryptoService { get; }
 
         /// <summary>
         /// Logger
@@ -113,25 +107,43 @@ namespace ImageWizard.Middlewares
             string url_loaderType = match.Groups["loaderType"].Value;
             string[] url_filters = match.Groups["filter"].Captures.OfType<Capture>()
                                                                             .Select(x => x.Value)
-                                                                            .Select(x => x.Substring(0, x.Length -1)) //remove "/"
+                                                                            .Select(x => x.Substring(0, x.Length - 1)) //remove "/"
                                                                             .ToArray();
 
-            string signature = CryptoService.Encrypt(url_path);
-
-            //check unsafe keyword or signature
-            if ((Settings.Value.AllowUnsafeUrl && url_signature == "unsafe") == false
-                &&
-                (signature == url_signature) == false)
+            //unsafe url?
+            if (Settings.Value.AllowUnsafeUrl && url_signature == "unsafe")
             {
-                context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                await context.Response.WriteAsync("signature is not valid!");
-
-                return;
+                Logger.LogTrace("unsafe request");
             }
+            else
+            {
+                //check signature
+                string signature = new CryptoService(Settings.Value.Key).Encrypt(url_path);
+
+                if (signature == url_signature)
+                {
+                    Logger.LogTrace("signature is valid");
+                }
+                else
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    await context.Response.WriteAsync("signature is not valid!");
+
+                    Logger.LogTrace("signature is not valid");
+
+                    interceptors.Foreach(x => x.OnFailedSignature());
+
+                    return;
+                }
+            }
+
+            //generate key
+            byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_path));
+            string key = keyInBytes.ToHexcode();
 
             IImageCache imageCache = context.RequestServices.GetService<IImageCache>();
 
-            if(imageCache == null)
+            if (imageCache == null)
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await context.Response.WriteAsync("Image cache not found");
@@ -140,7 +152,7 @@ namespace ImageWizard.Middlewares
             }
 
             //try to get cached image
-            ICachedImage cachedImage = await imageCache.ReadAsync(signature);
+            ICachedImage cachedImage = await imageCache.ReadAsync(key);
 
             //no cached image found?
             if (cachedImage == null)
@@ -172,7 +184,7 @@ namespace ImageWizard.Middlewares
                 {
                     Cache = originalImage.CacheSettings,
                     CreatedAt = DateTime.UtcNow,
-                    Signature = signature,
+                    Key = key,
                     Filters = url_filters,
                     LoaderSource = url_loaderSource,
                     LoaderType = url_loaderType,
@@ -190,7 +202,7 @@ namespace ImageWizard.Middlewares
                 else
                 {
                     //load image
-                    using (Image<Rgba32> image = Image.Load(originalImage.Data))
+                    using (Image image = Image.Load(originalImage.Data))
                     {
                         FilterContext filterContext = new FilterContext(Settings.Value, image, targetFormat);
 
@@ -278,8 +290,7 @@ namespace ImageWizard.Middlewares
                 Logger.LogTrace("Save new cached image");
 
                 //create hash of cached image
-                SHA256 sha = SHA256.Create();
-                byte[] hash = sha.ComputeHash(transformedImageData);
+                byte[] hash = SHA256.Create().ComputeHash(transformedImageData);
 
                 imageMetadata.Hash = hash.ToHexcode();
                 imageMetadata.FileLength = transformedImageData.Length;
@@ -288,10 +299,12 @@ namespace ImageWizard.Middlewares
                 if (imageMetadata.NoImageCache == false)
                 {
                     //save cached image
-                    await imageCache.WriteAsync(signature, imageMetadata, transformedImageData);
+                    await imageCache.WriteAsync(key, imageMetadata, transformedImageData);
                 }
 
                 cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(transformedImageData)));
+
+                interceptors.Foreach(x => x.OnCachedImageCreated(cachedImage));
             }
             else
             {
@@ -325,7 +338,7 @@ namespace ImageWizard.Middlewares
                     NoStore = Settings.Value.CacheControl.NoStore
                 };
             }
-            
+
             //set ETag header
             if (Settings.Value.UseETag)
             {
@@ -342,7 +355,7 @@ namespace ImageWizard.Middlewares
             //send response stream
             using (Stream stream = await cachedImage.OpenReadAsync())
             {
-                context.Response.ContentLength = stream.Length;
+                context.Response.ContentLength = cachedImage.Metadata.FileLength;
                 context.Response.ContentType = cachedImage.Metadata.MimeType;
 
                 interceptors.Foreach(x => x.OnResponseSending(context.Response, cachedImage));

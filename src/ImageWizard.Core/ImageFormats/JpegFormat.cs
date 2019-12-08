@@ -24,7 +24,7 @@ namespace ImageWizard.ImageFormats
 
         public string MimeType => MimeTypes.Jpeg;
 
-        public void SaveImage(Image<Rgba32> image, Stream stream)
+        public void SaveImage(Image image, Stream stream)
         {
             image.SaveAsJpeg(stream, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder() { Quality = Quality });
         }

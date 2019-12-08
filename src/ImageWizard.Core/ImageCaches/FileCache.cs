@@ -62,9 +62,7 @@ namespace ImageWizard.ImageStorages
 
         public async Task<ICachedImage> ReadAsync(string key)
         {
-            string keyHex = key.ToHexcode();
-
-            string[] parts = SplitKey(keyHex);
+            string[] parts = SplitKey(key);
 
             string basePath = Path.Combine(parts);
 
@@ -92,9 +90,7 @@ namespace ImageWizard.ImageStorages
 
         public async Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer)
         {
-            string keyHex = key.ToHexcode();
-
-            string[] parts = SplitKey(keyHex);
+            string[] parts = SplitKey(key);
 
             //store transformed image
             DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { HostingEnvironment.ContentRootPath }.Concat(new[] { Settings.Value.Folder }).Concat(parts.Take(parts.Length-1)).ToArray()));

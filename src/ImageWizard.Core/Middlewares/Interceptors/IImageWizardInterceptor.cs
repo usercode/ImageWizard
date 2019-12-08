@@ -11,5 +11,11 @@ namespace ImageWizard.Core.Middlewares
         void OnResponseSending(HttpResponse response, ICachedImage cachedImage);
 
         void OnResponseCompleted(ICachedImage cachedImage);
+
+        void OnCachedImageCreated(ICachedImage cachedImage);
+
+        void OnFailedSignature();
+
+
     }
 }

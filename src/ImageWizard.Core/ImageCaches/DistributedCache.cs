@@ -27,9 +27,11 @@ namespace ImageWizard.Core.ImageCaches
         /// </summary>
         public IDistributedCache Cache { get; }
 
+        private const string KeyPrefix = "ImageWizard:";
+
         public async Task<ICachedImage> ReadAsync(string key)
         {
-            string json = await Cache.GetStringAsync($"{key}#meta");
+            string json = await Cache.GetStringAsync($"{KeyPrefix}{key}#meta");
 
             if (json == null)
             {
@@ -40,7 +42,7 @@ namespace ImageWizard.Core.ImageCaches
 
             return new CachedImage(metadata, async () =>
             {
-                byte[] b = await Cache.GetAsync(key);
+                byte[] b = await Cache.GetAsync($"{KeyPrefix}{key}");
 
                 return new MemoryStream(b);
             });
@@ -50,9 +52,9 @@ namespace ImageWizard.Core.ImageCaches
         {
             string json = JsonSerializer.Serialize(metadata);
 
-            await Cache.SetStringAsync($"{key}#meta", json);
+            await Cache.SetStringAsync($"{KeyPrefix}{key}#meta", json);
 
-            await Cache.SetAsync(key, buffer);
+            await Cache.SetAsync($"{KeyPrefix}{key}", buffer);
         }
     }
 }

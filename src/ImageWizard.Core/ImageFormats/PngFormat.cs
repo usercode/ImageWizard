@@ -14,7 +14,7 @@ namespace ImageWizard.ImageFormats
     {
         public string MimeType => MimeTypes.Png;
 
-        public void SaveImage(Image<Rgba32> image, Stream stream)
+        public void SaveImage(Image image, Stream stream)
         {
             image.SaveAsPng(stream);
         }

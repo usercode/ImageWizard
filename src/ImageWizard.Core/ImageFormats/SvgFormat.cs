@@ -14,7 +14,7 @@ namespace ImageWizard.ImageFormats
     {
         public string MimeType => MimeTypes.Svg;
 
-        public void SaveImage(Image<Rgba32> image, Stream stream)
+        public void SaveImage(Image image, Stream stream)
         {
             //do nothing....
         }

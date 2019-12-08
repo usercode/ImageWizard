@@ -4,8 +4,8 @@ A ASP.NET Core service / middleware to manipulate your images dynamically as alt
 | Package                       | Release | 
 |--------------------------------|-----------------|
 | ImageWizard.Core               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
+| ImageWizard.Client        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Client.svg)](https://www.nuget.org/packages/ImageWizard.Client/) |
 | ImageWizard.MongoDB               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
-| ImageWizard.AspNetCore (URL Builder)        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.AspNetCore.svg)](https://www.nuget.org/packages/ImageWizard.AspNetCore/) |
 | ImageWizard.Piranha | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/) |
 
 ## Overview
@@ -126,7 +126,7 @@ services.AddImageWizard(options =>
 ```
 
 ```csharp
-app.UseEndpoints(x => x.MapImageWizard());
+app.UseImageWizard();
 ```
 
 ## Create custom filter
@@ -192,7 +192,6 @@ URL segment:
 ```csharp
 "/dpr(2.0)/resize(200,100)/"  //calls resize filter with the resolution 400 x 200
 ```
-
 Response header:
 ```csharp
 Content-DPR: 2
@@ -230,7 +229,7 @@ URL segment:
 
 ## ASP.NET Core UrlBuilder
 
-https://www.nuget.org/packages/ImageWizard.AspNetCore/
+https://www.nuget.org/packages/ImageWizard.Client/
 
 Example:
 
@@ -275,15 +274,5 @@ Create url with fluent api
 .Resize(160,140)
 .Jpg(90)
 .BuildUrl()
-```
-## Plugin for Piranha CMS 8.0
-
-ImageWizard.Piranha [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/)
-
-Useful to resize imagefields.
-
-```csharp
-<img src="@Url.ImageWizard().Fetch(Model.Body).Grayscale().Resize(900,900).Blur().BuildUrl()">
-
 ```
 

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Piranha.Extend.Fields;
 using System;
-using ImageWizard.AspNetCore;
 using Microsoft.AspNetCore.Html;
-using ImageWizard.AspNetCore.Builder.Types;
+using ImageWizard.Client.Builder.Types;
 
 namespace ImageWizard.Piranha
 {

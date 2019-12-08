@@ -1,27 +1,13 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using ImageWizard.Client.Builder.Types;
+using ImageWizard.SharedContract;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using ImageWizard.SharedContract.FilterTypes;
-using System.Diagnostics;
-using ImageWizard.SharedContract;
-using ImageWizard.AspNetCore.Builder.Types;
-using Microsoft.AspNetCore.Http;
-using System.Globalization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Caching.Memory;
-using System.Security.Cryptography;
-using System.IO;
-using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Mvc;
-using ImageWizard.AspNetCore;
 
 namespace ImageWizard
 {
@@ -50,11 +36,6 @@ namespace ImageWizard
             IHttpContextAccessor httpContextAccessor,
             IFileVersionProvider fileVersionProvider)
         {
-            if (settings.Value.UseUnsafeUrl == false)
-            {
-                CryptoService = new CryptoService(settings.Value.Key);
-            }
-
             Settings = settings;
             HostingEnvironment = env;
             HttpContextAccessor = httpContextAccessor;
@@ -115,12 +96,15 @@ namespace ImageWizard
             }
             else
             {
-                signature = CryptoService.Encrypt(url.ToString());
+                signature = new CryptoService(Settings.Value.Key).Encrypt(url.ToString());
             }
 
             url.Insert(0, "/");
             url.Insert(0, signature);
-            url.Insert(0, "/");
+            if (Settings.Value.BaseUrl.EndsWith("/") == false)
+            {
+                url.Insert(0, "/");
+            }
             url.Insert(0, Settings.Value.BaseUrl);
 
             return url.ToString();

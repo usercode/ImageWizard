@@ -9,11 +9,6 @@ namespace ImageWizard.Core
     /// </summary>
     public static class Extensions
     {
-        public static string ToHexcode(this string value)
-        {
-            return ToHexcode(Encoding.UTF8.GetBytes(value));
-        }
-
         public static string ToHexcode(this byte[] buffer)
         {
             StringBuilder stringBuilder = new StringBuilder(buffer.Length * 2);

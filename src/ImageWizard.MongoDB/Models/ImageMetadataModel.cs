@@ -16,7 +16,7 @@ namespace ImageWizard.MongoDB.Models
 
         public ObjectId Id { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public string Signature { get; set; }
+        public string Key { get; set; }
         public string Hash { get; set; }
         public string MimeType { get; set; }
         public double? DPR { get; set; }

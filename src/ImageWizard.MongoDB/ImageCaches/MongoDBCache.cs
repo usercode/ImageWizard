@@ -38,7 +38,7 @@ namespace ImageWizard.MongoDB.ImageCaches
             ImageBuffer = new GridFSBucket(Database, new GridFSBucketOptions() { BucketName = "ImageBuffer" });
 
             //create index
-            ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Signature)));
+            ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Key)));
             ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.CreatedAt)));
         }
 
@@ -66,7 +66,7 @@ namespace ImageWizard.MongoDB.ImageCaches
         {
             ImageMetadataModel foundMetadata = await ImageMetadatas
                                                             .AsQueryable()
-                                                            .FirstOrDefaultAsync(x => x.Signature == key);
+                                                            .FirstOrDefaultAsync(x => x.Key == key);
 
             if(foundMetadata == null)
             {
@@ -85,17 +85,18 @@ namespace ImageWizard.MongoDB.ImageCaches
                 CreatedAt = metadata.CreatedAt,
                 Cache = metadata.Cache,
                 Hash = metadata.Hash,
-                Signature = metadata.Signature,
+                Key = metadata.Key,
                 LoaderSource = metadata.LoaderSource,
                 Filters = metadata.Filters,
                 LoaderType = metadata.LoaderType,
                 MimeType = metadata.MimeType,
                 DPR = metadata.DPR,
-                NoImageCache = metadata.NoImageCache
+                NoImageCache = metadata.NoImageCache,
+                FileLength = metadata.FileLength
             };
 
             //upload image metadata
-            await ImageMetadatas.ReplaceOneAsync(Builders<ImageMetadataModel>.Filter.Where(x => x.Signature == key), model, new UpdateOptions() { IsUpsert = true });
+            await ImageMetadatas.ReplaceOneAsync(Builders<ImageMetadataModel>.Filter.Where(x => x.Key == key), model, new UpdateOptions() { IsUpsert = true });
 
             //upload transformed image
             await ImageBuffer.UploadFromBytesAsync(key, buffer);

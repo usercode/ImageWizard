@@ -1,5 +1,4 @@
-﻿using ImageWizard.AspNetCore.Builder;
-using ImageWizard.AspNetCore.Builder.Types;
+﻿using ImageWizard.Client.Builder.Types;
 using ImageWizard.SharedContract.FilterTypes;
 using System;
 using System.Collections.Generic;

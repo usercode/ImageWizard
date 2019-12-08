@@ -1,5 +1,4 @@
-﻿using ImageWizard.AspNetCore.Builder;
-using ImageWizard.AspNetCore.Builder.Types;
+﻿using ImageWizard.Client.Builder.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;

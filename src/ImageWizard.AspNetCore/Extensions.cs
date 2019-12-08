@@ -1,5 +1,4 @@
-﻿using ImageWizard.AspNetCore;
-using ImageWizard.AspNetCore.Builder.Types;
+﻿using ImageWizard.Client.Builder.Types;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;

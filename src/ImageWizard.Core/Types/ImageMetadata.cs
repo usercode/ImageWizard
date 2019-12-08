@@ -25,7 +25,7 @@ namespace ImageWizard.Services.Types
         /// <summary>
         /// Signature
         /// </summary>
-        public string Signature { get; set; }
+        public string Key { get; set; }
 
         /// <summary>
         /// Hash

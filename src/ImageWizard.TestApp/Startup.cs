@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using ImageWizard.AspNetCore;
 using ImageWizard.MongoDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ImageWizard.Analytics;
 
 namespace ImageWizard.TestApp
 {
@@ -27,14 +27,23 @@ namespace ImageWizard.TestApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddImageWizard(x => x.AllowUnsafeUrl = true)
+            services.AddImageWizard(x =>
+            {
+                x.AllowUnsafeUrl = true;
+                //x.Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
+            })
                 //.SetFileCache()
                 //.SetMongoDBCache()
                 .AddFileLoader(x => x.Folder = "FileStorage")
                 .AddYoutubeLoader()
-                .AddGravatarLoader();
+                .AddGravatarLoader()
+                .AddAnalytics();
 
-            services.AddImageWizardClient(x => x.UseUnsafeUrl = true);
+            services.AddImageWizardClient(x =>
+            {
+                x.UseUnsafeUrl = true;
+                //x.Key = x.Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
+            });
 
             services.AddRazorPages();
         }

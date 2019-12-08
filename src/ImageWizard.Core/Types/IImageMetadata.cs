@@ -7,7 +7,7 @@ namespace ImageWizard.Core.Types
     public interface IImageMetadata
     {
         DateTime? CreatedAt { get; set; }
-        string Signature { get; set; }
+        string Key { get; set; }
         string Hash { get; set; }
         string MimeType { get; set; }
         string[] Filters { get; set; }
