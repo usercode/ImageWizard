@@ -14,4 +14,4 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Build with dotnet
-      run: dotnet build "src\ImageWiazrd.Core" --configuration Release
+      run: dotnet build "src\ImageWizard.Core" --configuration Release
