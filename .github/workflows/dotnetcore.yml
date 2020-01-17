@@ -14,6 +14,8 @@ jobs:
       with:
         dotnet-version: 3.1.101
         source-url: https://nuget.pkg.github.com/usercode/index.json
+      env:
+       NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}  
     - name: Build with dotnet
       run: dotnet build --configuration Release "src\ImageWizard.Core"
     - name: Create the package
