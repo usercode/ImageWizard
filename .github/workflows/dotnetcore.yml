@@ -13,5 +13,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
+        source-url: https://nuget.pkg.github.com/usercode/index.json
     - name: Build with dotnet
-      run: dotnet build "src\ImageWizard.Core" --configuration Release
+      run: dotnet build --configuration Release "src\ImageWizard.Core"
+    - name: Create the package
+      run: dotnet pack --configuration Release "src\ImageWizard.Core"
+    - name: Publish the package to GPR
+      run: dotnet nuget push "src\ImageWizard.Core\bin\Release\*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "test"
