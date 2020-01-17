@@ -21,4 +21,4 @@ jobs:
     - name: Create the package
       run: dotnet pack --configuration Release "src\ImageWizard.Core"
     - name: Publish the package to GPR
-      run: dotnet nuget push "src\ImageWizard.Core\bin\Release\*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "test"
+      run: dotnet nuget push "src\ImageWizard.Core\bin\Release\*.nupkg"
