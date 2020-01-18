@@ -18,7 +18,7 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release ./src/ImageWizard.Core
     - name: Run unit tests
-      run: dotnet test    
+      run: dotnet test ./src/ImageWizard.Core  
     - name: Create the package
       run: dotnet pack --configuration Release ./src/ImageWizard.Core
     - name: Publish the package to GPR
