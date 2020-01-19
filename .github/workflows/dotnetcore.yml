@@ -13,8 +13,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-      env:
-       NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}  
     - name: Build with dotnet
       run: dotnet build --configuration Release ./src/ImageWizard.Core
     - name: Run unit tests
@@ -22,6 +20,6 @@ jobs:
     - name: Create the package
       run: dotnet pack --configuration Release ./src/ImageWizard.Core
     - name: Publish to github packages
-      run: dotnet nuget push ./src/ImageWizard.Core/bin/Release/*.nupkg --source "github" 
+      run: dotnet nuget push ./src/ImageWizard.Core/bin/Release/*.nupkg -s https://nuget.pkg.github.com/usercode/index.json -k ${{secrets.GITHUB_TOKEN}}
     - name: Publish to nuget
       run: dotnet nuget push ./src/ImageWizard.Core/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
