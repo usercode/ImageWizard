@@ -20,6 +20,6 @@ jobs:
     - name: Create the package
       run: dotnet pack --configuration Release ./src/ImageWizard.Core
     - name: Publish to github packages
-      run: dotnet nuget push ./src/ImageWizard.Core/bin/Release/*.nupkg -s https://nuget.pkg.github.com/usercode/index.json -k ${{secrets.GITHUB_TOKEN}}
+      run: dotnet nuget push ./src/ImageWizard.Core/bin/Release/*.nupkg -s https://nuget.pkg.github.com/usercode/index.json
     - name: Publish to nuget
       run: dotnet nuget push ./src/ImageWizard.Core/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
