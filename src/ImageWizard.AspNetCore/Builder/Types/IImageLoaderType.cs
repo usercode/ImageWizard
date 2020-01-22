@@ -8,6 +8,6 @@ namespace ImageWizard.Client.Builder.Types
 {
     public interface IImageLoaderType : IImageBuildUrl, IImageUrlBuilder
     {
-        IImageFilters Image(string loaderType, string value);
+        IImageFilters Image(string loaderType, string loaderSource);
     }
 }

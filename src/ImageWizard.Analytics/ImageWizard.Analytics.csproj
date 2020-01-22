@@ -2,10 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.4.1</Version>
+    <Authors>usercode</Authors>
+    <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\" />
   </ItemGroup>
 
 </Project>

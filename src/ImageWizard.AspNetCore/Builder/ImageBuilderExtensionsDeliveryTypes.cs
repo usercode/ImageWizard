@@ -45,8 +45,7 @@ namespace ImageWizard
                 return sb.ToString();
             }
 
-            var md5 = MD5.Create();
-            byte[] hashBuffer = md5.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
+            byte[] hashBuffer = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
 
             imageUrlBuilder.Image("gravatar", GetHashString(hashBuffer));
 

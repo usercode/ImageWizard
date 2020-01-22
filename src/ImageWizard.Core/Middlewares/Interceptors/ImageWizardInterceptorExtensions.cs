@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ImageWizard
 {
-    public static class ImageWizardInterceptosExtensions
+    public static class ImageWizardInterceptorExtensions
     {
         public static IImageWizardBuilder AddInterceptor<TInterceptor>(this IImageWizardBuilder builder)
           where TInterceptor : class, IImageWizardInterceptor
