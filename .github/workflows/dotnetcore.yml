@@ -1,6 +1,9 @@
 name: .NET Core
 
-on: [push]
+on: 
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -18,10 +21,6 @@ jobs:
     - name: Run unit tests
       run: dotnet test ./src/ImageWizard.Core  
     - name: Create the package
-      run: dotnet pack --configuration Release ./src/ImageWizard.Core
-    - name: Add nuget source
-      run: nuget source Add -Name "GitHub" -Source "https://nuget.pkg.github.com/phanatic/usercode/index.json" -UserName usercode
-    - name: Publish to github packages      
-      run: dotnet nuget push ./src/ImageWizard.Core/bin/Release/*.nupkg -s "GitHub"
+      run: dotnet pack --configuration Release ./src/ImageWizard.Core   
     - name: Publish to nuget
       run: dotnet nuget push ./src/ImageWizard.Core/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
