@@ -16,6 +16,7 @@ using ImageWizard.SharedContract.FilterTypes;
 using ImageWizard.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -27,6 +28,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -43,7 +45,7 @@ namespace ImageWizard.Middlewares
 
         public ImageWizardMiddleware(
             RequestDelegate next,
-            IOptions<ImageWizardSettings> settings,
+            IOptions<ImageWizardOptions> settings,
             ILogger<ImageWizardMiddleware> logger,
             FilterManager filterManager,
             ImageLoaderManager imageLoaderManager
@@ -59,7 +61,7 @@ namespace ImageWizard.Middlewares
             UrlRegex = new Regex($@"^(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.=']*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
-        private IOptions<ImageWizardSettings> Settings { get; }
+        private IOptions<ImageWizardOptions> Settings { get; }
 
         /// <summary>
         /// FilterManager
@@ -83,7 +85,7 @@ namespace ImageWizard.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            string path = (string)context.GetRouteValue("imagePath");
+            string path = WebUtility.UrlDecode((string)context.GetRouteValue("imagePath"));
 
             if (context.Request.QueryString.HasValue)
             {
@@ -141,6 +143,7 @@ namespace ImageWizard.Middlewares
             byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_path));
             string key = keyInBytes.ToHexcode();
 
+            //get image cache
             IImageCache imageCache = context.RequestServices.GetService<IImageCache>();
 
             if (imageCache == null)
@@ -151,178 +154,214 @@ namespace ImageWizard.Middlewares
                 return;
             }
 
-            //try to get cached image
-            ICachedImage cachedImage = await imageCache.ReadAsync(key);
+            //get image loader
+            Type imageLoaderType = ImageLoaderManager.Get(url_loaderType);
+            IImageLoader loader = (IImageLoader)context.RequestServices.GetService(imageLoaderType);
 
+            if (loader == null)
+            {
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                await context.Response.WriteAsync("image loader not found: " + url_loaderType);
+
+                return;
+            }
+
+            //try to get the cached image
+            ICachedImage cachedImage = await imageCache.ReadAsync(key);
+            
+            bool createCachedImage = false;
+            
             //no cached image found?
             if (cachedImage == null)
             {
+                createCachedImage = true;
+            }
+            else //use existing cached image
+            {
+                switch (loader.RefreshMode)
+                {
+                    case ImageLoaderRefreshMode.None:
+                        createCachedImage = false;
+                        break;
+
+                    case ImageLoaderRefreshMode.EveryTime:
+                        createCachedImage = true;
+                        break;
+
+                    case ImageLoaderRefreshMode.UseRemoteCacheControl:
+                        if(cachedImage.Metadata.Cache.NoStore == true
+                            || cachedImage.Metadata.Cache.NoCache == true
+                            || (cachedImage.Metadata.Cache.Expires != null && cachedImage.Metadata.Cache.Expires < DateTime.UtcNow)
+                            //(cachedImage.Metadata.Cache.LastModified != null)
+                            )
+                        {
+                            createCachedImage = true;
+                        }
+                        break;
+
+                    default:
+                        throw new Exception("unknown refresh mode");
+                }
+            }
+
+            //create cached image
+            if (createCachedImage == true)
+            {
                 Logger.LogTrace("Create cached image");
 
-                Type imageLoaderType = ImageLoaderManager.Get(url_loaderType);
-                IImageLoader loader = (IImageLoader)context.RequestServices.GetService(imageLoaderType);
+                //get original image
+                OriginalImage originalImage = await loader.GetAsync(url_loaderSource, cachedImage);
 
-                if (loader == null)
+                if (originalImage != null) //is there a new version of original image?
                 {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    await context.Response.WriteAsync("image loader not found: " + url_loaderType);
+                    IImageFormat targetFormat = ImageFormatHelper.Parse(originalImage.MimeType);
+
+                    byte[] transformedImageData;
+
+                    //create metadata
+                    ImageMetadata imageMetadata = new ImageMetadata()
+                    {
+                        Cache = originalImage.Cache,
+                        Created = DateTime.UtcNow,
+                        Key = key,
+                        Filters = url_filters,
+                        LoaderSource = url_loaderSource,
+                        LoaderType = url_loaderType,
+                        MimeType = targetFormat.MimeType,
+                        DPR = null
+                    };
+
+                    bool disableCache = false;
+
+                    //skip svg
+                    if (targetFormat is SvgFormat)
+                    {
+                        Logger.LogTrace("SVG file: skip filters");
+
+                        transformedImageData = originalImage.Data;
+                    }
+                    else
+                    {
+                        //load image
+                        using (Image image = Image.Load(originalImage.Data))
+                        {
+                            FilterContext filterContext = new FilterContext(Settings.Value, image, targetFormat);
+
+                            //use clint hints?
+                            if (Settings.Value.UseClintHints)
+                            {
+                                //check DPR value from request
+                                string ch_dpr = context.Request.Headers["DPR"].FirstOrDefault();
+                                string ch_width = context.Request.Headers["Width"].FirstOrDefault();
+                                string ch_viewportWidth = context.Request.Headers["Viewport-Width"].FirstOrDefault();
+
+                                if (ch_dpr != null)
+                                {
+                                    filterContext.ClientHints.DPR = double.Parse(ch_dpr, CultureInfo.InvariantCulture);
+                                    filterContext.DPR = filterContext.ClientHints.DPR;
+                                }
+
+                                if (ch_width != null)
+                                {
+                                    filterContext.ClientHints.Width = int.Parse(ch_width, CultureInfo.InvariantCulture);
+                                }
+
+                                if (ch_viewportWidth != null)
+                                {
+                                    filterContext.ClientHints.ViewportWidth = int.Parse(ch_viewportWidth, CultureInfo.InvariantCulture);
+                                }
+                            }
+
+                            //execute filters
+                            foreach (string filter in url_filters)
+                            {
+                                //find and execute filter
+                                IFilterAction foundFilter = FilterManager.FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
+
+                                if (foundFilter != null)
+                                {
+                                    Logger.LogTrace("Filter executed: " + filter);
+                                }
+                                else
+                                {
+                                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                                    await context.Response.WriteAsync($"filter was not found: {filter}");
+
+                                    return;
+                                }
+                            }
+
+                            //check max width and height
+                            bool change = false;
+
+                            int width = image.Width;
+                            int height = image.Height;
+
+                            if (Settings.Value.ImageMaxWidth != null && width > Settings.Value.ImageMaxWidth)
+                            {
+                                change = true;
+                                width = Settings.Value.ImageMaxWidth.Value;
+                            }
+
+                            if (Settings.Value.ImageMaxHeight != null && height > Settings.Value.ImageMaxHeight)
+                            {
+                                change = true;
+                                height = Settings.Value.ImageMaxHeight.Value;
+                            }
+
+                            if (change == true)
+                            {
+                                new ResizeFilter().Resize(width, height, ResizeMode.Max, filterContext);
+                            }
+
+                            MemoryStream mem = new MemoryStream();
+
+                            //generate image
+                            filterContext.ImageFormat.SaveImage(image, mem);
+
+                            transformedImageData = mem.ToArray();
+
+                            //update some metadata
+                            imageMetadata.DPR = filterContext.DPR;
+                            imageMetadata.MimeType = filterContext.ImageFormat.MimeType;
+
+                            disableCache = filterContext.NoImageCache;
+                        }
+                    }
+
+                    Logger.LogTrace("Save new cached image");
+
+                    //create hash of cached image
+                    byte[] hash = SHA256.Create().ComputeHash(transformedImageData);
+
+                    imageMetadata.Hash = hash.ToHexcode();
+                    imageMetadata.FileLength = transformedImageData.Length;
+
+                    cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(transformedImageData)));
+
+                    //disable cache?
+                    if (disableCache == false && (loader.RefreshMode == ImageLoaderRefreshMode.UseRemoteCacheControl && cachedImage.Metadata.Cache.NoStore) == false)
+                    {
+                        //save cached image
+                        await imageCache.WriteAsync(key, cachedImage);
+                    }
+
+                    interceptors.Foreach(x => x.OnCachedImageCreated(cachedImage));
+                }
+            }
+
+            //send "304-NotModified" if etag is valid
+            if (Settings.Value.UseETag)
+            {
+                bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == $"\"{cachedImage.Metadata.Hash}\"");
+
+                if (isValid == true)
+                {
+                    Logger.LogTrace("Operation completed: 304 Not modified");
+
+                    context.Response.StatusCode = StatusCodes.Status304NotModified;
 
                     return;
-                }
-
-                Logger.LogTrace("Get original image: " + url_loaderSource);
-
-                //download image
-                OriginalImage originalImage = await loader.GetAsync(url_loaderSource);
-
-                IImageFormat targetFormat = ImageFormatHelper.Parse(originalImage.MimeType);
-
-                byte[] transformedImageData;
-
-                //create metadata
-                ImageMetadata imageMetadata = new ImageMetadata()
-                {
-                    Cache = originalImage.CacheSettings,
-                    CreatedAt = DateTime.UtcNow,
-                    Key = key,
-                    Filters = url_filters,
-                    LoaderSource = url_loaderSource,
-                    LoaderType = url_loaderType,
-                    MimeType = targetFormat.MimeType,
-                    DPR = null
-                };
-
-                //skip svg
-                if (targetFormat is SvgFormat)
-                {
-                    Logger.LogTrace("SVG file: skip filters");
-
-                    transformedImageData = originalImage.Data;
-                }
-                else
-                {
-                    //load image
-                    using (Image image = Image.Load(originalImage.Data))
-                    {
-                        FilterContext filterContext = new FilterContext(Settings.Value, image, targetFormat);
-
-                        //use clint hints?
-                        if (Settings.Value.UseClintHints)
-                        {
-                            //check DPR value from request
-                            string ch_dpr = context.Request.Headers["DPR"].FirstOrDefault();
-                            string ch_width = context.Request.Headers["Width"].FirstOrDefault();
-                            string ch_viewportWidth = context.Request.Headers["Viewport-Width"].FirstOrDefault();
-
-                            if (ch_dpr != null)
-                            {
-                                filterContext.ClientHints.DPR = double.Parse(ch_dpr, CultureInfo.InvariantCulture);
-                                filterContext.DPR = filterContext.ClientHints.DPR;
-                            }
-
-                            if (ch_width != null)
-                            {
-                                filterContext.ClientHints.Width = int.Parse(ch_width, CultureInfo.InvariantCulture);
-                            }
-
-                            if (ch_viewportWidth != null)
-                            {
-                                filterContext.ClientHints.ViewportWidth = int.Parse(ch_viewportWidth, CultureInfo.InvariantCulture);
-                            }
-                        }
-
-                        //execute filters
-                        foreach (string filter in url_filters)
-                        {
-                            //find and execute filter
-                            IFilterAction foundFilter = FilterManager.FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
-
-                            if (foundFilter != null)
-                            {
-                                Logger.LogTrace("Filter executed: " + filter);
-                            }
-                            else
-                            {
-                                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                                await context.Response.WriteAsync($"filter was not found: {filter}");
-
-                                return;
-                            }
-                        }
-
-                        //check max width and height
-                        bool change = false;
-
-                        int width = image.Width;
-                        int height = image.Height;
-
-                        if (Settings.Value.ImageMaxWidth != null && width > Settings.Value.ImageMaxWidth)
-                        {
-                            change = true;
-                            width = Settings.Value.ImageMaxWidth.Value;
-                        }
-
-                        if (Settings.Value.ImageMaxHeight != null && height > Settings.Value.ImageMaxHeight)
-                        {
-                            change = true;
-                            height = Settings.Value.ImageMaxHeight.Value;
-                        }
-
-                        if (change == true)
-                        {
-                            new ResizeFilter().Resize(width, height, ResizeMode.Max, filterContext);
-                        }
-
-                        MemoryStream mem = new MemoryStream();
-
-                        //generate image
-                        filterContext.ImageFormat.SaveImage(image, mem);
-
-                        transformedImageData = mem.ToArray();
-
-                        //update some metadata
-                        imageMetadata.DPR = filterContext.DPR;
-                        imageMetadata.MimeType = filterContext.ImageFormat.MimeType;
-                        imageMetadata.NoImageCache = filterContext.NoImageCache;
-                    }
-                }
-
-                Logger.LogTrace("Save new cached image");
-
-                //create hash of cached image
-                byte[] hash = SHA256.Create().ComputeHash(transformedImageData);
-
-                imageMetadata.Hash = hash.ToHexcode();
-                imageMetadata.FileLength = transformedImageData.Length;
-
-                //disable cache?
-                if (imageMetadata.NoImageCache == false)
-                {
-                    //save cached image
-                    await imageCache.WriteAsync(key, imageMetadata, transformedImageData);
-                }
-
-                cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(transformedImageData)));
-
-                interceptors.Foreach(x => x.OnCachedImageCreated(cachedImage));
-            }
-            else
-            {
-                Logger.LogTrace("Cached image found");
-
-                //check ETag from request
-                if (Settings.Value.UseETag)
-                {
-                    bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == $"\"{cachedImage.Metadata.Hash}\"");
-
-                    if (isValid == true)
-                    {
-                        Logger.LogTrace("Operation completed: 304 Not modified");
-
-                        context.Response.StatusCode = StatusCodes.Status304NotModified;
-
-                        return;
-                    }
                 }
             }
 
@@ -349,18 +388,26 @@ namespace ImageWizard.Middlewares
             if (cachedImage.Metadata.DPR != null)
             {
                 context.Response.Headers.Add("Content-DPR", cachedImage.Metadata.DPR.Value.ToString(CultureInfo.InvariantCulture));
-                context.Response.Headers.Add("Vary", "DPR");
+                context.Response.Headers.Add(HeaderNames.Vary, "DPR");
             }
 
-            //send response stream
-            using (Stream stream = await cachedImage.OpenReadAsync())
-            {
-                context.Response.ContentLength = cachedImage.Metadata.FileLength;
-                context.Response.ContentType = cachedImage.Metadata.MimeType;
+            //context.Response.Headers[HeaderNames.AcceptRanges] = "bytes";
 
+            context.Response.ContentLength = cachedImage.Metadata.FileLength;
+            context.Response.ContentType = cachedImage.Metadata.MimeType;
+
+            //is HEAD request?
+            bool isHeadRequst = context.Request.Method.Equals("HEAD", StringComparison.OrdinalIgnoreCase);
+
+            if (isHeadRequst == false)
+            {
                 interceptors.Foreach(x => x.OnResponseSending(context.Response, cachedImage));
 
-                await stream.CopyToAsync(context.Response.Body);
+                //send response stream
+                using (Stream stream = await cachedImage.OpenReadAsync())
+                {
+                    await stream.CopyToAsync(context.Response.Body);
+                }
 
                 interceptors.Foreach(x => x.OnResponseCompleted(cachedImage));
             }

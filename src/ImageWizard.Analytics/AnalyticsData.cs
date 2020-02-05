@@ -6,13 +6,14 @@ namespace ImageWizard.Analytics
 {
     public class AnalyticsData : IAnalyticsData
     {
-        public long TotalRequests { get; set; }
+        public long TransferedImages { get; set; }
 
-        public long SucceededRequests { get; set; }
+        public long TransferedImagesInBytes { get; set; }
 
         public long InvalidSignature { get; set; }
 
-        public long CreatedCachedImage { get; set; }
-       
+        public long CreatedImages { get; set; }
+
+        public long CreatedImagesInBytes { get; set; }
     }
 }

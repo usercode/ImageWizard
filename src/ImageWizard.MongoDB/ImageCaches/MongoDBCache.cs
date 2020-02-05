@@ -21,7 +21,7 @@ namespace ImageWizard.MongoDB.ImageCaches
     /// </summary>
     public class MongoDBCache : IImageCache
     {
-        public MongoDBCache(IOptions<MongoDBCacheSettings> settings)
+        public MongoDBCache(IOptions<MongoDBCacheOptions> settings)
         {
             var mongoSetttings = new Mongo.MongoClientSettings() { Server = new Mongo.MongoServerAddress(settings.Value.Hostname) };
             
@@ -39,7 +39,7 @@ namespace ImageWizard.MongoDB.ImageCaches
 
             //create index
             ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Key)));
-            ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.CreatedAt)));
+            ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Created)));
         }
 
         /// <summary>
@@ -78,28 +78,30 @@ namespace ImageWizard.MongoDB.ImageCaches
             return cachedImage;
         }
 
-        public async Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer)
+        public async Task WriteAsync(string key, ICachedImage cachedImage)
         {
             ImageMetadataModel model = new ImageMetadataModel()
             {
-                CreatedAt = metadata.CreatedAt,
-                Cache = metadata.Cache,
-                Hash = metadata.Hash,
-                Key = metadata.Key,
-                LoaderSource = metadata.LoaderSource,
-                Filters = metadata.Filters,
-                LoaderType = metadata.LoaderType,
-                MimeType = metadata.MimeType,
-                DPR = metadata.DPR,
-                NoImageCache = metadata.NoImageCache,
-                FileLength = metadata.FileLength
+                Created = cachedImage.Metadata.Created,
+                Cache = cachedImage.Metadata.Cache,
+                Hash = cachedImage.Metadata.Hash,
+                Key = cachedImage.Metadata.Key,
+                LoaderSource = cachedImage.Metadata.LoaderSource,
+                Filters = cachedImage.Metadata.Filters,
+                LoaderType = cachedImage.Metadata.LoaderType,
+                MimeType = cachedImage.Metadata.MimeType,
+                DPR = cachedImage.Metadata.DPR,
+                FileLength = cachedImage.Metadata.FileLength
             };
 
             //upload image metadata
-            await ImageMetadatas.ReplaceOneAsync(Builders<ImageMetadataModel>.Filter.Where(x => x.Key == key), model, new UpdateOptions() { IsUpsert = true });
+            await ImageMetadatas.ReplaceOneAsync(Builders<ImageMetadataModel>.Filter.Where(x => x.Key == key), model, new ReplaceOptions() { IsUpsert = true });
 
-            //upload transformed image
-            await ImageBuffer.UploadFromBytesAsync(key, buffer);
+            using (Stream cachedImageStream = await cachedImage.OpenReadAsync())
+            {
+                //upload transformed image
+                await ImageBuffer.UploadFromStreamAsync(key, cachedImageStream);
+            }
         }
     }
 }

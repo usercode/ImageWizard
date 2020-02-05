@@ -2,19 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Authors>usercode</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <Version>1.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.10.1" />
-    <PackageReference Include="MongoDB.Driver.GridFS" Version="2.10.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.2.0" />
+    
+  </ItemGroup>
 </Project>

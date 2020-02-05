@@ -4,10 +4,11 @@ using System.Text;
 
 namespace ImageWizard.Core.ImageLoaders.Files
 {
-    public class FileLoaderSettings
+    public class FileLoaderOptions : ImageLoaderOptions
     {
-        public FileLoaderSettings()
+        public FileLoaderOptions()
         {
+            RefreshMode = ImageLoaderRefreshMode.EveryTime;
             Folder = "FileStorage";
         }
 

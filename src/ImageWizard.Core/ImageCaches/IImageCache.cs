@@ -29,6 +29,6 @@ namespace ImageWizard.ImageStorages
         /// <param name="imageFormat"></param>
         /// <param name="transformedImageData"></param>
         /// <returns></returns>
-        Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer);
+        Task WriteAsync(string key, ICachedImage cachedImage);
     }
 }

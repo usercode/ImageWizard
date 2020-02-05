@@ -11,24 +11,18 @@ namespace ImageWizard.Services.Types
     /// </summary>
     public class OriginalImage
     {
-        public OriginalImage(string url, string mimeType, byte[] data)
-            : this(url, mimeType, data, new CacheSettings())
+        public OriginalImage(string mimeType, byte[] data)
+            : this(mimeType, data, new CacheSettings())
         {
         }
 
-        public OriginalImage(string url, string mimeType, byte[] data, CacheSettings cacheSettings)
+        public OriginalImage(string mimeType, byte[] data, CacheSettings cacheSettings)
         {
-            Url = url;
             MimeType = mimeType;
             Data = data;
 
-            CacheSettings = cacheSettings;
+            Cache = cacheSettings ?? throw new ArgumentNullException(nameof(cacheSettings));
         }
-
-        /// <summary>
-        /// Url
-        /// </summary>
-        public string Url { get; set; }
 
         /// <summary>
         /// MimeType
@@ -41,8 +35,8 @@ namespace ImageWizard.Services.Types
         public byte[] Data { get; }
 
         /// <summary>
-        /// ETag
+        /// Cache
         /// </summary>
-        public CacheSettings CacheSettings { get; set; }
+        public CacheSettings Cache { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace ImageWizard
                                                          .UseMiddleware<ImageWizardMiddleware>()
                                                          .Build();
 
-            return endpoints.Map($"{path}/{{*imagePath}}", pipeline).WithDisplayName("ImageWizard");
+            return endpoints.MapMethods($"{path}/{{*imagePath}}", new[] { "GET", "HEAD" }, pipeline).WithDisplayName("ImageWizard");
         }
 
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services)
@@ -36,7 +36,7 @@ namespace ImageWizard
             return AddImageWizard(services, options => { });
         }
 
-        public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardSettings> settingsSetup)
+        public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardOptions> settingsSetup)
         {
             services.Configure(settingsSetup);
 

@@ -15,7 +15,7 @@ namespace ImageWizard
             return AddFileLoader(wizardConfiguration, setup => { });
         }
 
-        public static IImageWizardBuilder AddFileLoader(this IImageWizardBuilder wizardConfiguration, Action<FileLoaderSettings> setup)
+        public static IImageWizardBuilder AddFileLoader(this IImageWizardBuilder wizardConfiguration, Action<FileLoaderOptions> setup)
         {
             wizardConfiguration.Services.Configure(setup);
             wizardConfiguration.Services.AddSingleton<FileLoader>();

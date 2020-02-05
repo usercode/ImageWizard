@@ -3,7 +3,7 @@ name: .NET Core
 on: 
   push:
     branches:
-      - master
+      - development
 
 jobs:
   build:
@@ -17,10 +17,10 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Build with dotnet
-      run: dotnet build --configuration Release ./src/ImageWizard.Core
+      run: dotnet build --configuration Release "./src/ImageWizard.Core"
     - name: Run unit tests
-      run: dotnet test ./src/ImageWizard.Core  
+      run: dotnet test "./src/ImageWizard.Core"
     - name: Create the package
-      run: dotnet pack --configuration Release ./src/ImageWizard.Core   
-    - name: Publish to nuget
-      run: dotnet nuget push ./src/ImageWizard.Core/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
+      run: dotnet pack --configuration Release "./src/ImageWizard.Core"
+    - name: Publish to github packages
+      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" --source "github"

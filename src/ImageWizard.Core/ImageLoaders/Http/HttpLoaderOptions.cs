@@ -8,10 +8,12 @@ namespace ImageWizard.Core.ImageLoaders
     /// <summary>
     /// HttpLoaderSettings
     /// </summary>
-    public class HttpLoaderSettings
+    public class HttpLoaderOptions : ImageLoaderOptions
     {
-        public HttpLoaderSettings()
+        public HttpLoaderOptions()
         {
+            RefreshMode = ImageLoaderRefreshMode.None;
+
             Headers = new List<HttpHeaderItem>();
         }
 
@@ -20,7 +22,7 @@ namespace ImageWizard.Core.ImageLoaders
         /// </summary>
         public ICollection<HttpHeaderItem> Headers { get; }
 
-        public HttpLoaderSettings SetHeader(string name, string value)
+        public HttpLoaderOptions SetHeader(string name, string value)
         {
             Headers.Add(new HttpHeaderItem(name, value));
 

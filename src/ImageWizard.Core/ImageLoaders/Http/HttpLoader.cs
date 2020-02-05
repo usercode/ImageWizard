@@ -9,7 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -18,19 +20,25 @@ namespace ImageWizard.ImageLoaders
     /// <summary>in
     /// ImageDownloader
     /// </summary>
-    public class HttpLoader : IImageLoader
+    public class HttpLoader : ImageLoaderBase
     {
-        public HttpLoader(HttpClient httpCLient, IOptions<HttpLoaderSettings> settings, IHttpContextAccessor httpContextAccessor)
+        public HttpLoader(HttpClient httpClient, IOptions<HttpLoaderOptions> options, IHttpContextAccessor httpContextAccessor)
         {
-            HttpClient = httpCLient;
-            Settings = settings;
+            HttpClient = httpClient;
             HttpContextAccessor = httpContextAccessor;
 
-            foreach (HttpHeaderItem header in Settings.Value.Headers)
+            Options = options.Value;
+
+            foreach (HttpHeaderItem header in options.Value.Headers)
             {
                 HttpClient.DefaultRequestHeaders.Add(header.Name, header.Value);
             }
         }
+
+        /// <summary>
+        /// Options
+        /// </summary>
+        private HttpLoaderOptions Options { get; }
 
         /// <summary>
         /// HttpClient
@@ -38,52 +46,55 @@ namespace ImageWizard.ImageLoaders
         private HttpClient HttpClient { get; }
 
         /// <summary>
-        /// Settings
-        /// </summary>
-        public IOptions<HttpLoaderSettings> Settings { get; }
-
-        /// <summary>
         /// HttpContextAccessor
         /// </summary>
-        public IHttpContextAccessor HttpContextAccessor { get; }
+        private IHttpContextAccessor HttpContextAccessor { get; }
+
+        public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
         /// <summary>
         /// Download
         /// </summary>
-        /// <param name="requestUri"></param>
+        /// <param name="source"></param>
         /// <returns></returns>
-        public async Task<OriginalImage> GetAsync(string requestUri)
+        public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
         {
             //is relative url?
-            if (Regex.Match(requestUri, "^https?://").Success == false)
+            if (Regex.Match(source, "^https?://", RegexOptions.Compiled).Success == false)
             {
-                requestUri = $"{HttpContextAccessor.HttpContext.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{requestUri}";
+                //create absolute url
+                source = $"{HttpContextAccessor.HttpContext.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{source}";
             }
 
-            HttpResponseMessage response = await HttpClient.GetAsync(requestUri);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri(source));
+
+            if (existingCachedImage != null)
+            {
+                if (existingCachedImage.Metadata.Cache.ETag != null)
+                {
+                    request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue($"\"{existingCachedImage.Metadata.Cache.ETag}\""));
+                }
+            }
+
+            HttpResponseMessage response = await HttpClient.SendAsync(request);
+
+            if(response.StatusCode == HttpStatusCode.NotModified)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+
             byte[] data = await response.Content.ReadAsByteArrayAsync();
 
             string mimeType = response.Content.Headers.ContentType?.MediaType;
 
             if (mimeType == null)
             {
-                //mimeType = ImageFormatHelper.GetMimeTypeByExtension(requestUri);
-
                 throw new Exception("no content-type available");
             }
 
-            CacheSettings cacheSettings = new CacheSettings();
-
-            if (response.Headers.CacheControl != null)
-            {
-                cacheSettings.NoStore = response.Headers.CacheControl.NoStore;
-                cacheSettings.NoCache = response.Headers.CacheControl.NoCache;
-                cacheSettings.MaxAge = response.Headers.CacheControl.MaxAge;
-            }
-
-            cacheSettings.ETag = response.Headers.ETag?.Tag;
-
-            return new OriginalImage(requestUri, mimeType, data, cacheSettings);
+            return new OriginalImage(mimeType, data, new CacheSettings(response));
         }
     }
 }

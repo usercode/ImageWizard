@@ -16,14 +16,20 @@ namespace ImageWizard.Core.ImageLoaders.Files
     /// <summary>
     /// FileLoader
     /// </summary>
-    public class FileLoader : IImageLoader
+    public class FileLoader : ImageLoaderBase
     {
-        public FileLoader(IOptions<FileLoaderSettings> settings, IWebHostEnvironment hostingEnvironment)
+        public FileLoader(IOptions<FileLoaderOptions> options, IWebHostEnvironment hostingEnvironment)
         {
+            Options = options.Value;
             HostingEnvironment = hostingEnvironment;
 
-            FileProvider = new PhysicalFileProvider(Path.Combine(HostingEnvironment.ContentRootPath, settings.Value.Folder));
+            FileProvider = new PhysicalFileProvider(Path.Combine(HostingEnvironment.ContentRootPath, options.Value.Folder));
         }
+
+        /// <summary>
+        /// Options
+        /// </summary>
+        private FileLoaderOptions Options { get; }
 
         /// <summary>
         /// FileProvider
@@ -35,13 +41,25 @@ namespace ImageWizard.Core.ImageLoaders.Files
         /// </summary>
         private IWebHostEnvironment HostingEnvironment { get; }
 
-        public async Task<OriginalImage> GetAsync(string requestUri)
-        {
-            IFileInfo fileInfo = FileProvider.GetFileInfo(requestUri);
+        public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
-            if(fileInfo.Exists == false)
+        public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
+        {
+            IFileInfo fileInfo = FileProvider.GetFileInfo(source);
+
+            if (fileInfo.Exists == false)
             {
-                throw new Exception("file not found: " + requestUri);
+                throw new Exception("file not found: " + source);
+            }
+
+            string etag = (fileInfo.Length ^ fileInfo.LastModified.UtcTicks).ToString();
+
+            if(existingCachedImage != null)
+            {
+                if(existingCachedImage.Metadata.Cache.ETag == etag)
+                {
+                    return null;
+                }
             }
 
             MemoryStream mem = new MemoryStream((int)fileInfo.Length);
@@ -51,9 +69,9 @@ namespace ImageWizard.Core.ImageLoaders.Files
                 await stream.CopyToAsync(mem);
             }
 
-            string mimeType = ImageFormatHelper.GetMimeTypeByExtension(fileInfo.Name);            
+            string mimeType = ImageFormatHelper.GetMimeTypeByExtension(fileInfo.Name);
 
-            return new OriginalImage(requestUri, mimeType, mem.ToArray());
+            return new OriginalImage(mimeType, mem.ToArray(), new CacheSettings() { ETag = etag });
         }
     }
 }

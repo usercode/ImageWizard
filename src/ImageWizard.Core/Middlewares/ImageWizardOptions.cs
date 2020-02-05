@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace ImageWizard.Settings
 {
     /// <summary>
-    /// ServiceSettings
+    /// ImageWizardOptions
     /// </summary>
-    public class ImageWizardSettings
+    public class ImageWizardOptions
     {
-        public ImageWizardSettings()
+        public ImageWizardOptions()
         {
             UseETag = true;
             UseClintHints = true;

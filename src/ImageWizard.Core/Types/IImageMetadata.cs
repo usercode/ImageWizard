@@ -6,7 +6,7 @@ namespace ImageWizard.Core.Types
 {
     public interface IImageMetadata
     {
-        DateTime? CreatedAt { get; set; }
+        DateTime? Created { get; set; }
         string Key { get; set; }
         string Hash { get; set; }
         string MimeType { get; set; }
@@ -14,7 +14,6 @@ namespace ImageWizard.Core.Types
         string LoaderSource { get; set; }
         string LoaderType { get; set; }
         double? DPR { get; set; }
-        bool NoImageCache { get; set; }
         int FileLength { get; set; }
         CacheSettings Cache { get; }
     }

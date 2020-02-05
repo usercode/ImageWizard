@@ -1,4 +1,7 @@
-﻿using ImageWizard.Services.Types;
+﻿using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Core.Types;
+using ImageWizard.Services.Types;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +15,15 @@ namespace ImageWizard.ImageLoaders
     public interface IImageLoader
     {
         /// <summary>
+        /// RefreshSettings
+        /// </summary>
+        ImageLoaderRefreshMode RefreshMode { get; }
+
+        /// <summary>
         /// GetAsync
         /// </summary>
         /// <param name="requestUri"></param>
         /// <returns></returns>
-        Task<OriginalImage> GetAsync(string requestUri);
+        Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage = null);
     }
 }

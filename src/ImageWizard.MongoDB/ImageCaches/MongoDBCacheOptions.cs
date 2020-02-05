@@ -5,11 +5,11 @@ using System.Text;
 namespace ImageWizard.MongoDB.ImageCaches
 {
     /// <summary>
-    /// MongoDBCacheSettings
+    /// MongoDBCacheOptions
     /// </summary>
-    public class MongoDBCacheSettings
+    public class MongoDBCacheOptions
     {
-        public MongoDBCacheSettings()
+        public MongoDBCacheOptions()
         {
             Hostname = "localhost";
             Database = "ImageWizard";

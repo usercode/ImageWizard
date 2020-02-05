@@ -16,7 +16,7 @@ namespace ImageWizard.MongoDB
             return SetMongoDBCache(wizardConfiguration, options => { });
         }
 
-        public static IImageWizardBuilder SetMongoDBCache(this IImageWizardBuilder wizardConfiguration, Action<MongoDBCacheSettings> cacheSettingsSetup)
+        public static IImageWizardBuilder SetMongoDBCache(this IImageWizardBuilder wizardConfiguration, Action<MongoDBCacheOptions> cacheSettingsSetup)
         {
             wizardConfiguration.Services.Configure(cacheSettingsSetup);
 

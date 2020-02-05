@@ -1,11 +1,13 @@
 ﻿using ImageWizard.Core.Types;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ImageWizard.MongoDB.Models
 {
+    [BsonIgnoreExtraElements]
     public class ImageMetadataModel : IImageMetadata
     {
         public ImageMetadataModel()
@@ -15,12 +17,11 @@ namespace ImageWizard.MongoDB.Models
         }
 
         public ObjectId Id { get; set; }
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? Created { get; set; }
         public string Key { get; set; }
         public string Hash { get; set; }
         public string MimeType { get; set; }
         public double? DPR { get; set; }
-        public bool NoImageCache { get; set; }
         public int FileLength { get; set; }
         public CacheSettings Cache { get; set; }
         public string[] Filters { get; set; }

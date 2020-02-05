@@ -5,13 +5,13 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
-    <Version>1.4.1</Version>
+    <Version>1.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     
-    <PackageReference Include="Piranha" Version="8.0.0" />
+    <PackageReference Include="Piranha" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>

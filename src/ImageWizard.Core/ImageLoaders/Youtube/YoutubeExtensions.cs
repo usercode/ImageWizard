@@ -8,12 +8,18 @@ using System.Text;
 
 namespace ImageWizard
 {
-    public static class YoutubeExtensions
+    public static class YouTubeExtensions
     {
         public static IImageWizardBuilder AddYoutubeLoader(this IImageWizardBuilder wizardConfiguration)
         {
-            wizardConfiguration.Services.AddHttpClient2<YoutubeLoader>();
-            wizardConfiguration.ImageLoaderManager.Register<YoutubeLoader>("youtube");
+            return AddYoutubeLoader(wizardConfiguration, x => { });
+        }
+
+        public static IImageWizardBuilder AddYoutubeLoader(this IImageWizardBuilder wizardConfiguration, Action<YouTubeOptions> options)
+        {
+            wizardConfiguration.Services.Configure(options);
+            wizardConfiguration.Services.AddHttpClient2<YouTubeLoader>();
+            wizardConfiguration.ImageLoaderManager.Register<YouTubeLoader>("youtube");
 
             return wizardConfiguration;
         }

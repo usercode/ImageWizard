@@ -16,7 +16,7 @@ namespace ImageWizard.Filters
     /// </summary>
     public class FilterContext
     {
-        public FilterContext(ImageWizardSettings settings, Image image, IImageFormat imageFormat)
+        public FilterContext(ImageWizardOptions settings, Image image, IImageFormat imageFormat)
         {
             Settings = settings;
             Image = image;
@@ -28,7 +28,7 @@ namespace ImageWizard.Filters
         /// <summary>
         /// Settings
         /// </summary>
-        public ImageWizardSettings Settings { get; }
+        public ImageWizardOptions Settings { get; }
 
         /// <summary>
         /// Image

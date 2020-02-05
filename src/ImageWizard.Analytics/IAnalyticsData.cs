@@ -9,12 +9,12 @@ namespace ImageWizard.Analytics
     /// </summary>
     public interface IAnalyticsData
     {
-        long TotalRequests { get; set; }
-
-        long SucceededRequests { get; set; }
+        long TransferedImages { get; set; }
+        long TransferedImagesInBytes { get; set; }
 
         long InvalidSignature { get; set; }
 
-        long CreatedCachedImage { get; set; }
+        long CreatedImages { get; set; }
+        long CreatedImagesInBytes { get; set; }
     }
 }

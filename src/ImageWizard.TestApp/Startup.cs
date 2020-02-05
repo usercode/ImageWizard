@@ -12,6 +12,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ImageWizard.Analytics;
+using ImageWizard.Azure;
+using System.Web;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using ImageWizard.Core.ImageLoaders;
 
 namespace ImageWizard.TestApp
 {
@@ -34,10 +38,21 @@ namespace ImageWizard.TestApp
             })
                 //.SetFileCache()
                 //.SetMongoDBCache()
-                .AddFileLoader(x => x.Folder = "FileStorage")
+                .AddHttpLoader(x=>
+                {
+                    //x.RefreshMode = ImageLoaderRefreshMode.EveryTime;
+                    x.SetHeader("Api", "XYZ");
+                })
+                .AddFileLoader()
                 .AddYoutubeLoader()
                 .AddGravatarLoader()
-                .AddAnalytics();
+                .AddAnalytics()
+                .AddAzureBlob(x =>
+                {
+                    x.ConnectionString = "";
+                    x.ContainerName = "MyContainer";
+                })
+                ;
 
             services.AddImageWizardClient(x =>
             {

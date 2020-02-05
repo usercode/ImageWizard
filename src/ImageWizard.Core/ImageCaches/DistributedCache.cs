@@ -48,13 +48,19 @@ namespace ImageWizard.Core.ImageCaches
             });
         }
 
-        public async Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer)
+        public async Task WriteAsync(string key, ICachedImage cachedImage)
         {
-            string json = JsonSerializer.Serialize(metadata);
+            string json = JsonSerializer.Serialize(cachedImage.Metadata);
 
             await Cache.SetStringAsync($"{KeyPrefix}{key}#meta", json);
 
-            await Cache.SetAsync($"{KeyPrefix}{key}", buffer);
+            using (Stream cachedImageStream = await cachedImage.OpenReadAsync())
+            {
+                MemoryStream mem = new MemoryStream();
+                await cachedImageStream.CopyToAsync(mem);
+
+                await Cache.SetAsync($"{KeyPrefix}{key}", mem.ToArray());
+            }
         }
     }
 }

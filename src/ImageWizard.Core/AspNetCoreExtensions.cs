@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace ImageWizard
@@ -27,6 +28,11 @@ namespace ImageWizard
             }
 
             return services;
+        }
+
+        public static string GetTagUnquoted(this EntityTagHeaderValue value)
+        {
+            return value.Tag.Substring(1, value.Tag.Length - 2);
         }
     }
 }

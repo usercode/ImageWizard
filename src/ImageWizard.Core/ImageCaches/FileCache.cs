@@ -88,7 +88,7 @@ namespace ImageWizard.ImageStorages
             return new CachedImage(metadata, () => Task.FromResult(fileInfoData.CreateReadStream()));
         }
 
-        public async Task WriteAsync(string key, IImageMetadata metadata, byte[] buffer)
+        public async Task WriteAsync(string key, ICachedImage cachedImage)
         {
             string[] parts = SplitKey(key);
 
@@ -99,7 +99,7 @@ namespace ImageWizard.ImageStorages
             FileInfo fileInfoMetadata = new FileInfo(Path.Combine(sub.FullName, parts.Last() + ".meta"));
             
             //write metadata
-            string json = JsonSerializer.Serialize(metadata, new JsonSerializerOptions() { WriteIndented = true } );
+            string json = JsonSerializer.Serialize(cachedImage.Metadata, new JsonSerializerOptions() { WriteIndented = true } );
             byte[] metadataBuffer = Encoding.UTF8.GetBytes(json);
 
             using (Stream fs = fileInfoMetadata.OpenWrite())
@@ -111,8 +111,9 @@ namespace ImageWizard.ImageStorages
             FileInfo fileInfoData = new FileInfo(Path.Combine(sub.FullName, parts.Last()));
 
             using (Stream fs = fileInfoData.OpenWrite())
+            using (Stream cachedImageStream = await cachedImage.OpenReadAsync())
             {
-                await new MemoryStream(buffer).CopyToAsync(fs);
+                await cachedImageStream.CopyToAsync(fs);
             }
         }
     }

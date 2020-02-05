@@ -13,14 +13,13 @@ namespace ImageWizard.Services.Types
     {
         public ImageMetadata()
         {
-            NoImageCache = false;
             Cache = new CacheSettings();
         }
 
         /// <summary>
         /// CreatedAt
         /// </summary>
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? Created { get; set; }
 
         /// <summary>
         /// Signature
@@ -47,10 +46,6 @@ namespace ImageWizard.Services.Types
         /// </summary>
         public double? DPR { get; set; }
 
-        /// <summary>
-        /// NoImageCache
-        /// </summary>
-        public bool NoImageCache { get; set; }
         /// <summary>
         /// CacheSettings
         /// </summary>

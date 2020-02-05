@@ -11,6 +11,12 @@ namespace ImageWizard
     {
         public static IImageWizardBuilder AddGravatarLoader(this IImageWizardBuilder wizardConfiguration)
         {
+            return AddGravatarLoader(wizardConfiguration, x => { });
+        }
+
+        public static IImageWizardBuilder AddGravatarLoader(this IImageWizardBuilder wizardConfiguration, Action<GravatarOptions> options)
+        {
+            wizardConfiguration.Services.Configure(options);
             wizardConfiguration.Services.AddHttpClient2<GravatarLoader>();
             wizardConfiguration.ImageLoaderManager.Register<GravatarLoader>("gravatar");
 

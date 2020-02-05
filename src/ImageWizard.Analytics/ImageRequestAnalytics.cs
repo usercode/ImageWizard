@@ -28,7 +28,8 @@ namespace ImageWizard.Analytics
         {
             lock (_lock)
             {
-                AnalyticsData.SucceededRequests++;
+                AnalyticsData.TransferedImages++;
+                AnalyticsData.TransferedImagesInBytes += cachedImage.Metadata.FileLength;
             }
         }
 
@@ -41,7 +42,8 @@ namespace ImageWizard.Analytics
         {
             lock(_lock)
             {
-                AnalyticsData.CreatedCachedImage++;
+                AnalyticsData.CreatedImages++;
+                AnalyticsData.CreatedImagesInBytes += cachedImage.Metadata.FileLength;
             }
         }
 
