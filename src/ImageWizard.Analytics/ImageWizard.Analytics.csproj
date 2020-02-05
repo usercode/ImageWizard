@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <Version>1.5</Version>
     <Authors>usercode</Authors>
