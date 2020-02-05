@@ -20,13 +20,16 @@ namespace ImageWizard.Azure
     {
         public AzureBlobLoader(IOptions<AzureBlobOptions> options)
         {
-            Client = new BlobContainerClient(options.Value.ConnectionString, options.Value.ContainerName);
+            Options = options.Value;
 
+            Client = new BlobContainerClient(options.Value.ConnectionString, options.Value.ContainerName);
         }
+
+        private AzureBlobOptions Options { get; }
 
         private BlobContainerClient Client { get; }
 
-        public override ImageLoaderRefreshMode RefreshMode => ImageLoaderRefreshMode.EveryTime;
+        public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
         public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
         {
@@ -34,10 +37,10 @@ namespace ImageWizard.Azure
 
             BlobRequestConditions conditions = new BlobRequestConditions();
 
-            if(existingCachedImage != null)
-            {
-                conditions.IfNoneMatch = new ETag(existingCachedImage.Metadata.Cache.ETag);
-            }
+            //if(existingCachedImage != null)
+            //{
+            //    conditions.IfNoneMatch = new ETag(existingCachedImage.Metadata.Cache.ETag);
+            //}
 
             var response = await blob.DownloadAsync(conditions: conditions);
 
@@ -46,7 +49,7 @@ namespace ImageWizard.Azure
             MemoryStream mem = new MemoryStream();
             await stream.CopyToAsync(mem);
 
-            return new OriginalImage(response.Value.ContentType, mem.ToArray(), new CacheSettings() { ETag = response.Value.Details.ETag.ToString() });
+            return new OriginalImage(response.Value.ContentType, mem.ToArray(), new CacheSettings());
         }
     }
 }

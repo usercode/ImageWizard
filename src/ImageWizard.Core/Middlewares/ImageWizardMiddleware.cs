@@ -45,13 +45,13 @@ namespace ImageWizard.Middlewares
 
         public ImageWizardMiddleware(
             RequestDelegate next,
-            IOptions<ImageWizardOptions> settings,
+            IOptions<ImageWizardOptions> options,
             ILogger<ImageWizardMiddleware> logger,
             FilterManager filterManager,
             ImageLoaderManager imageLoaderManager
             )
         {
-            Settings = settings;
+            Options = options.Value;
             FilterManager = filterManager;
             ImageLoaderManager = imageLoaderManager;
             Logger = logger;
@@ -61,7 +61,7 @@ namespace ImageWizard.Middlewares
             UrlRegex = new Regex($@"^(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.=']*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
-        private IOptions<ImageWizardOptions> Settings { get; }
+        private ImageWizardOptions Options { get; }
 
         /// <summary>
         /// FilterManager
@@ -109,18 +109,18 @@ namespace ImageWizard.Middlewares
             string url_loaderType = match.Groups["loaderType"].Value;
             string[] url_filters = match.Groups["filter"].Captures.OfType<Capture>()
                                                                             .Select(x => x.Value)
-                                                                            .Select(x => x.Substring(0, x.Length - 1)) //remove "/"
+                                                                            .Select(x => x[0..^1]) //remove "/"
                                                                             .ToArray();
 
             //unsafe url?
-            if (Settings.Value.AllowUnsafeUrl && url_signature == "unsafe")
+            if (Options.AllowUnsafeUrl && url_signature == "unsafe")
             {
                 Logger.LogTrace("unsafe request");
             }
             else
             {
                 //check signature
-                string signature = new CryptoService(Settings.Value.Key).Encrypt(url_path);
+                string signature = new CryptoService(Options.Key).Encrypt(url_path);
 
                 if (signature == url_signature)
                 {
@@ -245,10 +245,10 @@ namespace ImageWizard.Middlewares
                         //load image
                         using (Image image = Image.Load(originalImage.Data))
                         {
-                            FilterContext filterContext = new FilterContext(Settings.Value, image, targetFormat);
+                            FilterContext filterContext = new FilterContext(Options, image, targetFormat);
 
                             //use clint hints?
-                            if (Settings.Value.UseClintHints)
+                            if (Options.UseClintHints)
                             {
                                 //check DPR value from request
                                 string ch_dpr = context.Request.Headers["DPR"].FirstOrDefault();
@@ -297,16 +297,16 @@ namespace ImageWizard.Middlewares
                             int width = image.Width;
                             int height = image.Height;
 
-                            if (Settings.Value.ImageMaxWidth != null && width > Settings.Value.ImageMaxWidth)
+                            if (Options.ImageMaxWidth != null && width > Options.ImageMaxWidth)
                             {
                                 change = true;
-                                width = Settings.Value.ImageMaxWidth.Value;
+                                width = Options.ImageMaxWidth.Value;
                             }
 
-                            if (Settings.Value.ImageMaxHeight != null && height > Settings.Value.ImageMaxHeight)
+                            if (Options.ImageMaxHeight != null && height > Options.ImageMaxHeight)
                             {
                                 change = true;
-                                height = Settings.Value.ImageMaxHeight.Value;
+                                height = Options.ImageMaxHeight.Value;
                             }
 
                             if (change == true)
@@ -351,7 +351,7 @@ namespace ImageWizard.Middlewares
             }
 
             //send "304-NotModified" if etag is valid
-            if (Settings.Value.UseETag)
+            if (Options.UseETag)
             {
                 bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == $"\"{cachedImage.Metadata.Hash}\"");
 
@@ -366,20 +366,20 @@ namespace ImageWizard.Middlewares
             }
 
             //set cache control header
-            if (Settings.Value.CacheControl.IsEnabled)
+            if (Options.CacheControl.IsEnabled)
             {
                 context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
                 {
-                    Public = Settings.Value.CacheControl.Public,
-                    MustRevalidate = Settings.Value.CacheControl.MustRevalidate,
-                    MaxAge = Settings.Value.CacheControl.MaxAge,
-                    NoCache = Settings.Value.CacheControl.NoCache,
-                    NoStore = Settings.Value.CacheControl.NoStore
+                    Public = Options.CacheControl.Public,
+                    MustRevalidate = Options.CacheControl.MustRevalidate,
+                    MaxAge = Options.CacheControl.MaxAge,
+                    NoCache = Options.CacheControl.NoCache,
+                    NoStore = Options.CacheControl.NoStore
                 };
             }
 
             //set ETag header
-            if (Settings.Value.UseETag)
+            if (Options.UseETag)
             {
                 context.Response.GetTypedHeaders().ETag = new EntityTagHeaderValue($"\"{cachedImage.Metadata.Hash}\"");
             }
