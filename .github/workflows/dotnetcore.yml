@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  imagewizard-core:
+  imagewizard:
 
     runs-on: ubuntu-latest
 
@@ -23,16 +23,16 @@ jobs:
     - name: Create the package
       run: dotnet pack --configuration Release "./src"
     - name: Publish "ImageWizard.Core" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} -n
     - name: Publish "ImageWizard.Analytics" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Analytics/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+      run: dotnet nuget push "./src/ImageWizard.Analytics/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} -n
     - name: Publish "ImageWizard.Azure" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Azure/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+      run: dotnet nuget push "./src/ImageWizard.Azure/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} -n
     - name: Publish "ImageWizard.Client" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Client/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+      run: dotnet nuget push "./src/ImageWizard.Client/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} -n
     - name: Publish "ImageWizard.MongoDB" to nuget
-      run: dotnet nuget push "./src/ImageWizard.MongoDB/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+      run: dotnet nuget push "./src/ImageWizard.MongoDB/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} -n
     - name: Publish "ImageWizard.Piranha" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+      run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} -n
       
       
