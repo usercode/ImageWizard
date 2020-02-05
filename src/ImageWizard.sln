@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard", "ImageWizard\ImageWizard.csproj", "{00DA7717-C5AF-41DF-BA66-0654023E18D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Client", "ImageWizard.AspNetCore\ImageWizard.Client.csproj", "{76E785D3-E3C4-4AED-AF68-0D32881D6362}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.SharedContract", "ImageWizard.SharedContract\ImageWizard.SharedContract.csproj", "{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Core", "ImageWizard.Core\ImageWizard.Core.csproj", "{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}"
@@ -19,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Piranha", "Imag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Analytics", "ImageWizard.Analytics\ImageWizard.Analytics.csproj", "{96867181-D7F1-4BE3-8231-19A9834F8FCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.Azure", "ImageWizard.Azure\ImageWizard.Azure.csproj", "{6D02F495-1351-4C57-ABF6-AD67FCB2BDB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Azure", "ImageWizard.Azure\ImageWizard.Azure.csproj", "{6D02F495-1351-4C57-ABF6-AD67FCB2BDB5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Client", "ImageWizard.Client\ImageWizard.Client.csproj", "{2825AD6F-5361-4D63-A009-393E2A7BB51A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,6 @@ Global
 		{00DA7717-C5AF-41DF-BA66-0654023E18D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00DA7717-C5AF-41DF-BA66-0654023E18D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00DA7717-C5AF-41DF-BA66-0654023E18D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76E785D3-E3C4-4AED-AF68-0D32881D6362}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76E785D3-E3C4-4AED-AF68-0D32881D6362}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76E785D3-E3C4-4AED-AF68-0D32881D6362}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76E785D3-E3C4-4AED-AF68-0D32881D6362}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{6D02F495-1351-4C57-ABF6-AD67FCB2BDB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D02F495-1351-4C57-ABF6-AD67FCB2BDB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D02F495-1351-4C57-ABF6-AD67FCB2BDB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2825AD6F-5361-4D63-A009-393E2A7BB51A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2825AD6F-5361-4D63-A009-393E2A7BB51A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2825AD6F-5361-4D63-A009-393E2A7BB51A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2825AD6F-5361-4D63-A009-393E2A7BB51A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
