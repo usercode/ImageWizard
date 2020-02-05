@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ImageWizard.AspNetCore\ImageWizard.Client.csproj" />
+    <ProjectReference Include="..\ImageWizard.Client\ImageWizard.Client.csproj" />
   </ItemGroup>
 
 </Project>
