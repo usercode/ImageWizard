@@ -3,10 +3,10 @@ name: .NET Core
 on: 
   push:
     branches:
-      - development
+      - master
 
 jobs:
-  build:
+  ImageWizard.Core:
 
     runs-on: ubuntu-latest
 
@@ -17,10 +17,22 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Build with dotnet
-      run: dotnet build --configuration Release "./src/ImageWizard.Core"
+      run: dotnet build --configuration Release "./src"
     - name: Run unit tests
-      run: dotnet test "./src/ImageWizard.Core"
+      run: dotnet test "./src"
     - name: Create the package
-      run: dotnet pack --configuration Release "./src/ImageWizard.Core"
-    - name: Publish to github packages
-      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" --source "github"
+      run: dotnet pack --configuration Release "./src"
+    - name: Publish "ImageWizard.Core" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+    - name: Publish "ImageWizard.Analytics" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Analytics/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+    - name: Publish "ImageWizard.Azure" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Azure/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+    - name: Publish "ImageWizard.Client" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Client/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+    - name: Publish "ImageWizard.MongoDB" to nuget
+      run: dotnet nuget push "./src/ImageWizard.MongoDB/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+    - name: Publish "ImageWizard.Piranha" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+      
+      
