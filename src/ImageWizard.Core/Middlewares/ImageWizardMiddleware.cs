@@ -139,10 +139,6 @@ namespace ImageWizard.Middlewares
                 }
             }
 
-            //generate key
-            byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_path));
-            string key = keyInBytes.ToHexcode();
-
             //get image cache
             IImageCache imageCache = context.RequestServices.GetService<IImageCache>();
 
@@ -165,6 +161,10 @@ namespace ImageWizard.Middlewares
 
                 return;
             }
+
+            //generate image key
+            byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_path));
+            string key = keyInBytes.ToHexcode();
 
             //try to get the cached image
             ICachedImage cachedImage = await imageCache.ReadAsync(key);

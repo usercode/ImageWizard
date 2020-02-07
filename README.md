@@ -117,6 +117,9 @@ services.AddImageWizard(options =>
                        //add some loaders
                        .AddFileLoader(options => options.Folder = "FileStorage")
                        .AddHttpLoader(options => 
+                                               //checks every time for a new version of the original image.
+                                               options.RefreshMode = ImageLoaderRefreshMode.EveryTime;
+                                               
                                                //add custom http header like apikey to prevent 
                                                //that user can download the original image
                                                options.SetHeader("ApiKey", "123456")) 

@@ -8,6 +8,7 @@
         <h1 class="display-4">Welcome to ImageWizard</h1>
         <p>Use the standalone version or middleware.</p>
 
+        <a href="https://github.com/usercode/ImageWizard" class="btn btn-success">Go to GitHub</a>
 
         <h2>Fetch local file (from wwwroot folder)</h2>
 
@@ -17,12 +18,15 @@
         <div class="row">
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).BuildUrl()" class="auto-scale" />
+                <p>Default</p>
             </div>
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+                <p>Grayscale</p>
             </div>
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
+                <p>Blur</p>
             </div>
         </div>
 
@@ -34,12 +38,15 @@
         <div class="row">
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().File("/meerkat.jpg").Resize(400, 400).BuildUrl()" class="auto-scale" />
+                <p>Default</p>
             </div>
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().File("/meerkat.jpg").Resize(400, 400).Grayscale().BuildUrl()" class="auto-scale" />
+                <p>Grayscale</p>
             </div>
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().File("/meerkat.jpg").Resize(400, 400).Blur().BuildUrl()" class="auto-scale" />
+                <p>Blur</p>
             </div>
         </div>
 
@@ -51,12 +58,15 @@
         <div class="row">
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").Resize(400,400).BuildUrl()" class="auto-scale" />
+                <p>Default</p>
             </div>
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+                <p>Grayscale</p>
             </div>
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
+                <p>Blur</p>
             </div>
         </div>
 
@@ -68,12 +78,15 @@
         <div class="row">
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().Youtube("6QBiWY09k8g").Resize(600,600).BuildUrl()" class="auto-scale" />
+                <p>Default</p>
             </div>
             <div class="col-lg-4">
                 <img src=@Url.ImageWizard().Youtube("6QBiWY09k8g").Resize(600,600).Grayscale().BuildUrl() class="auto-scale" />
+                <p>Grayscale</p>
             </div>
             <div class="col-lg-4">
                 <img src=@Url.ImageWizard().Youtube("6QBiWY09k8g").Resize(600,600).Blur().BuildUrl() class="auto-scale" />
+                <p>Blur</p>
             </div>
         </div>
 
@@ -85,12 +98,15 @@
         <div class="row">
             <div class="col-lg-4">
                 <img src="@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).BuildUrl()" class="auto-scale" />
+                <p>Default</p>
             </div>
             <div class="col-lg-4">
                 <img src=@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).Grayscale().BuildUrl() class="auto-scale" />
+                <p>Grayscale</p>
             </div>
             <div class="col-lg-4">
                 <img src=@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).Blur().BuildUrl() class="auto-scale" />
+                <p>Blur</p>
             </div>
         </div>
     </div>

@@ -12,9 +12,7 @@
     <Description>A middleware to manipulate your images dynamically.</Description>
   </PropertyGroup>
   
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    
+  <ItemGroup>    
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
   </ItemGroup>

@@ -16,6 +16,8 @@ using ImageWizard.Azure;
 using System.Web;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using ImageWizard.Core.ImageLoaders;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace ImageWizard.TestApp
 {
@@ -31,10 +33,17 @@ namespace ImageWizard.TestApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //generate random key
+            byte[] keyBuffer = new byte[64];
+            RandomNumberGenerator.Create().GetBytes(keyBuffer);
+
+            string key = WebEncoders.Base64UrlEncode(keyBuffer);
+            //string key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
+
             services.AddImageWizard(x =>
             {
-                x.AllowUnsafeUrl = true;
-                //x.Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
+                x.AllowUnsafeUrl = false;
+                x.Key = key;
             })
                 //.SetFileCache()
                 //.SetMongoDBCache()
@@ -56,8 +65,8 @@ namespace ImageWizard.TestApp
 
             services.AddImageWizardClient(x =>
             {
-                x.UseUnsafeUrl = true;
-                //x.Key = x.Key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
+                x.UseUnsafeUrl = false;
+                x.Key = key;
             });
 
             services.AddRazorPages();

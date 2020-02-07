@@ -1,9 +1,11 @@
 ﻿using ImageWizard.Core.Settings;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace ImageWizard.Settings
@@ -67,6 +69,18 @@ namespace ImageWizard.Settings
         /// ImageMaxHeight
         /// </summary>
         public int? ImageMaxHeight { get; set; }
+
+        /// <summary>
+        /// Generates random 64 byte key.
+        /// </summary>
+        public void GenerateRandomKey()
+        {
+            //generate random key
+            byte[] keyBuffer = new byte[64];
+            RandomNumberGenerator.Create().GetBytes(keyBuffer);
+
+            Key = WebEncoders.Base64UrlEncode(keyBuffer);
+        }
 
     }
 }
