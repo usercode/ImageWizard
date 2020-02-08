@@ -16,13 +16,13 @@ namespace ImageWizard.Filters
     /// </summary>
     public class FilterContext
     {
-        public FilterContext(ImageWizardOptions settings, Image image, IImageFormat imageFormat)
+        public FilterContext(ImageWizardOptions settings, Image image, IImageFormat imageFormat, ClientHints clientHints)
         {
             Settings = settings;
             Image = image;
             ImageFormat = imageFormat;
             NoImageCache = false;
-            ClientHints = new ClientHints();
+            ClientHints = clientHints;
         }
 
         /// <summary>
@@ -45,28 +45,7 @@ namespace ImageWizard.Filters
         /// </summary>
         public bool NoImageCache { get; set; }
 
-        private double? _dpr;
-
-        /// <summary>
-        /// Current device pixel ratio value
-        /// </summary>
-        public double? DPR
-        {
-            get => _dpr;
-            set
-            {
-                double? found = Settings.AllowedDPR
-                                            .Cast<double?>()
-                                            .FirstOrDefault(x => x >= value);
-                
-                if(found == null)
-                {
-                    found = Settings.AllowedDPR.LastOrDefault();
-                }
-
-                _dpr = found;
-            }
-        }
+       
 
         /// <summary>
         /// ClientHints

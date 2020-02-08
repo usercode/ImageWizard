@@ -18,7 +18,7 @@ namespace ImageWizard.Settings
         public ImageWizardOptions()
         {
             UseETag = true;
-            UseClintHints = true;
+            UseClintHints = false;
             AllowUnsafeUrl = false;
             Key = null;
 

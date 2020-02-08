@@ -43,6 +43,8 @@ namespace ImageWizard.TestApp
             services.AddImageWizard(x =>
             {
                 x.AllowUnsafeUrl = false;
+                x.UseClintHints = true;
+                x.UseETag = true;
                 x.Key = key;
             })
                 //.SetFileCache()

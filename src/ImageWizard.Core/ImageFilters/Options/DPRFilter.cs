@@ -14,7 +14,7 @@ namespace ImageWizard.Core.ImageFilters.Options
         [Filter]
         public void DPR(double dpr, FilterContext context)
         {
-            context.DPR = dpr;
+            context.ClientHints.DPR = dpr;
         }
     }
 }

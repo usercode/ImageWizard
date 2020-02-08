@@ -24,7 +24,7 @@ namespace ImageWizard.MongoDB.Models
         public double? DPR { get; set; }
         public int FileLength { get; set; }
         public CacheSettings Cache { get; set; }
-        public string[] Filters { get; set; }
+        public IEnumerable<string> Filters { get; set; }
         public string LoaderSource { get; set; }
         public string LoaderType { get; set; }
     }

@@ -145,10 +145,10 @@ namespace ImageWizard.Filters
                                                 {
                                                     //multiply parameter with dpr value
                                                     results.Add(
-                                                    Expression.IfThen(Expression.NotEqual(Expression.Property(filterContextParameter, nameof(FilterContext.DPR)), Expression.Constant(null)),
+                                                    Expression.IfThen(Expression.NotEqual(Expression.Property(Expression.Property(filterContextParameter, nameof(FilterContext.ClientHints)), nameof(FilterContext.ClientHints.DPR)), Expression.Constant(null)),
                                                     Expression.Assign(propertyExpression,
                                                         Expression.Convert(
-                                                            Expression.Multiply(Expression.Convert(propertyExpression, typeof(double)), Expression.Property(Expression.Property(filterContextParameter, nameof(FilterContext.DPR)), nameof(Nullable<double>.Value))),
+                                                            Expression.Multiply(Expression.Convert(propertyExpression, typeof(double)), Expression.Property(Expression.Property(Expression.Property(filterContextParameter, nameof(FilterContext.ClientHints)), nameof(FilterContext.ClientHints.DPR)), nameof(Nullable<double>.Value))),
                                                             x.ParameterType))));
                                                 }
 

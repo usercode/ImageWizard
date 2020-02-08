@@ -54,7 +54,7 @@ namespace ImageWizard.Services.Types
         /// <summary>
         /// Filters
         /// </summary>
-        public string[] Filters { get; set; }
+        public IEnumerable<string> Filters { get; set; }
 
         /// <summary>
         /// DeliveryType

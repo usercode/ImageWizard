@@ -10,7 +10,7 @@ namespace ImageWizard.Core.Types
         string Key { get; set; }
         string Hash { get; set; }
         string MimeType { get; set; }
-        string[] Filters { get; set; }
+        IEnumerable<string> Filters { get; set; }
         string LoaderSource { get; set; }
         string LoaderType { get; set; }
         double? DPR { get; set; }

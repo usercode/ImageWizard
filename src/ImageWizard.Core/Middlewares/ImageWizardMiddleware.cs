@@ -2,6 +2,7 @@
 using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.Middlewares;
+using ImageWizard.Core.Settings;
 using ImageWizard.Core.Types;
 using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
@@ -61,6 +62,9 @@ namespace ImageWizard.Middlewares
             UrlRegex = new Regex($@"^(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9,.=']*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
+        /// <summary>
+        /// Options
+        /// </summary>
         private ImageWizardOptions Options { get; }
 
         /// <summary>
@@ -107,10 +111,10 @@ namespace ImageWizard.Middlewares
             string url_path = match.Groups["path"].Value;
             string url_loaderSource = match.Groups["loaderSource"].Value;
             string url_loaderType = match.Groups["loaderType"].Value;
-            string[] url_filters = match.Groups["filter"].Captures.OfType<Capture>()
+            IList<string> url_filters = match.Groups["filter"].Captures.OfType<Capture>()
                                                                             .Select(x => x.Value)
                                                                             .Select(x => x[0..^1]) //remove "/"
-                                                                            .ToArray();
+                                                                            .ToList();
 
             //unsafe url?
             if (Options.AllowUnsafeUrl && url_signature == "unsafe")
@@ -162,8 +166,61 @@ namespace ImageWizard.Middlewares
                 return;
             }
 
+            string url_newPath = url_path;
+
+            ClientHints clientHints = new ClientHints(Options.AllowedDPR);
+
+            //use clint hints?
+            if (Options.UseClintHints)
+            {
+                //check DPR value from request
+                string ch_dpr = context.Request.Headers["DPR"].FirstOrDefault();
+                string ch_width = context.Request.Headers["Width"].FirstOrDefault();
+                string ch_viewportWidth = context.Request.Headers["Viewport-Width"].FirstOrDefault();
+
+                List<string> extraMethods = new List<string>();
+
+                if (ch_dpr != null)
+                {
+                   clientHints.DPR = double.Parse(ch_dpr, CultureInfo.InvariantCulture);
+
+                    string method = $"dpr({clientHints.DPR.Value.ToString("0.0", CultureInfo.InvariantCulture)})";
+                    extraMethods.Add(method);
+                }
+
+                if (ch_width != null)
+                {
+                    clientHints.Width = int.Parse(ch_width, CultureInfo.InvariantCulture);
+
+                    //extraMethods.Insert(0, $"resize({clientHints.Width},0)");
+                }
+
+                if (ch_viewportWidth != null)
+                {
+                    clientHints.ViewportWidth = int.Parse(ch_viewportWidth, CultureInfo.InvariantCulture);
+
+                    //extraMethods.Insert(0, $"resize({clientHints.ViewportWidth},0)");
+                }
+
+                if (extraMethods.Any())
+                {
+                    //rebuild path
+                    StringBuilder url = new StringBuilder(url_path);
+
+                    foreach(string method in extraMethods)
+                    {
+                        url_filters.Insert(0, method);
+
+                        url.Insert(0, "/");
+                        url.Insert(0, method);
+                    }
+
+                    url_newPath = url.ToString();
+                }
+            }
+
             //generate image key
-            byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_path));
+            byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_newPath));
             string key = keyInBytes.ToHexcode();
 
             //try to get the cached image
@@ -245,32 +302,7 @@ namespace ImageWizard.Middlewares
                         //load image
                         using (Image image = Image.Load(originalImage.Data))
                         {
-                            FilterContext filterContext = new FilterContext(Options, image, targetFormat);
-
-                            //use clint hints?
-                            if (Options.UseClintHints)
-                            {
-                                //check DPR value from request
-                                string ch_dpr = context.Request.Headers["DPR"].FirstOrDefault();
-                                string ch_width = context.Request.Headers["Width"].FirstOrDefault();
-                                string ch_viewportWidth = context.Request.Headers["Viewport-Width"].FirstOrDefault();
-
-                                if (ch_dpr != null)
-                                {
-                                    filterContext.ClientHints.DPR = double.Parse(ch_dpr, CultureInfo.InvariantCulture);
-                                    filterContext.DPR = filterContext.ClientHints.DPR;
-                                }
-
-                                if (ch_width != null)
-                                {
-                                    filterContext.ClientHints.Width = int.Parse(ch_width, CultureInfo.InvariantCulture);
-                                }
-
-                                if (ch_viewportWidth != null)
-                                {
-                                    filterContext.ClientHints.ViewportWidth = int.Parse(ch_viewportWidth, CultureInfo.InvariantCulture);
-                                }
-                            }
+                            FilterContext filterContext = new FilterContext(Options, image, targetFormat, clientHints);
 
                             //execute filters
                             foreach (string filter in url_filters)
@@ -322,7 +354,7 @@ namespace ImageWizard.Middlewares
                             transformedImageData = mem.ToArray();
 
                             //update some metadata
-                            imageMetadata.DPR = filterContext.DPR;
+                            imageMetadata.DPR = filterContext.ClientHints.DPR;
                             imageMetadata.MimeType = filterContext.ImageFormat.MimeType;
 
                             disableCache = filterContext.NoImageCache;

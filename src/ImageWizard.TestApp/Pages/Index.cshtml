@@ -10,6 +10,10 @@
 
         <a href="https://github.com/usercode/ImageWizard" class="btn btn-success">Go to GitHub</a>
 
+        <p>DPR: @Model.DPR </p>
+        <p>Width: @Model.Width</p>
+        <p>Viewport-Width: @Model.ViewportWidth</p>
+
         <h2>Fetch local file (from wwwroot folder)</h2>
 
         <p>@@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).BuildUrl()</p>
