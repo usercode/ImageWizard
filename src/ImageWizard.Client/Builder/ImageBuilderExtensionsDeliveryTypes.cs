@@ -25,6 +25,13 @@ namespace ImageWizard
             return (IImageFilters)imageUrlBuilder;
         }
 
+        public static IImageFilters Azure(this IImageLoaderType imageUrlBuilder, string url)
+        {
+            imageUrlBuilder.Image("azure", url);
+
+            return (IImageFilters)imageUrlBuilder;
+        }
+
         public static IImageFilters File(this IImageLoaderType imageUrlBuilder, string path)
         {
             imageUrlBuilder.Image("file", path);
