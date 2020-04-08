@@ -8,6 +8,10 @@
     <Version>1.5.6</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  
   <ItemGroup>    
     <PackageReference Include="Piranha" Version="8.1.0" />
   </ItemGroup>
