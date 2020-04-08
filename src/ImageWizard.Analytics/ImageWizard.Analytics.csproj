@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
   </ItemGroup>
 

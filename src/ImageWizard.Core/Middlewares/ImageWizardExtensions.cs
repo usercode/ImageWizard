@@ -1,5 +1,7 @@
 ﻿using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.Settings;
+using ImageWizard.ImageLoaders;
+using ImageWizard.ImageStorages;
 using ImageWizard.Middlewares;
 using ImageWizard.Settings;
 using ImageWizard.SharedContract;
@@ -33,7 +35,7 @@ namespace ImageWizard
 
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services)
         {
-            return AddImageWizard(services, options => { });
+            return AddImageWizard(services, options => { options.AllowUnsafeUrl = true; });
         }
 
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardOptions> settingsSetup)
@@ -46,6 +48,6 @@ namespace ImageWizard
             configuration.SetDistributedCache();
 
             return configuration;
-        }   
+        }
     }
 }

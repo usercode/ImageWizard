@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using ImageWizard;
 using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.Types;
 using ImageWizard.Services.Types;
@@ -37,19 +38,24 @@ namespace ImageWizard.Azure
 
             BlobRequestConditions conditions = new BlobRequestConditions();
 
-            //if(existingCachedImage != null)
-            //{
-            //    conditions.IfNoneMatch = new ETag(existingCachedImage.Metadata.Cache.ETag);
-            //}
+            if (existingCachedImage != null)
+            {
+                conditions.IfNoneMatch = new ETag(existingCachedImage.Metadata.Cache.ETag);
+            }
 
             var response = await blob.DownloadAsync(conditions: conditions);
+
+            if (response.GetRawResponse().Status == (int)System.Net.HttpStatusCode.NotModified)
+            {
+                return null;
+            }
 
             Stream stream = response.Value.Content;
 
             MemoryStream mem = new MemoryStream();
             await stream.CopyToAsync(mem);
 
-            return new OriginalImage(response.Value.ContentType, mem.ToArray(), new CacheSettings());
+            return new OriginalImage(response.Value.ContentType, mem.ToArray(), new CacheSettings() { ETag = response.Value.Details.ETag.ToString().GetTagUnquoted() });
         }
     }
 }

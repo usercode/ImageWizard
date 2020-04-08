@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ImageWizard
 {
-    static class AspNetCoreExtensions
+    public static class AspNetCoreExtensions
     {
         /// <summary>
         /// Fixed version
@@ -32,7 +32,12 @@ namespace ImageWizard
 
         public static string GetTagUnquoted(this EntityTagHeaderValue value)
         {
-            return value.Tag.Substring(1, value.Tag.Length - 2);
+            return value.Tag.GetTagUnquoted();
+        }
+
+        public static string GetTagUnquoted(this string value)
+        {
+            return value.Substring(1, value.Length - 2);
         }
     }
 }

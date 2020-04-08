@@ -9,7 +9,7 @@ namespace ImageWizard
     {
         public static IServiceCollection AddImageWizardClient(this IServiceCollection services)
         {
-            return AddImageWizardClient(services, x => { });
+            return AddImageWizardClient(services, x => { x.UseUnsafeUrl = true; });
         }
 
         public static IServiceCollection AddImageWizardClient(this IServiceCollection services, Action<ImageWizardClientSettings> setup)

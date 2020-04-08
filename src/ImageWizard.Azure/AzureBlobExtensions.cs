@@ -18,7 +18,7 @@ namespace ImageWizard.Azure
         {
             wizardConfiguration.Services.Configure(setup);
 
-            wizardConfiguration.Services.AddSingleton<IImageLoader, AzureBlobLoader>();
+            wizardConfiguration.Services.AddSingleton<AzureBlobLoader>();
             wizardConfiguration.ImageLoaderManager.Register<AzureBlobLoader>("azure");
 
             return wizardConfiguration;

@@ -38,7 +38,10 @@ namespace ImageWizard
             services.Configure<FileCacheSettings>(Configuration.GetSection("FileCache"));
             services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
             services.Configure<MongoDBCacheOptions>(Configuration.GetSection("MongoDBCache"));
-            
+
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+
             string cache = Configuration.GetSection("General")["Cache"];
 
             IImageWizardBuilder imageWizard = services.AddImageWizard()
@@ -82,7 +85,12 @@ namespace ImageWizard
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseEndpoints(x => x.MapImageWizard());
+            app.UseEndpoints(x =>
+            {
+                x.MapRazorPages();
+                x.MapControllers();
+                x.MapImageWizard();
+            });
         }
     }
 }
