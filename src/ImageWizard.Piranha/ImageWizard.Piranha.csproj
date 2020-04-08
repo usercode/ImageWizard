@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>    
-    <PackageReference Include="Piranha" Version="8.0.2" />
+    <PackageReference Include="Piranha" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>
