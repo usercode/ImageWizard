@@ -11,6 +11,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.4.1" />
