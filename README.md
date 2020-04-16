@@ -35,6 +35,8 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - resize(width,height)
 - resize(width,height,mode)
   - mode: min, max, crop, pad, stretch
+- resize(width,height,mode,anchor)
+  - anchor: center, top, bottom, left, right, topleft, topright, bottomleft, bottomright
 - crop(width,height)
   - int for absolute values, 0.0 to 1.0 for relative values
 - crop(x,y,width,height)
