@@ -21,8 +21,6 @@ namespace ImageWizard
         public IHttpContextAccessor HttpContextAccessor { get; }
         public IFileVersionProvider FileVersionProvider { get; }
         public IUrlHelper UrlHelper { get; internal set; }
-
-        private CryptoService CryptoService { get; }
        
         private string LoaderSource { get; set; }
 

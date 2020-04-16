@@ -96,6 +96,13 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
+        public static IImageFilters Resize(this IImageFilters imageUrlBuilder, int width, int height, ResizeMode mode, AnchorPositionMode anchorPosition)
+        {
+            imageUrlBuilder.Filter($"resize({width},{height},{mode.ToString().ToLower()},{anchorPosition.ToString().ToLower()})");
+
+            return imageUrlBuilder;
+        }
+
         public static IImageFilters Trim(this IImageFilters imageUrlBuilder)
         {
             imageUrlBuilder.Filter("trim()");

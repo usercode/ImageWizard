@@ -28,50 +28,53 @@ namespace ImageWizard.Filters
         [Filter]
         public void Resize([DPR]int width, [DPR]int height, SharedContract.FilterTypes.ResizeMode mode, FilterContext context)
         {
-            ResizeMode mode2;
+            Resize(width, height, mode, SharedContract.FilterTypes.AnchorPositionMode.Center, context);
+        }
 
-            switch (mode)
+        [Filter]
+        public void Resize([DPR]int width, [DPR]int height, SharedContract.FilterTypes.ResizeMode mode, SharedContract.FilterTypes.AnchorPositionMode position, FilterContext context)
+        {
+            ResizeMode mode2 = mode switch
             {
-                case SharedContract.FilterTypes.ResizeMode.Max:
-                    mode2 = ResizeMode.Max;
-                    break;
+                SharedContract.FilterTypes.ResizeMode.Max => ResizeMode.Max,
+                SharedContract.FilterTypes.ResizeMode.Min => ResizeMode.Min,
+                SharedContract.FilterTypes.ResizeMode.Stretch => ResizeMode.Stretch,
+                SharedContract.FilterTypes.ResizeMode.Pad => ResizeMode.Pad,
+                SharedContract.FilterTypes.ResizeMode.Crop => ResizeMode.Crop,
+                _ => throw new Exception(),
+            };
 
-                case SharedContract.FilterTypes.ResizeMode.Min:
-                    mode2 = ResizeMode.Min;
-                    break;
-
-                case SharedContract.FilterTypes.ResizeMode.Stretch:
-                    mode2 = ResizeMode.Stretch;
-                    break;
-
-                case SharedContract.FilterTypes.ResizeMode.Pad:
-                    mode2 = ResizeMode.Pad;
-                    break;
-
-                case SharedContract.FilterTypes.ResizeMode.Crop:
-                    mode2 = ResizeMode.Crop;
-                    break;
-
-                default:
-                    throw new Exception();
-            }
+            AnchorPositionMode anchorPositionMode = position switch
+            {
+                SharedContract.FilterTypes.AnchorPositionMode.Bottom => AnchorPositionMode.Bottom,
+                SharedContract.FilterTypes.AnchorPositionMode.BottomLeft => AnchorPositionMode.BottomLeft,
+                SharedContract.FilterTypes.AnchorPositionMode.BottomRight => AnchorPositionMode.BottomRight,
+                SharedContract.FilterTypes.AnchorPositionMode.Center => AnchorPositionMode.Center,
+                SharedContract.FilterTypes.AnchorPositionMode.Left => AnchorPositionMode.Left,
+                SharedContract.FilterTypes.AnchorPositionMode.Right => AnchorPositionMode.Right,
+                SharedContract.FilterTypes.AnchorPositionMode.Top => AnchorPositionMode.Top,
+                SharedContract.FilterTypes.AnchorPositionMode.TopLeft => AnchorPositionMode.TopLeft,
+                SharedContract.FilterTypes.AnchorPositionMode.TopRight => AnchorPositionMode.TopRight,
+                _ => throw new Exception(),
+            };
 
             //prevent upscaling
-            if(width > context.Image.Width)
+            if (width > context.Image.Width)
             {
                 width = context.Image.Width;
             }
 
-            if(height > context.Image.Height)
+            if (height > context.Image.Height)
             {
                 height = context.Image.Height;
             }
 
             context.Image.Mutate(m => m.Resize(new ResizeOptions()
-                                                {
-                                                    Mode = mode2,
-                                                    Size = new Size(width, height)
-                                                }));
+            {
+                Position = anchorPositionMode,
+                Mode = mode2,
+                Size = new Size(width, height)
+            }));
         }
     }
 }
