@@ -35,7 +35,7 @@ namespace ImageWizard
 
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services)
         {
-            return AddImageWizard(services, options => { options.AllowUnsafeUrl = true; });
+            return AddImageWizard(services, options => { });
         }
 
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardOptions> settingsSetup)
