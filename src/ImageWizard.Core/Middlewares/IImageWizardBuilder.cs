@@ -1,4 +1,6 @@
-﻿using ImageWizard.Core.ImageLoaders;
+﻿using ImageWizard.Core.ImageFilters.Base;
+using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Core.Settings;
 using ImageWizard.Filters;
 using ImageWizard.ImageLoaders;
 using ImageWizard.ImageStorages;
@@ -20,14 +22,15 @@ namespace ImageWizard.Core.Middlewares
         IServiceCollection Services { get; }
 
         /// <summary>
-        /// FilterManager
-        /// </summary>
-        FilterManager FilterManager { get; }
-
-        /// <summary>
         /// ImageLoaderManager
         /// </summary>
-        ImageLoaderManager ImageLoaderManager { get; }
+        TypeManager ImageLoaderManager { get; }
 
+        /// <summary>
+        /// PipelineManager
+        /// </summary>
+        TypeManager PipelineManager { get; }
+
+        void AddPipeline<T>(string[] mimeTypes) where T : class, IProcessingPipeline;
     }
 }

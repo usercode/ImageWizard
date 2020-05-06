@@ -10,6 +10,8 @@ namespace ImageWizard.Core.Types
         string Key { get; set; }
         string Hash { get; set; }
         string MimeType { get; set; }
+        int? Width { get; set; }
+        int? Height { get; set; }
         IEnumerable<string> Filters { get; set; }
         string LoaderSource { get; set; }
         string LoaderType { get; set; }

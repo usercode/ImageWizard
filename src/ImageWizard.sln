@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard", "ImageWizard\ImageWizard.csproj", "{00DA7717-C5AF-41DF-BA66-0654023E18D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.SharedContract", "ImageWizard.SharedContract\ImageWizard.SharedContract.csproj", "{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Core", "ImageWizard.Core\ImageWizard.Core.csproj", "{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.MongoDB", "ImageWizard.MongoDB\ImageWizard.MongoDB.csproj", "{718CC6EF-4F72-4D4C-8372-4F4D26148AA5}"
@@ -21,7 +19,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Azure", "ImageW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Client", "ImageWizard.Client\ImageWizard.Client.csproj", "{2825AD6F-5361-4D63-A009-393E2A7BB51A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.ImageSharp", "ImageWizard.ImageSharp\ImageWizard.ImageSharp.csproj", "{2EB8D1BF-3F0A-4743-89AE-EC5F563769E9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.SvgNet", "ImageWizard.Svg\ImageWizard.SvgNet.csproj", "{872B117F-3556-4D03-876F-6719053A9504}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{9F53E036-6D04-4ADD-A841-1ACBD08F803F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B06D4171-190B-408B-A57F-D6A1BB042EBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{49937EE0-864A-4B97-B53D-7803B4890482}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ImageWizard.Utils", "ImageWizard.Utils\ImageWizard.Utils.shproj", "{E894F058-13C9-408C-B383-11790E229533}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		ImageWizard.Utils\ImageWizard.Utils.projitems*{2825ad6f-5361-4d63-a009-393e2a7bb51a}*SharedItemsImports = 5
+		ImageWizard.Utils\ImageWizard.Utils.projitems*{872b117f-3556-4d03-876f-6719053a9504}*SharedItemsImports = 5
+		ImageWizard.Utils\ImageWizard.Utils.projitems*{998cbdf1-0870-48ea-be7e-1ce0f29abc42}*SharedItemsImports = 5
+		ImageWizard.Utils\ImageWizard.Utils.projitems*{e894f058-13c9-408c-b383-11790e229533}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -31,10 +47,6 @@ Global
 		{00DA7717-C5AF-41DF-BA66-0654023E18D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00DA7717-C5AF-41DF-BA66-0654023E18D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00DA7717-C5AF-41DF-BA66-0654023E18D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D687EAF3-A2AC-4A64-AD70-14F76491CFFE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,9 +75,30 @@ Global
 		{2825AD6F-5361-4D63-A009-393E2A7BB51A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2825AD6F-5361-4D63-A009-393E2A7BB51A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2825AD6F-5361-4D63-A009-393E2A7BB51A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EB8D1BF-3F0A-4743-89AE-EC5F563769E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EB8D1BF-3F0A-4743-89AE-EC5F563769E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EB8D1BF-3F0A-4743-89AE-EC5F563769E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EB8D1BF-3F0A-4743-89AE-EC5F563769E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{872B117F-3556-4D03-876F-6719053A9504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{872B117F-3556-4D03-876F-6719053A9504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{872B117F-3556-4D03-876F-6719053A9504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{872B117F-3556-4D03-876F-6719053A9504}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{00DA7717-C5AF-41DF-BA66-0654023E18D8} = {9F53E036-6D04-4ADD-A841-1ACBD08F803F}
+		{998CBDF1-0870-48EA-BE7E-1CE0F29ABC42} = {B06D4171-190B-408B-A57F-D6A1BB042EBA}
+		{718CC6EF-4F72-4D4C-8372-4F4D26148AA5} = {49937EE0-864A-4B97-B53D-7803B4890482}
+		{A4BEC44D-7004-4F38-BDB3-E1B277083B7B} = {9F53E036-6D04-4ADD-A841-1ACBD08F803F}
+		{07E5C893-676D-4AB9-8A61-93194F301893} = {49937EE0-864A-4B97-B53D-7803B4890482}
+		{96867181-D7F1-4BE3-8231-19A9834F8FCB} = {49937EE0-864A-4B97-B53D-7803B4890482}
+		{6D02F495-1351-4C57-ABF6-AD67FCB2BDB5} = {49937EE0-864A-4B97-B53D-7803B4890482}
+		{2825AD6F-5361-4D63-A009-393E2A7BB51A} = {B06D4171-190B-408B-A57F-D6A1BB042EBA}
+		{2EB8D1BF-3F0A-4743-89AE-EC5F563769E9} = {49937EE0-864A-4B97-B53D-7803B4890482}
+		{872B117F-3556-4D03-876F-6719053A9504} = {49937EE0-864A-4B97-B53D-7803B4890482}
+		{E894F058-13C9-408C-B383-11790E229533} = {B06D4171-190B-408B-A57F-D6A1BB042EBA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4E07FA6-DEC4-4ED4-946E-38BCD59BBF92}

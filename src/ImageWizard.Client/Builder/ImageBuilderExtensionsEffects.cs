@@ -137,5 +137,26 @@ namespace ImageWizard
 
             return imageUrlBuilder;
         }
+
+        public static IImageFilters SvgRemoveSize(this IImageFilters imageUrlBuilder)
+        {
+            imageUrlBuilder.Filter("removesize()");
+
+            return imageUrlBuilder;
+        }
+
+        public static IImageFilters SvgRotate(this IImageFilters imageUrlBuilder, float angle)
+        {
+            imageUrlBuilder.Filter($"rotate({angle.ToString("0.0", CultureInfo.InvariantCulture)})");
+
+            return imageUrlBuilder;
+        }
+
+        public static IImageFilters SvgBlur(this IImageFilters imageUrlBuilder)
+        {
+            imageUrlBuilder.Filter("blur()");
+
+            return imageUrlBuilder;
+        }
     }
 }

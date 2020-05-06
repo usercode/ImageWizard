@@ -38,14 +38,15 @@ namespace ImageWizard
             return AddImageWizard(services, options => { });
         }
 
-        public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardOptions> settingsSetup)
+        public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardOptions> options)
         {
-            services.Configure(settingsSetup);
+            services.Configure(options);
 
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
-            configuration.AddDefaultFilters();
             configuration.AddHttpLoader();
             configuration.SetDistributedCache();
+
+            services.AddSingleton(configuration);
 
             return configuration;
         }

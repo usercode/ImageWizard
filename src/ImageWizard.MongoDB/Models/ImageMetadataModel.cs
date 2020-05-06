@@ -21,6 +21,8 @@ namespace ImageWizard.MongoDB.Models
         public string Key { get; set; }
         public string Hash { get; set; }
         public string MimeType { get; set; }
+        public int? Width { get; set; }
+        public int? Height { get; set; }
         public double? DPR { get; set; }
         public int FileLength { get; set; }
         public CacheSettings Cache { get; set; }

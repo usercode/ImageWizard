@@ -1,23 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using ImageWizard.MongoDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ImageWizard.Analytics;
 using ImageWizard.Azure;
-using System.Web;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using ImageWizard.Core.ImageLoaders;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.WebUtilities;
+using ImageWizard.Filters;
+using ImageWizard.ImageSharp.Filters;
 
 namespace ImageWizard.TestApp
 {
@@ -42,14 +38,21 @@ namespace ImageWizard.TestApp
 
             services.AddImageWizard(x =>
             {
+#if DEBUG
+                x.AllowUnsafeUrl = true;
+#else
                 x.AllowUnsafeUrl = false;
+#endif
+
                 x.UseClintHints = true;
                 x.UseETag = true;
                 x.Key = key;
             })
+                .AddImageSharp(x=> { x.ImageMaxHeight = 4000; x.ImageMaxWidth = 4000; },x => x.AddFilter<ResizeFilter>())
+                .AddSvgNet()
                 //.SetFileCache()
                 //.SetMongoDBCache()
-                .AddHttpLoader(x=>
+                .AddHttpLoader(x =>
                 {
                     //x.RefreshMode = ImageLoaderRefreshMode.EveryTime;
                     x.SetHeader("Api", "XYZ");

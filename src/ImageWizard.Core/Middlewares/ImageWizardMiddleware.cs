@@ -1,13 +1,12 @@
 ﻿using ImageWizard.Core;
 using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageLoaders;
+using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.Settings;
 using ImageWizard.Core.Types;
 using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
-using ImageWizard.ImageFormats;
-using ImageWizard.ImageFormats.Base;
 using ImageWizard.ImageLoaders;
 using ImageWizard.ImageStorages;
 using ImageWizard.Services.Types;
@@ -22,8 +21,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -48,13 +45,11 @@ namespace ImageWizard.Middlewares
             RequestDelegate next,
             IOptions<ImageWizardOptions> options,
             ILogger<ImageWizardMiddleware> logger,
-            FilterManager filterManager,
-            ImageLoaderManager imageLoaderManager
+            ImageWizardBuilder builder
             )
         {
             Options = options.Value;
-            FilterManager = filterManager;
-            ImageLoaderManager = imageLoaderManager;
+            Builder = builder;
             Logger = logger;
 
             _next = next;
@@ -68,14 +63,9 @@ namespace ImageWizard.Middlewares
         private ImageWizardOptions Options { get; }
 
         /// <summary>
-        /// FilterManager
-        /// </summary>
-        private FilterManager FilterManager { get; }
-
-        /// <summary>
         /// ImageLoaderManager
         /// </summary>
-        private ImageLoaderManager ImageLoaderManager { get; }
+        private ImageWizardBuilder Builder { get; }
 
         /// <summary>
         /// Logger
@@ -155,7 +145,7 @@ namespace ImageWizard.Middlewares
             }
 
             //get image loader
-            Type imageLoaderType = ImageLoaderManager.Get(url_loaderType);
+            Type imageLoaderType = Builder.ImageLoaderManager.Get(url_loaderType);
             IImageLoader loader = (IImageLoader)context.RequestServices.GetService(imageLoaderType);
 
             if (loader == null)
@@ -209,8 +199,6 @@ namespace ImageWizard.Middlewares
 
                     foreach(string method in extraMethods)
                     {
-                        url_filters.Insert(0, method);
-
                         url.Insert(0, "/");
                         url.Insert(0, method);
                     }
@@ -271,9 +259,31 @@ namespace ImageWizard.Middlewares
 
                 if (originalImage != null) //is there a new version of original image?
                 {
-                    IImageFormat targetFormat = ImageFormatHelper.Parse(originalImage.MimeType);
+                    var processingContext = new ProcessingPipelineContext(
+                                                                 new CurrentImage(originalImage.MimeType, originalImage.Data, null, null, null),
+                                                                 clientHints,
+                                                                 Options,
+                                                                 url_filters);
 
-                    byte[] transformedImageData;
+                    //find processing pipeline by mime type
+                    Type processingPipelineType = Builder.GetPipeline(processingContext.CurrentImage.MimeType);
+                    IProcessingPipeline processingPipeline = (IProcessingPipeline)context.RequestServices.GetService(processingPipelineType);
+
+                    if (processingPipeline == null)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                        await context.Response.WriteAsync("Processing pipeline not found: " + processingContext.CurrentImage.MimeType);
+
+                        return;
+                    }
+
+                    //start processing
+                    await processingPipeline.StartAsync(processingContext);
+                    
+                    Logger.LogTrace("Save new cached image");
+
+                    //create hash of cached image
+                    byte[] hash = SHA256.Create().ComputeHash(processingContext.CurrentImage.Data);
 
                     //create metadata
                     ImageMetadata imageMetadata = new ImageMetadata()
@@ -284,95 +294,19 @@ namespace ImageWizard.Middlewares
                         Filters = url_filters,
                         LoaderSource = url_loaderSource,
                         LoaderType = url_loaderType,
-                        MimeType = targetFormat.MimeType,
-                        DPR = null
+                        Hash = hash.ToHexcode(),
+                        MimeType = processingContext.CurrentImage.MimeType,
+                        DPR = processingContext.CurrentImage.DPR,
+                        FileLength = processingContext.CurrentImage.Data.Length,                        
+                        Width = processingContext.CurrentImage.Width,
+                        Height = processingContext.CurrentImage.Height
                     };
 
-                    bool disableCache = false;
-
-                    //skip svg
-                    if (targetFormat is SvgFormat)
-                    {
-                        Logger.LogTrace("SVG file: skip filters");
-
-                        transformedImageData = originalImage.Data;
-                    }
-                    else
-                    {
-                        //load image
-                        using (Image image = Image.Load(originalImage.Data))
-                        {
-                            FilterContext filterContext = new FilterContext(Options, image, targetFormat, clientHints);
-
-                            //execute filters
-                            foreach (string filter in url_filters)
-                            {
-                                //find and execute filter
-                                IFilterAction foundFilter = FilterManager.FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
-
-                                if (foundFilter != null)
-                                {
-                                    Logger.LogTrace("Filter executed: " + filter);
-                                }
-                                else
-                                {
-                                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                                    await context.Response.WriteAsync($"filter was not found: {filter}");
-
-                                    return;
-                                }
-                            }
-
-                            //check max width and height
-                            bool change = false;
-
-                            int width = image.Width;
-                            int height = image.Height;
-
-                            if (Options.ImageMaxWidth != null && width > Options.ImageMaxWidth)
-                            {
-                                change = true;
-                                width = Options.ImageMaxWidth.Value;
-                            }
-
-                            if (Options.ImageMaxHeight != null && height > Options.ImageMaxHeight)
-                            {
-                                change = true;
-                                height = Options.ImageMaxHeight.Value;
-                            }
-
-                            if (change == true)
-                            {
-                                new ResizeFilter().Resize(width, height, ResizeMode.Max, filterContext);
-                            }
-
-                            MemoryStream mem = new MemoryStream();
-
-                            //generate image
-                            filterContext.ImageFormat.SaveImage(image, mem);
-
-                            transformedImageData = mem.ToArray();
-
-                            //update some metadata
-                            imageMetadata.DPR = filterContext.ClientHints.DPR;
-                            imageMetadata.MimeType = filterContext.ImageFormat.MimeType;
-
-                            disableCache = filterContext.NoImageCache;
-                        }
-                    }
-
-                    Logger.LogTrace("Save new cached image");
-
-                    //create hash of cached image
-                    byte[] hash = SHA256.Create().ComputeHash(transformedImageData);
-
-                    imageMetadata.Hash = hash.ToHexcode();
-                    imageMetadata.FileLength = transformedImageData.Length;
-
-                    cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(transformedImageData)));
+                    cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(processingContext.CurrentImage.Data)));
 
                     //disable cache?
-                    if (disableCache == false && (loader.RefreshMode == ImageLoaderRefreshMode.UseRemoteCacheControl && cachedImage.Metadata.Cache.NoStore) == false)
+                    if (processingContext.DisableCache == false
+                        && (loader.RefreshMode == ImageLoaderRefreshMode.UseRemoteCacheControl && cachedImage.Metadata.Cache.NoStore) == false)
                     {
                         //save cached image
                         await imageCache.WriteAsync(key, cachedImage);

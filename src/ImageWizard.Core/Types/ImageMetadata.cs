@@ -37,6 +37,16 @@ namespace ImageWizard.Services.Types
         public string MimeType { get; set; }
 
         /// <summary>
+        /// Width
+        /// </summary>
+        public int? Width { get; set; }
+
+        /// <summary>
+        /// Height
+        /// </summary>
+        public int? Height { get; set; }
+
+        /// <summary>
         /// FileLength
         /// </summary>
         public int FileLength { get; set; }

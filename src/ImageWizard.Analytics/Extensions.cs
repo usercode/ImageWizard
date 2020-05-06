@@ -9,7 +9,7 @@ namespace ImageWizard.Analytics
         public static IImageWizardBuilder AddAnalytics(this IImageWizardBuilder builder)
         {
             builder.Services.AddSingleton<IAnalyticsData, AnalyticsData>();
-            builder.AddInterceptor<ImageRequestAnalytics>();
+            builder.Services.AddTransient<IImageWizardInterceptor, ImageRequestAnalytics>();
 
             return builder;
         }

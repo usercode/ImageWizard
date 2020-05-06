@@ -22,9 +22,6 @@ namespace ImageWizard.Settings
             AllowUnsafeUrl = false;
             Key = null;
 
-            ImageMaxWidth = 4000;
-            ImageMaxHeight = 4000;
-
             AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
 
             CacheControl = new CacheControl();
@@ -59,16 +56,6 @@ namespace ImageWizard.Settings
         /// AllowedDPR
         /// </summary>
         public double[] AllowedDPR { get; set; }
-
-        /// <summary>
-        /// ImageMaxWidth
-        /// </summary>
-        public int? ImageMaxWidth { get; set; }
-
-        /// <summary>
-        /// ImageMaxHeight
-        /// </summary>
-        public int? ImageMaxHeight { get; set; }
 
         /// <summary>
         /// Generates random 64 byte key.

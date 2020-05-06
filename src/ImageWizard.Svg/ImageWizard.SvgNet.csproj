@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>usercode</Authors>
+    <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
+    <Version>2.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Svg" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\ImageWizard.Utils\ImageWizard.Utils.projitems" Label="Shared" />
+
+</Project>

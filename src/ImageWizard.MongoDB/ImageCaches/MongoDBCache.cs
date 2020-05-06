@@ -1,5 +1,4 @@
-﻿using ImageWizard.ImageFormats.Base;
-using ImageWizard.ImageStorages;
+﻿using ImageWizard.ImageStorages;
 using ImageWizard.Services.Types;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -40,6 +39,11 @@ namespace ImageWizard.MongoDB.ImageCaches
             //create index
             ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Key)));
             ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Created)));
+            ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.MimeType)));
+            ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.DPR)));
+            ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Width)));
+            ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Height)));
+
         }
 
         /// <summary>
@@ -90,6 +94,8 @@ namespace ImageWizard.MongoDB.ImageCaches
                 Filters = cachedImage.Metadata.Filters,
                 LoaderType = cachedImage.Metadata.LoaderType,
                 MimeType = cachedImage.Metadata.MimeType,
+                Width = cachedImage.Metadata.Width,
+                Height = cachedImage.Metadata.Height,
                 DPR = cachedImage.Metadata.DPR,
                 FileLength = cachedImage.Metadata.FileLength
             };

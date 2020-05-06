@@ -1,5 +1,4 @@
 ﻿using ImageWizard.Core.Types;
-using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
 using ImageWizard.Types;
 using System;

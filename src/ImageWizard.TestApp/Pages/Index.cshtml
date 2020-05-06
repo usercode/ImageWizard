@@ -10,12 +10,30 @@
 
         <a href="https://github.com/usercode/ImageWizard" class="btn btn-success">Go to GitHub</a>
 
-        <p>DPR: @Model.DPR </p>
-        <p>Width: @Model.Width</p>
-        <p>Viewport-Width: @Model.ViewportWidth</p>
+        <h2>SVG transforming</h2>
+        <p>@@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").BuildUrl()</p>
+        <p>@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").BuildUrl()</p>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <p>Original (width=100px, height=100px)</p>
+                <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").BuildUrl()" />
+            </div>
+            <div class="col-lg-3">
+                <p>RemoveSize()</p>
+                <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").SvgRemoveSize().BuildUrl()" />
+            </div>
+            <div class="col-lg-3">
+                <p>Rotate(45.0) </p>
+                <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").SvgRemoveSize().SvgRotate(45).BuildUrl()" />
+            </div>
+            <div class="col-lg-3">
+                <p>Blur() </p>
+                <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").SvgRemoveSize().SvgBlur().BuildUrl()" />
+            </div>
+        </div>
 
         <h2>Fetch local file (from wwwroot folder)</h2>
-
         <p>@@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).BuildUrl()</p>
         <p>@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400, 400).BuildUrl()</p>
 

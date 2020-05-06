@@ -1,4 +1,5 @@
-﻿using ImageWizard.Core.ImageLoaders;
+﻿using ImageWizard.Core.ImageFilters.Base;
+using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.Middlewares;
 using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
@@ -12,6 +13,8 @@ using System.Text;
 
 namespace ImageWizard.Core.Settings
 {
+    public delegate void PipelineAction<T>(T pipeline);
+
     /// <summary>
     /// ServiceConfiguration
     /// </summary>
@@ -21,11 +24,8 @@ namespace ImageWizard.Core.Settings
         {
             Services = services;
 
-            FilterManager = new FilterManager();
-            ImageLoaderManager = new ImageLoaderManager();
-
-            Services.AddSingleton(FilterManager);
-            Services.AddSingleton(ImageLoaderManager);
+            ImageLoaderManager = new TypeManager();
+            PipelineManager = new TypeManager();
         }
 
         /// <summary>
@@ -34,15 +34,28 @@ namespace ImageWizard.Core.Settings
         public IServiceCollection Services { get; }
 
         /// <summary>
-        /// FilterManager
-        /// </summary>
-        public FilterManager FilterManager { get; }
-
-        /// <summary>
         /// ImageLoaderManager
         /// </summary>
-        public ImageLoaderManager ImageLoaderManager { get; }
+        public TypeManager ImageLoaderManager { get; }
 
-        
+        /// <summary>
+        /// PipelineManager
+        /// </summary>
+        public TypeManager PipelineManager { get; }
+
+        public void AddPipeline<T>(string[] mimeTypes) where T : class, IProcessingPipeline
+        {
+            Services.AddSingleton<T>();
+
+            foreach(string mimeType in mimeTypes)
+            {
+                PipelineManager.Register<T>(mimeType);
+            }
+        }
+
+        public Type GetPipeline(string key)
+        {
+            return PipelineManager.Get(key);
+        }
     }
 }
