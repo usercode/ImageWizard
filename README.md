@@ -33,7 +33,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 ## Processing pipelines
 
-| package  |  mime type | |
+| package  |  mime type |
 |------------------------------------|-----------------|
 | ImageWizard.ImageSharp | image/jpg, image/png, image/gif, image/bmp | 
 | ImageWizard.SvgNet     | image/svg+xml |
@@ -185,7 +185,7 @@ Register filter:
 
 ```csharp
 services.AddImageWizard()
-	.AddFilter<BackgroundColorFilter>();
+	.AddImageSharp(x => x.AddFilter<BackgroundColorFilter>());
 ```
 
 URL segments: 
