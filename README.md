@@ -78,6 +78,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 ### SvgNet
 #### SVG transformations
+- removesize()
 - blur()
 - blur(deviation)
   - value: float
@@ -115,9 +116,7 @@ services.AddImageWizard(options =>
                            options.AllowUnsafeUrl = true;             
 			   options.AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
                            options.Key = "DEMO-KEY..."; //64 byte key encoded in Base64Url
-                           options.UseETag = true;
-                           options.ImageMaxWidth = 4000;
-                           options.ImageMaxHeight = 4000;                           
+                           options.UseETag = true;                                                
                            options.CacheControl.IsEnabled = true;
                            options.CacheControl.MaxAge = TimeSpan.FromDays(365);
                            options.CacheControl.MustRevalidate = false;
@@ -125,8 +124,11 @@ services.AddImageWizard(options =>
                            options.CacheControl.NoCache = false;
                            options.CacheControl.NoStore = false;
                        })
-                       //handle images
-                       .AddImageSharp()
+                       //handle images (jpg, png, gif, bmp)
+                       .AddImageSharp(options => { 
+						options.ImageMaxWidth = 4000;
+						options.ImageMaxHeight = 4000;
+					})
                        //handle svg
                        .AddSvgNet()
                        //use file cache
