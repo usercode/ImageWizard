@@ -34,10 +34,6 @@ namespace ImageWizard.SvgNet.Filters
             AddFilter<RemoveSizeFilter>();
             AddFilter<RotateFilter>();
             AddFilter<BlurFilter>();
-
-            var doc = SvgDocument.Open<SvgDocument>(@"C:\Users\admin\Desktop\tset.txt");
-
-
         }
 
         public override IEnumerable<string> MimeType => new[] { MimeTypes.Svg };

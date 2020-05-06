@@ -48,7 +48,7 @@ namespace ImageWizard.TestApp
                 x.UseETag = true;
                 x.Key = key;
             })
-                .AddImageSharp(x=> { x.ImageMaxHeight = 4000; x.ImageMaxWidth = 4000; },x => x.AddFilter<ResizeFilter>())
+                .AddImageSharp(x => { x.ImageMaxHeight = 4000; x.ImageMaxWidth = 4000; }, x => x.AddFilter<ResizeFilter>())
                 .AddSvgNet()
                 //.SetFileCache()
                 //.SetMongoDBCache()
