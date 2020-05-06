@@ -3,11 +3,13 @@ A ASP.NET Core service / middleware to manipulate your images dynamically as alt
 
 | Package                       | Release | 
 |--------------------------------|-----------------|
-| ImageWizard.Core               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
+| ImageWizard.Core          | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
 | ImageWizard.Client        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Client.svg)](https://www.nuget.org/packages/ImageWizard.Client/) |
-| ImageWizard.MongoDB               | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
-| ImageWizard.Piranha | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/) |
-| ImageWizard.Azure | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Azure.svg)](https://www.nuget.org/packages/ImageWizard.Azure/) |
+| ImageWizard.ImageSharp    | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.ImageSharp.svg)](https://www.nuget.org/packages/ImageWizard.ImageSharp/)|
+| ImageWizard.SvgNet        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SvgNet.svg)](https://www.nuget.org/packages/ImageWizard.SvgNet/)|
+| ImageWizard.MongoDB       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
+| ImageWizard.Piranha       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/) |
+| ImageWizard.Azure         | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Azure.svg)](https://www.nuget.org/packages/ImageWizard.Azure/) |
 
 ## Overview
 
@@ -22,15 +24,22 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 </p>
 
 | Description         | Url segment |
-|---------------------|-----------------|
-| base path | "image" |
-| signature based on HMACSHA256 | "cGiAwFYGYWx0SzO0YyCidWIfkdlUYrVgBwbm7bcTOjE" or "unsafe" (if enabled) |
-| any filters | "resize(200,200)/grayscale()/jpg(90)" |
-| loader type | "fetch" |
-| loader source | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
+|---------------------------------|-----------------|
+| base path                       | "image" |
+| signature based on HMACSHA256   | "cGiAwFYGYWx0SzO0YyCidWIfkdlUYrVgBwbm7bcTOjE" or "unsafe" (if enabled) |
+| any filters                     | "resize(200,200)/grayscale()/jpg(90)" |
+| loader type                     | "fetch" |
+| loader source                   | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
-## Image filters
-### Image transformations
+## Processing pipelines
+
+| package  |  mime type |
+|------------------------------------|-----------------|
+| ImageWizard.ImageSharp | image/jpg, image/png, image/gif, image/bmp | 
+| ImageWizard.SvgNet     | image/svg+xml |
+
+### ImageSharp
+#### Image transformations
 - resize(size)
 - resize(width,height)
 - resize(width,height,mode)
@@ -42,7 +51,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - crop(x,y,width,height)
   - int for absolute values, 0.0 to 1.0 for relative values
 - backgroundcolor(r,g,b)
-  - int (0 to 255) or double (0.0 to 1.0)
+  - int (0 to 255) or float (0.0 to 1.0)
 - flip(type)
   - type: horizontal, vertical
 - rotate(value) 
@@ -56,17 +65,24 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - brightness(value)
 - contrast(value)
 
-### Output formats
-
+#### Output formats
 - jpg()
 - jpg(quality)
 - png()
 - gif()
 - bmp()
 
-### Special options
+#### Special options
 - dpr(value) //set allowed device pixel ratio
 - nocache() //do not store the transformed image
+
+### SvgNet
+#### SVG transformations
+- blur()
+- blur(deviation)
+  - value: float
+- rotate(angle)
+  - value: float
 
 ## Image loaders
 - HTTP loader ("fetch")
@@ -78,7 +94,6 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - gravatar loader ("gravatar")
 
 ## Image caches
-
 - file cache
 - distributed cache
   - MS SQL
@@ -110,6 +125,10 @@ services.AddImageWizard(options =>
                            options.CacheControl.NoCache = false;
                            options.CacheControl.NoStore = false;
                        })
+                       //handle images
+                       .AddImageSharp()
+                       //handle svg
+                       .AddSvgNet()
                        //use file cache
                        .SetFileCache(options => options.Folder = "FileCache")
                        //or MongoDB cache
@@ -148,18 +167,18 @@ app.UseEndpoints(x => x.MapImageWizard());
 - add filter context parameter to get access to image and settings
 
 ```csharp
- public class BackgroundColorFilter : FilterBase
+ public class BackgroundColorFilter : ImageFilter
     {
         [Filter]
-        public void BackgroundColor(byte r, byte g, byte b, FilterContext context)
+        public void BackgroundColor(byte r, byte g, byte b)
         {
-            context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
+            Context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
         }
 
         [Filter]
-        public void BackgroundColor(float r, float g, float b, FilterContext context)
+        public void BackgroundColor(float r, float g, float b)
         {
-            context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
+            Context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
         }
     }
 ```
@@ -168,7 +187,7 @@ Register filter:
 
 ```csharp
 services.AddImageWizard()
-	.AddFilter<BackgroundColorFilter>();
+	.AddImageSharp(x => x.AddFilter<BackgroundColorFilter>());
 ```
 
 URL segments: 
@@ -184,12 +203,12 @@ URL segments:
 - all parameter with DPR attribute will be multiplied by the DPR factor
 
 ```csharp
- public class ResizeFilter : FilterBase
+ public class ResizeFilter : ImageFilter
  {
       [Filter]
-      public void Resize([DPR]int width, [DPR]int height, FilterContext context)
+      public void Resize([DPR]int width, [DPR]int height)
       {
-          context.Image.Mutate(m => m.Resize(width, height));
+          Context.Image.Mutate(m => m.Resize(width, height));
       }
  }
 ```
@@ -214,9 +233,9 @@ Example:
  public class TextFilter : FilterBase
  {
       [Filter]
-      public void DrawText(int x = 0, int y = 0, string text = "", int size = 12, string font = "Arial", FilterContext context = null)
+      public void DrawText(int x = 0, int y = 0, string text = "", int size = 12, string font = "Arial")
       {
-          context.Image.Mutate(m =>
+          Context.Image.Mutate(m =>
           {
               m.DrawText(
                   text,

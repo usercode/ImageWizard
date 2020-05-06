@@ -37,6 +37,6 @@ namespace ImageWizard.Services.Types
         /// <summary>
         /// Cache
         /// </summary>
-        public CacheSettings Cache { get; set; }
+        public CacheSettings Cache { get; }
     }
 }

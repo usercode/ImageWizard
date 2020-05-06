@@ -14,34 +14,22 @@ namespace ImageWizard.Filters
     /// <summary>
     /// FilterAction
     /// </summary>
-    public class FilterAction<TFilter> : IFilterAction
-        where TFilter : IFilter
+    public abstract class FilterAction<TFilter> : IFilterAction
+        where TFilter : IFilter, new()
     {
-        public delegate void FilterActionHandler(GroupCollection groups, TFilter filer, FilterContext filterContext);
+        public delegate void FilterActionHandler(GroupCollection groups, TFilter filer);
 
-        public FilterAction(Regex regex, MethodInfo method, TFilter filter)
+        public FilterAction(Regex regex, MethodInfo method)
         {
             Regex = regex;
-            Filter = filter;
-            Method = method;
 
-            MethodDelegate = BuildFastAccessor();
+            MethodDelegate = BuildFastAccessor(method);
         }
 
         /// <summary>
         /// Regex
         /// </summary>
         public Regex Regex { get; }
-
-        /// <summary>
-        /// Filter
-        /// </summary>
-        public TFilter Filter { get; }
-
-        /// <summary>
-        /// TargetMethod
-        /// </summary>
-        public MethodInfo Method { get; }
 
         /// <summary>
         /// MethodDelegate
@@ -57,23 +45,27 @@ namespace ImageWizard.Filters
                 return false;
             }
 
-            MethodDelegate(match.Groups, Filter, filterContext);
+            TFilter filter = new TFilter()
+            {
+                Context = filterContext
+            };
+
+            MethodDelegate(match.Groups, filter);
 
             return true;
         }
 
-        private FilterActionHandler BuildFastAccessor()
+        private FilterActionHandler BuildFastAccessor(MethodInfo method)
         {
             ParameterExpression groupsParameter = Expression.Parameter(typeof(GroupCollection));
             ParameterExpression filterParameter = Expression.Parameter(typeof(TFilter));
-            ParameterExpression filterContextParameter = Expression.Parameter(typeof(FilterContext));
 
             //find group indexer property -> Group["Key"]
             PropertyInfo groupCollectionItemStringProperty = typeof(GroupCollection)
                                                                 .GetProperties()
                                                                 .FirstOrDefault(x => x.Name == "Item" && x.GetIndexParameters().Any(p => p.ParameterType == typeof(string)));
 
-            var parsedVariables = Method.GetParameters()
+            var parsedVariables = method.GetParameters()
                                             .Select(x =>
                                             {
                                                 ParameterExpression propertyExpression = Expression.Variable(x.ParameterType, x.Name);
@@ -118,37 +110,32 @@ namespace ImageWizard.Filters
                                                 {
                                                     parsedValue = groupValue;
                                                 }
-                                                else if (x.ParameterType == typeof(FilterContext))
-                                                {
-                                                    result = filterContextParameter;
-                                                }
                                                 else
                                                 {
                                                     throw new Exception("Parameter type is not supported: " + x.ParameterType.Name);
                                                 }
 
-                                                if (parsedValue != null)
-                                                {
-                                                    result = Expression.Condition(
-                                                                              groupSuccess,
-                                                                              parsedValue,
-                                                                              defaultValue
-                                                                              );
-                                                }
+                                                result = Expression.Condition(
+                                                                            groupSuccess,
+                                                                            parsedValue,
+                                                                            defaultValue
+                                                                            );                                                
 
                                                 List<Expression> results = new List<Expression>();
 
                                                 results.Add(Expression.Assign(propertyExpression, result));
+
+                                                AppliedPropertyExpression(x, filterParameter, propertyExpression, results);
 
                                                 //check dpr attribute
                                                 if (x.GetCustomAttribute<DPRAttribute>() != null)
                                                 {
                                                     //multiply parameter with dpr value
                                                     results.Add(
-                                                    Expression.IfThen(Expression.NotEqual(Expression.Property(Expression.Property(filterContextParameter, nameof(FilterContext.ClientHints)), nameof(FilterContext.ClientHints.DPR)), Expression.Constant(null)),
+                                                    Expression.IfThen(Expression.NotEqual(Expression.Property(Expression.Property(Expression.Property(filterParameter, nameof(IFilter.Context)), nameof(FilterContext.ClientHints)), nameof(FilterContext.ClientHints.DPR)), Expression.Constant(null)),
                                                     Expression.Assign(propertyExpression,
                                                         Expression.Convert(
-                                                            Expression.Multiply(Expression.Convert(propertyExpression, typeof(double)), Expression.Property(Expression.Property(Expression.Property(filterContextParameter, nameof(FilterContext.ClientHints)), nameof(FilterContext.ClientHints.DPR)), nameof(Nullable<double>.Value))),
+                                                            Expression.Multiply(Expression.Convert(propertyExpression, typeof(double)), Expression.Property(Expression.Property(Expression.Property(Expression.Property(filterParameter, nameof(IFilter.Context)), nameof(FilterContext.ClientHints)), nameof(FilterContext.ClientHints.DPR)), nameof(Nullable<double>.Value))),
                                                             x.ParameterType))));
                                                 }
 
@@ -165,12 +152,19 @@ namespace ImageWizard.Filters
                                                 //call filter method with parsed values
                                                 .Concat(new[] { Expression.Call(
                                                                             filterParameter,
-                                                                            Method,
+                                                                            method,
                                                                             variables) }).ToArray();
 
             Expression block = Expression.Block(variables, assigns);
 
-            return Expression.Lambda<FilterActionHandler>(block, groupsParameter, filterParameter, filterContextParameter).Compile();
+            return Expression.Lambda<FilterActionHandler>(block, groupsParameter, filterParameter).Compile();
         }
+
+        protected virtual void AppliedPropertyExpression(ParameterInfo parameterInfo, ParameterExpression filterParameter, ParameterExpression propertyExpr, IList<Expression> result)
+        {
+
+        }
+
+       
     }
 }

@@ -24,6 +24,10 @@ jobs:
       run: dotnet pack --configuration Release "./src"
     - name: Publish "ImageWizard.Core" to nuget
       run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true
+    - name: Publish "ImageWizard.ImageSharp" to nuget
+      run: dotnet nuget push "./src/ImageWizard.ImageSharp/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true
+    - name: Publish "ImageWizard.SvgNet" to nuget
+      run: dotnet nuget push "./src/ImageWizard.SvgNet/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true    
     - name: Publish "ImageWizard.Analytics" to nuget
       run: dotnet nuget push "./src/ImageWizard.Analytics/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true
     - name: Publish "ImageWizard.Azure" to nuget
@@ -34,5 +38,3 @@ jobs:
       run: dotnet nuget push "./src/ImageWizard.MongoDB/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true
     - name: Publish "ImageWizard.Piranha" to nuget
       run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true
-      
-      

@@ -69,7 +69,7 @@ namespace ImageWizard.Core.ImageLoaders.Files
                 await stream.CopyToAsync(mem);
             }
 
-            string mimeType = ImageFormatHelper.GetMimeTypeByExtension(fileInfo.Name);
+            string mimeType = MimeTypeHelper.GetMimeTypeByExtension(fileInfo.Name);
 
             return new OriginalImage(mimeType, mem.ToArray(), new CacheSettings() { ETag = etag });
         }

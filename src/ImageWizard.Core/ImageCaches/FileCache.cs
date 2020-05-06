@@ -2,8 +2,6 @@
 using ImageWizard.Core.ImageCaches;
 using ImageWizard.Core.ImageLoaders.Files;
 using ImageWizard.Core.Types;
-using ImageWizard.ImageFormats;
-using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
 using ImageWizard.Types;
 using Microsoft.AspNetCore.Hosting;

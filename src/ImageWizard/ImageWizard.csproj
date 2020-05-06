@@ -23,8 +23,9 @@
     <ProjectReference Include="..\ImageWizard.Analytics\ImageWizard.Analytics.csproj" />
     <ProjectReference Include="..\ImageWizard.Azure\ImageWizard.Azure.csproj" />
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+    <ProjectReference Include="..\ImageWizard.ImageSharp\ImageWizard.ImageSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.MongoDB\ImageWizard.MongoDB.csproj" />
-    <ProjectReference Include="..\ImageWizard.SharedContract\ImageWizard.SharedContract.csproj" />
+    <ProjectReference Include="..\ImageWizard.Svg\ImageWizard.SvgNet.csproj" />
   </ItemGroup>
 
 </Project>
