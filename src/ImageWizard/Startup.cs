@@ -45,6 +45,8 @@ namespace ImageWizard
             string cache = Configuration.GetSection("General")["Cache"];
 
             IImageWizardBuilder imageWizard = services.AddImageWizard()
+                                                        .AddImageSharp()
+                                                        .AddSvgNet()
                                                         .AddHttpLoader()
                                                         .AddFileLoader()
                                                         .AddYoutubeLoader()

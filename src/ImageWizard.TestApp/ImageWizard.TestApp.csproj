@@ -24,7 +24,7 @@
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
     <ProjectReference Include="..\ImageWizard.ImageSharp\ImageWizard.ImageSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.MongoDB\ImageWizard.MongoDB.csproj" />
-    <ProjectReference Include="..\ImageWizard.Svg\ImageWizard.SvgNet.csproj" />
+    <ProjectReference Include="..\ImageWizard.SvgNet\ImageWizard.SvgNet.csproj" />
   </ItemGroup>
 
 </Project>
