@@ -22,10 +22,10 @@ jobs:
       run: dotnet test "./src"
     - name: Create the package
       run: dotnet pack --configuration Release "./src"
-    - name: Publish "ImageWizard.Core" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true
     - name: Publish "ImageWizard.Utils" to nuget
       run: dotnet nuget push "./src/ImageWizard.Utils/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true
+    - name: Publish "ImageWizard.Core" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true    
     - name: Publish "ImageWizard.ImageSharp" to nuget
       run: dotnet nuget push "./src/ImageWizard.ImageSharp/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} --no-symbols true
     - name: Publish "ImageWizard.SvgNet" to nuget
