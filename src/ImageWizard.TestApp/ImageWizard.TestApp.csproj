@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>usercode</Authors>
+    <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

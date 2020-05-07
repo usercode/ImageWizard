@@ -1,5 +1,4 @@
 ﻿using ImageWizard.Client.Builder.Types;
-using ImageWizard.SharedContract.FilterTypes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

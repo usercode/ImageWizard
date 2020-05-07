@@ -1,5 +1,5 @@
 ﻿using ImageWizard.Client.Builder.Types;
-using ImageWizard.SharedContract;
+using ImageWizard.Utils;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

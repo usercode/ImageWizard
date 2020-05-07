@@ -6,7 +6,6 @@ using ImageWizard.Core.Types;
 using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
 using ImageWizard.Services.Types;
-using ImageWizard.SharedContract.FilterTypes;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Svg;

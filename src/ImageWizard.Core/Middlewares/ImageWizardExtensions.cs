@@ -4,7 +4,6 @@ using ImageWizard.ImageLoaders;
 using ImageWizard.ImageStorages;
 using ImageWizard.Middlewares;
 using ImageWizard.Settings;
-using ImageWizard.SharedContract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;

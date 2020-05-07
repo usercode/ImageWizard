@@ -8,7 +8,7 @@ using ImageWizard.ImageFormats.Base;
 using ImageWizard.ImageSharp.Builder;
 using ImageWizard.ImageSharp.Filters.ImageFormats;
 using ImageWizard.Services.Types;
-using ImageWizard.SharedContract.FilterTypes;
+using ImageWizard.Utils.FilterTypes;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

@@ -5,7 +5,7 @@
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,5 +18,7 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
-  <Import Project="..\ImageWizard.Utils\ImageWizard.Utils.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\ImageWizard.Utils\ImageWizard.Utils.csproj" />
+  </ItemGroup>
 </Project>

@@ -1,5 +1,4 @@
-﻿using ImageWizard.SharedContract;
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.SharedContract
+namespace ImageWizard.Utils
 {
     /// <summary>
     /// CryptoService

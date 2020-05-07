@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.SharedContract.FilterTypes
+namespace ImageWizard.Utils.FilterTypes
 {
     public enum RotateMode
     {

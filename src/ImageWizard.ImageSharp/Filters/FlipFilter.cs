@@ -13,17 +13,17 @@ namespace ImageWizard.ImageSharp.Filters
     public class FlipFilter : ImageFilter
     {
         [Filter]
-        public void Flip(SharedContract.FilterTypes.FlipMode flippingMode)
+        public void Flip(Utils.FilterTypes.FlipMode flippingMode)
         {
             FlipMode flipMode;
 
             switch(flippingMode)
             {
-                case SharedContract.FilterTypes.FlipMode.Horizontal:
+                case Utils.FilterTypes.FlipMode.Horizontal:
                     flipMode = FlipMode.Horizontal;
                     break;
 
-                case SharedContract.FilterTypes.FlipMode.Vertical:
+                case Utils.FilterTypes.FlipMode.Vertical:
                     flipMode = FlipMode.Vertical;
                     break;
 
