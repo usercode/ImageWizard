@@ -1,9 +1,10 @@
 name: .NET Core
 
 on: 
-  push:
-    branches:
-      - master
+  page_build:
+  release:
+    types:
+      - created
 
 jobs:
   imagewizard:
