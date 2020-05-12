@@ -10,6 +10,7 @@ A ASP.NET Core service / middleware to manipulate your images dynamically as alt
 | ImageWizard.MongoDB       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
 | ImageWizard.Piranha       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/) |
 | ImageWizard.Azure         | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Azure.svg)](https://www.nuget.org/packages/ImageWizard.Azure/) |
+| ImageWizard.AWS           | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.AWS.svg)](https://www.nuget.org/packages/ImageWizard.AWS/) |
 
 ## Overview
 

@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ImageWizard.Analytics\ImageWizard.Analytics.csproj" />
+    <ProjectReference Include="..\ImageWizard.AWS\ImageWizard.AWS.csproj" />
     <ProjectReference Include="..\ImageWizard.Azure\ImageWizard.Azure.csproj" />
     <ProjectReference Include="..\ImageWizard.Client\ImageWizard.Client.csproj" />
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />

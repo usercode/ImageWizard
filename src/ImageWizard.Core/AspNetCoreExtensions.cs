@@ -30,14 +30,6 @@ namespace ImageWizard
             return services;
         }
 
-        public static string GetTagUnquoted(this EntityTagHeaderValue value)
-        {
-            return value.Tag.GetTagUnquoted();
-        }
-
-        public static string GetTagUnquoted(this string value)
-        {
-            return value.Substring(1, value.Length - 2);
-        }
+        
     }
 }

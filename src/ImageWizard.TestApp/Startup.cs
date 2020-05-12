@@ -14,6 +14,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.WebUtilities;
 using ImageWizard.Filters;
 using ImageWizard.ImageSharp.Filters;
+using ImageWizard.AWS;
 
 namespace ImageWizard.TestApp
 {
@@ -48,7 +49,12 @@ namespace ImageWizard.TestApp
                 x.UseETag = true;
                 x.Key = key;
             })
-                .AddImageSharp(x => { x.ImageMaxHeight = 4000; x.ImageMaxWidth = 4000; }, x => x.AddFilter<ResizeFilter>())
+                .AddImageSharp(x => 
+                { 
+                    x.ImageMaxHeight = 4000; 
+                    x.ImageMaxWidth = 4000; 
+                }, 
+                x => x.AddFilter<ResizeFilter>())
                 .AddSvgNet()
                 //.SetFileCache()
                 //.SetMongoDBCache()
@@ -65,6 +71,10 @@ namespace ImageWizard.TestApp
                 {
                     x.ConnectionString = "";
                     x.ContainerName = "MyContainer";
+                })
+                .AddAWS(x =>
+                {
+                    x.BucketName = "MyBucket";
                 })
                 ;
 

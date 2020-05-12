@@ -31,6 +31,13 @@ namespace ImageWizard
             return (IImageFilters)imageUrlBuilder;
         }
 
+        public static IImageFilters AWS(this IImageLoaderType imageUrlBuilder, string url)
+        {
+            imageUrlBuilder.Image("aws", url);
+
+            return (IImageFilters)imageUrlBuilder;
+        }
+
         public static IImageFilters File(this IImageLoaderType imageUrlBuilder, string path)
         {
             imageUrlBuilder.Image("file", path);

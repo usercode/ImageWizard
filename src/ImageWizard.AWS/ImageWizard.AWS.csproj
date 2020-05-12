@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>usercode</Authors>
+    <Version>2.0.2</Version>
+     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.3.110.68" />
+  </ItemGroup>
+</Project>
