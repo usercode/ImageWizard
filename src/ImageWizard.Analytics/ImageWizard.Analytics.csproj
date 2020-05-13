@@ -9,9 +9,13 @@
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
-    <StartupObject />
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>    
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
   </ItemGroup>
