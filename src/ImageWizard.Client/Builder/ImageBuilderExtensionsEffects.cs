@@ -138,6 +138,13 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
+        public static IImageFilters RoundedCorner(this IImageFilters imageUrlBuilder, float value)
+        {
+            imageUrlBuilder.Filter($"roundedcorner({value.ToString("0.0", CultureInfo.InvariantCulture)})");
+
+            return imageUrlBuilder;
+        }
+
         public static IImageFilters SvgRemoveSize(this IImageFilters imageUrlBuilder)
         {
             imageUrlBuilder.Filter("removesize()");

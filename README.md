@@ -53,6 +53,8 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
   - int for absolute values, 0.0 to 1.0 for relative values
 - backgroundcolor(r,g,b)
   - int (0 to 255) or float (0.0 to 1.0)
+- backgroundcolor(r,g,b,a)
+  - int (0 to 255) or float (0.0 to 1.0)
 - flip(type)
   - type: horizontal, vertical
 - rotate(value) 
@@ -65,6 +67,8 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - invert()
 - brightness(value)
 - contrast(value)
+- roundedcorner(value)
+  - value: 0.0 to 1.0
 
 #### Output formats
 - jpg()

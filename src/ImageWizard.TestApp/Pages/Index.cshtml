@@ -38,17 +38,21 @@
         <p>@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400, 400).BuildUrl()</p>
 
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).BuildUrl()" class="auto-scale" />
-                <p>Default</p>
+                <p>Resize(400,400)</p>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
+                <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).RoundedCorner(1.0f).BackgroundColor(1.0,1.0,1.0).BuildUrl()" class="auto-scale" />
+                <p>RoundedCorner(1.0)</p>
+            </div>
+            <div class="col-lg-3">
                 <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
-                <p>Grayscale</p>
+                <p>Grayscale()</p>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
-                <p>Blur</p>
+                <p>Blur()</p>
             </div>
         </div>
 

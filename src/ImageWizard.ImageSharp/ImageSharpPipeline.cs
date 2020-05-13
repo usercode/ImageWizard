@@ -50,6 +50,7 @@ namespace ImageWizard.ImageSharp.Filters
             AddFilter<DPRFilter>();
             AddFilter<NoImageCacheFilter>();
             AddFilter<AutoOrientFilter>();
+            AddFilter<RoundedCornerFilter>();
 
             //formats
             AddFilter<JpgFilter>();
