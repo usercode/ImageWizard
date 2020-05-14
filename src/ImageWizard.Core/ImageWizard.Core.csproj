@@ -4,14 +4,17 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>usercode</Authors>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <Description>A middleware to manipulate your images dynamically.</Description>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageIcon>usercode.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>image processing</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   
   <ItemGroup>
@@ -20,5 +23,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ImageWizard.Utils\ImageWizard.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\usercode.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

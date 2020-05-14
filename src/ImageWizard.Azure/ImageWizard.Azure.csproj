@@ -5,8 +5,10 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageIcon>usercode.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +20,10 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.4.1" />
-    
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.4.1" />    
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\usercode.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

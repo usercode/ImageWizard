@@ -5,8 +5,10 @@
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageIcon>usercode.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,5 +27,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ImageWizard.Utils\ImageWizard.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\usercode.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

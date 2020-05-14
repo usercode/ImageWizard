@@ -5,8 +5,10 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageIcon>usercode.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,5 +23,8 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <None Include="..\usercode.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>
