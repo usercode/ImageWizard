@@ -25,6 +25,5 @@ namespace ImageWizard.SvgNet.Filters
 
             Context.Filters.Add(new SvgGaussianBlur() { StdDeviation = l });
         }
-
     }
 }

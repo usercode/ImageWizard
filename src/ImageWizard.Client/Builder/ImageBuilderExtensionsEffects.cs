@@ -76,6 +76,13 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
+        public static IImageFilters Blur(this IImageFilters imageUrlBuilder, int radius)
+        {
+            imageUrlBuilder.Filter($"blur({radius})");
+
+            return imageUrlBuilder;
+        }
+
         public static IImageFilters Resize(this IImageFilters imageUrlBuilder, int size)
         {
             imageUrlBuilder.Filter($"resize({size})");
@@ -118,6 +125,13 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
+        public static IImageFilters Grayscale(this IImageFilters imageUrlBuilder, double value)
+        {
+            imageUrlBuilder.Filter($"grayscale({value.ToUrlString()})");
+
+            return imageUrlBuilder;
+        }
+
         public static IImageFilters BlackWhite(this IImageFilters imageUrlBuilder)
         {
             imageUrlBuilder.Filter($"blackwhite()");
@@ -153,13 +167,6 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
-        public static IImageFilters Rotate(this IImageFilters imageUrlBuilder, RotateMode mode)
-        {
-            imageUrlBuilder.Filter($"rotate({(int)mode})");
-
-            return imageUrlBuilder;
-        }
-
         public static IImageFilters Rotate(this IImageFilters imageUrlBuilder, double angle)
         {
             imageUrlBuilder.Filter($"rotate({angle.ToUrlString()})");
@@ -184,20 +191,6 @@ namespace ImageWizard
         public static IImageFilters SvgRemoveSize(this IImageFilters imageUrlBuilder)
         {
             imageUrlBuilder.Filter("removesize()");
-
-            return imageUrlBuilder;
-        }
-
-        public static IImageFilters SvgRotate(this IImageFilters imageUrlBuilder, double angle)
-        {
-            imageUrlBuilder.Filter($"rotate({angle.ToUrlString()})");
-
-            return imageUrlBuilder;
-        }
-
-        public static IImageFilters SvgBlur(this IImageFilters imageUrlBuilder)
-        {
-            imageUrlBuilder.Filter("blur()");
 
             return imageUrlBuilder;
         }

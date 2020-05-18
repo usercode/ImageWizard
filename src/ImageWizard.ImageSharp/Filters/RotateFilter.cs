@@ -13,11 +13,11 @@ namespace ImageWizard.ImageSharp.Filters
     public class RotateFilter : ImageFilter
     {
         [Filter]
-        public void Rotate(int rotateValue)
+        public void Rotate(int angle)
         {
             RotateMode rotateMode;
 
-            switch (rotateValue)
+            switch (angle)
             {
                 case 90:
                     rotateMode = RotateMode.Rotate90;
@@ -32,7 +32,7 @@ namespace ImageWizard.ImageSharp.Filters
                     break;
 
                 default:
-                    throw new Exception();
+                    throw new Exception("angle is not supported: " + angle);
             }
 
             Context.Image.Mutate(m => m.Rotate(rotateMode));
