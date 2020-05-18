@@ -13,6 +13,8 @@ namespace ImageWizard.Filters
         {
 
         }
-        
+
+        public override string Namespace => "svgnet";
+
     }
 }

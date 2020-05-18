@@ -14,6 +14,8 @@ namespace ImageWizard.Core.ImageFilters.Base
             set => Context = (TContext)value; 
         }
 
+        public abstract string Namespace { get; }
+
         public TContext Context { get; set; }
     }
 }

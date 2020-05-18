@@ -47,7 +47,7 @@ namespace ImageWizard.AWS
                 request.EtagToNotMatch = $"\"{existingCachedImage.Metadata.Cache.ETag}\"";
             }
 
-            var result = await Client.GetObjectAsync(request);
+            GetObjectResponse result = await Client.GetObjectAsync(request);
 
             if(result.HttpStatusCode == System.Net.HttpStatusCode.NotModified)
             {

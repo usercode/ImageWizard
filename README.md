@@ -6,6 +6,7 @@ A ASP.NET Core service / middleware to manipulate your images dynamically as alt
 | ImageWizard.Core          | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
 | ImageWizard.Client        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Client.svg)](https://www.nuget.org/packages/ImageWizard.Client/) |
 | ImageWizard.ImageSharp    | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.ImageSharp.svg)](https://www.nuget.org/packages/ImageWizard.ImageSharp/)|
+| ImageWizard.SkiaSharp     | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SkiaSharp.svg)](https://www.nuget.org/packages/ImageWizard.SkiaSharp/)|
 | ImageWizard.SvgNet        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SvgNet.svg)](https://www.nuget.org/packages/ImageWizard.SvgNet/)|
 | ImageWizard.MongoDB       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
 | ImageWizard.Piranha       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/) |
@@ -36,7 +37,8 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 | package  |  mime type |
 |------------------------------------|-----------------|
-| ImageWizard.ImageSharp | image/jpg, image/png, image/gif, image/bmp | 
+| ImageWizard.ImageSharp | image/jpeg, image/png, image/gif, image/bmp | 
+| ImageWizard.SkiaSharp  | image/jpeg, image/png, image/gif, image/bmp, image/webp  | 
 | ImageWizard.SvgNet     | image/svg+xml |
 
 ### ImageSharp
@@ -80,6 +82,12 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 #### Special options
 - dpr(value) //set allowed device pixel ratio
 - nocache() //do not store the transformed image
+
+### SkiaSharp
+#### Image transformations
+- blur()
+- grayscale()
+- resize(width,height)
 
 ### SvgNet
 #### SVG transformations
@@ -129,12 +137,15 @@ services.AddImageWizard(options =>
                            options.CacheControl.NoCache = false;
                            options.CacheControl.NoStore = false;
                        })
-                       //handle images (jpg, png, gif, bmp)
-                       .AddImageSharp(options => { 
-						options.ImageMaxWidth = 4000;
-						options.ImageMaxHeight = 4000;
-					})
-                       //handle svg
+                       .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif)
+                            .WithOptions(x =>
+                                        {
+                                            x.ImageMaxHeight = 4000;
+                                            x.ImageMaxWidth = 4000;
+                                        })
+                            .WithFilter<ResizeFilter>()
+                            .WithFilter<BlurFilter>()
+                       .AddSkiaSharp(MimeTypes.WebP)
                        .AddSvgNet()
                        //use file cache
                        .SetFileCache(options => options.Folder = "FileCache")

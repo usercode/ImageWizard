@@ -35,8 +35,6 @@ namespace ImageWizard.SvgNet.Filters
             AddFilter<BlurFilter>();
         }
 
-        public override IEnumerable<string> MimeType => new[] { MimeTypes.Svg };
-
         /// <summary>
         /// Logger
         /// </summary>

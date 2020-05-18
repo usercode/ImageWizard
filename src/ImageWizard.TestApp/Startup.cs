@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using ImageWizard.Filters;
 using ImageWizard.ImageSharp.Filters;
 using ImageWizard.AWS;
+using ImageWizard.SkiaSharp;
+using ImageWizard.Core.Types;
 
 namespace ImageWizard.TestApp
 {
@@ -44,17 +46,18 @@ namespace ImageWizard.TestApp
 #else
                 x.AllowUnsafeUrl = false;
 #endif
-
                 x.UseClintHints = true;
                 x.UseETag = true;
                 x.Key = key;
             })
-                .AddImageSharp(x => 
-                { 
-                    x.ImageMaxHeight = 4000; 
-                    x.ImageMaxWidth = 4000; 
-                }, 
-                x => x.AddFilter<ResizeFilter>())
+                .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif)
+                    .WithOptions(x =>
+                                {
+                                    x.ImageMaxHeight = 4000;
+                                    x.ImageMaxWidth = 4000;
+                                })
+                    .WithFilter<ResizeFilter>()
+                .AddSkiaSharp()
                 .AddSvgNet()
                 //.SetFileCache()
                 //.SetMongoDBCache()
@@ -74,13 +77,17 @@ namespace ImageWizard.TestApp
                 })
                 .AddAWS(x =>
                 {
+                    x.AccessKeyId = "";
+                    x.SecretAccessKey = "";
                     x.BucketName = "MyBucket";
                 })
                 ;
 
             services.AddImageWizardClient(x =>
             {
-                x.UseUnsafeUrl = false;
+#if DEBUG
+                x.UseUnsafeUrl = true;
+#endif
                 x.Key = key;
             });
 

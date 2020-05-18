@@ -20,26 +20,18 @@ namespace ImageWizard
     /// </summary>
     public static class ImageWizardBuilderExtensions
     {
-        public static IImageWizardBuilder AddImageSharp(this IImageWizardBuilder builder)
+        public static IImageSharpBuilder AddImageSharp(this IImageWizardBuilder builder)
         {
-            return AddImageSharp(builder, x => { }, null);
+            return AddImageSharp(builder, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bitmap);
         }
 
-        public static IImageWizardBuilder AddImageSharp(this IImageWizardBuilder builder, Action<ImageSharpOptions> options, PipelineAction<IImageSharpBuilder> action = null)
+        public static IImageSharpBuilder AddImageSharp(this IImageWizardBuilder builder, params string[] mimeTypes)
         {
-            builder.Services.Configure(options);
-
-            builder.AddPipeline<ImageSharpPipeline>(new[] { MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bitmap });
-
-            if(action == null)
-            {
-                action = x => { };
-            }
+            builder.AddPipeline<ImageSharpPipeline>(mimeTypes);
 
             builder.Services.AddSingleton<IProcessingPipeline, ImageSharpPipeline>();
-            builder.Services.AddSingleton(action);
 
-            return builder;
+            return new ImageSharpBuilder(builder);
         }
     }
 }

@@ -6,7 +6,6 @@ using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.ImageSharp.Builder;
-using ImageWizard.ImageSharp.Filters.ImageFormats;
 using ImageWizard.Services.Types;
 using ImageWizard.Utils.FilterTypes;
 using Microsoft.AspNetCore.Components;
@@ -27,9 +26,9 @@ namespace ImageWizard.ImageSharp.Filters
     /// <summary>
     /// ImageSharpPipeline
     /// </summary>
-    public class ImageSharpPipeline : ProcessingPipeline<ImageFilter>, IImageSharpBuilder
+    public class ImageSharpPipeline : ProcessingPipeline<ImageFilter>
     {
-        public ImageSharpPipeline(IOptions<ImageSharpOptions> options, ILogger<ImageSharpPipeline> logger, PipelineAction<IImageSharpBuilder> action)
+        public ImageSharpPipeline(IOptions<ImageSharpOptions> options, ILogger<ImageSharpPipeline> logger, PipelineAction<ImageSharpPipeline> action)
         {
             Options = options.Value;
             Logger = logger;
@@ -51,12 +50,7 @@ namespace ImageWizard.ImageSharp.Filters
             AddFilter<NoImageCacheFilter>();
             AddFilter<AutoOrientFilter>();
             AddFilter<RoundedCornerFilter>();
-
-            //formats
-            AddFilter<JpgFilter>();
-            AddFilter<PngFilter>();
-            AddFilter<GifFilter>();
-            AddFilter<BmpFilter>();
+            AddFilter<ImageFormatFilter>();
 
             action(this);
         }
@@ -65,8 +59,6 @@ namespace ImageWizard.ImageSharp.Filters
         /// Options
         /// </summary>
         public ImageSharpOptions Options { get; }
-
-        public override IEnumerable<string> MimeType => new[] { MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bitmap };
 
         public ILogger<ImageSharpPipeline> Logger { get; set; }
 
@@ -142,13 +134,6 @@ namespace ImageWizard.ImageSharp.Filters
                 context.DisableCache = filterContext.NoImageCache;
                 context.CurrentImage = new CurrentImage(filterContext.ImageFormat.MimeType, transformedImageData, filterContext.Image.Width, filterContext.Image.Height, filterContext.ClientHints.DPR);
             }
-        }
-
-        IImageSharpBuilder IImageSharpBuilder.AddFilter<TFilter>()
-        {
-            AddFilter<TFilter>();
-
-            return this;
         }
     }
 }

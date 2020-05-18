@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Filters.ImageFormats
 {
-    public class ImageFormatHelper
+    class ImageFormatHelper
     {
         public static IImageFormat Parse(string mimeType)
         {
@@ -31,6 +31,10 @@ namespace ImageWizard.Filters.ImageFormats
 
                 case MimeTypes.Bitmap:
                     imageFormat = new BmpFormat();
+                    break;
+
+                case MimeTypes.WebP:
+                    imageFormat = new WebPFormat();
                     break;
 
                 default:

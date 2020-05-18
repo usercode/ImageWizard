@@ -10,6 +10,7 @@ namespace ImageWizard.Core.Types
         public const string Png = "image/png";
         public const string Gif = "image/gif";
         public const string Bitmap = "image/bmp";
+        public const string WebP = "image/webp";
         public const string Svg = "image/svg+xml";
     }
 }

@@ -28,8 +28,6 @@ namespace ImageWizard.Filters
 
         protected abstract IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo) where TFilter : TFilterBase, new();
 
-        public abstract IEnumerable<string> MimeType { get; }
-
         public IList<IFilterAction> FilterActions { get; set; }
 
         /// <summary>

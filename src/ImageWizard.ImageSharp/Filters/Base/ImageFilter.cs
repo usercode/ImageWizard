@@ -13,5 +13,7 @@ namespace ImageWizard.ImageSharp.Filters
         {
 
         }
+
+        public override string Namespace => "imagesharp";
     }
 }

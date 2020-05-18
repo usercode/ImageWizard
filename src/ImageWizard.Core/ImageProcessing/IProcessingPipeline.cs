@@ -10,8 +10,6 @@ namespace ImageWizard.Core.ImageFilters.Base
 {
     public interface IProcessingPipeline
     {
-        IEnumerable<string> MimeType { get; }
-
         Task StartAsync(ProcessingPipelineContext context);
     }
 }

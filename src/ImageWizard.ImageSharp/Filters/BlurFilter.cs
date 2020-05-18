@@ -14,7 +14,13 @@ namespace ImageWizard.ImageSharp.Filters
         [Filter]
         public void Blur()
         {
-            Context.Image.Mutate(m => m.BoxBlur());
+            Blur(10);
+        }
+
+        [Filter]
+        public void Blur(int radius)
+        {
+            Context.Image.Mutate(m => m.BoxBlur(radius));
         }
     }
 }

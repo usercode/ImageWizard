@@ -5,17 +5,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using ImageWizard.Core.Types;
 using ImageWizard.ImageFormats.Base;
-using SixLabors.ImageSharp;
+using SkiaSharp;
 
 namespace ImageWizard.ImageFormats
 {
-    public class SvgFormat : IImageFormat
+    public class BmpFormat : IImageFormat
     {
-        public string MimeType => MimeTypes.Svg;
+        public string MimeType => MimeTypes.Bitmap;
 
-        public void SaveImage(Image image, Stream stream)
+        public void SaveImage(SKBitmap image, Stream stream)
         {
-            //do nothing....
+            image.Encode(stream, SKEncodedImageFormat.Bmp, 85);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ImageWizard.Client.Builder.Types;
+﻿using ImageWizard.Client.Builder;
+using ImageWizard.Client.Builder.Types;
 using ImageWizard.Utils.FilterTypes;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace ImageWizard
     {
         public static IImageFilters BackgroundColor(this IImageFilters imageUrlBuilder, double r, double g, double b)
         {
-            imageUrlBuilder.Filter($"backgroundcolor({r.ToString("0.0", CultureInfo.InvariantCulture)},{g.ToString("0.0", CultureInfo.InvariantCulture)},{b.ToString("0.0", CultureInfo.InvariantCulture)})");
+            imageUrlBuilder.Filter($"backgroundcolor({r.ToUrlString()},{g.ToUrlString()},{b.ToUrlString()})");
 
             return imageUrlBuilder;
         }
@@ -29,7 +30,7 @@ namespace ImageWizard
 
         public static IImageFilters DPR(this IImageFilters imageUrlBuilder, double value)
         {
-            imageUrlBuilder.Filter($"dpr({value.ToString("0.0", CultureInfo.InvariantCulture)})");
+            imageUrlBuilder.Filter($"dpr({value.ToUrlString()})");
 
             return imageUrlBuilder;
         }
@@ -64,7 +65,7 @@ namespace ImageWizard
 
         public static IImageFilters Crop(this IImageFilters imageUrlBuilder, double x, double y, double width, double heigth)
         {
-            imageUrlBuilder.Filter($"crop({x.ToString("0.0", CultureInfo.InvariantCulture)},{y.ToString("0.0", CultureInfo.InvariantCulture)},{width.ToString("0.0", CultureInfo.InvariantCulture)},{heigth.ToString("0.0", CultureInfo.InvariantCulture)})");
+            imageUrlBuilder.Filter($"crop({x.ToUrlString()},{y.ToUrlString()},{width.ToUrlString()},{heigth.ToUrlString()})");
 
             return imageUrlBuilder;
         }
@@ -91,14 +92,14 @@ namespace ImageWizard
 
         public static IImageFilters Resize(this IImageFilters imageUrlBuilder, int width, int height, ResizeMode mode)
         {
-            imageUrlBuilder.Filter($"resize({width},{height},{mode.ToString().ToLower()})");
+            imageUrlBuilder.Filter($"resize({width},{height},{mode.ToUrlString()})");
 
             return imageUrlBuilder;
         }
 
         public static IImageFilters Resize(this IImageFilters imageUrlBuilder, int width, int height, ResizeMode mode, AnchorPositionMode anchorPosition)
         {
-            imageUrlBuilder.Filter($"resize({width},{height},{mode.ToString().ToLower()},{anchorPosition.ToString().ToLower()})");
+            imageUrlBuilder.Filter($"resize({width},{height},{mode.ToUrlString()},{anchorPosition.ToUrlString()})");
 
             return imageUrlBuilder;
         }
@@ -124,6 +125,27 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
+        public static IImageFilters Brightness(this IImageFilters imageUrlBuilder, double value)
+        {
+            imageUrlBuilder.Filter($"brightness({value.ToUrlString()})");
+
+            return imageUrlBuilder;
+        }
+
+        public static IImageFilters Contrast(this IImageFilters imageUrlBuilder, double value)
+        {
+            imageUrlBuilder.Filter($"contrast({value.ToUrlString()})");
+
+            return imageUrlBuilder;
+        }
+
+        public static IImageFilters Invert(this IImageFilters imageUrlBuilder)
+        {
+            imageUrlBuilder.Filter($"invert()");
+
+            return imageUrlBuilder;
+        }
+
         public static IImageFilters Rotate(this IImageFilters imageUrlBuilder, RotateMode mode)
         {
             imageUrlBuilder.Filter($"rotate({(int)mode})");
@@ -131,16 +153,23 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
-        public static IImageFilters Flip(this IImageFilters imageUrlBuilder, FlipMode flippingMode)
+        public static IImageFilters Rotate(this IImageFilters imageUrlBuilder, double angle)
         {
-            imageUrlBuilder.Filter($"flip({flippingMode.ToString().ToLower()})");
+            imageUrlBuilder.Filter($"rotate({angle.ToUrlString()})");
 
             return imageUrlBuilder;
         }
 
-        public static IImageFilters RoundedCorner(this IImageFilters imageUrlBuilder, float value)
+        public static IImageFilters Flip(this IImageFilters imageUrlBuilder, FlipMode flippingMode)
         {
-            imageUrlBuilder.Filter($"roundedcorner({value.ToString("0.0", CultureInfo.InvariantCulture)})");
+            imageUrlBuilder.Filter($"flip({flippingMode.ToUrlString()})");
+
+            return imageUrlBuilder;
+        }
+
+        public static IImageFilters RoundedCorner(this IImageFilters imageUrlBuilder, double value)
+        {
+            imageUrlBuilder.Filter($"roundedcorner({value.ToUrlString()})");
 
             return imageUrlBuilder;
         }
@@ -152,9 +181,9 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
-        public static IImageFilters SvgRotate(this IImageFilters imageUrlBuilder, float angle)
+        public static IImageFilters SvgRotate(this IImageFilters imageUrlBuilder, double angle)
         {
-            imageUrlBuilder.Filter($"rotate({angle.ToString("0.0", CultureInfo.InvariantCulture)})");
+            imageUrlBuilder.Filter($"rotate({angle.ToUrlString()})");
 
             return imageUrlBuilder;
         }
