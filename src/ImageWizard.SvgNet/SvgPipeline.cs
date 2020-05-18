@@ -33,6 +33,7 @@ namespace ImageWizard.SvgNet.Filters
             AddFilter<RemoveSizeFilter>();
             AddFilter<RotateFilter>();
             AddFilter<BlurFilter>();
+            AddFilter<GrayscaleFilter>();
         }
 
         /// <summary>
