@@ -85,9 +85,29 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 ### SkiaSharp
 #### Image transformations
-- blur()
-- grayscale()
 - resize(width,height)
+- resize(width,height,mode)
+  - mode: min, max, crop, pad, stretch
+- crop(width,height)
+  - 0.0 to 1.0 for relative values
+- crop(x,y,width,height)
+  - 0.0 to 1.0 for relative values
+- flip(type)
+  - type: horizontal, vertical
+- rotate(value)
+  - value: 0.0 to 360.0
+- grayscale()
+- blur()
+- blur(radius)
+- grayscale()
+
+#### Output formats
+- jpg()
+- jpg(quality)
+- png()
+- gif()
+- bmp()
+- webp()
 
 ### SvgNet
 #### SVG transformations
