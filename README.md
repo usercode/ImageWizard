@@ -99,7 +99,6 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - grayscale()
 - blur()
 - blur(radius)
-- grayscale()
 
 #### Output formats
 - jpg()
