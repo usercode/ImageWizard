@@ -146,6 +146,13 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
+        public static IImageFilters Saturate(this IImageFilters imageUrlBuilder, double value)
+        {
+            imageUrlBuilder.Filter($"saturate({value.ToUrlString()})");
+
+            return imageUrlBuilder;
+        }
+
         public static IImageFilters Rotate(this IImageFilters imageUrlBuilder, RotateMode mode)
         {
             imageUrlBuilder.Filter($"rotate({(int)mode})");

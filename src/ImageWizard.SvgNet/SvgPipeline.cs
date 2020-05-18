@@ -35,6 +35,7 @@ namespace ImageWizard.SvgNet.Filters
             AddFilter<BlurFilter>();
             AddFilter<GrayscaleFilter>();
             AddFilter<InvertFilter>();
+            AddFilter<SaturateFilter>();
         }
 
         /// <summary>
