@@ -20,7 +20,7 @@ namespace ImageWizard.ImageFormats
         /// </summary>
         public int Quality { get; set; }
 
-        public string MimeType => MimeTypes.Jpeg;
+        public string MimeType => MimeTypes.WebP;
 
         public void SaveImage(SKBitmap image, Stream stream)
         {
