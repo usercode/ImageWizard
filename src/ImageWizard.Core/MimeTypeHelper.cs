@@ -34,6 +34,10 @@ namespace ImageWizard.Filters.ImageFormats
                     mimeType = MimeTypes.Bitmap;
                     break;
 
+                case ".webp":
+                    mimeType = MimeTypes.WebP;
+                    break;
+
                 case ".svg":
                     mimeType = MimeTypes.Svg;
                     break;
