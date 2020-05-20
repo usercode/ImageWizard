@@ -28,7 +28,7 @@ namespace ImageWizard.ImageSharp.Filters
     /// </summary>
     public class ImageSharpPipeline : ProcessingPipeline<ImageFilter>
     {
-        public ImageSharpPipeline(IOptions<ImageSharpOptions> options, ILogger<ImageSharpPipeline> logger, PipelineAction<ImageSharpPipeline> action)
+        public ImageSharpPipeline(IOptions<ImageSharpOptions> options, ILogger<ImageSharpPipeline> logger)
         {
             Options = options.Value;
             Logger = logger;
@@ -51,8 +51,6 @@ namespace ImageWizard.ImageSharp.Filters
             AddFilter<AutoOrientFilter>();
             AddFilter<RoundedCornerFilter>();
             AddFilter<ImageFormatFilter>();
-
-            action(this);
         }
 
         /// <summary>

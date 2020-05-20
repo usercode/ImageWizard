@@ -56,8 +56,8 @@ namespace ImageWizard.TestApp
                                     x.ImageMaxHeight = 4000;
                                     x.ImageMaxWidth = 4000;
                                 })
-                    .WithFilter<ResizeFilter>()
-                .AddSkiaSharp()
+                    //.WithFilter<ResizeFilter>()
+                //.AddSkiaSharp()
                 .AddSvgNet()
                 //.SetFileCache()
                 //.SetMongoDBCache()

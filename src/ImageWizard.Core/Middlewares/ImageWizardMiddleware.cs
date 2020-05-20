@@ -259,7 +259,7 @@ namespace ImageWizard.Middlewares
                 if (originalImage != null) //is there a new version of original image?
                 {
                     var processingContext = new ProcessingPipelineContext(
-                                                                 new CurrentImage(originalImage.MimeType, originalImage.Data, null, null, null),
+                                                                 new CurrentImage(originalImage.MimeType, originalImage.Data),
                                                                  clientHints,
                                                                  Options,
                                                                  url_filters);
