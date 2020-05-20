@@ -28,6 +28,8 @@ jobs:
       run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} 
     - name: Publish "ImageWizard.ImageSharp" to nuget
       run: dotnet nuget push "./src/ImageWizard.ImageSharp/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+    - name: Publish "ImageWizard.SkiaSharp" to nuget
+      run: dotnet nuget push "./src/ImageWizard.SkiaSharp/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
     - name: Publish "ImageWizard.SvgNet" to nuget
       run: dotnet nuget push "./src/ImageWizard.SvgNet/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}   
     - name: Publish "ImageWizard.Analytics" to nuget
