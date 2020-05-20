@@ -156,29 +156,30 @@ services.AddImageWizard(options =>
                            options.CacheControl.NoCache = false;
                            options.CacheControl.NoStore = false;
                        })
+		       //registers ImageSharp pipeline for specified mime types
                        .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif)
                             .WithOptions(x =>
                                         {
                                             x.ImageMaxHeight = 4000;
                                             x.ImageMaxWidth = 4000;
                                         })
-                            .WithFilter<ResizeFilter>()
+                            //Adds your custom filters
                             .WithFilter<BlurFilter>()
                        .AddSkiaSharp(MimeTypes.WebP)
                        .AddSvgNet()
-                       //use file cache
+                       //uses file cache
                        .SetFileCache(options => options.Folder = "FileCache")
                        //or MongoDB cache
                        .SetMongoDBCache(options => options.Hostname = "localhost")
                        //or distributed cache
                        .SetDistributedCache()
-                       //add some loaders
+                       //adds some loaders
                        .AddFileLoader(options => options.Folder = "FileStorage")
                        .AddHttpLoader(options => 
                                                //checks every time for a new version of the original image.
                                                options.RefreshMode = ImageLoaderRefreshMode.EveryTime;
                                                
-                                               //add custom http header like apikey to prevent 
+                                               //adds custom http header like apikey to prevent 
                                                //that user can download the original image
                                                options.SetHeader("ApiKey", "123456")) 
                        .AddYoutubeLoader()
@@ -224,7 +225,7 @@ Register filter:
 
 ```csharp
 services.AddImageWizard()
-	.AddImageSharp(x => x.AddFilter<BackgroundColorFilter>());
+	.AddImageSharp().WithFilter<BackgroundColorFilter>();
 ```
 
 URL segments: 
