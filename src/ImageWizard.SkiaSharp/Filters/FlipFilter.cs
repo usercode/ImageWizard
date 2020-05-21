@@ -14,8 +14,6 @@ namespace ImageWizard.SkiaSharp.Filters
         [Filter]
         public void Flip(FlipMode flipMode)
         {
-            
-
             using (var surface = SKSurface.Create(new SKImageInfo(Context.Image.Width, Context.Image.Height)))
             using (var canvas = surface.Canvas)
             {

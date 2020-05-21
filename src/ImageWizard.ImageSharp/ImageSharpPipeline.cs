@@ -1,4 +1,5 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
+﻿using ImageWizard.Core;
+using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Settings;
 using ImageWizard.Core.Types;
@@ -28,7 +29,7 @@ namespace ImageWizard.ImageSharp.Filters
     /// </summary>
     public class ImageSharpPipeline : ProcessingPipeline<ImageFilter>
     {
-        public ImageSharpPipeline(IOptions<ImageSharpOptions> options, ILogger<ImageSharpPipeline> logger)
+        public ImageSharpPipeline(IOptions<ImageSharpOptions> options, ILogger<ImageSharpPipeline> logger, IEnumerable<PipelineAction<ImageSharpPipeline>> actions)
         {
             Options = options.Value;
             Logger = logger;
@@ -51,6 +52,8 @@ namespace ImageWizard.ImageSharp.Filters
             AddFilter<AutoOrientFilter>();
             AddFilter<RoundedCornerFilter>();
             AddFilter<ImageFormatFilter>();
+
+            actions.Foreach(x => x(this));
         }
 
         /// <summary>
@@ -130,7 +133,12 @@ namespace ImageWizard.ImageSharp.Filters
 
                 //update some metadata
                 context.DisableCache = filterContext.NoImageCache;
-                context.CurrentImage = new CurrentImage(filterContext.ImageFormat.MimeType, transformedImageData, filterContext.Image.Width, filterContext.Image.Height, filterContext.ClientHints.DPR);
+                context.CurrentImage = new CurrentImage(
+                                                transformedImageData,
+                                                filterContext.ImageFormat.MimeType,                     
+                                                filterContext.Image.Width, 
+                                                filterContext.Image.Height, 
+                                                filterContext.ClientHints.DPR);
             }
         }
     }

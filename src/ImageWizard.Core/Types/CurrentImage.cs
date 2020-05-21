@@ -12,15 +12,15 @@ namespace ImageWizard.Services.Types
     /// </summary>
     public class CurrentImage
     {
-        public CurrentImage(string mimeType, byte[] data)
-            : this(mimeType, data, null, null, null)
+        public CurrentImage(byte[] data, string mimeType)
+            : this(data, mimeType, null, null, null)
         {
         }
 
-        public CurrentImage(string mimeType, byte[] data, int? width, int? height, double? dpr)
+        public CurrentImage(byte[] data, string mimeType, int? width, int? height, double? dpr)
         {
-            MimeType = mimeType;
             Data = data;
+            MimeType = mimeType;            
             Width = width;
             Height = height;
             DPR = dpr;

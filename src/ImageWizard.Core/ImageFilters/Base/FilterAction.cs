@@ -21,10 +21,16 @@ namespace ImageWizard.Filters
 
         public FilterAction(Regex regex, MethodInfo method)
         {
+            Name = method.Name;
             Regex = regex;
 
             MethodDelegate = BuildFastAccessor(method);
         }
+
+        /// <summary>
+        /// Name
+        /// </summary>
+        public string Name { get; }
 
         /// <summary>
         /// Regex

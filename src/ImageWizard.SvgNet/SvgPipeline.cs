@@ -94,7 +94,7 @@ namespace ImageWizard.SvgNet.Filters
             MemoryStream mem = new MemoryStream();
             svg.Write(mem);
 
-            context.CurrentImage = new CurrentImage(MimeTypes.Svg, mem.ToArray());
+            context.CurrentImage = new CurrentImage(mem.ToArray(), MimeTypes.Svg);
         }
     }
 }

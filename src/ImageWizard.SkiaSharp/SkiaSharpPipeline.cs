@@ -1,5 +1,7 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
+﻿using ImageWizard.Core;
+using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageProcessing;
+using ImageWizard.Core.Settings;
 using ImageWizard.Core.Types;
 using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
@@ -7,6 +9,7 @@ using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
 using ImageWizard.SkiaSharp.Filters;
 using ImageWizard.SkiaSharp.Filters.Base;
+using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -23,8 +26,10 @@ namespace ImageWizard.SkiaSharp
     /// </summary>
     public class SkiaSharpPipeline : ProcessingPipeline<SkiaSharpFilter>
     {
-        public SkiaSharpPipeline()
+        public SkiaSharpPipeline(ILogger<SkiaSharpPipeline> logger, IEnumerable<PipelineAction<SkiaSharpPipeline>> actions)
         {
+            Logger = logger;
+
             AddFilter<ResizeFilter>();
             AddFilter<RotateFilter>();
             AddFilter<CropFilter>();
@@ -33,7 +38,14 @@ namespace ImageWizard.SkiaSharp
             AddFilter<FlipFilter>();
             AddFilter<DPRFilter>();
             AddFilter<ImageFormatFilter>();
+
+            actions.Foreach(x => x(this));
         }
+
+        /// <summary>
+        /// Logger
+        /// </summary>
+        public ILogger<SkiaSharpPipeline> Logger { get; }
 
         public override async Task StartAsync(ProcessingPipelineContext context)
         {
@@ -64,8 +76,12 @@ namespace ImageWizard.SkiaSharp
             MemoryStream mem = new MemoryStream();
             filterContext.ImageFormat.SaveImage(filterContext.Image, mem);
 
-            context.CurrentImage = new CurrentImage(filterContext.ImageFormat.MimeType, mem.ToArray(), filterContext.Image.Width, filterContext.Image.Height, filterContext.ClientHints.DPR);
-
+            context.CurrentImage = new CurrentImage(
+                                                mem.ToArray(),
+                                                filterContext.ImageFormat.MimeType,
+                                                filterContext.Image.Width,
+                                                filterContext.Image.Height,
+                                                filterContext.ClientHints.DPR);
         }
 
         protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)

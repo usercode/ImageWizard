@@ -28,8 +28,4 @@
   <ItemGroup>
     <None Include="..\usercode.png" Pack="true" PackagePath="" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
 </Project>
