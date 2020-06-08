@@ -3,7 +3,6 @@ using ImageWizard.Core.ImageFilters.Base.Attributes;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +37,7 @@ namespace ImageWizard.ImageSharp.Filters
         [Filter]
         public void Crop(int x, int y, int width, int height)
         {
-           Context.Image.Mutate(m => m.Crop(new Rectangle(x, y, width, height)));
+           Context.Image.Mutate(m => m.Crop(new SixLabors.ImageSharp.Rectangle(x, y, width, height)));
         }
     }
 }

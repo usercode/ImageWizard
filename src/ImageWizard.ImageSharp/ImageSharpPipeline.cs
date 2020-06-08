@@ -43,14 +43,13 @@ namespace ImageWizard.ImageSharp.Filters
             AddFilter<FlipFilter>();
             AddFilter<RotateFilter>();
             AddFilter<BlurFilter>();
-            AddFilter<TextFilter>();
+            //AddFilter<TextFilter>();
             AddFilter<InvertFilter>();
             AddFilter<BrightnessFilter>();
             AddFilter<ContrastFilter>();
             AddFilter<DPRFilter>();
             AddFilter<NoImageCacheFilter>();
             AddFilter<AutoOrientFilter>();
-            AddFilter<RoundedCornerFilter>();
             AddFilter<ImageFormatFilter>();
 
             actions.Foreach(x => x(this));

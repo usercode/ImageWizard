@@ -181,13 +181,6 @@ namespace ImageWizard
             return imageUrlBuilder;
         }
 
-        public static IImageFilters RoundedCorner(this IImageFilters imageUrlBuilder, double value)
-        {
-            imageUrlBuilder.Filter($"roundedcorner({value.ToUrlString()})");
-
-            return imageUrlBuilder;
-        }
-
         public static IImageFilters SvgRemoveSize(this IImageFilters imageUrlBuilder)
         {
             imageUrlBuilder.Filter("removesize()");

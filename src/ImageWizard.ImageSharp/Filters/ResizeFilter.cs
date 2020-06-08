@@ -3,7 +3,6 @@ using ImageWizard.Core.ImageFilters.Base.Attributes;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +72,7 @@ namespace ImageWizard.ImageSharp.Filters
             {
                 Position = anchorPositionMode,
                 Mode = mode2,
-                Size = new Size(width, height)
+                Size = new SixLabors.ImageSharp.Size(width, height)
             }));
         }
     }

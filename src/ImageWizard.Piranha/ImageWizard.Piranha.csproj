@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   
   <ItemGroup>
@@ -22,9 +22,9 @@
   </ItemGroup>
   
   <ItemGroup>    
-    <PackageReference Include="Piranha" Version="8.1.0" />
-    <PackageReference Include="Piranha.AspNetCore" Version="8.1.0" />
-    <PackageReference Include="Piranha.Manager" Version="8.1.0" />
+    <PackageReference Include="Piranha" Version="8.3.0" />
+    <PackageReference Include="Piranha.AspNetCore" Version="8.3.0" />
+    <PackageReference Include="Piranha.Manager" Version="8.3.1" />
   </ItemGroup>
 
   <ItemGroup>
