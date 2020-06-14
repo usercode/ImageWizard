@@ -179,6 +179,9 @@ services.AddImageWizard(options =>
                                                //checks every time for a new version of the original image.
                                                options.RefreshMode = ImageLoaderRefreshMode.EveryTime;
                                                
+                                               //set base url for relative urls
+                                               options.DefaultBaseUrl = "https://mydomain";
+                                               
                                                //adds custom http header like apikey to prevent 
                                                //that user can download the original image
                                                options.SetHeader("ApiKey", "123456")) 
@@ -320,6 +323,7 @@ services.AddImageWizardClient(options =>
     options.BaseUrl = "https://<your-domain>/image";
     options.Key = "..";
     options.Enabled = true;
+    options.UseUnsafeUrl = false;
 });
 ```
 

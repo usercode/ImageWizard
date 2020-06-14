@@ -62,8 +62,15 @@ namespace ImageWizard.ImageLoaders
             //is relative url?
             if (Regex.Match(source, "^https?://", RegexOptions.Compiled).Success == false)
             {
-                //create absolute url
-                source = $"{HttpContextAccessor.HttpContext.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{source}";
+                if(string.IsNullOrWhiteSpace(Options.DefaultBaseUrl) == false)
+                {
+                    source = $"{Options.DefaultBaseUrl.TrimEnd('/')}/{source}";
+                }
+                else
+                {
+                    //create absolute url
+                    source = $"{HttpContextAccessor.HttpContext.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{source}";
+                }
             }
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri(source));

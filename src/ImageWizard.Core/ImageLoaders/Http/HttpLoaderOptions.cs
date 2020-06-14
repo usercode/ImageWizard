@@ -22,6 +22,11 @@ namespace ImageWizard.Core.ImageLoaders
         /// </summary>
         public ICollection<HttpHeaderItem> Headers { get; }
 
+        /// <summary>
+        /// Used for relative urls.
+        /// </summary>
+        public string DefaultBaseUrl { get; set; }
+
         public HttpLoaderOptions SetHeader(string name, string value)
         {
             Headers.Add(new HttpHeaderItem(name, value));
