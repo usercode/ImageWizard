@@ -17,6 +17,8 @@ using ImageWizard.ImageSharp.Filters;
 using ImageWizard.AWS;
 using ImageWizard.SkiaSharp;
 using ImageWizard.Core.Types;
+using ImageWizard.Settings;
+using Microsoft.Extensions.Options;
 
 namespace ImageWizard.TestApp
 {
@@ -102,7 +104,7 @@ namespace ImageWizard.TestApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ImageWizardOptions> options)
         {
             if (env.IsDevelopment())
             {
@@ -122,7 +124,7 @@ namespace ImageWizard.TestApp
             {
                 x.MapRazorPages();
                 x.MapControllers();
-                x.MapImageWizard();
+                x.MapImageWizard(options.Value.BasePath);
             });
         }
     }

@@ -4,6 +4,7 @@ using ImageWizard.ImageLoaders;
 using ImageWizard.ImageStorages;
 using ImageWizard.Middlewares;
 using ImageWizard.Settings;
+using ImageWizard.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -20,7 +21,7 @@ namespace ImageWizard
 
         public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
         {
-            return MapImageWizard(endpoints, "/image");
+            return MapImageWizard(endpoints, ImageWizardConstants.DefaultBasePath);
         }
 
         public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, string path)

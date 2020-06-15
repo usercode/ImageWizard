@@ -16,6 +16,7 @@ using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.ImageLoaders.Files;
 using Microsoft.Extensions.Hosting;
 using ImageWizard.Analytics;
+using Microsoft.Extensions.Options;
 
 namespace ImageWizard
 {
@@ -76,7 +77,7 @@ namespace ImageWizard
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ImageWizardOptions> options)
         {
             app.UseRouting();
 
@@ -92,7 +93,7 @@ namespace ImageWizard
             {
                 x.MapRazorPages();
                 x.MapControllers();
-                x.MapImageWizard();
+                x.MapImageWizard(options.Value.BasePath);
             });
         }
     }

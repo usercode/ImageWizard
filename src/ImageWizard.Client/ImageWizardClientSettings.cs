@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageWizard.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,7 +11,7 @@ namespace ImageWizard
         {
             UseUnsafeUrl = false;
             Enabled = true;
-            BaseUrl = "/image";
+            BaseUrl = ImageWizardConstants.DefaultBasePath;
             Key = null;
         }
 
