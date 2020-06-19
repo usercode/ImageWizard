@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class ImageFormatFilter : ImageFilter
+    public class ImageFormatFilter : ImageSharpFilter
     {
         [Filter]
         public void Bmp()

@@ -4,6 +4,7 @@ using ImageWizard.Core.ImageFilters.Base.Helpers;
 using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Types;
 using ImageWizard.Services.Types;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +22,26 @@ namespace ImageWizard.Filters
     public abstract class ProcessingPipeline<TFilterBase> : IProcessingPipeline
         where TFilterBase : IFilter
     {
-        public ProcessingPipeline()
+        public ProcessingPipeline(ILogger<ProcessingPipeline<TFilterBase>> logger)
         {
+            Logger = logger;
+
             FilterActions = new List<IFilterAction>();
         }
 
-        protected abstract IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo) where TFilter : TFilterBase, new();
+        /// <summary>
+        /// UsedMimeTypes
+        /// </summary>
+        public string[] UsedMimeTypes { get; set; }
 
+        /// <summary>
+        /// Logger
+        /// </summary>
+        private ILogger<ProcessingPipeline<TFilterBase>> Logger { get; }
+
+        /// <summary>
+        /// FilterActions
+        /// </summary>
         public IList<IFilterAction> FilterActions { get; set; }
 
         /// <summary>
@@ -124,29 +138,62 @@ namespace ImageWizard.Filters
             }
         }
 
-        protected bool ProcessFilters(IEnumerable<string> urlFilters, FilterContext filterContext)
+        /// <summary>
+        /// CreateFilterAction
+        /// </summary>
+        /// <typeparam name="TFilter"></typeparam>
+        /// <param name="regex"></param>
+        /// <param name="methodInfo"></param>
+        /// <returns></returns>
+        protected abstract IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo) where TFilter : TFilterBase, new();
+
+        /// <summary>
+        /// CreateFilterContext
+        /// </summary>
+        /// <returns></returns>
+        protected abstract FilterContext CreateFilterContext(ProcessingPipelineContext context);
+
+        /// <summary>
+        /// StartAsync
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async Task<ImageResult> StartAsync(ProcessingPipelineContext context)
         {
-            //execute filters
-            foreach (string filter in urlFilters)
+            using (FilterContext filterContext = CreateFilterContext(context))
             {
-                //find and execute filter
-                IFilterAction foundFilter = FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
-
-                if (foundFilter != null)
+                //execute filters
+                while (filterContext.ProcessingContext.UrlFilters.Count > 0)
                 {
-                    //Logger.LogTrace("Filter executed: " + filter);
-                }
-                else
-                {
-                    //Logger.LogTrace($"filter was not found: {filter}");
+                    string filter = filterContext.ProcessingContext.UrlFilters.Peek();
 
-                    return false;
+                    //find and execute filter
+                    IFilterAction foundFilter = FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
+
+                    if (foundFilter != null)
+                    {
+                        Logger.LogTrace("Filter executed: " + filter);
+
+                        filterContext.ProcessingContext.UrlFilters.Dequeue();
+                    }
+                    else
+                    {
+                        Logger.LogTrace($"filter was not found: {filter}");
+
+                        throw new Exception($"Filter was not found: {filter}");
+
+                        //return false;
+                    }
+
+                    //stop processing?
+                    if (filterContext.Result != null)
+                    {
+                        return filterContext.Result;
+                    }
                 }
+
+                return filterContext.BuildResult();
             }
-
-            return true;
         }
-
-        public abstract Task StartAsync(ProcessingPipelineContext context);
     }
 }

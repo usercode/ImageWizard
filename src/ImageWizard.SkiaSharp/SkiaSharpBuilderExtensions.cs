@@ -14,14 +14,12 @@ namespace ImageWizard.SkiaSharp
     {
         public static ISkiaSharpBuilder AddSkiaSharp(this IImageWizardBuilder builder)
         {
-            return AddSkiaSharp(builder, MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bitmap);
+            return AddSkiaSharp(builder, MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp);
         }
 
         public static ISkiaSharpBuilder AddSkiaSharp(this IImageWizardBuilder builder, params string[] mimeTypes)
         {
             builder.AddPipeline<SkiaSharpPipeline>(mimeTypes);
-
-            builder.Services.AddSingleton<IProcessingPipeline, SkiaSharpPipeline>();
 
             return new SkiaSharpBuilder(builder);
         }

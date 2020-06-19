@@ -29,7 +29,7 @@ namespace ImageWizard.ImageSharp.Builder
             Builder.AddPipeline<T>(mimeTypes);
         }
 
-        public IImageSharpBuilder WithFilter<TFilter>() where TFilter : ImageFilter, new()
+        public IImageSharpBuilder WithFilter<TFilter>() where TFilter : ImageSharpFilter, new()
         {
             Builder.Services.AddSingleton(new PipelineAction<ImageSharpPipeline>(x => x.AddFilter<TFilter>()));
 

@@ -208,7 +208,7 @@ app.UseEndpoints(x => x.MapImageWizard());
 - add filter context parameter to get access to image and settings
 
 ```csharp
- public class BackgroundColorFilter : ImageFilter
+ public class BackgroundColorFilter : ImageSharpFilter
     {
         [Filter]
         public void BackgroundColor(byte r, byte g, byte b)

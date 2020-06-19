@@ -1,4 +1,5 @@
-﻿using ImageWizard.Core.Types;
+﻿using ImageWizard.Core.ProcessingResults;
+using ImageWizard.Core.Types;
 using Microsoft.AspNetCore.Routing.Constraints;
 using System;
 using System.Collections.Generic;
@@ -8,16 +9,16 @@ using System.Threading.Tasks;
 namespace ImageWizard.Services.Types
 {
     /// <summary>
-    /// OriginalImage
+    /// CurrentImage
     /// </summary>
-    public class CurrentImage
+    public class ImageResult : IProcessingResult
     {
-        public CurrentImage(byte[] data, string mimeType)
+        public ImageResult(byte[] data, string mimeType)
             : this(data, mimeType, null, null, null)
         {
         }
 
-        public CurrentImage(byte[] data, string mimeType, int? width, int? height, double? dpr)
+        public ImageResult(byte[] data, string mimeType, int? width, int? height, double? dpr)
         {
             Data = data;
             MimeType = mimeType;            

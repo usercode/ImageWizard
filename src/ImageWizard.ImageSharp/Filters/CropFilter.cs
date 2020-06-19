@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class CropFilter : ImageFilter
+    public class CropFilter : ImageSharpFilter
     {
         [Filter]
         public void Crop(double width, double height)

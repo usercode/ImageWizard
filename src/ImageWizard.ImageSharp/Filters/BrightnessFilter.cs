@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class BrightnessFilter : ImageFilter
+    public class BrightnessFilter : ImageSharpFilter
     {
         [Filter]
         public void Brightness(float value)

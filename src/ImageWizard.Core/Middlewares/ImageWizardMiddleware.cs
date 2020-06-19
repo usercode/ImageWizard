@@ -259,30 +259,33 @@ namespace ImageWizard.Middlewares
                 if (originalImage != null) //is there a new version of original image?
                 {
                     var processingContext = new ProcessingPipelineContext(
-                                                                 new CurrentImage(originalImage.Data, originalImage.MimeType),
+                                                                 new ImageResult(originalImage.Data, originalImage.MimeType),
                                                                  clientHints,
                                                                  Options,
                                                                  url_filters);
 
-                    //find processing pipeline by mime type
-                    Type processingPipelineType = Builder.GetPipeline(processingContext.CurrentImage.MimeType);
-                    IProcessingPipeline processingPipeline = (IProcessingPipeline)context.RequestServices.GetService(processingPipelineType);
-
-                    if (processingPipeline == null)
+                    while (processingContext.UrlFilters.Count > 0)
                     {
-                        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                        await context.Response.WriteAsync("Processing pipeline not found: " + processingContext.CurrentImage.MimeType);
+                        //find processing pipeline by mime type
+                        Type processingPipelineType = Builder.GetPipeline(processingContext.Result.MimeType);
+                        IProcessingPipeline processingPipeline = (IProcessingPipeline)context.RequestServices.GetService(processingPipelineType);
 
-                        return;
+                        if (processingPipeline == null)
+                        {
+                            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                            await context.Response.WriteAsync("Processing pipeline not found: " + processingContext.Result.MimeType);
+
+                            return;
+                        }
+
+                        //start processing
+                        processingContext.Result = await processingPipeline.StartAsync(processingContext);
                     }
-
-                    //start processing
-                    await processingPipeline.StartAsync(processingContext);
                     
                     Logger.LogTrace("Save new cached image");
 
                     //create hash of cached image
-                    byte[] hash = SHA256.Create().ComputeHash(processingContext.CurrentImage.Data);
+                    byte[] hash = SHA256.Create().ComputeHash(processingContext.Result.Data);
 
                     //create metadata
                     ImageMetadata imageMetadata = new ImageMetadata()
@@ -294,14 +297,14 @@ namespace ImageWizard.Middlewares
                         LoaderSource = url_loaderSource,
                         LoaderType = url_loaderType,
                         Hash = hash.ToHexcode(),
-                        MimeType = processingContext.CurrentImage.MimeType,
-                        DPR = processingContext.CurrentImage.DPR,
-                        FileLength = processingContext.CurrentImage.Data.Length,                        
-                        Width = processingContext.CurrentImage.Width,
-                        Height = processingContext.CurrentImage.Height
+                        MimeType = processingContext.Result.MimeType,
+                        DPR = processingContext.Result.DPR,
+                        FileLength = processingContext.Result.Data.Length,                        
+                        Width = processingContext.Result.Width,
+                        Height = processingContext.Result.Height
                     };
 
-                    cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(processingContext.CurrentImage.Data)));
+                    cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(processingContext.Result.Data)));
 
                     //disable cache?
                     if (processingContext.DisableCache == false

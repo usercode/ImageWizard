@@ -43,7 +43,8 @@ namespace ImageWizard.Core.Settings
         /// </summary>
         public TypeManager PipelineManager { get; }
 
-        public void AddPipeline<T>(string[] mimeTypes) where T : class, IProcessingPipeline
+        public void AddPipeline<T>(string[] mimeTypes) 
+            where T : class, IProcessingPipeline
         {
             Services.AddSingleton<T>();
 
@@ -51,6 +52,8 @@ namespace ImageWizard.Core.Settings
             {
                 PipelineManager.Register<T>(mimeType);
             }
+
+            Services.AddSingleton(new PipelineAction<T>(x => x.UsedMimeTypes = mimeTypes));
         }
 
         public Type GetPipeline(string key)

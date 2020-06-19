@@ -29,7 +29,7 @@ namespace ImageWizard.Filters.ImageFormats
                     imageFormat = new GifFormat();
                     break;
 
-                case MimeTypes.Bitmap:
+                case MimeTypes.Bmp:
                     imageFormat = new BmpFormat();
                     break;
 

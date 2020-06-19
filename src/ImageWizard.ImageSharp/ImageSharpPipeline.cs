@@ -27,9 +27,10 @@ namespace ImageWizard.ImageSharp.Filters
     /// <summary>
     /// ImageSharpPipeline
     /// </summary>
-    public class ImageSharpPipeline : ProcessingPipeline<ImageFilter>
+    public class ImageSharpPipeline : ProcessingPipeline<ImageSharpFilter>
     {
         public ImageSharpPipeline(IOptions<ImageSharpOptions> options, ILogger<ImageSharpPipeline> logger, IEnumerable<PipelineAction<ImageSharpPipeline>> actions)
+            : base(logger)
         {
             Options = options.Value;
             Logger = logger;
@@ -64,81 +65,16 @@ namespace ImageWizard.ImageSharp.Filters
 
         protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
         {
-            return new ImageFilterAction<TFilter>(
-                                                    regex,
-                                                    methodInfo);
+            return new ImageSharpFilterAction<TFilter>(regex, methodInfo);
         }
 
-        public override async Task StartAsync(ProcessingPipelineContext context)
+        protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
         {
-            //load image
-            using (Image image = Image.Load(context.CurrentImage.Data))
-            {
-                IImageFormat targetFormat = ImageFormatHelper.Parse(context.CurrentImage.MimeType);
+            Image image = Image.Load(context.Result.Data);
+            
+            IImageFormat targetFormat = ImageFormatHelper.Parse(context.Result.MimeType);
 
-                ImageFilterContext filterContext = new ImageFilterContext(image, targetFormat, context.ClientHints);
-
-                //process filters
-                while(context.UrlFilters.Count > 0)
-                {
-                    string filter = context.UrlFilters.Peek();
-
-                    //find and execute filter
-                    IFilterAction foundFilter = FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
-
-                    if (foundFilter != null)
-                    {
-                        Logger.LogTrace("Filter executed: " + filter);
-
-                        context.UrlFilters.Dequeue();
-                    }
-                    else
-                    {
-                        Logger.LogTrace($"filter was not found: {filter}");
-
-                        throw new Exception($"filter was not found: {filter}");
-                    }
-                }
-
-                //check max width and height
-                bool change = false;
-
-                int width = image.Width;
-                int height = image.Height;
-
-                if (Options.ImageMaxWidth != null && width > Options.ImageMaxWidth)
-                {
-                    change = true;
-                    width = Options.ImageMaxWidth.Value;
-                }
-
-                if (Options.ImageMaxHeight != null && height > Options.ImageMaxHeight)
-                {
-                    change = true;
-                    height = Options.ImageMaxHeight.Value;
-                }
-
-                if (change == true)
-                {
-                    new ResizeFilter() { Context = filterContext }.Resize(width, height, ResizeMode.Max);
-                }
-
-                MemoryStream mem = new MemoryStream();
-
-                //save image
-                filterContext.ImageFormat.SaveImage(image, mem);
-
-                byte[] transformedImageData = mem.ToArray();
-
-                //update some metadata
-                context.DisableCache = filterContext.NoImageCache;
-                context.CurrentImage = new CurrentImage(
-                                                transformedImageData,
-                                                filterContext.ImageFormat.MimeType,                     
-                                                filterContext.Image.Width, 
-                                                filterContext.Image.Height, 
-                                                filterContext.ClientHints.DPR);
-            }
+            return new ImageSharpFilterContext(context, image, targetFormat, context.ClientHints);
         }
     }
 }

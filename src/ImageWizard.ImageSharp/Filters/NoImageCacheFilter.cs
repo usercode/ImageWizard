@@ -9,7 +9,7 @@ namespace ImageWizard.ImageSharp.Filters
     /// <summary>
     /// NoCacheFilter
     /// </summary>
-    public class NoImageCacheFilter : ImageFilter
+    public class NoImageCacheFilter : ImageSharpFilter
     {
         [Filter]
         public void NoCache()

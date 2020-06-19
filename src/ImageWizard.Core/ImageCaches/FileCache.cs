@@ -81,7 +81,7 @@ namespace ImageWizard.ImageStorages
 
             string json = Encoding.UTF8.GetString(mem.ToArray());
 
-            IImageMetadata metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
+            ImageMetadata metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
 
             return new CachedImage(metadata, () => Task.FromResult(fileInfoData.CreateReadStream()));
         }

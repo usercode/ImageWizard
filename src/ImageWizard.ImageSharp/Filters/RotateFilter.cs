@@ -9,14 +9,8 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class RotateFilter : ImageFilter
+    public class RotateFilter : ImageSharpFilter
     {
-        [Filter]
-        public void Rotate(int angle)
-        {
-            Rotate((float)angle);
-        }
-
         [Filter]
         public void Rotate(float angle)
         {

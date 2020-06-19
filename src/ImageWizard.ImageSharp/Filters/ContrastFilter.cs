@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class ContrastFilter : ImageFilter
+    public class ContrastFilter : ImageSharpFilter
     {
         [Filter]
         public void Contrast(float value)

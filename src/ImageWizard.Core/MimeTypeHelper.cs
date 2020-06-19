@@ -12,40 +12,29 @@ namespace ImageWizard.Filters.ImageFormats
 
         public static string GetMimeTypeByExtension(string path)
         {
-            string mimeType;
-
             string extension = Path.GetExtension(path).ToLower();
-
-            switch (extension)
+            string mimeType = extension switch
             {
-                case ".jpg":
-                    mimeType = MimeTypes.Jpeg;
-                    break;
+                //image
+                ".jpg" => MimeTypes.Jpeg,
+                ".png" => MimeTypes.Png,
+                ".gif" => MimeTypes.Gif,
+                ".bmp" => MimeTypes.Bmp,
+                ".webp" => MimeTypes.WebP,
+                ".svg" => MimeTypes.Svg,
 
-                case ".png":
-                    mimeType = MimeTypes.Png;
-                    break;
+                //video
+                ".mpeg" => MimeTypes.Mpeg,
+                ".mpg" => MimeTypes.Mpeg,
+                ".mpe" => MimeTypes.Mpeg,
+                ".mp4" => MimeTypes.Mp4,
+                ".ogg" => MimeTypes.Ogg,
+                ".avi" => MimeTypes.Avi,
+                ".webm" => MimeTypes.Webm,
+                ".3gpp" => MimeTypes.Mobile3GP,
 
-                case ".gif":
-                    mimeType = MimeTypes.Gif;
-                    break;
-
-                case ".bmp":
-                    mimeType = MimeTypes.Bitmap;
-                    break;
-
-                case ".webp":
-                    mimeType = MimeTypes.WebP;
-                    break;
-
-                case ".svg":
-                    mimeType = MimeTypes.Svg;
-                    break;
-
-                default:
-                    throw new Exception("unknown file extension");
-            }
-
+                _ => throw new Exception("unknown file extension"),
+            };
             return mimeType;
         }
     }

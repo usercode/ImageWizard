@@ -27,6 +27,7 @@ namespace ImageWizard.SkiaSharp
     public class SkiaSharpPipeline : ProcessingPipeline<SkiaSharpFilter>
     {
         public SkiaSharpPipeline(ILogger<SkiaSharpPipeline> logger, IEnumerable<PipelineAction<SkiaSharpPipeline>> actions)
+            : base(logger)
         {
             Logger = logger;
 
@@ -47,46 +48,18 @@ namespace ImageWizard.SkiaSharp
         /// </summary>
         public ILogger<SkiaSharpPipeline> Logger { get; }
 
-        public override async Task StartAsync(ProcessingPipelineContext context)
-        {
-            IImageFormat targetFormat = ImageFormatHelper.Parse(context.CurrentImage.MimeType);
-
-            SKBitmap bitmap = SKBitmap.Decode(context.CurrentImage.Data);
-
-            SkiaSharpFilterContext filterContext = new SkiaSharpFilterContext(bitmap, targetFormat, context.ClientHints);
-
-            //process filters
-            while (context.UrlFilters.Count > 0)
-            {
-                string filter = context.UrlFilters.Peek();
-
-                //find and execute filter
-                IFilterAction foundFilter = FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
-
-                if (foundFilter != null)
-                {
-                    context.UrlFilters.Dequeue();
-                }
-                else
-                {
-                    throw new Exception($"filter was not found: {filter}");
-                }
-            }
-
-            MemoryStream mem = new MemoryStream();
-            filterContext.ImageFormat.SaveImage(filterContext.Image, mem);
-
-            context.CurrentImage = new CurrentImage(
-                                                mem.ToArray(),
-                                                filterContext.ImageFormat.MimeType,
-                                                filterContext.Image.Width,
-                                                filterContext.Image.Height,
-                                                filterContext.ClientHints.DPR);
-        }
-
         protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
         {
             return new SkiaSharpFilterAction<TFilter>(regex, methodInfo);
         }
-    };
+
+        protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
+        {
+            IImageFormat targetFormat = ImageFormatHelper.Parse(context.Result.MimeType);
+
+            SKBitmap bitmap = SKBitmap.Decode(context.Result.Data);
+
+            return new SkiaSharpFilterContext(context, bitmap, targetFormat, context.ClientHints);
+        }
+    }
 }

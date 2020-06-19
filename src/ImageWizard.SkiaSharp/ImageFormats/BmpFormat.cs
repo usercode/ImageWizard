@@ -11,7 +11,7 @@ namespace ImageWizard.ImageFormats
 {
     public class BmpFormat : IImageFormat
     {
-        public string MimeType => MimeTypes.Bitmap;
+        public string MimeType => MimeTypes.Bmp;
 
         public void SaveImage(SKBitmap image, Stream stream)
         {

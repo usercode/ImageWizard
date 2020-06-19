@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public abstract class ImageFilter : Filter<ImageFilterContext>
+    public abstract class ImageSharpFilter : Filter<ImageSharpFilterContext>
     {
-        public ImageFilter()
+        public ImageSharpFilter()
         {
 
         }

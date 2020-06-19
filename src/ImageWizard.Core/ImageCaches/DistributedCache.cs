@@ -38,7 +38,7 @@ namespace ImageWizard.Core.ImageCaches
                 return null;
             }
 
-            IImageMetadata metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
+            ImageMetadata metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
 
             return new CachedImage(metadata, async () =>
             {

@@ -13,9 +13,9 @@ namespace ImageWizard.Core.ImageProcessing
     /// </summary>
     public class ProcessingPipelineContext
     {
-        public ProcessingPipelineContext(CurrentImage currentImage, ClientHints clientHints, ImageWizardOptions imageWizardOptions, IEnumerable<string> urlFilters)
+        public ProcessingPipelineContext(ImageResult result, ClientHints clientHints, ImageWizardOptions imageWizardOptions, IEnumerable<string> urlFilters)
         {
-            CurrentImage = currentImage;
+            Result = result;
             ClientHints = clientHints;
             ImageWizardOptions = imageWizardOptions;
             UrlFilters = new Queue<string>(urlFilters);            
@@ -24,7 +24,7 @@ namespace ImageWizard.Core.ImageProcessing
         /// <summary>
         /// OriginalImage
         /// </summary>
-        public CurrentImage CurrentImage { get; set; }
+        public ImageResult Result { get; set; }
 
         /// <summary>
         /// ClientHints
@@ -40,7 +40,6 @@ namespace ImageWizard.Core.ImageProcessing
         /// UrlFilters
         /// </summary>
         public Queue<string> UrlFilters { get; }
-
 
         /// <summary>
         /// DisableCache

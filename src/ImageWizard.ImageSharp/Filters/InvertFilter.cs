@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class InvertFilter : ImageFilter
+    public class InvertFilter : ImageSharpFilter
     {
         [Filter]
         public void Invert()

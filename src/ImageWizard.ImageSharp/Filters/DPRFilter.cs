@@ -9,7 +9,7 @@ namespace ImageWizard.ImageSharp.Filters
     /// <summary>
     /// DPRFilter
     /// </summary>
-    public class DPRFilter : ImageFilter
+    public class DPRFilter : ImageSharpFilter
     {
         [Filter]
         public void DPR(double dpr)

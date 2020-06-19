@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.3.111.9" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.111.13" />
   </ItemGroup>
   
   <ItemGroup>

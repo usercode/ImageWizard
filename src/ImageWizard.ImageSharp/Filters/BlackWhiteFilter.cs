@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class BlackWhiteFilter : ImageFilter
+    public class BlackWhiteFilter : ImageSharpFilter
     {
         [Filter]
         public void BlackWhite()

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class GrayscaleFilter : ImageFilter
+    public class GrayscaleFilter : ImageSharpFilter
     {
         [Filter]
         public void Grayscale()

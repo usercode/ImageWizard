@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class BackgroundColorFilter : ImageFilter
+    public class BackgroundColorFilter : ImageSharpFilter
     {
         [Filter]
         public void BackgroundColor(byte r, byte g, byte b)

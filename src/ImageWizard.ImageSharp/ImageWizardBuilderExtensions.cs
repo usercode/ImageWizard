@@ -22,14 +22,12 @@ namespace ImageWizard
     {
         public static IImageSharpBuilder AddImageSharp(this IImageWizardBuilder builder)
         {
-            return AddImageSharp(builder, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bitmap);
+            return AddImageSharp(builder, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp);
         }
 
         public static IImageSharpBuilder AddImageSharp(this IImageWizardBuilder builder, params string[] mimeTypes)
         {
             builder.AddPipeline<ImageSharpPipeline>(mimeTypes);
-
-            builder.Services.AddSingleton<IProcessingPipeline, ImageSharpPipeline>();
 
             return new ImageSharpBuilder(builder);
         }

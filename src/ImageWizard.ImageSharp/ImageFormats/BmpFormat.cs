@@ -12,7 +12,7 @@ namespace ImageWizard.ImageFormats
 {
     public class BmpFormat : IImageFormat
     {
-        public string MimeType => MimeTypes.Bitmap;
+        public string MimeType => MimeTypes.Bmp;
 
         public void SaveImage(Image image, Stream stream)
         {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class TrimFilter : ImageFilter
+    public class TrimFilter : ImageSharpFilter
     {
         [Filter]
         public void Trim()

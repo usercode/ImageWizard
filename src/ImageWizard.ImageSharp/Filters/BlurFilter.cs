@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class BlurFilter : ImageFilter
+    public class BlurFilter : ImageSharpFilter
     {
         [Filter]
         public void Blur()

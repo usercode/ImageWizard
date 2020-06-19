@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class AutoOrientFilter : ImageFilter
+    public class AutoOrientFilter : ImageSharpFilter
     {
         [Filter]
         public void AutoOrient()

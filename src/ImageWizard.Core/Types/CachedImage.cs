@@ -12,7 +12,7 @@ namespace ImageWizard.Types
     /// </summary>
     public class CachedImage : ICachedImage
     {
-        public CachedImage(IImageMetadata metadata, Func<Task<Stream>> streamTask)
+        public CachedImage(IMetadata metadata, Func<Task<Stream>> streamTask)
         {
             Metadata = metadata;
             StreamTask = streamTask;
@@ -21,7 +21,7 @@ namespace ImageWizard.Types
         /// <summary>
         /// Metadata
         /// </summary>
-        public IImageMetadata Metadata { get; }
+        public IMetadata Metadata { get; }
 
         /// <summary>
         /// Buffer

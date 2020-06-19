@@ -9,7 +9,7 @@ namespace ImageWizard.Services.Types
     /// <summary>
     /// ImageMetadata
     /// </summary>
-    public class ImageMetadata : IImageMetadata
+    public class ImageMetadata : IMetadata
     {
         public ImageMetadata()
         {
@@ -67,12 +67,12 @@ namespace ImageWizard.Services.Types
         public IEnumerable<string> Filters { get; set; }
 
         /// <summary>
-        /// DeliveryType
+        /// LoaderType
         /// </summary>
         public string LoaderType { get; set; }
 
         /// <summary>
-        /// ImageSource
+        /// LoaderSource
         /// </summary>
         public string LoaderSource { get; set; }
     }

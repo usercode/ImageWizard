@@ -1,9 +1,12 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
+using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Settings;
 using ImageWizard.ImageFormats.Base;
+using ImageWizard.Services.Types;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace ImageWizard.SkiaSharp.Filters.Base
@@ -13,7 +16,8 @@ namespace ImageWizard.SkiaSharp.Filters.Base
     /// </summary>
     public class SkiaSharpFilterContext : FilterContext
     {
-        public SkiaSharpFilterContext(SKBitmap image, IImageFormat imageFormat, ClientHints clientHints)
+        public SkiaSharpFilterContext(ProcessingPipelineContext processingContext, SKBitmap image, IImageFormat imageFormat, ClientHints clientHints)
+            : base(processingContext)
         {
             Image = image;
             ImageFormat = imageFormat;
@@ -39,6 +43,30 @@ namespace ImageWizard.SkiaSharp.Filters.Base
             }
         }
 
+        /// <summary>
+        /// ImageFormat
+        /// </summary>
         public IImageFormat ImageFormat { get; set; }
+
+        public override void Dispose()
+        {
+            if(Image != null)
+            {
+                Image.Dispose();
+            }
+        }
+
+        public override ImageResult BuildResult()
+        {
+            MemoryStream mem = new MemoryStream();
+            ImageFormat.SaveImage(Image, mem);
+
+            return new ImageResult(
+                                    mem.ToArray(),
+                                    ImageFormat.MimeType,
+                                    Image.Width,
+                                    Image.Height,
+                                    ClientHints.DPR);
+        }
     }
 }

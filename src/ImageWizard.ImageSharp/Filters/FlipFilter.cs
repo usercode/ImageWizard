@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class FlipFilter : ImageFilter
+    public class FlipFilter : ImageSharpFilter
     {
         [Filter]
         public void Flip(Utils.FilterTypes.FlipMode flippingMode)

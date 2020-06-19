@@ -4,7 +4,10 @@ using System.Text;
 
 namespace ImageWizard.Core.Types
 {
-    public interface IImageMetadata
+    /// <summary>
+    /// IMetadata
+    /// </summary>
+    public interface IMetadata
     {
         DateTime? Created { get; set; }
         string Key { get; set; }

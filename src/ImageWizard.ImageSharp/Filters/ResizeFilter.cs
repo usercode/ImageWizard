@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public class ResizeFilter : ImageFilter
+    public class ResizeFilter : ImageSharpFilter
     {
         [Filter]
         public void Resize([DPR]int size)
@@ -72,7 +72,7 @@ namespace ImageWizard.ImageSharp.Filters
             {
                 Position = anchorPositionMode,
                 Mode = mode2,
-                Size = new SixLabors.ImageSharp.Size(width, height)
+                Size = new Size(width, height)
             }));
         }
     }
