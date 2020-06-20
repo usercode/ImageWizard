@@ -125,6 +125,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - youtube loader ("youtube")
   - video id
 - gravatar loader ("gravatar")
+- Azure loader ("azure")
 
 ## Image caches
 - file cache
