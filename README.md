@@ -69,8 +69,6 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - invert()
 - brightness(value)
 - contrast(value)
-- roundedcorner(value)
-  - value: 0.0 to 1.0
 
 #### Output formats
 - jpg()

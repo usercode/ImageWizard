@@ -13,30 +13,14 @@ namespace ImageWizard.Filters.ImageFormats
     {
         public static IImageFormat Parse(string mimeType)
         {
-            IImageFormat imageFormat;
-
-            switch (mimeType)
+            IImageFormat imageFormat = mimeType switch
             {
-                case MimeTypes.Jpeg:
-                    imageFormat = new JpegFormat();
-                    break;
-
-                case MimeTypes.Png:
-                    imageFormat = new PngFormat();
-                    break;
-
-                case MimeTypes.Gif:
-                    imageFormat = new GifFormat();
-                    break;
-
-                case MimeTypes.Bmp:
-                    imageFormat = new BmpFormat();
-                    break;
-
-                default:
-                    throw new Exception();
-            }
-
+                MimeTypes.Jpeg => new JpegFormat(),
+                MimeTypes.Png => new PngFormat(),
+                MimeTypes.Gif => new GifFormat(),
+                MimeTypes.Bmp => new BmpFormat(),
+                _ => throw new Exception(),
+            };
             return imageFormat;
         }
     }
