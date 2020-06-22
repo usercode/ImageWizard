@@ -209,9 +209,8 @@ app.UseEndpoints(x => x.MapImageWizard());
 ```csharp
  public class BackgroundColorFilter : ImageSharpFilter
     {
-    
         //use dependency injection
-        public BackgroundColorFilter(IOptions<ImageWizardOptions> options)
+        public BackgroundColorFilter(ILogger<BackgroundColorFilter> logger)
         {
           //...
         }
@@ -263,7 +262,8 @@ URL segments:
 URL segment: 
 ```csharp
 "/dpr(2.0)/resize(200,100)/"             //calls resize filter with the resolution 400 x 200
-or "/resize(200,100)/" + client hints  
+or 
+"/resize(200,100)/" + client hints  
 ```
 Response header:
 ```csharp
