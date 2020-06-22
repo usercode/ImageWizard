@@ -9,6 +9,7 @@ using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
 using ImageWizard.Services.Types;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Svg;
 using Svg.Transforms;
@@ -28,32 +29,19 @@ namespace ImageWizard.SvgNet.Filters
     /// </summary>
     public class SvgPipeline : ProcessingPipeline<SvgFilter>
     {
-        public SvgPipeline(ILogger<SvgPipeline> logger, IEnumerable<PipelineAction<SvgPipeline>> actions)
-            : base(logger)
+        public SvgPipeline(
+            IServiceProvider serviceProvider, 
+            ILogger<SvgPipeline> logger, 
+            IEnumerable<PipelineAction<SvgPipeline>> actions)
+            : base(serviceProvider, logger)
         {
-            Logger = logger;
-
-            AddFilter<RemoveSizeFilter>();
-            AddFilter<RotateFilter>();
-            AddFilter<BlurFilter>();
-            AddFilter<GrayscaleFilter>();
-            AddFilter<InvertFilter>();
-            AddFilter<SaturateFilter>();
-            AddFilter<ImageFormatFilter>();
 
             actions.Foreach(x => x(this));
         }
 
-        /// <summary>
-        /// Logger
-        /// </summary>
-        public ILogger<SvgPipeline> Logger { get; set; }
-
         protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
         {
-            return new SvgFilterAction<TFilter>(
-                                                    regex,
-                                                    methodInfo);
+            return new SvgFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
         }
 
         protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)

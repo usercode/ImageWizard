@@ -14,10 +14,10 @@ namespace ImageWizard.ImageSharp.Filters
     /// FilterAction
     /// </summary>
     public class ImageSharpFilterAction<TFilter> : FilterAction<TFilter>
-        where TFilter : ImageSharpFilter, new()
+        where TFilter : ImageSharpFilter
     {
-        public ImageSharpFilterAction(Regex regex, MethodInfo method)
-            : base(regex, method)
+        public ImageSharpFilterAction(IServiceProvider serviceProvider, Regex regex, MethodInfo method)
+            : base(serviceProvider, regex, method)
         {
         }
     }

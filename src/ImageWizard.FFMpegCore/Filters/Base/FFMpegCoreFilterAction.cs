@@ -8,10 +8,10 @@ using System.Text.RegularExpressions;
 namespace ImageWizard.FFMpegCore.Filters.Base
 {
     public class FFMpegCoreFilterAction<TFilter> : FilterAction<TFilter>
-        where TFilter : FFMpegCoreFilter, new()
+        where TFilter : FFMpegCoreFilter
     {
-        public FFMpegCoreFilterAction(Regex regex, MethodInfo method)
-            : base(regex, method)
+        public FFMpegCoreFilterAction(IServiceProvider serviceProvider, Regex regex, MethodInfo method)
+            : base(serviceProvider, regex, method)
         {
 
         }

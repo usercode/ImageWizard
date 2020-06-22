@@ -4,6 +4,7 @@ using ImageWizard.Core.ImageFilters.Base.Helpers;
 using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Types;
 using ImageWizard.Services.Types;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,9 @@ namespace ImageWizard.Filters
     public abstract class ProcessingPipeline<TFilterBase> : IProcessingPipeline
         where TFilterBase : IFilter
     {
-        public ProcessingPipeline(ILogger<ProcessingPipeline<TFilterBase>> logger)
+        public ProcessingPipeline(IServiceProvider serviceProvider, ILogger<ProcessingPipeline<TFilterBase>> logger)
         {
+            ServiceProvider = serviceProvider;
             Logger = logger;
 
             FilterActions = new List<IFilterAction>();
@@ -35,21 +37,26 @@ namespace ImageWizard.Filters
         public string[] UsedMimeTypes { get; set; }
 
         /// <summary>
+        /// ServiceProvider
+        /// </summary>
+        protected IServiceProvider ServiceProvider { get; }
+
+        /// <summary>
         /// Logger
         /// </summary>
-        private ILogger<ProcessingPipeline<TFilterBase>> Logger { get; }
+        protected ILogger<ProcessingPipeline<TFilterBase>> Logger { get; }
 
         /// <summary>
         /// FilterActions
         /// </summary>
-        public IList<IFilterAction> FilterActions { get; set; }
+        protected IList<IFilterAction> FilterActions { get; set; }
 
         /// <summary>
         /// AddFilter
         /// </summary>
         /// <typeparam name="TFilter"></typeparam>
         public void AddFilter<TFilter>()
-            where TFilter : TFilterBase, new()
+            where TFilter : TFilterBase
         {
             MethodInfo[] methods = typeof(TFilter)
                                         .GetMethods()
@@ -145,7 +152,7 @@ namespace ImageWizard.Filters
         /// <param name="regex"></param>
         /// <param name="methodInfo"></param>
         /// <returns></returns>
-        protected abstract IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo) where TFilter : TFilterBase, new();
+        protected abstract IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo) where TFilter : TFilterBase;
 
         /// <summary>
         /// CreateFilterContext

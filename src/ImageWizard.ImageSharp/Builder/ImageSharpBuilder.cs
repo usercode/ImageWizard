@@ -14,6 +14,23 @@ namespace ImageWizard.ImageSharp.Builder
         public ImageSharpBuilder(IImageWizardBuilder builder)
         {
             Builder = builder;
+
+            WithFilter<ResizeFilter>();
+            WithFilter<BackgroundColorFilter>();
+            WithFilter<CropFilter>();
+            WithFilter<GrayscaleFilter>();
+            WithFilter<BlackWhiteFilter>();
+            WithFilter<TrimFilter>();
+            WithFilter<FlipFilter>();
+            WithFilter<RotateFilter>();
+            WithFilter<BlurFilter>();
+            WithFilter<InvertFilter>();
+            WithFilter<BrightnessFilter>();
+            WithFilter<ContrastFilter>();
+            WithFilter<DPRFilter>();
+            WithFilter<NoImageCacheFilter>();
+            WithFilter<AutoOrientFilter>();
+            WithFilter<ImageFormatFilter>();
         }
 
         private IImageWizardBuilder Builder { get; }
@@ -29,8 +46,9 @@ namespace ImageWizard.ImageSharp.Builder
             Builder.AddPipeline<T>(mimeTypes);
         }
 
-        public IImageSharpBuilder WithFilter<TFilter>() where TFilter : ImageSharpFilter, new()
+        public IImageSharpBuilder WithFilter<TFilter>() where TFilter : ImageSharpFilter
         {
+            Builder.Services.AddTransient<TFilter>();
             Builder.Services.AddSingleton(new PipelineAction<ImageSharpPipeline>(x => x.AddFilter<TFilter>()));
 
             return this;

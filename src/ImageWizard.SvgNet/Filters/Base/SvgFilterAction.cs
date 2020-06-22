@@ -15,10 +15,10 @@ namespace ImageWizard.Filters
     /// FilterAction
     /// </summary>
     public class SvgFilterAction<TFilter> : FilterAction<TFilter>
-      where TFilter : SvgFilter, new()
+      where TFilter : SvgFilter
     {
-        public SvgFilterAction(Regex regex, MethodInfo method)
-            : base(regex, method)
+        public SvgFilterAction(IServiceProvider serviceProvider, Regex regex, MethodInfo method)
+            : base(serviceProvider, regex, method)
         {
         }
 

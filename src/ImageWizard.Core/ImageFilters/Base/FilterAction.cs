@@ -1,5 +1,6 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageFilters.Base.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,12 +16,13 @@ namespace ImageWizard.Filters
     /// FilterAction
     /// </summary>
     public abstract class FilterAction<TFilter> : IFilterAction
-        where TFilter : IFilter, new()
+        where TFilter : IFilter
     {
         public delegate void FilterActionHandler(GroupCollection groups, TFilter filer);
 
-        public FilterAction(Regex regex, MethodInfo method)
+        public FilterAction(IServiceProvider serviceProvider, Regex regex, MethodInfo method)
         {
+            ServiceProvider = serviceProvider;
             Name = method.Name;
             Regex = regex;
 
@@ -33,14 +35,19 @@ namespace ImageWizard.Filters
         public string Name { get; }
 
         /// <summary>
+        /// ServiceProvider
+        /// </summary>
+        private IServiceProvider ServiceProvider { get; }
+
+        /// <summary>
         /// Regex
         /// </summary>
-        public Regex Regex { get; }
+        private Regex Regex { get; }
 
         /// <summary>
         /// MethodDelegate
         /// </summary>
-        public FilterActionHandler MethodDelegate { get; }
+        private FilterActionHandler MethodDelegate { get; }
 
         public bool TryExecute(string input, FilterContext filterContext)
         {
@@ -51,10 +58,8 @@ namespace ImageWizard.Filters
                 return false;
             }
 
-            TFilter filter = new TFilter()
-            {
-                Context = filterContext
-            };
+            TFilter filter = ServiceProvider.GetRequiredService<TFilter>();
+            filter.Context = filterContext;
 
             MethodDelegate(match.Groups, filter);
 

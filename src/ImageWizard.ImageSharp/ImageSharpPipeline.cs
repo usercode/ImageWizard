@@ -10,6 +10,7 @@ using ImageWizard.ImageSharp.Builder;
 using ImageWizard.Services.Types;
 using ImageWizard.Utils.FilterTypes;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
@@ -29,43 +30,18 @@ namespace ImageWizard.ImageSharp.Filters
     /// </summary>
     public class ImageSharpPipeline : ProcessingPipeline<ImageSharpFilter>
     {
-        public ImageSharpPipeline(IOptions<ImageSharpOptions> options, ILogger<ImageSharpPipeline> logger, IEnumerable<PipelineAction<ImageSharpPipeline>> actions)
-            : base(logger)
+        public ImageSharpPipeline(
+            IServiceProvider service, 
+            ILogger<ImageSharpPipeline> logger, 
+            IEnumerable<PipelineAction<ImageSharpPipeline>> actions)
+            : base(service, logger)
         {
-            Options = options.Value;
-            Logger = logger;
-
-            AddFilter<ResizeFilter>();
-            AddFilter<BackgroundColorFilter>();
-            AddFilter<CropFilter>();
-            AddFilter<GrayscaleFilter>();
-            AddFilter<BlackWhiteFilter>();
-            AddFilter<TrimFilter>();
-            AddFilter<FlipFilter>();
-            AddFilter<RotateFilter>();
-            AddFilter<BlurFilter>();
-            //AddFilter<TextFilter>();
-            AddFilter<InvertFilter>();
-            AddFilter<BrightnessFilter>();
-            AddFilter<ContrastFilter>();
-            AddFilter<DPRFilter>();
-            AddFilter<NoImageCacheFilter>();
-            AddFilter<AutoOrientFilter>();
-            AddFilter<ImageFormatFilter>();
-
             actions.Foreach(x => x(this));
         }
 
-        /// <summary>
-        /// Options
-        /// </summary>
-        public ImageSharpOptions Options { get; }
-
-        public ILogger<ImageSharpPipeline> Logger { get; set; }
-
         protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
         {
-            return new ImageSharpFilterAction<TFilter>(regex, methodInfo);
+            return new ImageSharpFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
         }
 
         protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)

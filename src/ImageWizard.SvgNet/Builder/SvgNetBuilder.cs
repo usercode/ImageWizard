@@ -1,28 +1,27 @@
 ﻿using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.Settings;
-using ImageWizard.SkiaSharp.Filters;
-using ImageWizard.SkiaSharp.Filters.Base;
+using ImageWizard.Filters;
+using ImageWizard.SvgNet.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.SkiaSharp.Builder
+namespace ImageWizard.SvgNet.Builder
 {
-    class SkiaSharpBuilder : ISkiaSharpBuilder
+    class SvgNetBuilder : ISvgNetBuilder
     {
-        public SkiaSharpBuilder(IImageWizardBuilder builder)
+        public SvgNetBuilder(IImageWizardBuilder builder)
         {
             Builder = builder;
 
-            WithFilter<ResizeFilter>();
+            WithFilter<RemoveSizeFilter>();
             WithFilter<RotateFilter>();
-            WithFilter<CropFilter>();
-            WithFilter<GrayscaleFilter>();
             WithFilter<BlurFilter>();
-            WithFilter<FlipFilter>();
-            WithFilter<DPRFilter>();
+            WithFilter<GrayscaleFilter>();
+            WithFilter<InvertFilter>();
+            WithFilter<SaturateFilter>();
             WithFilter<ImageFormatFilter>();
         }
 
@@ -39,15 +38,15 @@ namespace ImageWizard.SkiaSharp.Builder
             Builder.AddPipeline<T>(mimeTypes);
         }
 
-        public ISkiaSharpBuilder WithFilter<TFilter>() where TFilter : SkiaSharpFilter, new()
+        public ISvgNetBuilder WithFilter<TFilter>() where TFilter : SvgFilter, new()
         {
             Builder.Services.AddTransient<TFilter>();
-            Builder.Services.AddSingleton(new PipelineAction<SkiaSharpPipeline>(x => x.AddFilter<TFilter>()));
+            Builder.Services.AddSingleton(new PipelineAction<SvgPipeline>(x => x.AddFilter<TFilter>()));
 
             return this;
         }
 
-        public ISkiaSharpBuilder WithOptions(Action<SkiaSharpOptions> action)
+        public ISvgNetBuilder WithOptions(Action<SvgOptions> action)
         {
             Builder.Services.Configure(action);
 

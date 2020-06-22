@@ -9,6 +9,7 @@ using ImageWizard.ImageFormats.Base;
 using ImageWizard.Services.Types;
 using ImageWizard.SkiaSharp.Filters;
 using ImageWizard.SkiaSharp.Filters.Base;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System;
@@ -26,31 +27,18 @@ namespace ImageWizard.SkiaSharp
     /// </summary>
     public class SkiaSharpPipeline : ProcessingPipeline<SkiaSharpFilter>
     {
-        public SkiaSharpPipeline(ILogger<SkiaSharpPipeline> logger, IEnumerable<PipelineAction<SkiaSharpPipeline>> actions)
-            : base(logger)
+        public SkiaSharpPipeline(
+            IServiceProvider serviceProvider, 
+            ILogger<SkiaSharpPipeline> logger, 
+            IEnumerable<PipelineAction<SkiaSharpPipeline>> actions)
+            : base(serviceProvider, logger)
         {
-            Logger = logger;
-
-            AddFilter<ResizeFilter>();
-            AddFilter<RotateFilter>();
-            AddFilter<CropFilter>();
-            AddFilter<GrayscaleFilter>();
-            AddFilter<BlurFilter>();
-            AddFilter<FlipFilter>();
-            AddFilter<DPRFilter>();
-            AddFilter<ImageFormatFilter>();
-
             actions.Foreach(x => x(this));
         }
 
-        /// <summary>
-        /// Logger
-        /// </summary>
-        public ILogger<SkiaSharpPipeline> Logger { get; }
-
         protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
         {
-            return new SkiaSharpFilterAction<TFilter>(regex, methodInfo);
+            return new SkiaSharpFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
         }
 
         protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)

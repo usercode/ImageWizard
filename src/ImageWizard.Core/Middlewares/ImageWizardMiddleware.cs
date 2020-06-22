@@ -273,7 +273,7 @@ namespace ImageWizard.Middlewares
                         if (processingPipeline == null)
                         {
                             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                            await context.Response.WriteAsync("Processing pipeline not found: " + processingContext.Result.MimeType);
+                            await context.Response.WriteAsync("Processing pipeline was not found: " + processingContext.Result.MimeType);
 
                             return;
                         }

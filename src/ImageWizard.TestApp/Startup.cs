@@ -61,7 +61,7 @@ namespace ImageWizard.TestApp
                                 })
                     .WithFilter<ResizeFilter>()
                 //.AddSkiaSharp()
-                //    .WithOptions(x => 
+                //    .WithOptions(x =>
                 //                {
                 //                    x.ImageMaxHeight = 4000;
                 //                    x.ImageMaxWidth = 4000;

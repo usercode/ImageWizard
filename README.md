@@ -196,7 +196,7 @@ app.UseEndpoints(x => x.MapImageWizard());
 
 ## Create custom filter
 
-- implements IFilter (or use base class 'FilterBase')
+- implement IFilter (or use base class 'FilterBase')
 - add a public method which is marked with the filter attribute
   - at url level are the following types possible for method overloading: 
     - integer ("0")
@@ -209,6 +209,13 @@ app.UseEndpoints(x => x.MapImageWizard());
 ```csharp
  public class BackgroundColorFilter : ImageSharpFilter
     {
+    
+        //use dependency injection
+        public BackgroundColorFilter(IOptions<ImageWizardOptions> options)
+        {
+          //...
+        }
+        
         [Filter]
         public void BackgroundColor(byte r, byte g, byte b)
         {
@@ -243,7 +250,7 @@ URL segments:
 - all parameter with DPR attribute will be multiplied by the DPR factor
 
 ```csharp
- public class ResizeFilter : ImageFilter
+ public class ResizeFilter : ImageSharpFilter
  {
       [Filter]
       public void Resize([DPR]int width, [DPR]int height)
@@ -255,7 +262,8 @@ URL segments:
 
 URL segment: 
 ```csharp
-"/dpr(2.0)/resize(200,100)/"  //calls resize filter with the resolution 400 x 200
+"/dpr(2.0)/resize(200,100)/"             //calls resize filter with the resolution 400 x 200
+or "/resize(200,100)/" + client hints  
 ```
 Response header:
 ```csharp
@@ -270,7 +278,7 @@ Content-DPR: 2
 Example:
 
 ```csharp
- public class TextFilter : FilterBase
+ public class TextFilter : ImageSharpFilter
  {
       [Filter]
       public void DrawText(int x = 0, int y = 0, string text = "", int size = 12, string font = "Arial")

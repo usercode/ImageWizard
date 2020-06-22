@@ -12,7 +12,7 @@ namespace ImageWizard.ImageSharp.Builder
     {
         IImageSharpBuilder WithOptions(Action<ImageSharpOptions> action);
 
-        IImageSharpBuilder WithFilter<TFilter>() where TFilter : ImageSharpFilter, new();
+        IImageSharpBuilder WithFilter<TFilter>() where TFilter : ImageSharpFilter;
 
 
     }

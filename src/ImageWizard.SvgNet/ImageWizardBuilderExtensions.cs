@@ -1,5 +1,6 @@
 ﻿using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.Types;
+using ImageWizard.SvgNet.Builder;
 using ImageWizard.SvgNet.Filters;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace ImageWizard
         {
             builder.AddPipeline<SvgPipeline>(new[] { MimeTypes.Svg });
 
-            return builder;
+            return new SvgNetBuilder(builder);
         }
     }
 }
