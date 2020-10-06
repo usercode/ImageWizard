@@ -13,6 +13,7 @@ namespace ImageWizard.ImageFormats
     {
         public WebPFormat()
         {
+            Quality = 85;
         }
 
         /// <summary>
@@ -24,7 +25,7 @@ namespace ImageWizard.ImageFormats
 
         public void SaveImage(SKBitmap image, Stream stream)
         {
-            image.Encode(stream, SKEncodedImageFormat.Webp, 85);
+            image.Encode(stream, SKEncodedImageFormat.Webp, Quality);
         }
     }
 }

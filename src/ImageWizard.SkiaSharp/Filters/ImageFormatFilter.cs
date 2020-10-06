@@ -45,5 +45,11 @@ namespace ImageWizard.SkiaSharp.Filters
         {
             Context.ImageFormat = new WebPFormat();
         }
+
+        [Filter]
+        public void WebP(int quality)
+        {
+            Context.ImageFormat = new WebPFormat() { Quality = quality };
+        }
     }
 }
