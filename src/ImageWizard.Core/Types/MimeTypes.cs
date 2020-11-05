@@ -11,6 +11,7 @@ namespace ImageWizard.Core.Types
         public const string Gif = "image/gif";
         public const string Bmp = "image/bmp";
         public const string WebP = "image/webp";
+        public const string Avif = "image/avif";
         public const string Svg = "image/svg+xml";
 
         public const string Mpeg = "video/mpeg";

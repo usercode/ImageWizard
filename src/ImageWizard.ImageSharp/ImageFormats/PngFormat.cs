@@ -14,9 +14,9 @@ namespace ImageWizard.ImageFormats
     {
         public string MimeType => MimeTypes.Png;
 
-        public void SaveImage(Image image, Stream stream)
+        public async Task SaveImageAsync(Image image, Stream stream)
         {
-            image.SaveAsPng(stream);
+            await image.SaveAsPngAsync(stream);
         }
     }
 }

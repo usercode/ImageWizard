@@ -12,6 +12,6 @@ namespace ImageWizard.ImageFormats.Base
     {
         string MimeType { get; }
 
-        void SaveImage(Image image, Stream stream);
+        Task SaveImageAsync(Image image, Stream stream);
     }
 }

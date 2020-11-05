@@ -39,7 +39,7 @@ namespace ImageWizard.Filters
         /// </summary>
         public IList<SvgFilterPrimitive> Filters { get; set; }
 
-        public override ImageResult BuildResult()
+        public override async Task<ImageResult> BuildResultAsync()
         {
             //apply filters
             if (Filters.Any())

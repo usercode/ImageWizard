@@ -199,7 +199,7 @@ namespace ImageWizard.Filters
                     }
                 }
 
-                return filterContext.BuildResult();
+                return await filterContext.BuildResultAsync();
             }
         }
     }

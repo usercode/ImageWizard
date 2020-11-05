@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ImageWizard.SkiaSharp.Filters.Base
 {
@@ -56,7 +57,7 @@ namespace ImageWizard.SkiaSharp.Filters.Base
             }
         }
 
-        public override ImageResult BuildResult()
+        public override async Task<ImageResult> BuildResultAsync()
         {
             MemoryStream mem = new MemoryStream();
             ImageFormat.SaveImage(Image, mem);

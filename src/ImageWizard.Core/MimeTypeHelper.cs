@@ -21,6 +21,7 @@ namespace ImageWizard.Filters.ImageFormats
                 ".gif" => MimeTypes.Gif,
                 ".bmp" => MimeTypes.Bmp,
                 ".webp" => MimeTypes.WebP,
+                ".avif" => MimeTypes.Avif,
                 ".svg" => MimeTypes.Svg,
 
                 //video

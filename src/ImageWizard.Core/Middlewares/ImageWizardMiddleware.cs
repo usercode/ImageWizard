@@ -150,7 +150,7 @@ namespace ImageWizard.Middlewares
             if (loader == null)
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                await context.Response.WriteAsync("image loader not found: " + url_loaderType);
+                await context.Response.WriteAsync("Image loader not found: " + url_loaderType);
 
                 return;
             }

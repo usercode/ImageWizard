@@ -48,7 +48,7 @@ namespace ImageWizard.ImageSharp.Filters
             }
         }
 
-        public override ImageResult BuildResult()
+        public override async Task<ImageResult> BuildResultAsync()
         {
             //check max width and height
             bool change = false;
@@ -76,7 +76,7 @@ namespace ImageWizard.ImageSharp.Filters
             MemoryStream mem = new MemoryStream();
 
             //save image
-            ImageFormat.SaveImage(Image, mem);
+            await ImageFormat.SaveImageAsync(Image, mem);
 
             byte[] transformedImageData = mem.ToArray();
 

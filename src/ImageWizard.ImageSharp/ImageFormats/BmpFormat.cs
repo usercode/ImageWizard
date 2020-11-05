@@ -14,9 +14,9 @@ namespace ImageWizard.ImageFormats
     {
         public string MimeType => MimeTypes.Bmp;
 
-        public void SaveImage(Image image, Stream stream)
+        public async Task SaveImageAsync(Image image, Stream stream)
         {
-            image.SaveAsBmp(stream);
+            await image.SaveAsBmpAsync(stream);
         }
     }
 }

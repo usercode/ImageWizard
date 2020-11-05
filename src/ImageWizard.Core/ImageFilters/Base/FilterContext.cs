@@ -4,6 +4,7 @@ using ImageWizard.Services.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ImageWizard.Core.ImageFilters.Base
 {
@@ -42,7 +43,7 @@ namespace ImageWizard.Core.ImageFilters.Base
             
         }
 
-        public virtual ImageResult BuildResult()
+        public virtual Task<ImageResult> BuildResultAsync()
         {
             return null;
         }

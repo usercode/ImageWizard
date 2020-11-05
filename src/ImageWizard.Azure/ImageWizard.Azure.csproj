@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net50</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
@@ -22,7 +22,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.4.4" />    
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.6.0" />    
   </ItemGroup>
 
   <ItemGroup>

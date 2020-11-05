@@ -23,9 +23,9 @@ namespace ImageWizard.ImageFormats
 
         public string MimeType => MimeTypes.Jpeg;
 
-        public void SaveImage(Image image, Stream stream)
+        public async Task SaveImageAsync(Image image, Stream stream)
         {
-            image.SaveAsJpeg(stream, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder() { Quality = Quality });
+            await image.SaveAsJpegAsync(stream, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder() { Quality = Quality });
         }
     }
 }

@@ -37,7 +37,6 @@ namespace ImageWizard.SkiaSharp.Filters
                 // save
                 Context.Image = SKBitmap.FromImage(surface.Snapshot());
             }
-
         }
     }
 }
