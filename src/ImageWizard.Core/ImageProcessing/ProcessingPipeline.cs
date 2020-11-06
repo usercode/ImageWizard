@@ -84,11 +84,11 @@ namespace ImageWizard.Filters
 
                     if (integerTypes.Any(x => x == currentParameter.ParameterType))
                     {
-                        pp.Add(CreateParameter(currentParameter, @"\d+"));
+                        pp.Add(CreateParameter(currentParameter, @"-?\d+"));
                     }
                     else if (floatingNumberTypes.Any(x => x == currentParameter.ParameterType))
                     {
-                        pp.Add(CreateParameter(currentParameter, @"\d+\.\d+"));
+                        pp.Add(CreateParameter(currentParameter, @"-?\d+\.\d+"));
                     }
                     else if (currentParameter.ParameterType == typeof(bool))
                     {
