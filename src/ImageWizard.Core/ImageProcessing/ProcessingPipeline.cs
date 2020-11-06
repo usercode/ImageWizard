@@ -96,7 +96,7 @@ namespace ImageWizard.Filters
                     }
                     else if (currentParameter.ParameterType == typeof(string))
                     {
-                        ParameterItem p = CreateParameter(parameters[i], ".+");
+                        ParameterItem p = CreateParameter(parameters[i], "[^']*");
 
                         p.Pattern = $"'{p.Pattern}'";
 
