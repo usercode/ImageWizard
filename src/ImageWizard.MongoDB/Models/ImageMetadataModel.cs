@@ -8,7 +8,7 @@ using System.Text;
 namespace ImageWizard.MongoDB.Models
 {
     [BsonIgnoreExtraElements]
-    public class ImageMetadataModel : IMetadata
+    public class ImageMetadataModel : IImageMetadata
     {
         public ImageMetadataModel()
         {

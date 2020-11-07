@@ -15,7 +15,7 @@ namespace ImageWizard.Core.Types
         /// Metadata
         /// </summary>
         /// <returns></returns>
-        IMetadata Metadata { get; }
+        IImageMetadata Metadata { get; }
 
         /// <summary>
         /// OpenReadAsync

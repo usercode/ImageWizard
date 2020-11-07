@@ -9,7 +9,7 @@ namespace ImageWizard.Services.Types
     /// <summary>
     /// ImageMetadata
     /// </summary>
-    public class ImageMetadata : IMetadata
+    public class ImageMetadata : IImageMetadata
     {
         public ImageMetadata()
         {

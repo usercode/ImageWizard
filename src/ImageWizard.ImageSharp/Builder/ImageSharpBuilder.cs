@@ -31,6 +31,7 @@ namespace ImageWizard.ImageSharp.Builder
             WithFilter<NoImageCacheFilter>();
             WithFilter<AutoOrientFilter>();
             WithFilter<ImageFormatFilter>();
+            WithFilter<TextFilter>();
         }
 
         private IImageWizardBuilder Builder { get; }

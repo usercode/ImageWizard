@@ -53,7 +53,12 @@ namespace ImageWizard.Middlewares
 
             _next = next;
 
-            UrlRegex = new Regex($@"^(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([a-z0-9-,.=']*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            const string signature = @"[a-z0-9-_]+";
+            const string filter = @"[a-z]+\([^)]*\)";
+            const string loaderType = @"[a-z]+";
+            const string loaderSource = @".*";
+            
+            UrlRegex = new Regex($@"^(?<signature>{signature})/(?<path>(?<filter>{filter}/)*(?<loaderType>{loaderType})/(?<loaderSource>{loaderSource}))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace ImageWizard.Core.Types
     /// <summary>
     /// IMetadata
     /// </summary>
-    public interface IMetadata
+    public interface IImageMetadata
     {
         DateTime? Created { get; set; }
         string Key { get; set; }
