@@ -69,6 +69,8 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - invert()
 - brightness(value)
 - contrast(value)
+- drawtext(text='Hello',size=24,x=0.5,y=0.5)
+  - string: raw ('Hello') or base64url (SGVsbG8)
 
 #### Output formats
 - jpg()
@@ -97,7 +99,9 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - grayscale()
 - blur()
 - blur(radius)
-
+- drawtext(text='Hello',size=24,x=0.5,y=0.5)
+  - string: raw ('Hello') or base64url (SGVsbG8)
+  
 #### Output formats
 - jpg()
 - jpg(quality)

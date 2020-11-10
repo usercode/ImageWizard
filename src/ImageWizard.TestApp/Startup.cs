@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using ImageWizard.MongoDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +11,6 @@ using ImageWizard.Analytics;
 using ImageWizard.Azure;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.WebUtilities;
-using ImageWizard.Filters;
 using ImageWizard.ImageSharp.Filters;
 using ImageWizard.AWS;
 using ImageWizard.SkiaSharp;
@@ -20,6 +18,7 @@ using ImageWizard.Core.Types;
 using ImageWizard.Settings;
 using Microsoft.Extensions.Options;
 using ImageWizard.FFMpegCore;
+using System.Text;
 
 namespace ImageWizard.TestApp
 {
@@ -54,20 +53,20 @@ namespace ImageWizard.TestApp
                 x.UseETag = true;
                 x.Key = key;
             })
-                //.AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
-                //    .WithOptions(x =>
-                //                {
-                //                    x.ImageMaxHeight = 4000;
-                //                    x.ImageMaxWidth = 4000;
-                //                })
-                //    .WithFilter<ResizeFilter>()
-                .AddSkiaSharp()
+                .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
                     .WithOptions(x =>
                                 {
                                     x.ImageMaxHeight = 4000;
                                     x.ImageMaxWidth = 4000;
                                 })
-                    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>()
+                    .WithFilter<ResizeFilter>()
+                //.AddSkiaSharp()
+                //    .WithOptions(x =>
+                //                {
+                //                    x.ImageMaxHeight = 4000;
+                //                    x.ImageMaxWidth = 4000;
+                //                })
+                //    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>()
                 .AddSvgNet()
                 //.SetFileCache()
                 //.SetMongoDBCache()

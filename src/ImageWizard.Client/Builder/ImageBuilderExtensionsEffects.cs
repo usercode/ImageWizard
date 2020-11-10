@@ -1,8 +1,10 @@
 ﻿using ImageWizard.Client.Builder;
 using ImageWizard.Client.Builder.Types;
 using ImageWizard.Utils.FilterTypes;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
@@ -187,10 +189,38 @@ namespace ImageWizard
 
             return imageUrlBuilder;
         }
-
-        public static IImageFilters DrawText(this IImageFilters imageUrlBuilder, string text)
+        public static IImageFilters DrawText(this IImageFilters imageUrlBuilder, string text, int? size = null, double? x = null, double? y = null, bool useBase64Url = true)
         {
-            imageUrlBuilder.Filter($"drawtext(text='{text}')");
+            List<string> builder = new List<string>();
+
+            if (useBase64Url)
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(text);
+                string base64Url = WebEncoders.Base64UrlEncode(buffer);
+
+                builder.Add($"text={base64Url}");
+            }
+            else
+            {
+                builder.Add($"text={text}");
+            }
+
+            if (size != null)
+            {
+                builder.Add($"size={size}");
+            }
+
+            if (x != null)
+            {
+                builder.Add($"x={x.Value.ToUrlString()}");
+            }
+
+            if (y != null)
+            {
+                builder.Add($"y={y.Value.ToUrlString()}");
+            }
+
+            imageUrlBuilder.Filter($"drawtext({string.Join(",", builder)})");
 
             return imageUrlBuilder;
         }

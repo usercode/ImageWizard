@@ -96,9 +96,8 @@ namespace ImageWizard.Filters
                     }
                     else if (currentParameter.ParameterType == typeof(string))
                     {
-                        ParameterItem p = CreateParameter(parameters[i], "[^']*");
-
-                        p.Pattern = $"'{p.Pattern}'";
+                        //find string as Base64Url or surrounded with ''
+                        ParameterItem p = CreateParameter(parameters[i], "(('[^']*')|([A-Za-z0-9-_]+))");
 
                         pp.Add(p);
                     }

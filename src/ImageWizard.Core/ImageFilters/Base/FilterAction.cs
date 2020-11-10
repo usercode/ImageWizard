@@ -2,13 +2,16 @@
 using ImageWizard.Core.ImageFilters.Base.Attributes;
 using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Settings;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -121,12 +124,26 @@ namespace ImageWizard.Filters
                                                 }
                                                 else if (x.ParameterType == typeof(string))
                                                 {
-                                                    parsedValue = groupValue;
+                                                    MethodInfo StartsWith = typeof(string).GetMethod(nameof(string.StartsWith), new[] { typeof(char) });
+                                                    MethodInfo SubString = typeof(string).GetMethod(nameof(string.Substring), new[] { typeof(int), typeof(int) });
+
+                                                    MethodInfo base64Decode = typeof(WebEncoders).GetMethod(nameof(WebEncoders.Base64UrlDecode), new[] { typeof(string) });
+                                                    MethodInfo getBytes = typeof(Encoding).GetMethod(nameof(Encoding.GetString), new[] { typeof(byte[]) });
+                                                    PropertyInfo utf8 = typeof(Encoding).GetProperty(nameof(Encoding.UTF8));
+
+                                                    //raw string or base54url?
+                                                    parsedValue = Expression.Condition(
+                                                                        Expression.Call(groupValue, StartsWith, Expression.Constant('\'')),
+                                                                        Expression.Call(groupValue, SubString, 
+                                                                            Expression.Constant(1), 
+                                                                            Expression.Subtract(Expression.Property(groupValue, nameof(string.Length)), Expression.Constant(2))),
+                                                                        Expression.Call(Expression.Property(null, utf8), getBytes, Expression.Call(base64Decode, groupValue)));
                                                 }
                                                 else
                                                 {
                                                     throw new Exception("Parameter type is not supported: " + x.ParameterType.Name);
                                                 }
+
 
                                                 result = Expression.Condition(
                                                                             groupSuccess,
