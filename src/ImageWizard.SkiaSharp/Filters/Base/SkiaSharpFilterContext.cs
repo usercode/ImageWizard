@@ -17,12 +17,11 @@ namespace ImageWizard.SkiaSharp.Filters.Base
     /// </summary>
     public class SkiaSharpFilterContext : FilterContext
     {
-        public SkiaSharpFilterContext(ProcessingPipelineContext processingContext, SKBitmap image, IImageFormat imageFormat, ClientHints clientHints)
+        public SkiaSharpFilterContext(ProcessingPipelineContext processingContext, SKBitmap image, IImageFormat imageFormat)
             : base(processingContext)
         {
             Image = image;
             ImageFormat = imageFormat;
-            ClientHints = clientHints;
         }
 
         private SKBitmap _image;
@@ -67,7 +66,7 @@ namespace ImageWizard.SkiaSharp.Filters.Base
                                     ImageFormat.MimeType,
                                     Image.Width,
                                     Image.Height,
-                                    ClientHints.DPR);
+                                    ProcessingContext.ClientHints.DPR);
         }
     }
 }

@@ -13,18 +13,29 @@ namespace ImageWizard.Core.ImageProcessing
     /// </summary>
     public class ProcessingPipelineContext
     {
-        public ProcessingPipelineContext(ImageResult result, ClientHints clientHints, ImageWizardOptions imageWizardOptions, IEnumerable<string> urlFilters)
+        public ProcessingPipelineContext(
+            ImageResult result, 
+            ClientHints clientHints, 
+            ImageWizardOptions imageWizardOptions,
+            IEnumerable<string> acceptMimeTypes,
+            IEnumerable<string> urlFilters)
         {
             Result = result;
             ClientHints = clientHints;
             ImageWizardOptions = imageWizardOptions;
-            UrlFilters = new Queue<string>(urlFilters);            
+            AcceptMimeTypes = acceptMimeTypes;
+            UrlFilters = new Queue<string>(urlFilters);
         }
 
         /// <summary>
         /// OriginalImage
         /// </summary>
         public ImageResult Result { get; set; }
+
+        /// <summary>
+        /// AcceptMimeTypes
+        /// </summary>
+        public IEnumerable<string> AcceptMimeTypes { get; set; }
 
         /// <summary>
         /// ClientHints

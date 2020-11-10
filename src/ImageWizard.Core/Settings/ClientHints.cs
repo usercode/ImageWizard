@@ -5,8 +5,15 @@ using System.Text;
 
 namespace ImageWizard.Core.Settings
 {
+    /// <summary>
+    /// ClientHints
+    /// </summary>
     public class ClientHints
     {
+        public const string DPRHeader = "DPR";
+        public const string WidthHeader = "Width";
+        public const string ViewportWidthHeader = "Viewport-Width";
+
         public ClientHints(double[] allowedDPR)
         {
             AllowedDPR = allowedDPR;

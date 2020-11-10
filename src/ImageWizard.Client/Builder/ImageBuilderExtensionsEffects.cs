@@ -187,5 +187,12 @@ namespace ImageWizard
 
             return imageUrlBuilder;
         }
+
+        public static IImageFilters DrawText(this IImageFilters imageUrlBuilder, string text)
+        {
+            imageUrlBuilder.Filter($"drawtext(text='{text}')");
+
+            return imageUrlBuilder;
+        }
     }
 }

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -43,11 +44,33 @@ namespace ImageWizard.SkiaSharp
 
         protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
         {
-            IImageFormat targetFormat = ImageFormatHelper.Parse(context.Result.MimeType);
+            IImageFormat targetFormat = null;
+
+            if (context.ImageWizardOptions.UseAcceptHeader)
+            {
+                //try to use mime type from accept header
+                targetFormat = ImageFormatHelper.FirstOrDefault(context.AcceptMimeTypes);
+            }
+
+            if(targetFormat == null)
+            {
+                //use mime type of the original image
+                targetFormat = ImageFormatHelper.FirstOrDefault(context.Result.MimeType);
+            }
 
             SKBitmap bitmap = SKBitmap.Decode(context.Result.Data);
 
-            return new SkiaSharpFilterContext(context, bitmap, targetFormat, context.ClientHints);
+            if (context.ImageWizardOptions.UseClintHints)
+            {
+                if (context.ClientHints.DPR != null)
+                {
+                    string method = $"dpr({context.ClientHints.DPR.Value.ToString("0.0", CultureInfo.InvariantCulture)})";
+                    
+                    //url_filters.Insert(0, method);
+                }
+            }
+
+            return new SkiaSharpFilterContext(context, bitmap, targetFormat);
         }
     }
 }

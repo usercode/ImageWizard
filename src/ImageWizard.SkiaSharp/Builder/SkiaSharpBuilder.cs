@@ -24,6 +24,7 @@ namespace ImageWizard.SkiaSharp.Builder
             WithFilter<FlipFilter>();
             WithFilter<DPRFilter>();
             WithFilter<ImageFormatFilter>();
+            WithFilter<TextFilter>();
         }
 
         private IImageWizardBuilder Builder { get; }

@@ -12,17 +12,6 @@ namespace ImageWizard.Core
     /// </summary>
     public static class Extensions
     {
-        public static string ToHexcode(this byte[] buffer)
-        {
-            StringBuilder stringBuilder = new StringBuilder(buffer.Length * 2);
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                stringBuilder.Append(buffer[i].ToString("x2"));
-            }
-
-            return stringBuilder.ToString();
-        }
-
         public static async Task<byte[]> ToByteArrayAsync(this Stream stream)
         {
             MemoryStream mem = new MemoryStream();

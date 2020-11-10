@@ -133,7 +133,13 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).DrawText("Test").BuildUrl()" class="auto-scale" />
+        </div>
+        <div class="col-lg-4">
+            <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+        </div>
+        <div class="col-lg-4">
+            <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
         </div>
     </div>
 
@@ -145,6 +151,12 @@
     <div class="row">
         <div class="col-lg-4">
             <img src="@Url.ImageWizard().File("/meerkat.jpg").Resize(400, 400).BuildUrl()" class="auto-scale" />
+        </div>
+        <div class="col-lg-4">
+            <img src="@Url.ImageWizard().File("/meerkat.jpg").Resize(400, 400).Grayscale().BuildUrl()" class="auto-scale" />
+        </div>
+        <div class="col-lg-4">
+            <img src="@Url.ImageWizard().File("/meerkat.jpg").Resize(400, 400).Blur().BuildUrl()" class="auto-scale" />
         </div>
     </div>
 

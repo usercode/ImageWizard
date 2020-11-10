@@ -21,13 +21,12 @@ namespace ImageWizard.ImageSharp.Filters
     /// </summary>
     public class ImageSharpFilterContext : FilterContext
     {
-        public ImageSharpFilterContext(ProcessingPipelineContext processingContext, Image image, IImageFormat imageFormat, ClientHints clientHints)
+        public ImageSharpFilterContext(ProcessingPipelineContext processingContext, Image image, IImageFormat imageFormat)
             : base(processingContext)
         {
             Image = image;
             ImageFormat = imageFormat;
             NoImageCache = false;
-            ClientHints = clientHints;
         }
 
         /// <summary>
@@ -87,7 +86,7 @@ namespace ImageWizard.ImageSharp.Filters
                                             ImageFormat.MimeType,
                                             Image.Width,
                                             Image.Height,
-                                            ClientHints.DPR);
+                                            ProcessingContext.ClientHints.DPR);
         }
     }
 }

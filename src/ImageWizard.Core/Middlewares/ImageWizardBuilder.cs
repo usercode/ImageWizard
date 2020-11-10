@@ -58,7 +58,9 @@ namespace ImageWizard.Core.Settings
 
         public Type GetPipeline(string key)
         {
-            return PipelineManager.Get(key);
+            Type type = PipelineManager.Get(key);
+
+            return type;
         }
     }
 }

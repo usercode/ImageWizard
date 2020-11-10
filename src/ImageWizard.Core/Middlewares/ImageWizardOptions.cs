@@ -22,6 +22,7 @@ namespace ImageWizard.Settings
             UseETag = true;
             UseClintHints = false;
             AllowUnsafeUrl = false;
+            UseAcceptHeader = false;
             Key = null;
 
             AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
@@ -43,6 +44,11 @@ namespace ImageWizard.Settings
         /// AllowUnsafeUrl
         /// </summary>
         public bool AllowUnsafeUrl { get; set; }
+
+        /// <summary>
+        /// AutoFormat
+        /// </summary>
+        public bool UseAcceptHeader { get; set; }
 
         /// <summary>
         /// UseETag

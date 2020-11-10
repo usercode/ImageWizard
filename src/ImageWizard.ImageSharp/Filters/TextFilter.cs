@@ -12,7 +12,7 @@ namespace ImageWizard.ImageSharp.Filters
     public class TextFilter : ImageSharpFilter
     {
         [Filter]
-        public void DrawText(int x = 0, int y = 0, string text = "", int size = 12, string font = "Arial")
+        public void DrawText(int x = 0, int y = 0, string text = "", int size = 24, string font = "Arial")
         {
             Context.Image.Mutate(m =>
              {

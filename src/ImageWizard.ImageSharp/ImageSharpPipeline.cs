@@ -47,10 +47,20 @@ namespace ImageWizard.ImageSharp.Filters
         protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
         {
             Image image = Image.Load(context.Result.Data);
-            
-            IImageFormat targetFormat = ImageFormatHelper.Parse(context.Result.MimeType);
 
-            return new ImageSharpFilterContext(context, image, targetFormat, context.ClientHints);
+            IImageFormat targetFormat = null;
+
+            if (context.ImageWizardOptions.UseAcceptHeader)
+            {
+                targetFormat = ImageFormatHelper.FirstOrDefault(context.AcceptMimeTypes);
+            }
+
+            if (targetFormat == null)
+            {
+                targetFormat = ImageFormatHelper.FirstOrDefault(context.Result.MimeType);
+            }
+
+            return new ImageSharpFilterContext(context, image, targetFormat);
         }
     }
 }

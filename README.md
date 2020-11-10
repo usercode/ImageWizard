@@ -186,7 +186,7 @@ services.AddImageWizard(options =>
                                                options.SetHeader("ApiKey", "123456")) 
                        .AddYoutubeLoader()
                        .AddGravatarLoader()
-                       .AddInterceptor<MyInterceptor>()
+                       .AddAnalytics()
                        ;
 ```
 
@@ -196,7 +196,6 @@ app.UseEndpoints(x => x.MapImageWizard());
 
 ## Create custom filter
 
-- implement IFilter (or use base class 'FilterBase')
 - add a public method which is marked with the filter attribute
   - at url level are the following types possible for method overloading: 
     - integer ("0")

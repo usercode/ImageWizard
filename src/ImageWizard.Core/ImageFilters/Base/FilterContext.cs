@@ -33,11 +33,6 @@ namespace ImageWizard.Core.ImageFilters.Base
         /// </summary>
         public bool NoImageCache { get; set; }
 
-        /// <summary>
-        /// ClientHints
-        /// </summary>
-        public ClientHints ClientHints { get; set; }
-
         public virtual void Dispose()
         {
             

@@ -160,60 +160,26 @@ namespace ImageWizard.Middlewares
                 return;
             }
 
-            string url_newPath = url_path;
+            string url_Path_with_headers = url_path;
 
-            ClientHints clientHints = new ClientHints(Options.AllowedDPR);
+            //get compatible mime types by the accept header
+            IEnumerable<string> acceptFormats = context.Request.GetTypedHeaders().Accept
+                                                                                    .Where(x => x.MatchesAllSubTypes == false)
+                                                                                    .Select(x => x.MediaType.Value)
+                                                                                    .ToList();
 
-            //use clint hints?
-            if (Options.UseClintHints)
+            //use accept header?
+            if (Options.UseAcceptHeader)
             {
-                //check DPR value from request
-                string ch_dpr = context.Request.Headers["DPR"].FirstOrDefault();
-                string ch_width = context.Request.Headers["Width"].FirstOrDefault();
-                string ch_viewportWidth = context.Request.Headers["Viewport-Width"].FirstOrDefault();
-
-                List<string> extraMethods = new List<string>();
-
-                if (ch_dpr != null)
+                if (acceptFormats.Any())
                 {
-                   clientHints.DPR = double.Parse(ch_dpr, CultureInfo.InvariantCulture);
-
-                    string method = $"dpr({clientHints.DPR.Value.ToString("0.0", CultureInfo.InvariantCulture)})";
-                    extraMethods.Add(method);
-                }
-
-                if (ch_width != null)
-                {
-                    clientHints.Width = int.Parse(ch_width, CultureInfo.InvariantCulture);
-
-                    //extraMethods.Insert(0, $"resize({clientHints.Width},0)");
-                }
-
-                if (ch_viewportWidth != null)
-                {
-                    clientHints.ViewportWidth = int.Parse(ch_viewportWidth, CultureInfo.InvariantCulture);
-
-                    //extraMethods.Insert(0, $"resize({clientHints.ViewportWidth},0)");
-                }
-
-                if (extraMethods.Any())
-                {
-                    //rebuild path
-                    StringBuilder url = new StringBuilder(url_path);
-
-                    foreach(string method in extraMethods)
-                    {
-                        url.Insert(0, "/");
-                        url.Insert(0, method);
-                    }
-
-                    url_newPath = url.ToString();
+                    url_Path_with_headers += $"+Accept={string.Join(",", acceptFormats)}";
                 }
             }
 
             //generate image key
-            byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_newPath));
-            string key = keyInBytes.ToHexcode();
+            byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_Path_with_headers));
+            string key = Convert.ToHexString(keyInBytes);
 
             //try to get the cached image
             ICachedImage cachedImage = await imageCache.ReadAsync(key);
@@ -263,10 +229,13 @@ namespace ImageWizard.Middlewares
 
                 if (originalImage != null) //is there a new version of original image?
                 {
+                    ClientHints clientHints = context.Request.GetClientHints(Options.AllowedDPR);
+
                     var processingContext = new ProcessingPipelineContext(
                                                                  new ImageResult(originalImage.Data, originalImage.MimeType),
                                                                  clientHints,
                                                                  Options,
+                                                                 acceptFormats,
                                                                  url_filters);
 
                     while (processingContext.UrlFilters.Count > 0)
@@ -301,7 +270,7 @@ namespace ImageWizard.Middlewares
                         Filters = url_filters,
                         LoaderSource = url_loaderSource,
                         LoaderType = url_loaderType,
-                        Hash = hash.ToHexcode(),
+                        Hash = Convert.ToHexString(hash),
                         MimeType = processingContext.Result.MimeType,
                         DPR = processingContext.Result.DPR,
                         FileLength = processingContext.Result.Data.Length,                        
@@ -338,6 +307,22 @@ namespace ImageWizard.Middlewares
                 }
             }
 
+            IList<string> varyHeader = new List<string>();
+
+            //use accept header
+            if(Options.UseAcceptHeader)
+            {
+                varyHeader.Add(HeaderNames.Accept);
+            }
+
+            //use client hints
+            if (Options.UseClintHints)
+            {
+                varyHeader.Add(ClientHints.DPRHeader);
+                varyHeader.Add(ClientHints.WidthHeader);
+                varyHeader.Add(ClientHints.ViewportWidthHeader);
+            }
+
             //set cache control header
             if (Options.CacheControl.IsEnabled)
             {
@@ -361,11 +346,14 @@ namespace ImageWizard.Middlewares
             if (cachedImage.Metadata.DPR != null)
             {
                 context.Response.Headers.Add("Content-DPR", cachedImage.Metadata.DPR.Value.ToString(CultureInfo.InvariantCulture));
-                context.Response.Headers.Add(HeaderNames.Vary, "DPR");
+            }
+
+            if (varyHeader.Count > 0)
+            {
+                context.Response.Headers.Add(HeaderNames.Vary, string.Join(", ", varyHeader));
             }
 
             //context.Response.Headers[HeaderNames.AcceptRanges] = "bytes";
-
             context.Response.ContentLength = cachedImage.Metadata.FileLength;
             context.Response.ContentType = cachedImage.Metadata.MimeType;
 

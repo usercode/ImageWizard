@@ -15,7 +15,7 @@ namespace ImageWizard.SkiaSharp.Filters
         [Filter]
         public void DPR(double dpr)
         {
-            Context.ClientHints.DPR = dpr;
+            Context.ProcessingContext.ClientHints.DPR = dpr;
         }
     }
 }

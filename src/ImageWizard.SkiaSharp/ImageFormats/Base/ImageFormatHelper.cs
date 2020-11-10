@@ -11,18 +11,32 @@ namespace ImageWizard.Filters.ImageFormats
 {
     class ImageFormatHelper
     {
-        public static IImageFormat Parse(string mimeType)
+        public static IImageFormat FirstOrDefault(string mimeType)
         {
-            IImageFormat imageFormat = mimeType switch
+            return FirstOrDefault(new[] { mimeType });
+        }
+
+        public static IImageFormat FirstOrDefault(IEnumerable<string> mimeTypes)
+        {
+            foreach (string mimeType in mimeTypes)
             {
-                MimeTypes.Jpeg => new JpegFormat(),
-                MimeTypes.Png => new PngFormat(),
-                MimeTypes.Gif => new GifFormat(),
-                MimeTypes.Bmp => new BmpFormat(),
-                MimeTypes.WebP => new WebPFormat(),
-                _ => throw new Exception(),
-            };
-            return imageFormat;
+                IImageFormat imageFormat = mimeType switch
+                {
+                    MimeTypes.Jpeg => new JpegFormat(),
+                    MimeTypes.Png => new PngFormat(),
+                    MimeTypes.Gif => new GifFormat(),
+                    MimeTypes.Bmp => new BmpFormat(),
+                    MimeTypes.WebP => new WebPFormat(),
+                    _ => null,
+                };
+
+                if(imageFormat != null)
+                {
+                    return imageFormat;
+                }
+            }
+
+            return null;
         }
     }
 }
