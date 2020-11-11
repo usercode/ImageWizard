@@ -158,6 +158,8 @@ services.AddImageWizard(options =>
                            options.CacheControl.Public = true;
                            options.CacheControl.NoCache = false;
                            options.CacheControl.NoStore = false;
+			   //select automatically the compatible mime type by request header
+			   options.UseAcceptHeader = true;
                        })
 		       //registers ImageSharp pipeline for specified mime types
                        .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif)
