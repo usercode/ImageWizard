@@ -18,6 +18,11 @@ namespace ImageWizard.Core.ImageLoaders
             ImageLoaderTypes = new Dictionary<string, Type>();
         }
 
+        public IEnumerable<string> GetAllKeys()
+        {
+            return ImageLoaderTypes.Keys;
+        }
+
         /// <summary>
         /// Get
         /// </summary>

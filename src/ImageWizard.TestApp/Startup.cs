@@ -53,20 +53,20 @@ namespace ImageWizard.TestApp
                 x.UseETag = true;
                 x.Key = key;
             })
-                .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
-                    .WithOptions(x =>
-                                {
-                                    x.ImageMaxHeight = 4000;
-                                    x.ImageMaxWidth = 4000;
-                                })
-                    .WithFilter<ResizeFilter>()
-                //.AddSkiaSharp()
+                //.AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
                 //    .WithOptions(x =>
                 //                {
                 //                    x.ImageMaxHeight = 4000;
                 //                    x.ImageMaxWidth = 4000;
                 //                })
-                //    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>()
+                //    .WithFilter<ResizeFilter>()
+                .AddSkiaSharp()
+                    .WithOptions(x =>
+                                {
+                                    x.ImageMaxHeight = 4000;
+                                    x.ImageMaxWidth = 4000;
+                                })
+                    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>()
                 .AddSvgNet()
                 //.SetFileCache()
                 //.SetMongoDBCache()

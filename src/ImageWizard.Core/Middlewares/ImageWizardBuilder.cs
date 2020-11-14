@@ -43,6 +43,11 @@ namespace ImageWizard.Core.Settings
         /// </summary>
         public TypeManager PipelineManager { get; }
 
+        public IEnumerable<string> GetAllMimeTypes()
+        {
+            return PipelineManager.GetAllKeys();
+        }
+
         public void AddPipeline<T>(string[] mimeTypes) 
             where T : class, IProcessingPipeline
         {

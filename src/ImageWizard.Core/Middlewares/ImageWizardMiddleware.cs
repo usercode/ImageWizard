@@ -163,17 +163,19 @@ namespace ImageWizard.Middlewares
             string url_Path_with_headers = url_path;
 
             //get compatible mime types by the accept header
-            IEnumerable<string> acceptFormats = context.Request.GetTypedHeaders().Accept
-                                                                                    .Where(x => x.MatchesAllSubTypes == false)
-                                                                                    .Select(x => x.MediaType.Value)
-                                                                                    .ToList();
+            IEnumerable<string> acceptMimeTypes = context.Request.GetTypedHeaders().Accept
+                                                                        .Where(x => x.MatchesAllSubTypes == false)
+                                                                        .Select(x => x.MediaType.Value)
+                                                                        //filter unknown mime types
+                                                                        .Where(x => Builder.GetAllMimeTypes().Contains(x))
+                                                                        .ToList();
 
             //use accept header?
             if (Options.UseAcceptHeader)
             {
-                if (acceptFormats.Any())
+                if (acceptMimeTypes.Any())
                 {
-                    url_Path_with_headers += $"+Accept={string.Join(",", acceptFormats)}";
+                    url_Path_with_headers += $"+Accept={string.Join(",", acceptMimeTypes)}";
                 }
             }
 
@@ -235,7 +237,7 @@ namespace ImageWizard.Middlewares
                                                                  new ImageResult(originalImage.Data, originalImage.MimeType),
                                                                  clientHints,
                                                                  Options,
-                                                                 acceptFormats,
+                                                                 acceptMimeTypes,
                                                                  url_filters);
 
                     while (processingContext.UrlFilters.Count > 0)
