@@ -18,7 +18,6 @@ namespace ImageWizard.Settings
     {
         public ImageWizardOptions()
         {
-            BasePath = ImageWizardConstants.DefaultBasePath;
             UseETag = true;
             UseClintHints = false;
             AllowUnsafeUrl = false;
@@ -29,11 +28,6 @@ namespace ImageWizard.Settings
 
             CacheControl = new CacheControl();
         }
-
-        /// <summary>
-        /// BasePath
-        /// </summary>
-        public string BasePath { get; set; }
 
         /// <summary>
         /// CacheControl

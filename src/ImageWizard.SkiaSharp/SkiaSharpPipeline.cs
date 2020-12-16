@@ -60,16 +60,6 @@ namespace ImageWizard.SkiaSharp
 
             SKBitmap bitmap = SKBitmap.Decode(context.Result.Data);
 
-            if (context.ImageWizardOptions.UseClintHints)
-            {
-                if (context.ClientHints.DPR != null)
-                {
-                    string method = $"dpr({context.ClientHints.DPR.Value.ToString("0.0", CultureInfo.InvariantCulture)})";
-                    
-                    //url_filters.Insert(0, method);
-                }
-            }
-
             return new SkiaSharpFilterContext(context, bitmap, targetFormat);
         }
     }

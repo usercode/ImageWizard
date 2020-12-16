@@ -126,7 +126,7 @@ namespace ImageWizard.TestApp
             {
                 x.MapRazorPages();
                 x.MapControllers();
-                x.MapImageWizard(options.Value.BasePath);
+                x.MapImageWizard();
             });
         }
     }

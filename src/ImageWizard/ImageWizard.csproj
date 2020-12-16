@@ -5,6 +5,7 @@
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <UserSecretsId>9b67df7c-d6af-4b1a-9270-7b490d8604e9</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

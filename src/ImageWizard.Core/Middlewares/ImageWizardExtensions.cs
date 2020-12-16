@@ -24,7 +24,7 @@ namespace ImageWizard
             return MapImageWizard(endpoints, ImageWizardConstants.DefaultBasePath);
         }
 
-        public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, string path)
+        public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, PathString path)
         {
             RequestDelegate pipeline = endpoints.CreateApplicationBuilder()
                                                          .UseMiddleware<ImageWizardMiddleware>()

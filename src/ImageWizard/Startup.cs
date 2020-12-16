@@ -93,7 +93,7 @@ namespace ImageWizard
             {
                 x.MapRazorPages();
                 x.MapControllers();
-                x.MapImageWizard(options.Value.BasePath);
+                x.MapImageWizard();
             });
         }
     }
