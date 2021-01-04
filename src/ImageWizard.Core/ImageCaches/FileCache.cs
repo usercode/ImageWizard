@@ -29,7 +29,14 @@ namespace ImageWizard.ImageStorages
             Settings = settings;
             HostingEnvironment = hostingEnvironment;
 
-            FileProvider = new PhysicalFileProvider(Path.Combine(hostingEnvironment.ContentRootPath, settings.Value.Folder));
+            if (Path.IsPathFullyQualified(settings.Value.Folder))
+            {
+                Folder = new DirectoryInfo(settings.Value.Folder);
+            }
+            else
+            {
+                Folder = new DirectoryInfo(Path.Combine(hostingEnvironment.ContentRootPath, settings.Value.Folder));
+            }            
         }
 
         /// <summary>
@@ -45,9 +52,9 @@ namespace ImageWizard.ImageStorages
         /// <summary>
         /// FileProvider
         /// </summary>
-        private IFileProvider FileProvider { get; }
+        private DirectoryInfo Folder { get; }
 
-        private string[] SplitKey(string secret)
+        private string[] KeyToPath(string secret)
         {
             string part1 = secret.Substring(0, 2);
             string part2 = secret.Substring(2, 2);
@@ -55,17 +62,17 @@ namespace ImageWizard.ImageStorages
             string part4 = secret.Substring(6, 2);
             string part_last = secret.Substring(8);
 
-            return new[] { part1, part2, part3, part4, part_last };
+            return new[] { Folder.FullName, part1, part2, part3, part4, part_last };
         }
 
         public async Task<ICachedImage> ReadAsync(string key)
         {
-            string[] parts = SplitKey(key);
+            string[] parts = KeyToPath(key);
 
             string basePath = Path.Combine(parts);
 
-            IFileInfo fileInfoData = FileProvider.GetFileInfo(basePath);
-            IFileInfo fileInfoMetadata = FileProvider.GetFileInfo(basePath + ".meta");
+            FileInfo fileInfoData = new FileInfo(basePath);
+            FileInfo fileInfoMetadata = new FileInfo(basePath + ".meta");
 
             if (fileInfoMetadata.Exists == false || fileInfoData.Exists == false)
             {
@@ -74,7 +81,7 @@ namespace ImageWizard.ImageStorages
 
             MemoryStream mem = new MemoryStream((int)fileInfoMetadata.Length);
 
-            using (Stream fs = fileInfoMetadata.CreateReadStream())
+            using (Stream fs = fileInfoMetadata.OpenRead())
             {
                 await fs.CopyToAsync(mem);
             }
@@ -83,15 +90,15 @@ namespace ImageWizard.ImageStorages
 
             ImageMetadata metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
 
-            return new CachedImage(metadata, () => Task.FromResult(fileInfoData.CreateReadStream()));
+            return new CachedImage(metadata, () => Task.FromResult((Stream)fileInfoData.OpenRead()));
         }
 
         public async Task WriteAsync(string key, ICachedImage cachedImage)
         {
-            string[] parts = SplitKey(key);
+            string[] parts = KeyToPath(key);
 
-            //store transformed image
-            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(new[] { HostingEnvironment.ContentRootPath }.Concat(new[] { Settings.Value.Folder }).Concat(parts.Take(parts.Length-1)).ToArray()));
+            //create folder structure
+            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(parts.Take(parts.Length - 1).ToArray()));
 
             //write to file
             FileInfo fileInfoMetadata = new FileInfo(Path.Combine(sub.FullName, parts.Last() + ".meta"));

@@ -17,6 +17,7 @@ using ImageWizard.Core.ImageLoaders.Files;
 using Microsoft.Extensions.Hosting;
 using ImageWizard.Analytics;
 using Microsoft.Extensions.Options;
+using ImageWizard.DocNET;
 
 namespace ImageWizard
 {
@@ -48,6 +49,7 @@ namespace ImageWizard
             IImageWizardBuilder imageWizard = services.AddImageWizard()
                                                         .AddImageSharp()
                                                         .AddSvgNet()
+                                                        .AddDocNET()
                                                         .AddHttpLoader()
                                                         .AddFileLoader()
                                                         .AddYoutubeLoader()
@@ -77,7 +79,7 @@ namespace ImageWizard
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ImageWizardOptions> options)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
 

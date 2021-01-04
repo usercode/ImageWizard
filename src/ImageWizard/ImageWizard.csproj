@@ -18,8 +18,10 @@
     <ProjectReference Include="..\ImageWizard.Analytics\ImageWizard.Analytics.csproj" />
     <ProjectReference Include="..\ImageWizard.Azure\ImageWizard.Azure.csproj" />
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+    <ProjectReference Include="..\ImageWizard.DocNET\ImageWizard.DocNET.csproj" />
     <ProjectReference Include="..\ImageWizard.ImageSharp\ImageWizard.ImageSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.MongoDB\ImageWizard.MongoDB.csproj" />
+    <ProjectReference Include="..\ImageWizard.SkiaSharp\ImageWizard.SkiaSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.SvgNet\ImageWizard.SvgNet.csproj" />
   </ItemGroup>
 

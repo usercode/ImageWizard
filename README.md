@@ -180,7 +180,7 @@ services.AddImageWizard(options =>
                        .AddSkiaSharp(MimeTypes.WebP)
                        .AddSvgNet()
                        //uses file cache
-                       .SetFileCache(options => options.Folder = "FileCache")
+                       .SetFileCache(options => options.Folder = "FileCache") //relative or absolute path
                        //or MongoDB cache
                        .SetMongoDBCache(options => options.Hostname = "localhost")
                        //or distributed cache
