@@ -189,6 +189,21 @@ namespace ImageWizard
 
             return imageUrlBuilder;
         }
+
+        public static IImageFilters PageToImage(this IImageFilters imageUrlBuilder, int pageIndex)
+        {
+            imageUrlBuilder.Filter($"pagetoimage({pageIndex})");
+
+            return imageUrlBuilder;
+        }
+
+        public static IImageFilters PageToImage(this IImageFilters imageUrlBuilder, int pageIndex, int width, int height)
+        {
+            imageUrlBuilder.Filter($"pagetoimage({pageIndex},{width},{height})");
+
+            return imageUrlBuilder;
+        }
+
         public static IImageFilters DrawText(this IImageFilters imageUrlBuilder, string text, int? size = null, double? x = null, double? y = null, bool useBase64Url = true)
         {
             List<string> builder = new List<string>();

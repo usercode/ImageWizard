@@ -19,6 +19,7 @@ using ImageWizard.Settings;
 using Microsoft.Extensions.Options;
 using ImageWizard.FFMpegCore;
 using System.Text;
+using ImageWizard.DocNET;
 
 namespace ImageWizard.TestApp
 {
@@ -53,14 +54,14 @@ namespace ImageWizard.TestApp
                 x.UseETag = true;
                 x.Key = key;
             })
-                //.AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
-                //    .WithOptions(x =>
-                //                {
-                //                    x.ImageMaxHeight = 4000;
-                //                    x.ImageMaxWidth = 4000;
-                //                })
-                //    .WithFilter<ResizeFilter>()
-                .AddSkiaSharp()
+                .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
+                    .WithOptions(x =>
+                                {
+                                    x.ImageMaxHeight = 4000;
+                                    x.ImageMaxWidth = 4000;
+                                })
+                    .WithFilter<ResizeFilter>()
+                .AddSkiaSharp(MimeTypes.WebP)
                     .WithOptions(x =>
                                 {
                                     x.ImageMaxHeight = 4000;
@@ -79,6 +80,7 @@ namespace ImageWizard.TestApp
                 .AddYoutubeLoader()
                 .AddGravatarLoader()
                 .AddFFMpegCore()
+                .AddDocNET()
                 .AddAnalytics()
                 .AddAzureBlob(x =>
                 {

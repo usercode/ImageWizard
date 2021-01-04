@@ -11,7 +11,7 @@ A ASP.NET Core service / middleware to manipulate your images dynamically as alt
 | ImageWizard.MongoDB       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
 | ImageWizard.Piranha       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/) |
 | ImageWizard.Azure         | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Azure.svg)](https://www.nuget.org/packages/ImageWizard.Azure/) |
-| ImageWizard.AWS           | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.AWS.svg)](https://www.nuget.org/packages/ImageWizard.AWS/) |
+| ImageWizard.DocNET        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.DocNET.svg)](https://www.nuget.org/packages/ImageWizard.DocNET/) |
 
 ## Overview
 
@@ -40,6 +40,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | ImageWizard.ImageSharp | image/jpeg, image/png, image/gif, image/bmp | 
 | ImageWizard.SkiaSharp  | image/jpeg, image/png, image/gif, image/bmp, image/webp  | 
 | ImageWizard.SvgNet     | image/svg+xml |
+| ImageWizard.DocNET     | application/pdf |
 
 ### ImageSharp
 #### Image transformations
@@ -109,6 +110,12 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 - gif()
 - bmp()
 - webp()
+
+### DocNET
+#### DocNET transformations
+- pagetoimage(pageindex)
+- pagetoimage(pageindex,width,height)
+- subpages(pageFromIndex, pageToIndex)
 
 ### SvgNet
 #### SVG transformations

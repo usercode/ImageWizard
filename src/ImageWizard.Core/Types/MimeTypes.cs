@@ -21,5 +21,7 @@ namespace ImageWizard.Core.Types
         public const string Avi = "video/x-msvideo";
         public const string Mobile3GP = "video/3gpp";
 
+        public const string Pdf = "application/pdf";
+
     }
 }
