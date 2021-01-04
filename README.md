@@ -179,8 +179,8 @@ services.AddImageWizard(options =>
                             .WithFilter<BlurFilter>()
                        .AddSkiaSharp(MimeTypes.WebP)
                        .AddSvgNet()
-                       //uses file cache
-                       .SetFileCache(options => options.Folder = "FileCache") //relative or absolute path
+                       //uses file cache (relative or absolute path)
+                       .SetFileCache(options => options.Folder = "FileCache") 
                        //or MongoDB cache
                        .SetMongoDBCache(options => options.Hostname = "localhost")
                        //or distributed cache
@@ -188,6 +188,7 @@ services.AddImageWizard(options =>
                        //adds some loaders
                        .AddFileLoader(options => options.Folder = "FileStorage")
                        .AddHttpLoader(options => 
+		       			      {
                                                //checks every time for a new version of the original image.
                                                options.RefreshMode = ImageLoaderRefreshMode.EveryTime;
                                                
@@ -196,7 +197,8 @@ services.AddImageWizard(options =>
                                                
                                                //adds custom http header like apikey to prevent 
                                                //that user can download the original image
-                                               options.SetHeader("ApiKey", "123456")) 
+                                               options.SetHeader("ApiKey", "123456");
+					       })
                        .AddYoutubeLoader()
                        .AddGravatarLoader()
                        .AddAnalytics()
