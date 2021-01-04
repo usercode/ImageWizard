@@ -27,7 +27,6 @@ namespace ImageWizard.ImageStorages
         public FileCache(IOptions<FileCacheSettings> settings, IWebHostEnvironment hostingEnvironment)
         {
             Settings = settings;
-            HostingEnvironment = hostingEnvironment;
 
             if (Path.IsPathFullyQualified(settings.Value.Folder))
             {
@@ -43,11 +42,6 @@ namespace ImageWizard.ImageStorages
         /// Settings
         /// </summary>
         public IOptions<FileCacheSettings> Settings { get; }
-
-        /// <summary>
-        /// HostingEnvironment
-        /// </summary>
-        private IWebHostEnvironment HostingEnvironment { get; }
 
         /// <summary>
         /// FileProvider
@@ -105,11 +99,11 @@ namespace ImageWizard.ImageStorages
             
             //write metadata
             string json = JsonSerializer.Serialize(cachedImage.Metadata, new JsonSerializerOptions() { WriteIndented = true } );
-            byte[] metadataBuffer = Encoding.UTF8.GetBytes(json);
+            Stream metadataStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
 
             using (Stream fs = fileInfoMetadata.OpenWrite())
             {
-                await fs.WriteAsync(metadataBuffer, 0, metadataBuffer.Length);
+                await metadataStream.CopyToAsync(fs);
             }
 
             //write data
