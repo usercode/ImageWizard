@@ -42,107 +42,6 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | ImageWizard.SvgNet     | image/svg+xml |
 | ImageWizard.DocNET     | application/pdf |
 
-### ImageSharp
-#### Image transformations
-- resize(size)
-- resize(width,height)
-- resize(width,height,mode)
-  - mode: min, max, crop, pad, stretch
-- resize(width,height,mode,anchor)
-  - anchor: center, top, bottom, left, right, topleft, topright, bottomleft, bottomright
-- crop(width,height)
-  - int for absolute values, 0.0 to 1.0 for relative values
-- crop(x,y,width,height)
-  - int for absolute values, 0.0 to 1.0 for relative values
-- backgroundcolor(r,g,b)
-  - int (0 to 255) or float (0.0 to 1.0)
-- backgroundcolor(r,g,b,a)
-  - int (0 to 255) or float (0.0 to 1.0)
-- flip(type)
-  - type: horizontal, vertical
-- rotate(value) 
-  - value: 90, 180 or 270
-- grayscale()
-- grayscale(amount)
-  - amount: 0.0 to 1.0
-- blackwhite()
-- blur()
-- invert()
-- brightness(value)
-- contrast(value)
-- drawtext(text='Hello',size=24,x=0.5,y=0.5)
-  - string: raw ('Hello') or base64url (SGVsbG8)
-
-#### Output formats
-- jpg()
-- jpg(quality)
-- png()
-- gif()
-- bmp()
-
-#### Special options
-- dpr(value) //set allowed device pixel ratio
-- nocache() //do not store the transformed image
-
-### SkiaSharp
-#### Image transformations
-- resize(width,height)
-- resize(width,height,mode)
-  - mode: min, max, crop, pad, stretch
-- crop(width,height)
-  - 0.0 to 1.0 for relative values
-- crop(x,y,width,height)
-  - 0.0 to 1.0 for relative values
-- flip(type)
-  - type: horizontal, vertical
-- rotate(value)
-  - value: 0.0 to 360.0
-- grayscale()
-- blur()
-- blur(radius)
-- drawtext(text='Hello',size=24,x=0.5,y=0.5)
-  - string: raw ('Hello') or base64url (SGVsbG8)
-  
-#### Output formats
-- jpg()
-- jpg(quality)
-- png()
-- gif()
-- bmp()
-- webp()
-
-### DocNET
-#### DocNET transformations
-- pagetoimage(pageindex)
-- pagetoimage(pageindex,width,height)
-- subpages(pageFromIndex, pageToIndex)
-
-### SvgNet
-#### SVG transformations
-- removesize()
-- blur()
-- blur(deviation)
-  - value: float
-- rotate(angle)
-  - value: float
-
-## Image loaders
-- HTTP loader ("fetch")
-  - absolute or relative url of the original image
-- file loader ("file")
-  - relative url to file
-- youtube loader ("youtube")
-  - video id
-- gravatar loader ("gravatar")
-- Azure loader ("azure")
-
-## Image caches
-- file cache
-- distributed cache
-  - MS SQL
-  - Redis
-- MongoDB cache
-
 ## Integrate into existing ASP.NET Core applications
 
 https://www.nuget.org/packages/ImageWizard.Core/
@@ -365,6 +264,110 @@ Create url with fluent api
 .Jpg(90)
 .BuildUrl()
 ```
+
+## Processing pipelines
+### ImageSharp
+#### Image transformations
+- resize(size)
+- resize(width,height)
+- resize(width,height,mode)
+  - mode: min, max, crop, pad, stretch
+- resize(width,height,mode,anchor)
+  - anchor: center, top, bottom, left, right, topleft, topright, bottomleft, bottomright
+- crop(width,height)
+  - int for absolute values, 0.0 to 1.0 for relative values
+- crop(x,y,width,height)
+  - int for absolute values, 0.0 to 1.0 for relative values
+- backgroundcolor(r,g,b)
+  - int (0 to 255) or float (0.0 to 1.0)
+- backgroundcolor(r,g,b,a)
+  - int (0 to 255) or float (0.0 to 1.0)
+- flip(type)
+  - type: horizontal, vertical
+- rotate(value) 
+  - value: 90, 180 or 270
+- grayscale()
+- grayscale(amount)
+  - amount: 0.0 to 1.0
+- blackwhite()
+- blur()
+- invert()
+- brightness(value)
+- contrast(value)
+- drawtext(text='Hello',size=24,x=0.5,y=0.5)
+  - string: raw ('Hello') or base64url (SGVsbG8)
+
+#### Output formats
+- jpg()
+- jpg(quality)
+- png()
+- gif()
+- bmp()
+
+#### Special options
+- dpr(value) //set allowed device pixel ratio
+- nocache() //do not store the transformed image
+
+### SkiaSharp
+#### Image transformations
+- resize(width,height)
+- resize(width,height,mode)
+  - mode: min, max, crop, pad, stretch
+- crop(width,height)
+  - 0.0 to 1.0 for relative values
+- crop(x,y,width,height)
+  - 0.0 to 1.0 for relative values
+- flip(type)
+  - type: horizontal, vertical
+- rotate(value)
+  - value: 0.0 to 360.0
+- grayscale()
+- blur()
+- blur(radius)
+- drawtext(text='Hello',size=24,x=0.5,y=0.5)
+  - string: raw ('Hello') or base64url (SGVsbG8)
+  
+#### Output formats
+- jpg()
+- jpg(quality)
+- png()
+- gif()
+- bmp()
+- webp()
+
+### DocNET
+#### DocNET transformations
+- pagetoimage(pageindex)
+- pagetoimage(pageindex,width,height)
+- subpages(pageFromIndex, pageToIndex)
+
+### SvgNet
+#### SVG transformations
+- removesize()
+- blur()
+- blur(deviation)
+  - value: float
+- rotate(angle)
+  - value: float
+
+## Image loaders
+- HTTP loader ("fetch")
+  - absolute or relative url of the original image
+- file loader ("file")
+  - relative url to file
+- youtube loader ("youtube")
+  - video id
+- gravatar loader ("gravatar")
+- Azure loader ("azure")
+
+## Image caches
+- file cache
+- distributed cache
+  - MS SQL
+  - Redis
+- MongoDB cache
+
+
 ## Plugin for Piranha CMS 8.0
 
 ImageWizard.Piranha [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/)
