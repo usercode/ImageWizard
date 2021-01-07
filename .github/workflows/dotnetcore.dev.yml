@@ -1,0 +1,48 @@
+name: .NET Core
+
+on: 
+  push:
+    branches:
+      - dev
+
+jobs:
+  imagewizard:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: Build with dotnet
+      run: dotnet build --configuration Release "./src"
+    - name: Run unit tests
+      run: dotnet test "./src"
+    - name: Create the package
+      run: dotnet pack --configuration Release "./src"
+    - name: Add nuget source
+    - run: dotnet nuget add source "https://nuget.pkg.github.com/usercode/index.json" - n "github" -u usercode -p ${{secrets.GITHUB_TOKEN}}
+    - name: Publish "ImageWizard.Utils" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Utils/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Core" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.ImageSharp" to nuget
+      run: dotnet nuget push "./src/ImageWizard.ImageSharp/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.SkiaSharp" to nuget
+      run: dotnet nuget push "./src/ImageWizard.SkiaSharp/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.SvgNet" to nuget
+      run: dotnet nuget push "./src/ImageWizard.SvgNet/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Analytics" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Analytics/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Azure" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Azure/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Client" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Client/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.MongoDB" to nuget
+      run: dotnet nuget push "./src/ImageWizard.MongoDB/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Piranha" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.DocNET" to nuget
+      run: dotnet nuget push "./src/ImageWizard.DocNET/bin/Release/*.nupkg" -s "github"
