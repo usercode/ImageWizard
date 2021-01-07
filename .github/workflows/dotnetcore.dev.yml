@@ -19,7 +19,7 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release "./src/ImageWizard.sln"
     - name: Run unit tests
-      run: dotnet test "./src"
+      run: dotnet test "./src/ImageWizard.sln"
     - name: Create the package
       run: dotnet pack --configuration Release "./src/ImageWizard.sln"
     - name: Add nuget source
