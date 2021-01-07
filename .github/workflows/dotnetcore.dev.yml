@@ -17,11 +17,11 @@ jobs:
       with:
         dotnet-version: 5.0.100
     - name: Build with dotnet
-      run: dotnet build --configuration Release "./src"
+      run: dotnet build --configuration Release "./src/ImageWizard.sln"
     - name: Run unit tests
       run: dotnet test "./src"
     - name: Create the package
-      run: dotnet pack --configuration Release "./src"
+      run: dotnet pack --configuration Release "./src/ImageWizard.sln"
     - name: Add nuget source
       run: dotnet nuget add source "https://nuget.pkg.github.com/usercode/index.json" - n "github" -u usercode -p ${{secrets.GITHUB_TOKEN}}
     - name: Publish "ImageWizard.Utils" to nuget
