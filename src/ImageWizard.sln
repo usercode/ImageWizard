@@ -37,7 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.SkiaSharp", "Im
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.FFMpegCore", "ImageWizard.FFMpegCore\ImageWizard.FFMpegCore.csproj", "{BBDEFA71-5570-4A1A-AACF-E01887DA3AF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.DocNET", "ImageWizard.DocNET\ImageWizard.DocNET.csproj", "{70DCFA79-8F02-41F6-9D15-58B7145EBFC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.DocNET", "ImageWizard.DocNET\ImageWizard.DocNET.csproj", "{70DCFA79-8F02-41F6-9D15-58B7145EBFC5}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C746B73F-58D2-40D5-A8A6-8AEE9BA4E7D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,10 @@ Global
 		{70DCFA79-8F02-41F6-9D15-58B7145EBFC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70DCFA79-8F02-41F6-9D15-58B7145EBFC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70DCFA79-8F02-41F6-9D15-58B7145EBFC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C746B73F-58D2-40D5-A8A6-8AEE9BA4E7D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C746B73F-58D2-40D5-A8A6-8AEE9BA4E7D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C746B73F-58D2-40D5-A8A6-8AEE9BA4E7D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C746B73F-58D2-40D5-A8A6-8AEE9BA4E7D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

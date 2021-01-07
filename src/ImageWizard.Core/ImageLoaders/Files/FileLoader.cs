@@ -54,9 +54,9 @@ namespace ImageWizard.Core.ImageLoaders.Files
 
             string etag = (fileInfo.Length ^ fileInfo.LastModified.UtcTicks).ToString();
 
-            if(existingCachedImage != null)
+            if (existingCachedImage != null)
             {
-                if(existingCachedImage.Metadata.Cache.ETag == etag)
+                if (existingCachedImage.Metadata.Cache.ETag == etag)
                 {
                     return null;
                 }

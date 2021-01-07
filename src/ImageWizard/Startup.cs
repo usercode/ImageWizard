@@ -54,7 +54,6 @@ namespace ImageWizard
                                                         .AddFileLoader()
                                                         .AddYoutubeLoader()
                                                         .AddGravatarLoader()
-                                                        .AddImageSharp()
                                                         .AddAnalytics();
 
             switch (cache)
