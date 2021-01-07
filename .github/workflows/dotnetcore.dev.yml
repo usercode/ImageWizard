@@ -23,7 +23,7 @@ jobs:
     - name: Create the package
       run: dotnet pack --configuration Release "./src/ImageWizard.sln"
     - name: Add nuget source
-      run: dotnet nuget add source "https://nuget.pkg.github.com/usercode/index.json" - n "github" -u usercode -p ${{secrets.GITHUB_TOKEN}}
+      run: dotnet nuget add source "https://nuget.pkg.github.com/usercode/index.json" -n "github" -u usercode -p ${{secrets.GITHUB_TOKEN}}
     - name: Publish "ImageWizard.Utils" to nuget
       run: dotnet nuget push "./src/ImageWizard.Utils/bin/Release/*.nupkg" -s "github"
     - name: Publish "ImageWizard.Core" to nuget
