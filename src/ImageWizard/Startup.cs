@@ -18,6 +18,7 @@ using Microsoft.Extensions.Hosting;
 using ImageWizard.Analytics;
 using Microsoft.Extensions.Options;
 using ImageWizard.DocNET;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace ImageWizard
 {
@@ -73,28 +74,41 @@ namespace ImageWizard
                 default:
                     throw new Exception("unknown cache type selected");
             }
-
-            services.AddHttpsRedirection(x => { x.RedirectStatusCode = StatusCodes.Status301MovedPermanently; x.HttpsPort = 443; });
+            
+            if (string.Equals(
+                Environment.GetEnvironmentVariable("ASPNETCORE_FORWARDEDHEADERS_ENABLED"), "true", StringComparison.OrdinalIgnoreCase))
+            {
+                services.Configure<ForwardedHeadersOptions>(options =>
+                {
+                    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                        ForwardedHeaders.XForwardedProto;
+                    // Only loopback proxies are allowed by default.
+                    // Clear that restriction because forwarders are enabled by explicit 
+                    // configuration.
+                    options.KnownNetworks.Clear();
+                    options.KnownProxies.Clear();
+                });
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseRouting();
+            app.UseForwardedHeaders();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseEndpoints(x =>
             {
+                x.MapImageWizard();
                 x.MapRazorPages();
                 x.MapControllers();
-                x.MapImageWizard();
             });
         }
     }
