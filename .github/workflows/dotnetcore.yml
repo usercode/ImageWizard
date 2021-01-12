@@ -17,11 +17,11 @@ jobs:
       with:
         dotnet-version: 5.0.100
     - name: Build with dotnet
-      run: dotnet build --configuration Release "./src"
+      run: dotnet build --configuration Release "./src/ImageWizard.sln"
     - name: Run unit tests
-      run: dotnet test "./src"
+      run: dotnet test "./src/ImageWizard.sln"
     - name: Create the package
-      run: dotnet pack --configuration Release "./src"
+      run: dotnet pack --configuration Release "./src/ImageWizard.sln"
     - name: Publish "ImageWizard.Utils" to nuget
       run: dotnet nuget push "./src/ImageWizard.Utils/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
     - name: Publish "ImageWizard.Core" to nuget
@@ -44,3 +44,27 @@ jobs:
       run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
     - name: Publish "ImageWizard.DocNET" to nuget
       run: dotnet nuget push "./src/ImageWizard.DocNET/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
+    - name: Add nuget source
+      run: dotnet nuget add source "https://nuget.pkg.github.com/usercode/index.json" -n "github" -u usercode -p ${{secrets.GITHUB_TOKEN}} --store-password-in-clear-text
+    - name: Publish "ImageWizard.Utils" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Utils/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Core" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.ImageSharp" to nuget
+      run: dotnet nuget push "./src/ImageWizard.ImageSharp/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.SkiaSharp" to nuget
+      run: dotnet nuget push "./src/ImageWizard.SkiaSharp/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.SvgNet" to nuget
+      run: dotnet nuget push "./src/ImageWizard.SvgNet/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Analytics" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Analytics/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Azure" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Azure/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Client" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Client/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.MongoDB" to nuget
+      run: dotnet nuget push "./src/ImageWizard.MongoDB/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.Piranha" to nuget
+      run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" -s "github"
+    - name: Publish "ImageWizard.DocNET" to nuget
+      run: dotnet nuget push "./src/ImageWizard.DocNET/bin/Release/*.nupkg" -s "github"
