@@ -2,7 +2,7 @@
 A ASP.NET Core service / middleware to manipulate your images dynamically as alternative for thumbor.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard)](https://hub.docker.com/repository/docker/usercode/imagewizard)
+[![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard)](https://hub.docker.com/r/usercode/imagewizard)
 
 | Package                       | Release | 
 |--------------------------------|-----------------|
