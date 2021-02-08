@@ -33,6 +33,23 @@ namespace ImageWizard
             return endpoints.MapMethods($"{path}/{{*imagePath}}", new[] { "GET", "HEAD" }, pipeline).WithDisplayName("ImageWizard");
         }
 
+        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder)
+        {
+            return UseImageWizard(builder, ImageWizardConstants.DefaultBasePath);
+        }
+
+        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, PathString path)
+        {
+            builder.Map(path, x =>
+            {
+                x.UseRouting();
+                x.UseEndpoints(endpoits => endpoits.MapImageWizard(PathString.Empty));
+
+            });
+
+            return builder;
+        }
+
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services)
         {
             return AddImageWizard(services, options => { });

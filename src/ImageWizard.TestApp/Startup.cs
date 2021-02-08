@@ -123,12 +123,13 @@ namespace ImageWizard.TestApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseImageWizard();
             app.UseRouting();
             app.UseEndpoints(x =>
             {
                 x.MapRazorPages();
                 x.MapControllers();
-                x.MapImageWizard();
+                //x.MapImageWizard();
             });
         }
     }
