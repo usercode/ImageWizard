@@ -110,6 +110,10 @@ services.AddImageWizard(options =>
 
 ```csharp
 app.UseEndpoints(x => x.MapImageWizard());
+
+or
+
+app.UseImageWizard();
 ```
 
 ## Create custom filter
