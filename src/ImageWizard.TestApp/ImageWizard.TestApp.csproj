@@ -4,20 +4,16 @@
     <TargetFramework>net5.0</TargetFramework>
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
+    <UserSecretsId>6f770be3-cbfd-4cd8-b274-36bf0deabef4</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="FileStorage\bat-eared-fox.jpg" />
-    <None Remove="FileStorage\chair.png" />
+    <None Include="wwwroot\img\meerkat.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="FileStorage\bat-eared-fox.jpg">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="FileStorage\chair.png">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ImageWizard.Analytics\ImageWizard.Analytics.csproj" />
@@ -31,6 +27,9 @@
     <ProjectReference Include="..\ImageWizard.MongoDB\ImageWizard.MongoDB.csproj" />
     <ProjectReference Include="..\ImageWizard.SkiaSharp\ImageWizard.SkiaSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.SvgNet\ImageWizard.SvgNet.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FileStorage\" />
   </ItemGroup>
 
 </Project>
