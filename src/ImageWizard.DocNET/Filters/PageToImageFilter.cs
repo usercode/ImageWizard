@@ -34,11 +34,11 @@ namespace ImageWizard.DocNET.Filters
             byte[] imageData = pageReader.GetImage();
 
             MemoryStream mem = new MemoryStream();
-            using (Image<Rgba32> image = new Image<Rgba32>(pageReader.GetPageWidth(), pageReader.GetPageHeight()))
+            using (Image<Bgra32> image = new Image<Bgra32>(pageReader.GetPageWidth(), pageReader.GetPageHeight()))
             {
-                image.TryGetSinglePixelSpan(out Span<Rgba32> span);
+                image.TryGetSinglePixelSpan(out Span<Bgra32> span);
 
-                Span<Rgba32> imageData2 = MemoryMarshal.Cast<byte, Rgba32>(imageData);
+                Span<Bgra32> imageData2 = MemoryMarshal.Cast<byte, Bgra32>(imageData);
                 imageData2.CopyTo(span);
 
                 image.SaveAsPng(mem);
