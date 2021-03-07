@@ -31,18 +31,11 @@ namespace ImageWizard.DocNET.Filters
             IDocReader docReader = DocLib.Instance.GetDocReader(Context.Document, new PageDimensions(width, height));
             IPageReader pageReader = docReader.GetPageReader(pageIndex);
 
-            byte[] imageData = pageReader.GetImage();
-
             MemoryStream mem = new MemoryStream();
-            using (Image<Bgra32> image = new Image<Bgra32>(pageReader.GetPageWidth(), pageReader.GetPageHeight()))
-            {
-                image.TryGetSinglePixelSpan(out Span<Bgra32> span);
 
-                Span<Bgra32> imageData2 = MemoryMarshal.Cast<byte, Bgra32>(imageData);
-                imageData2.CopyTo(span);
+            Image<Bgra32> image = Image.LoadPixelData<Bgra32>(pageReader.GetImage(), pageReader.GetPageWidth(), pageReader.GetPageHeight());
 
-                image.SaveAsPng(mem);
-            }
+            image.SaveAsPng(mem);
 
             Context.Result = new ImageResult(mem.ToArray(), MimeTypes.Png);
         }
