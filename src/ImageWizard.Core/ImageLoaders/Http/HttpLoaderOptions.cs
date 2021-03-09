@@ -12,8 +12,9 @@ namespace ImageWizard.Core.ImageLoaders
     {
         public HttpLoaderOptions()
         {
+            AllowAbsoluteUrls = false;
+            AllowedHosts = Array.Empty<string>();
             RefreshMode = ImageLoaderRefreshMode.None;
-
             Headers = new List<HttpHeaderItem>();
         }
 
@@ -26,6 +27,16 @@ namespace ImageWizard.Core.ImageLoaders
         /// Used for relative urls.
         /// </summary>
         public string DefaultBaseUrl { get; set; }
+
+        /// <summary>
+        /// AllowAbsoluteUrls
+        /// </summary>
+        public bool AllowAbsoluteUrls { get; set; }
+
+        /// <summary>
+        /// AllowedHosts
+        /// </summary>
+        public string[] AllowedHosts { get; set; }
 
         public HttpLoaderOptions SetHeader(string name, string value)
         {

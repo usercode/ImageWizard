@@ -98,6 +98,12 @@ services.AddImageWizard(options =>
                                                //set base url for relative urls
                                                options.DefaultBaseUrl = "https://mydomain";
                                                
+                                               //allow only relative urls (use base url from request or DefaultBaseUrl from options)
+                                               options.AllowAbsoluteUrls = false;
+                                               
+                                               //allow only specified hosts
+                                               options.AllowedHosts = new [] { "mydomain" };
+                                               
                                                //adds custom http header like apikey to prevent 
                                                //that user can download the original image
                                                options.SetHeader("ApiKey", "123456");

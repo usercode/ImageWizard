@@ -59,21 +59,41 @@ namespace ImageWizard.ImageLoaders
         /// <returns></returns>
         public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
         {
+            Uri sourceUri;
+
             //is relative url?
             if (Regex.Match(source, "^https?://", RegexOptions.Compiled).Success == false)
             {
                 if(string.IsNullOrWhiteSpace(Options.DefaultBaseUrl) == false)
                 {
-                    source = $"{Options.DefaultBaseUrl.TrimEnd('/')}/{source}";
+                    sourceUri = new Uri($"{Options.DefaultBaseUrl.TrimEnd('/')}/{source}");
                 }
                 else
                 {
                     //create absolute url
-                    source = $"{HttpContextAccessor.HttpContext.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{source}";
+                    sourceUri = new Uri($"{HttpContextAccessor.HttpContext.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{source}");
+                }
+            }
+            else //absolute url
+            {
+                sourceUri = new Uri(source);
+
+                if (Options.AllowAbsoluteUrls == false)
+                {
+                    throw new Exception("Absolute urls are not allowed.");
+                }
+
+                //check allowed hosts
+                if (Options.AllowedHosts.Any())
+                {
+                    if (Options.AllowedHosts.Any(x => string.Compare(x, sourceUri.Host, true) == 0) == false)
+                    {
+                        throw new Exception($"Not allowed hosts is used: {sourceUri.Host}");
+                    }
                 }
             }
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, new Uri(source));
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, sourceUri);
 
             if (existingCachedImage != null)
             {

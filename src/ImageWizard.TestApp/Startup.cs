@@ -75,6 +75,8 @@ namespace ImageWizard.TestApp
                 {
                     //x.RefreshMode = ImageLoaderRefreshMode.EveryTime;
                     x.SetHeader("Api", "XYZ");
+
+                    x.AllowAbsoluteUrls = true;
                 })
                 .AddFileLoader()
                 .AddYoutubeLoader()
