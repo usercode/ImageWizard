@@ -15,9 +15,9 @@ namespace ImageWizard.Core.Settings
             ClientHints clientHints = new ClientHints(allowedDPR);
 
             //check DPR value from request
-            string ch_dpr = request.Headers[ClientHints.DPRHeader].FirstOrDefault();
-            string ch_width = request.Headers[ClientHints.WidthHeader].FirstOrDefault();
-            string ch_viewportWidth = request.Headers[ClientHints.ViewportWidthHeader].FirstOrDefault();
+            string? ch_dpr = request.Headers[ClientHints.DPRHeader].FirstOrDefault();
+            string? ch_width = request.Headers[ClientHints.WidthHeader].FirstOrDefault();
+            string? ch_viewportWidth = request.Headers[ClientHints.ViewportWidthHeader].FirstOrDefault();
 
             if (ch_dpr != null)
             {

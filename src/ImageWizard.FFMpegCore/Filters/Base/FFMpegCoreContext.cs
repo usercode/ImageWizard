@@ -1,8 +1,10 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageProcessing;
+using ImageWizard.Services.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ImageWizard.FFMpegCore.Filters.Base
 {
@@ -13,6 +15,11 @@ namespace ImageWizard.FFMpegCore.Filters.Base
             : base(processingContext)
         {
 
+        }
+
+        public override Task<ImageResult> BuildResultAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -9,11 +9,6 @@ namespace ImageWizard.Core.ImageLoaders.Http
     /// </summary>
     public class HttpHeaderItem
     {
-        public HttpHeaderItem()
-        {
-
-        }
-
         public HttpHeaderItem(string name, string value)
         {
             Name = name;

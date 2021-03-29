@@ -6,6 +6,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome to ImageWizard</h1>
+    <p>Image processing webservice based on ASP.NET Core and ImageSharp / SkiaSharp / SvgNet / DocNET</p>
     <p>Use the standalone version or middleware.</p>
 
     <a href="https://github.com/usercode/ImageWizard" class="btn btn-success">Go to GitHub</a>
@@ -175,20 +176,20 @@
 
     <h2>Fetch youtube image</h2>
 
-    <p>@@Url.ImageWizard().Youtube("6QBiWY09k8g").Resize(400,400).BuildUrl()</p>
-    <p>@Url.ImageWizard().Youtube("6QBiWY09k8g").Resize(400, 400).BuildUrl()</p>
+    <p>@@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(400,400).BuildUrl()</p>
+    <p>@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(400, 400).BuildUrl()</p>
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().Youtube("6QBiWY09k8g").Resize(600,600).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(600,600).BuildUrl()" class="auto-scale" />
             <p>Default</p>
         </div>
         <div class="col-lg-4">
-            <img src=@Url.ImageWizard().Youtube("6QBiWY09k8g").Resize(600,600).Grayscale().BuildUrl() class="auto-scale" />
+            <img src=@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(600,600).Grayscale().BuildUrl() class="auto-scale" />
             <p>Grayscale</p>
         </div>
         <div class="col-lg-4">
-            <img src=@Url.ImageWizard().Youtube("6QBiWY09k8g").Resize(600,600).Blur().BuildUrl() class="auto-scale" />
+            <img src=@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(600,600).Blur().BuildUrl() class="auto-scale" />
             <p>Blur</p>
         </div>
     </div>

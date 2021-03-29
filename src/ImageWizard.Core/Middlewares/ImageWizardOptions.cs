@@ -57,7 +57,7 @@ namespace ImageWizard.Settings
         /// <summary>
         /// Key
         /// </summary>
-        public string Key { get; set; }
+        public string? Key { get; set; }
 
         /// <summary>
         /// AllowedDPR
@@ -75,6 +75,5 @@ namespace ImageWizard.Settings
 
             Key = WebEncoders.Base64UrlEncode(keyBuffer);
         }
-
     }
 }

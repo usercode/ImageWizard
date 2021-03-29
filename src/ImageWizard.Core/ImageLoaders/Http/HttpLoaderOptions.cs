@@ -26,7 +26,7 @@ namespace ImageWizard.Core.ImageLoaders
         /// <summary>
         /// Used for relative urls.
         /// </summary>
-        public string DefaultBaseUrl { get; set; }
+        public string? DefaultBaseUrl { get; set; }
 
         /// <summary>
         /// AllowAbsoluteUrls

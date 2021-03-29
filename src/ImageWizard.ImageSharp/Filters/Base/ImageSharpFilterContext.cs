@@ -41,7 +41,7 @@ namespace ImageWizard.ImageSharp.Filters
 
         public override void Dispose()
         {
-            if(Image != null)
+            if (Image != null)
             {
                 Image.Dispose();
             }

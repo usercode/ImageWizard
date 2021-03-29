@@ -44,7 +44,7 @@ namespace ImageWizard.Core.Types
 
         public bool NoCache { get; set; }
         public bool NoStore { get; set; }
-        public string ETag { get; set; }
+        public string? ETag { get; set; }
         public DateTime? Expires { get; set; }
 
     }

@@ -20,6 +20,7 @@ using Microsoft.Extensions.Options;
 using ImageWizard.FFMpegCore;
 using System.Text;
 using ImageWizard.DocNET;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace ImageWizard.TestApp
 {
@@ -52,7 +53,7 @@ namespace ImageWizard.TestApp
                 x.UseAcceptHeader = true;
                 x.UseClintHints = true;
                 x.UseETag = true;
-                x.Key = key;
+                x.Key = key;                
             })
                 .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
                     .WithOptions(x =>
@@ -76,6 +77,7 @@ namespace ImageWizard.TestApp
                     //x.RefreshMode = ImageLoaderRefreshMode.EveryTime;
                     x.SetHeader("Api", "XYZ");
 
+                    x.AllowedHosts = new [] { "upload.wikimedia.org" };
                     x.AllowAbsoluteUrls = true;
                 })
                 .AddFileLoader()
@@ -107,11 +109,19 @@ namespace ImageWizard.TestApp
 
             services.AddRazorPages();
             services.AddControllersWithViews();
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseForwardedHeaders();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -122,7 +132,7 @@ namespace ImageWizard.TestApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseImageWizard();

@@ -77,9 +77,14 @@ namespace ImageWizard.Filters
             ParameterExpression filterParameter = Expression.Parameter(typeof(TFilter));
 
             //find group indexer property -> Group["Key"]
-            PropertyInfo groupCollectionItemStringProperty = typeof(GroupCollection)
+            PropertyInfo? groupCollectionItemStringProperty = typeof(GroupCollection)
                                                                 .GetProperties()
                                                                 .FirstOrDefault(x => x.Name == "Item" && x.GetIndexParameters().Any(p => p.ParameterType == typeof(string)));
+
+            if (groupCollectionItemStringProperty == null)
+            {
+                throw new ArgumentNullException(nameof(groupCollectionItemStringProperty));
+            }
 
             var parsedVariables = method.GetParameters()
                                             .Select(x =>
@@ -90,12 +95,17 @@ namespace ImageWizard.Filters
                                                 Expression groupValue = Expression.Property(Expression.Property(groupsParameter, groupCollectionItemStringProperty, Expression.Constant(x.Name)), nameof(Group.Value));
                                                 Expression defaultValue = x.DefaultValue is DBNull ? (Expression)Expression.Default(x.ParameterType) : (Expression)Expression.Constant(x.DefaultValue);
 
-                                                Expression result = null;
-                                                Expression parsedValue = null;
+                                                Expression? result = null;
+                                                Expression? parsedValue = null;
 
                                                 if (x.ParameterType == typeof(bool))
                                                 {
-                                                    MethodInfo parseMethodInfo = x.ParameterType.GetMethod(nameof(bool.Parse), new[] { typeof(string) });
+                                                    MethodInfo? parseMethodInfo = x.ParameterType.GetMethod(nameof(bool.Parse), new[] { typeof(string) });
+
+                                                    if (parseMethodInfo == null)
+                                                    {
+                                                        throw new ArgumentNullException(nameof(parseMethodInfo));
+                                                    }
 
                                                     parsedValue = Expression.Call(
                                                                                 parseMethodInfo, 
@@ -103,7 +113,12 @@ namespace ImageWizard.Filters
                                                 }
                                                 else if (x.ParameterType.IsPrimitive)
                                                 {
-                                                    MethodInfo parseMethodInfo = x.ParameterType.GetMethod(nameof(int.Parse), new[] { typeof(string), typeof(CultureInfo) });
+                                                    MethodInfo? parseMethodInfo = x.ParameterType.GetMethod(nameof(int.Parse), new[] { typeof(string), typeof(CultureInfo) });
+
+                                                    if (parseMethodInfo == null)
+                                                    {
+                                                        throw new ArgumentNullException(nameof(parseMethodInfo));
+                                                    }
 
                                                     parsedValue = Expression.Call(
                                                                                parseMethodInfo,
@@ -112,7 +127,12 @@ namespace ImageWizard.Filters
                                                 }
                                                 else if (x.ParameterType.IsEnum)
                                                 {
-                                                    MethodInfo parseMethodInfo = typeof(Enum).GetMethod(nameof(Enum.Parse), new[] { typeof(Type), typeof(string), typeof(bool) });
+                                                    MethodInfo? parseMethodInfo = typeof(Enum).GetMethod(nameof(Enum.Parse), new[] { typeof(Type), typeof(string), typeof(bool) });
+
+                                                    if (parseMethodInfo == null)
+                                                    {
+                                                        throw new ArgumentNullException(nameof(parseMethodInfo));
+                                                    }
 
                                                     parsedValue = Expression.Convert(
                                                                                 Expression.Call(
@@ -124,17 +144,42 @@ namespace ImageWizard.Filters
                                                 }
                                                 else if (x.ParameterType == typeof(string))
                                                 {
-                                                    MethodInfo StartsWith = typeof(string).GetMethod(nameof(string.StartsWith), new[] { typeof(char) });
-                                                    MethodInfo SubString = typeof(string).GetMethod(nameof(string.Substring), new[] { typeof(int), typeof(int) });
+                                                    MethodInfo? startsWith = typeof(string).GetMethod(nameof(string.StartsWith), new[] { typeof(char) });
+                                                    MethodInfo? subString = typeof(string).GetMethod(nameof(string.Substring), new[] { typeof(int), typeof(int) });
 
-                                                    MethodInfo base64Decode = typeof(WebEncoders).GetMethod(nameof(WebEncoders.Base64UrlDecode), new[] { typeof(string) });
-                                                    MethodInfo getBytes = typeof(Encoding).GetMethod(nameof(Encoding.GetString), new[] { typeof(byte[]) });
-                                                    PropertyInfo utf8 = typeof(Encoding).GetProperty(nameof(Encoding.UTF8));
+                                                    if (startsWith == null)
+                                                    {
+                                                        throw new ArgumentNullException(nameof(startsWith));
+                                                    }
+
+                                                    if (subString == null)
+                                                    {
+                                                        throw new ArgumentNullException(nameof(subString));
+                                                    }
+
+                                                    MethodInfo? base64Decode = typeof(WebEncoders).GetMethod(nameof(WebEncoders.Base64UrlDecode), new[] { typeof(string) });
+                                                    MethodInfo? getBytes = typeof(Encoding).GetMethod(nameof(Encoding.GetString), new[] { typeof(byte[]) });
+                                                    PropertyInfo? utf8 = typeof(Encoding).GetProperty(nameof(Encoding.UTF8));
+
+                                                    if (base64Decode == null)
+                                                    {
+                                                        throw new ArgumentNullException(nameof(base64Decode));
+                                                    }
+
+                                                    if (getBytes == null)
+                                                    {
+                                                        throw new ArgumentNullException(nameof(getBytes));
+                                                    }
+
+                                                    if (utf8 == null)
+                                                    {
+                                                        throw new ArgumentNullException(nameof(utf8));
+                                                    }
 
                                                     //raw string or base54url?
                                                     parsedValue = Expression.Condition(
-                                                                        Expression.Call(groupValue, StartsWith, Expression.Constant('\'')),
-                                                                        Expression.Call(groupValue, SubString, 
+                                                                        Expression.Call(groupValue, startsWith, Expression.Constant('\'')),
+                                                                        Expression.Call(groupValue, subString, 
                                                                             Expression.Constant(1), 
                                                                             Expression.Subtract(Expression.Property(groupValue, nameof(string.Length)), Expression.Constant(2))),
                                                                         Expression.Call(Expression.Property(null, utf8), getBytes, Expression.Call(base64Decode, groupValue)));

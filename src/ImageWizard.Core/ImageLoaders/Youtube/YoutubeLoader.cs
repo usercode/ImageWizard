@@ -35,7 +35,7 @@ namespace ImageWizard.Core.ImageLoaders.Youtube
 
         public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
-        public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
+        public override async Task<OriginalImage?> GetAsync(string source, ICachedImage? existingCachedImage)
         {
             string url = $"https://i.ytimg.com/vi/{source}/maxresdefault.jpg";
 
@@ -60,7 +60,14 @@ namespace ImageWizard.Core.ImageLoaders.Youtube
 
             byte[] data = await response.Content.ReadAsByteArrayAsync();
 
-            return new OriginalImage(response.Content.Headers.ContentType.MediaType, data, new CacheSettings(response));
+            string? mimeType = response.Content.Headers.ContentType?.MediaType;
+
+            if (mimeType == null)
+            {
+                throw new Exception("no content-type available");
+            }
+
+            return new OriginalImage(mimeType, data, new CacheSettings(response));
         }
     }
 }

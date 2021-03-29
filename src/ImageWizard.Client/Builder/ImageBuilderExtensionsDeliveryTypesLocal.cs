@@ -13,11 +13,14 @@ namespace ImageWizard
         /// <param name="path"></param>
         /// <param name="addFingerprint"></param>
         /// <returns></returns>
-        public static IImageFilters FetchLocalFile(this IImageLoaderType imageBuilder, string path)
+        public static IImageFilters FetchLocalFile(this IImageLoaderType imageBuilder, string path, bool addFileVersion = true)
         {
-            string newPath = imageBuilder.FileVersionProvider.AddFileVersionToPath(imageBuilder.HttpContextAccessor.HttpContext.Request.PathBase, path);
+            if (addFileVersion == true)
+            {
+                path = imageBuilder.FileVersionProvider.AddFileVersionToPath(imageBuilder.HttpContextAccessor.HttpContext.Request.PathBase, path);
+            }
 
-            imageBuilder.Image("fetch", newPath);
+            imageBuilder.Image("fetch", path);
 
             return (IImageFilters)imageBuilder;
         }

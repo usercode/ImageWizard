@@ -18,7 +18,7 @@ namespace ImageWizard.ImageStorages
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        Task<ICachedImage> ReadAsync(string key);
+        Task<ICachedImage?> ReadAsync(string key);
 
         /// <summary>
         /// SaveAsync

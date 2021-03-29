@@ -24,6 +24,6 @@ namespace ImageWizard.ImageLoaders
         /// </summary>
         /// <param name="requestUri"></param>
         /// <returns></returns>
-        Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage = null);
+        Task<OriginalImage?> GetAsync(string source, ICachedImage? existingCachedImage = null);
     }
 }

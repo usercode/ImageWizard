@@ -30,9 +30,9 @@ namespace ImageWizard.Core.ImageLoaders
         /// <returns></returns>
         public Type Get(string key)
         {
-            if(ImageLoaderTypes.TryGetValue(key, out Type loaderType) == false)
+            if(ImageLoaderTypes.TryGetValue(key, out Type? loaderType) == false)
             {
-                return null;
+                throw new Exception($"Type was not found: {key}");
             }
 
             return loaderType;

@@ -59,7 +59,7 @@ namespace ImageWizard.ImageStorages
             return new[] { Folder.FullName, part1, part2, part3, part4, part_last };
         }
 
-        public async Task<ICachedImage> ReadAsync(string key)
+        public async Task<ICachedImage?> ReadAsync(string key)
         {
             string[] parts = KeyToPath(key);
 
@@ -82,9 +82,14 @@ namespace ImageWizard.ImageStorages
 
             string json = Encoding.UTF8.GetString(mem.ToArray());
 
-            ImageMetadata metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
+            ImageMetadata? metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
 
-            return new CachedImage(metadata, () => Task.FromResult((Stream)fileInfoData.OpenRead()));
+            if (metadata == null)
+            {
+                throw new ArgumentNullException(nameof(metadata));
+            }
+
+            return new CachedImage(metadata, () => Task.FromResult<Stream>(fileInfoData.OpenRead()));
         }
 
         public async Task WriteAsync(string key, ICachedImage cachedImage)

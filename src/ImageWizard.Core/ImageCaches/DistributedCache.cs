@@ -29,7 +29,7 @@ namespace ImageWizard.Core.ImageCaches
 
         private const string KeyPrefix = "ImageWizard:";
 
-        public async Task<ICachedImage> ReadAsync(string key)
+        public async Task<ICachedImage?> ReadAsync(string key)
         {
             string json = await Cache.GetStringAsync($"{KeyPrefix}{key}#meta");
 
@@ -38,7 +38,12 @@ namespace ImageWizard.Core.ImageCaches
                 return null;
             }
 
-            ImageMetadata metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
+            ImageMetadata? metadata = JsonSerializer.Deserialize<ImageMetadata>(json);
+
+            if(metadata == null)
+            {
+                throw new Exception("Metadata is not available.");
+            }
 
             return new CachedImage(metadata, async () =>
             {

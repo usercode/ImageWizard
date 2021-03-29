@@ -14,6 +14,9 @@ namespace ImageWizard.Services.Types
         public ImageMetadata()
         {
             Cache = new CacheSettings();
+            Filters = Array.Empty<string>();
+
+            MimeType = MimeTypes.Object;
         }
 
         /// <summary>
@@ -24,12 +27,12 @@ namespace ImageWizard.Services.Types
         /// <summary>
         /// Signature
         /// </summary>
-        public string Key { get; set; }
+        public string? Key { get; set; }
 
         /// <summary>
         /// Hash
         /// </summary>
-        public string Hash { get; set; }
+        public string? Hash { get; set; }
 
         /// <summary>
         /// MimeType
@@ -69,11 +72,11 @@ namespace ImageWizard.Services.Types
         /// <summary>
         /// LoaderType
         /// </summary>
-        public string LoaderType { get; set; }
+        public string? LoaderType { get; set; }
 
         /// <summary>
         /// LoaderSource
         /// </summary>
-        public string LoaderSource { get; set; }
+        public string? LoaderSource { get; set; }
     }
 }

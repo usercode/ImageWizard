@@ -83,7 +83,12 @@ namespace ImageWizard.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            string path = WebUtility.UrlDecode((string)context.GetRouteValue("imagePath"));
+            string? path = WebUtility.UrlDecode((string?)context.GetRouteValue("imagePath"));
+
+            if(path == null)
+            {
+                throw new Exception("path is not available.");
+            }
 
             if (context.Request.QueryString.HasValue)
             {
@@ -138,7 +143,7 @@ namespace ImageWizard.Middlewares
             }
 
             //get image cache
-            IImageCache imageCache = context.RequestServices.GetService<IImageCache>();
+            IImageCache? imageCache = context.RequestServices.GetService<IImageCache>();
 
             if (imageCache == null)
             {
@@ -150,7 +155,7 @@ namespace ImageWizard.Middlewares
 
             //get image loader
             Type imageLoaderType = Builder.ImageLoaderManager.Get(url_loaderType);
-            IImageLoader loader = (IImageLoader)context.RequestServices.GetService(imageLoaderType);
+            IImageLoader? loader = (IImageLoader?)context.RequestServices.GetService(imageLoaderType);
 
             if (loader == null)
             {
@@ -184,7 +189,7 @@ namespace ImageWizard.Middlewares
             string key = Convert.ToHexString(keyInBytes);
 
             //try to get the cached image
-            ICachedImage cachedImage = await imageCache.ReadAsync(key);
+            ICachedImage? cachedImage = await imageCache.ReadAsync(key);
             
             bool createCachedImage = false;
             
@@ -227,13 +232,13 @@ namespace ImageWizard.Middlewares
                 Logger.LogTrace("Create cached image");
 
                 //get original image
-                OriginalImage originalImage = await loader.GetAsync(url_loaderSource, cachedImage);
+                OriginalImage? originalImage = await loader.GetAsync(url_loaderSource, cachedImage);
 
                 if (originalImage != null) //is there a new version of original image?
                 {
                     ClientHints clientHints = context.Request.GetClientHints(Options.AllowedDPR);
 
-                    var processingContext = new ProcessingPipelineContext(
+                    ProcessingPipelineContext processingContext = new ProcessingPipelineContext(
                                                                  new ImageResult(originalImage.Data, originalImage.MimeType),
                                                                  clientHints,
                                                                  Options,
@@ -244,7 +249,7 @@ namespace ImageWizard.Middlewares
                     {
                         //find processing pipeline by mime type
                         Type processingPipelineType = Builder.GetPipeline(processingContext.Result.MimeType);
-                        IProcessingPipeline processingPipeline = (IProcessingPipeline)context.RequestServices.GetService(processingPipelineType);
+                        IProcessingPipeline? processingPipeline = (IProcessingPipeline?)context.RequestServices.GetService(processingPipelineType);
 
                         if (processingPipeline == null)
                         {
@@ -294,6 +299,11 @@ namespace ImageWizard.Middlewares
                 }
             }
 
+            if (cachedImage == null)
+            {
+                throw new ArgumentNullException(nameof(cachedImage));
+            }
+
             //send "304-NotModified" if etag is valid
             if (Options.UseETag)
             {
@@ -312,7 +322,7 @@ namespace ImageWizard.Middlewares
             IList<string> varyHeader = new List<string>();
 
             //use accept header
-            if(Options.UseAcceptHeader)
+            if (Options.UseAcceptHeader)
             {
                 varyHeader.Add(HeaderNames.Accept);
             }

@@ -26,7 +26,7 @@ namespace ImageWizard.Core.ImageFilters.Base
         /// <summary>
         /// Result
         /// </summary>
-        public ImageResult Result { get; set; }
+        public ImageResult? Result { get; set; }
 
         /// <summary>
         /// NoCache
@@ -38,9 +38,6 @@ namespace ImageWizard.Core.ImageFilters.Base
             
         }
 
-        public virtual Task<ImageResult> BuildResultAsync()
-        {
-            return null;
-        }
+        public abstract Task<ImageResult> BuildResultAsync();
     }
 }

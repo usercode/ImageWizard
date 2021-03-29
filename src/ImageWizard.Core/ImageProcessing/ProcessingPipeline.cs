@@ -29,6 +29,7 @@ namespace ImageWizard.Filters
             Logger = logger;
 
             FilterActions = new List<IFilterAction>();
+            UsedMimeTypes = Array.Empty<string>();
         }
 
         /// <summary>
@@ -174,7 +175,7 @@ namespace ImageWizard.Filters
                     string filter = filterContext.ProcessingContext.UrlFilters.Peek();
 
                     //find and execute filter
-                    IFilterAction foundFilter = FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
+                    IFilterAction? foundFilter = FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
 
                     if (foundFilter != null)
                     {

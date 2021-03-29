@@ -43,7 +43,7 @@ namespace ImageWizard.Core.ImageLoaders.Files
 
         public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
-        public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
+        public override async Task<OriginalImage?> GetAsync(string source, ICachedImage? existingCachedImage)
         {
             IFileInfo fileInfo = FileProvider.GetFileInfo(source);
 

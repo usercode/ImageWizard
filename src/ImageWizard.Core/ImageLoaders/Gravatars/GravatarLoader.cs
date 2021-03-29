@@ -30,15 +30,22 @@ namespace ImageWizard.Core.ImageLoaders.Gravatars
 
         public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
-        public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
+        public override async Task<OriginalImage?> GetAsync(string source, ICachedImage? existingCachedImage)
         {
             string url = $"https://www.gravatar.com/avatar/{source}?size=512";
 
             HttpResponseMessage response = await Client.GetAsync(url);
 
             byte[] data = await response.Content.ReadAsByteArrayAsync();
+            
+            string? mimeType = response.Content.Headers.ContentType?.MediaType;
 
-            return new OriginalImage(response.Content.Headers.ContentType.MediaType, data, new CacheSettings(response));
+            if (mimeType == null)
+            {
+                throw new Exception("no content-type available");
+            }
+
+            return new OriginalImage(mimeType, data, new CacheSettings(response));
         }
     }
 }

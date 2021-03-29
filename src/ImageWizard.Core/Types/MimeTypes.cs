@@ -6,6 +6,8 @@ namespace ImageWizard.Core.Types
 {
     public static class MimeTypes
     {
+        public const string Object = "application/octet-stream";
+
         public const string Jpeg = "image/jpeg";
         public const string Png = "image/png";
         public const string Gif = "image/gif";

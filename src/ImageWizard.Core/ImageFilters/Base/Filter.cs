@@ -8,14 +8,14 @@ namespace ImageWizard.Core.ImageFilters.Base
     public abstract class Filter<TContext> : IFilter
         where TContext : FilterContext
     {
-        FilterContext IFilter.Context 
+        FilterContext? IFilter.Context 
         { 
             get => Context; 
-            set => Context = (TContext)value; 
+            set => Context = (TContext?)value; 
         }
 
         public abstract string Namespace { get; }
 
-        public TContext Context { get; set; }
+        public TContext? Context { get; set; }
     }
 }

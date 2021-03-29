@@ -57,7 +57,7 @@ namespace ImageWizard.ImageLoaders
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
+        public override async Task<OriginalImage?> GetAsync(string source, ICachedImage? existingCachedImage)
         {
             Uri sourceUri;
 
@@ -71,7 +71,7 @@ namespace ImageWizard.ImageLoaders
                 else
                 {
                     //create absolute url
-                    sourceUri = new Uri($"{HttpContextAccessor.HttpContext.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{source}");
+                    sourceUri = new Uri($"{HttpContextAccessor.HttpContext!.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{source}");
                 }
             }
             else //absolute url
@@ -114,7 +114,7 @@ namespace ImageWizard.ImageLoaders
 
             byte[] data = await response.Content.ReadAsByteArrayAsync();
 
-            string mimeType = response.Content.Headers.ContentType?.MediaType;
+            string? mimeType = response.Content.Headers.ContentType?.MediaType;
 
             if (mimeType == null)
             {

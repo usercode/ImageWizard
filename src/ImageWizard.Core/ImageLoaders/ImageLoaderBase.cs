@@ -18,6 +18,6 @@ namespace ImageWizard.Core.ImageLoaders
 
         public virtual ImageLoaderRefreshMode RefreshMode { get; }
 
-        public abstract Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage);
+        public abstract Task<OriginalImage?> GetAsync(string source, ICachedImage? existingCachedImage);
     }
 }

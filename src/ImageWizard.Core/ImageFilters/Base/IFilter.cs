@@ -8,6 +8,6 @@ namespace ImageWizard.Filters
 {
     public interface IFilter
     {
-        public FilterContext Context { get; set; }
+        public FilterContext? Context { get; set; }
     }
 }
