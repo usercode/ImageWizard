@@ -14,11 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Svg" Version="3.1.1" />
+    <PackageReference Include="Svg" Version="3.2.3" />
   </ItemGroup>
 
   <ItemGroup>

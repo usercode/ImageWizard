@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FFMpegCore" Version="3.3.0" />
+    <PackageReference Include="FFMpegCore" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
