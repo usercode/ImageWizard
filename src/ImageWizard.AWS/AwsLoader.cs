@@ -34,7 +34,7 @@ namespace ImageWizard.AWS
         /// </summary>
         public IAmazonS3 Client { get; }
 
-        public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
+        public override async Task<OriginalData> GetAsync(string source, ICachedImage existingCachedImage)
         {
             GetObjectRequest request = new GetObjectRequest()
             {
@@ -54,7 +54,7 @@ namespace ImageWizard.AWS
                 return null;
             }
 
-            return new OriginalImage(
+            return new OriginalData(
                         result.Headers.ContentType,
                         await result.ResponseStream.ToByteArrayAsync(), 
                         new CacheSettings() { ETag = result.ETag.GetTagUnquoted() });

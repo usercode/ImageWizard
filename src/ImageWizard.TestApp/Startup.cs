@@ -21,6 +21,7 @@ using ImageWizard.FFMpegCore;
 using System.Text;
 using ImageWizard.DocNET;
 using Microsoft.AspNetCore.HttpOverrides;
+using ImageWizard.Client;
 
 namespace ImageWizard.TestApp
 {

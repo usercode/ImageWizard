@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 namespace ImageWizard.Services.Types
 {
     /// <summary>
-    /// OriginalImage
+    /// OriginalData
     /// </summary>
-    public class OriginalImage
+    public class OriginalData
     {
-        public OriginalImage(string mimeType, byte[] data)
+        public OriginalData(string mimeType, byte[] data)
             : this(mimeType, data, new CacheSettings())
         {
         }
 
-        public OriginalImage(string mimeType, byte[] data, CacheSettings cacheSettings)
+        public OriginalData(string mimeType, byte[] data, CacheSettings cacheSettings)
         {
             MimeType = mimeType;
             Data = data;

@@ -33,7 +33,7 @@ namespace ImageWizard.Azure
 
         public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
-        public override async Task<OriginalImage> GetAsync(string source, ICachedImage existingCachedImage)
+        public override async Task<OriginalData> GetAsync(string source, ICachedImage existingCachedImage)
         {
             BlobClient blob = Client.GetBlobClient(source);
 
@@ -51,7 +51,7 @@ namespace ImageWizard.Azure
                 return null;
             }
 
-            return new OriginalImage(
+            return new OriginalData(
                         response.Value.ContentType, 
                         await response.Value.Content.ToByteArrayAsync(), 
                         new CacheSettings() { ETag = response.Value.Details.ETag.ToString().GetTagUnquoted() });

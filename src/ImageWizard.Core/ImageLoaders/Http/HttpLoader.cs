@@ -57,7 +57,7 @@ namespace ImageWizard.ImageLoaders
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public override async Task<OriginalImage?> GetAsync(string source, ICachedImage? existingCachedImage)
+        public override async Task<OriginalData?> GetAsync(string source, ICachedImage? existingCachedImage)
         {
             Uri sourceUri;
 
@@ -121,7 +121,7 @@ namespace ImageWizard.ImageLoaders
                 throw new Exception("no content-type available");
             }
 
-            return new OriginalImage(mimeType, data, new CacheSettings(response));
+            return new OriginalData(mimeType, data, new CacheSettings(response));
         }
     }
 }

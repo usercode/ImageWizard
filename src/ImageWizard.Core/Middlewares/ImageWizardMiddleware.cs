@@ -83,7 +83,7 @@ namespace ImageWizard.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            string? path = WebUtility.UrlDecode((string?)context.GetRouteValue("imagePath"));
+            string? path = (string?)context.GetRouteValue("imagePath");
 
             if(path == null)
             {
@@ -232,14 +232,14 @@ namespace ImageWizard.Middlewares
                 Logger.LogTrace("Create cached image");
 
                 //get original image
-                OriginalImage? originalImage = await loader.GetAsync(url_loaderSource, cachedImage);
+                OriginalData? originalData = await loader.GetAsync(url_loaderSource, cachedImage);
 
-                if (originalImage != null) //is there a new version of original image?
+                if (originalData != null) //is there a new version of original image?
                 {
                     ClientHints clientHints = context.Request.GetClientHints(Options.AllowedDPR);
 
                     ProcessingPipelineContext processingContext = new ProcessingPipelineContext(
-                                                                 new ImageResult(originalImage.Data, originalImage.MimeType),
+                                                                 new ImageResult(originalData.Data, originalData.MimeType),
                                                                  clientHints,
                                                                  Options,
                                                                  acceptMimeTypes,
@@ -271,7 +271,7 @@ namespace ImageWizard.Middlewares
                     //create metadata
                     ImageMetadata imageMetadata = new ImageMetadata()
                     {
-                        Cache = originalImage.Cache,
+                        Cache = originalData.Cache,
                         Created = DateTime.UtcNow,
                         Key = key,
                         Filters = url_filters,

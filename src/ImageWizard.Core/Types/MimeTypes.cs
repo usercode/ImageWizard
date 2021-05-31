@@ -15,6 +15,7 @@ namespace ImageWizard.Core.Types
         public const string WebP = "image/webp";
         public const string Avif = "image/avif";
         public const string Svg = "image/svg+xml";
+        
 
         public const string Mpeg = "video/mpeg";
         public const string Mp4 = "video/mp4";
@@ -24,6 +25,10 @@ namespace ImageWizard.Core.Types
         public const string Mobile3GP = "video/3gpp";
 
         public const string Pdf = "application/pdf";
+
+        public const string Html = "text/html";
+        public const string Css = "text/css";
+        public const string Xml = "text/xml";
 
     }
 }

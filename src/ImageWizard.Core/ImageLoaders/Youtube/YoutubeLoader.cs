@@ -35,7 +35,7 @@ namespace ImageWizard.Core.ImageLoaders.Youtube
 
         public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
-        public override async Task<OriginalImage?> GetAsync(string source, ICachedImage? existingCachedImage)
+        public override async Task<OriginalData?> GetAsync(string source, ICachedImage? existingCachedImage)
         {
             string url = $"https://i.ytimg.com/vi/{source}/maxresdefault.jpg";
 
@@ -67,7 +67,7 @@ namespace ImageWizard.Core.ImageLoaders.Youtube
                 throw new Exception("no content-type available");
             }
 
-            return new OriginalImage(mimeType, data, new CacheSettings(response));
+            return new OriginalData(mimeType, data, new CacheSettings(response));
         }
     }
 }

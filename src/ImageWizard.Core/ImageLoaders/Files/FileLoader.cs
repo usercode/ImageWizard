@@ -43,7 +43,7 @@ namespace ImageWizard.Core.ImageLoaders.Files
 
         public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
-        public override async Task<OriginalImage?> GetAsync(string source, ICachedImage? existingCachedImage)
+        public override async Task<OriginalData?> GetAsync(string source, ICachedImage? existingCachedImage)
         {
             IFileInfo fileInfo = FileProvider.GetFileInfo(source);
 
@@ -71,7 +71,7 @@ namespace ImageWizard.Core.ImageLoaders.Files
 
             string mimeType = MimeTypeHelper.GetMimeTypeByExtension(fileInfo.Name);
 
-            return new OriginalImage(mimeType, mem.ToArray(), new CacheSettings() { ETag = etag });
+            return new OriginalData(mimeType, mem.ToArray(), new CacheSettings() { ETag = etag });
         }
     }
 }

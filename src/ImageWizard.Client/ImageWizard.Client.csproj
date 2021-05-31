@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -12,6 +12,18 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\youtube\youtube.css" />
+    <Content Remove="wwwroot\youtube\youtube.js" />
+    <Content Remove="wwwroot\youtube\youtube.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\youtube\youtube.css" />
+    <EmbeddedResource Include="wwwroot\youtube\youtube.js" />
+    <EmbeddedResource Include="wwwroot\youtube\youtube.svg" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
