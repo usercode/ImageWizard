@@ -5,7 +5,7 @@
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.1.7</Version>
+    <Version>2.1.8</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>usercode.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
