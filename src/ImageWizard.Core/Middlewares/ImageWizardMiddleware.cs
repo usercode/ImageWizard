@@ -85,7 +85,7 @@ namespace ImageWizard.Middlewares
         {
             string? path = (string?)context.GetRouteValue("imagePath");
 
-            if(path == null)
+            if (path == null)
             {
                 throw new Exception("path is not available.");
             }

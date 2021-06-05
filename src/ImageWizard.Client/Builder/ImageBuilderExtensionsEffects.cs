@@ -217,7 +217,7 @@ namespace ImageWizard
             }
             else
             {
-                builder.Add($"text={text}");
+                builder.Add($"text='{text}'");
             }
 
             if (size != null)

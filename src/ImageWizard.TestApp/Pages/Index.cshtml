@@ -129,12 +129,12 @@
     </div>
 
     <h2>Draw text</h2>
-    <p>@@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1).BuildUrl()</p>
-    <p>@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1).BuildUrl()</p>
+    <p>@@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
+    <p>@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).DrawText("bat-eared-fox", 65, 0.3, 0.1).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" class="auto-scale" />
         </div>
     </div>
 
