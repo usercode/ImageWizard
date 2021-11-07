@@ -12,9 +12,8 @@ namespace ImageWizard
 {
     public interface IImageUrlBuilder
     {
-        IWebHostEnvironment HostingEnvironment { get; }
+        IWebHostEnvironment HostEnvironment { get; }
         IHttpContextAccessor HttpContextAccessor { get; }
-        IFileVersionProvider FileVersionProvider { get; }
         IUrlHelper UrlHelper { get; }
     }
 }

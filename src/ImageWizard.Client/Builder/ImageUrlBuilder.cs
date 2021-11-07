@@ -17,9 +17,8 @@ namespace ImageWizard
     public class ImageUrlBuilder : IImageUrlBuilder, IImageFilters, IImageLoaderType
     {
         public IOptions<ImageWizardClientSettings> Settings { get; }
-        public IWebHostEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostEnvironment { get; }
         public IHttpContextAccessor HttpContextAccessor { get; }
-        public IFileVersionProvider FileVersionProvider { get; }
         public IUrlHelper UrlHelper { get; internal set; }
        
         private string LoaderSource { get; set; }
@@ -31,13 +30,11 @@ namespace ImageWizard
         public ImageUrlBuilder(
             IOptions<ImageWizardClientSettings> settings,
             IWebHostEnvironment env, 
-            IHttpContextAccessor httpContextAccessor,
-            IFileVersionProvider fileVersionProvider)
+            IHttpContextAccessor httpContextAccessor)
         {
             Settings = settings;
-            HostingEnvironment = env;
+            HostEnvironment = env;
             HttpContextAccessor = httpContextAccessor;
-            FileVersionProvider = fileVersionProvider;
 
             Filters = new List<string>();
         }
