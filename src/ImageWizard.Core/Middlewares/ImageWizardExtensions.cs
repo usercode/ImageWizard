@@ -60,8 +60,6 @@ namespace ImageWizard
             services.Configure(options);
 
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
-            configuration.AddHttpLoader();
-            configuration.SetDistributedCache();
 
             services.AddSingleton(configuration);
 

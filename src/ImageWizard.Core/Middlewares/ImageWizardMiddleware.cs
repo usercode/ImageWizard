@@ -142,17 +142,6 @@ namespace ImageWizard.Middlewares
                 }
             }
 
-            //get image cache
-            IImageCache? imageCache = context.RequestServices.GetService<IImageCache>();
-
-            if (imageCache == null)
-            {
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                await context.Response.WriteAsync("Image cache not found");
-
-                return;
-            }
-
             //get image loader
             Type imageLoaderType = Builder.ImageLoaderManager.Get(url_loaderType);
             IImageLoader? loader = (IImageLoader?)context.RequestServices.GetService(imageLoaderType);
@@ -189,7 +178,19 @@ namespace ImageWizard.Middlewares
             string key = Convert.ToHexString(keyInBytes);
 
             //try to get the cached image
-            ICachedImage? cachedImage = await imageCache.ReadAsync(key);
+            ICachedImage? cachedImage = null;
+
+            //get image cache
+            IImageCache? imageCache = context.RequestServices.GetService<IImageCache>();
+
+            if (imageCache != null)
+            {
+                cachedImage = await imageCache.ReadAsync(key);
+            }
+            else
+            {
+                Logger.LogWarning("There is no image cache available.");
+            }
             
             bool createCachedImage = false;
             
@@ -287,12 +288,15 @@ namespace ImageWizard.Middlewares
 
                     cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(processingContext.Result.Data)));
 
-                    //disable cache?
-                    if (processingContext.DisableCache == false
-                        && (loader.RefreshMode == ImageLoaderRefreshMode.UseRemoteCacheControl && cachedImage.Metadata.Cache.NoStore) == false)
+                    if (imageCache != null)
                     {
-                        //save cached image
-                        await imageCache.WriteAsync(key, cachedImage);
+                        //disable cache?
+                        if (processingContext.DisableCache == false
+                            && (loader.RefreshMode == ImageLoaderRefreshMode.UseRemoteCacheControl && cachedImage.Metadata.Cache.NoStore) == false)
+                        {
+                            //save cached image
+                            await imageCache.WriteAsync(key, cachedImage);
+                        }
                     }
 
                     interceptors.Foreach(x => x.OnCachedImageCreated(cachedImage));

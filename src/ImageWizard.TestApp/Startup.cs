@@ -98,6 +98,7 @@ namespace ImageWizard.TestApp
                     x.SecretAccessKey = "";
                     x.BucketName = "MyBucket";
                 })
+                .SetDistributedCache()
                 ;
 
             services.AddImageWizardClient(x =>
