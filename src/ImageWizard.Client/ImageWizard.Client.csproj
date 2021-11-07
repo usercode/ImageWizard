@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.1.9</Version>
+    <Version>2.2.0</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>usercode.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
     <ProjectReference Include="..\ImageWizard.Utils\ImageWizard.Utils.csproj" />
   </ItemGroup>
 
