@@ -110,10 +110,10 @@ namespace ImageWizard.Middlewares
             string url_path = match.Groups["path"].Value;
             string url_loaderSource = match.Groups["loaderSource"].Value;
             string url_loaderType = match.Groups["loaderType"].Value;
-            IList<string> url_filters = match.Groups["filter"].Captures.OfType<Capture>()
-                                                                            .Select(x => x.Value)
-                                                                            .Select(x => x[0..^1]) //remove "/"
-                                                                            .ToList();
+            IList<string> url_filters = match.Groups["filter"].Captures
+                                                                        .Select(x => x.Value)
+                                                                        .Select(x => x[0..^1]) //remove "/"
+                                                                        .ToList();
 
             //unsafe url?
             if (Options.AllowUnsafeUrl && url_signature == "unsafe")

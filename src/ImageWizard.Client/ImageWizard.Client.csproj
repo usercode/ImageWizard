@@ -28,13 +28,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
-
+	  
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+<ItemGroup>
     <ProjectReference Include="..\ImageWizard.Utils\ImageWizard.Utils.csproj" />
   </ItemGroup>
 
