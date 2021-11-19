@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <Authors>usercode</Authors>
+	  <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	  <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
+	  <Version>2.2.0</Version>
+	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
+	  <PackageIcon>usercode.png</PackageIcon>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <IncludeSymbols>true</IncludeSymbols>
+	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\usercode.png" Pack="true" PackagePath="" />
+	</ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="OpenCvSharp4" Version="4.5.3.20210817" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Builders\" />
+  </ItemGroup>
+
+</Project>
