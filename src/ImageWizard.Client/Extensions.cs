@@ -35,10 +35,9 @@ namespace ImageWizard.Client
             return services;
         }
 
-        public static IImageLoaderType ImageWizard(this IUrlHelper urlHelper)
+        public static IImageLoader ImageWizard(this IUrlHelper urlHelper)
         {
             ImageUrlBuilder imageWizard = urlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<ImageUrlBuilder>();
-            imageWizard.UrlHelper = urlHelper;
 
             return imageWizard;
         }

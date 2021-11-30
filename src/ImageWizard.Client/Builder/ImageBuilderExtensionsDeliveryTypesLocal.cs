@@ -1,5 +1,7 @@
 ﻿using ImageWizard.Client.Builder.Types;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
@@ -16,11 +18,12 @@ namespace ImageWizard
         /// <param name="path"></param>
         /// <param name="addFingerprint"></param>
         /// <returns></returns>
-        public static IImageFilters FetchLocalFile(this IImageLoaderType imageBuilder, string path, bool addFileVersion = true)
+        public static IImageFilters FetchLocalFile(this IImageLoader imageBuilder, string path, bool addFileVersion = true)
         {
             if (addFileVersion == true)
             {
-                IFileInfo file = imageBuilder.HostEnvironment.WebRootFileProvider.GetFileInfo(path);
+                IWebHostEnvironment env = imageBuilder.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+                IFileInfo file = env.WebRootFileProvider.GetFileInfo(path);
 
                 string hash = $"{file.Length}#{file.LastModified.Ticks}";
 
@@ -32,9 +35,7 @@ namespace ImageWizard
                 path += $"?v={hashBase64}";
             }
 
-            imageBuilder.Image("fetch", path);
-
-            return (IImageFilters)imageBuilder;
+            return imageBuilder.Image("fetch", path);
         }
     }
 }

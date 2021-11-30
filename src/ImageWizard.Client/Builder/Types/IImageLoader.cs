@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ImageWizard.Client.Builder.Types
 {
-    public interface IImageLoaderType : IImageBuildUrl, IImageUrlBuilder
+    public interface IImageLoader : IImageUrlBuilder
     {
         IImageFilters Image(string loaderType, string loaderSource);
     }

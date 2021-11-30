@@ -37,7 +37,7 @@ namespace ImageWizard.Utils
         /// <returns></returns>
         public string Encrypt(string data)
         {
-            if(Key == null)
+            if (Key == null)
             {
                 throw new Exception("No key available!");
             }

@@ -12,37 +12,32 @@ namespace ImageWizard
     {
         public static IImageBuildUrl Jpg(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter("jpg()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter("jpg()");
         }
 
         public static IImageBuildUrl Jpg(this IImageFilters imageUrlBuilder, int quality)
         {
-            imageUrlBuilder.Filter($"jpg({quality})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"jpg({quality})");
         }
 
         public static IImageBuildUrl Png(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter("png()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter("png()");
         }
 
         public static IImageBuildUrl Gif(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter("gif()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter("gif()");
         }
 
         public static IImageBuildUrl Bmp(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter("bmp()");
+            return imageUrlBuilder.Filter("bmp()");
+        }
 
-            return imageUrlBuilder;
+        public static IImageBuildUrl WebP(this IImageFilters imageUrlBuilder)
+        {
+            return imageUrlBuilder.Filter("webp()");
         }
     }
 }

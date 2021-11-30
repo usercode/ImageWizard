@@ -17,35 +17,27 @@ namespace ImageWizard
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static IImageFilters Fetch(this IImageLoaderType imageUrlBuilder, string url)
+        public static IImageFilters Fetch(this IImageLoader imageUrlBuilder, string url)
         {
-            imageUrlBuilder.Image("fetch", url);
-
-            return (IImageFilters)imageUrlBuilder;
+            return imageUrlBuilder.Image("fetch", url);
         }
 
-        public static IImageFilters Azure(this IImageLoaderType imageUrlBuilder, string url)
+        public static IImageFilters Azure(this IImageLoader imageUrlBuilder, string url)
         {
-            imageUrlBuilder.Image("azure", url);
-
-            return (IImageFilters)imageUrlBuilder;
+            return imageUrlBuilder.Image("azure", url);
         }
 
-        public static IImageFilters AWS(this IImageLoaderType imageUrlBuilder, string url)
+        public static IImageFilters AWS(this IImageLoader imageUrlBuilder, string url)
         {
-            imageUrlBuilder.Image("aws", url);
-
-            return (IImageFilters)imageUrlBuilder;
+            return imageUrlBuilder.Image("aws", url);
         }
 
-        public static IImageFilters File(this IImageLoaderType imageUrlBuilder, string path)
+        public static IImageFilters File(this IImageLoader imageUrlBuilder, string path)
         {
-            imageUrlBuilder.Image("file", path);
-
-            return (IImageFilters)imageUrlBuilder;
+            return imageUrlBuilder.Image("file", path);
         }
 
-        public static IImageFilters Gravatar(this IImageLoaderType imageUrlBuilder, string email)
+        public static IImageFilters Gravatar(this IImageLoader imageUrlBuilder, string email)
         {
             string GetHashString(byte[] hash)
             {
@@ -60,16 +52,12 @@ namespace ImageWizard
 
             byte[] hashBuffer = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
 
-            imageUrlBuilder.Image("gravatar", GetHashString(hashBuffer));
-
-            return (IImageFilters)imageUrlBuilder;
+            return imageUrlBuilder.Image("gravatar", GetHashString(hashBuffer));
         }
 
-        public static IImageFilters Youtube(this IImageLoaderType imageUrlBuilder, string id)
+        public static IImageFilters Youtube(this IImageLoader imageUrlBuilder, string id)
         {
-            imageUrlBuilder.Image("youtube", id);
-
-            return (IImageFilters)imageUrlBuilder;
+            return imageUrlBuilder.Image("youtube", id);
         }
     }
 }

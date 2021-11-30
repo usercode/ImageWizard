@@ -18,30 +18,22 @@ namespace ImageWizard
     {
         public static IImageFilters BackgroundColor(this IImageFilters imageUrlBuilder, double r, double g, double b)
         {
-            imageUrlBuilder.Filter($"backgroundcolor({r.ToUrlString()},{g.ToUrlString()},{b.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"backgroundcolor({r.ToUrlString()},{g.ToUrlString()},{b.ToUrlString()})");
         }
 
         public static IImageFilters BackgroundColor(this IImageFilters imageUrlBuilder, byte r, byte g, byte b)
         {
-            imageUrlBuilder.Filter($"backgroundcolor({r},{g},{b})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"backgroundcolor({r},{g},{b})");
         }
 
         public static IImageFilters DPR(this IImageFilters imageUrlBuilder, double value)
         {
-            imageUrlBuilder.Filter($"dpr({value.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"dpr({value.ToUrlString()})");
         }
 
         public static IImageFilters NoCache(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter($"nocache()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"nocache()");
         }
 
         public static IImageFilters Crop(this IImageFilters imageUrlBuilder, int width, int heigth)
@@ -53,155 +45,111 @@ namespace ImageWizard
 
         public static IImageFilters Crop(this IImageFilters imageUrlBuilder, int x, int y, int width, int heigth)
         {
-            imageUrlBuilder.Filter($"crop({x},{y},{width},{heigth})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"crop({x},{y},{width},{heigth})");
         }
 
         public static IImageFilters Crop(this IImageFilters imageUrlBuilder, double width, double heigth)
         {
-            Crop(imageUrlBuilder, 0, 0, width, heigth);
-
-            return imageUrlBuilder;
+            return Crop(imageUrlBuilder, 0, 0, width, heigth);
         }
 
         public static IImageFilters Crop(this IImageFilters imageUrlBuilder, double x, double y, double width, double heigth)
         {
-            imageUrlBuilder.Filter($"crop({x.ToUrlString()},{y.ToUrlString()},{width.ToUrlString()},{heigth.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"crop({x.ToUrlString()},{y.ToUrlString()},{width.ToUrlString()},{heigth.ToUrlString()})");
         }
         public static IImageFilters Blur(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter($"blur()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"blur()");
         }
 
         public static IImageFilters Blur(this IImageFilters imageUrlBuilder, int radius)
         {
-            imageUrlBuilder.Filter($"blur({radius})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"blur({radius})");
         }
 
         public static IImageFilters Resize(this IImageFilters imageUrlBuilder, int size)
         {
-            imageUrlBuilder.Filter($"resize({size})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"resize({size})");
         }
 
         public static IImageFilters Resize(this IImageFilters imageUrlBuilder, int width, int height)
         {
-            imageUrlBuilder.Filter($"resize({width},{height})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"resize({width},{height})");
         }
 
         public static IImageFilters Resize(this IImageFilters imageUrlBuilder, int width, int height, ResizeMode mode)
         {
-            imageUrlBuilder.Filter($"resize({width},{height},{mode.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"resize({width},{height},{mode.ToUrlString()})");
         }
 
         public static IImageFilters Resize(this IImageFilters imageUrlBuilder, int width, int height, ResizeMode mode, AnchorPositionMode anchorPosition)
         {
-            imageUrlBuilder.Filter($"resize({width},{height},{mode.ToUrlString()},{anchorPosition.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"resize({width},{height},{mode.ToUrlString()},{anchorPosition.ToUrlString()})");
         }
 
         public static IImageFilters Trim(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter("trim()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter("trim()");
         }
 
         public static IImageFilters Grayscale(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter($"grayscale()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"grayscale()");
         }
 
         public static IImageFilters Grayscale(this IImageFilters imageUrlBuilder, double value)
         {
-            imageUrlBuilder.Filter($"grayscale({value.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"grayscale({value.ToUrlString()})");
         }
 
         public static IImageFilters BlackWhite(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter($"blackwhite()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"blackwhite()");
         }
 
         public static IImageFilters Brightness(this IImageFilters imageUrlBuilder, double value)
         {
-            imageUrlBuilder.Filter($"brightness({value.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"brightness({value.ToUrlString()})");
         }
 
         public static IImageFilters Contrast(this IImageFilters imageUrlBuilder, double value)
         {
-            imageUrlBuilder.Filter($"contrast({value.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"contrast({value.ToUrlString()})");
         }
 
         public static IImageFilters Invert(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter($"invert()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"invert()");
         }
 
         public static IImageFilters Saturate(this IImageFilters imageUrlBuilder, double value)
         {
-            imageUrlBuilder.Filter($"saturate({value.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"saturate({value.ToUrlString()})");
         }
 
         public static IImageFilters Rotate(this IImageFilters imageUrlBuilder, double angle)
         {
-            imageUrlBuilder.Filter($"rotate({angle.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"rotate({angle.ToUrlString()})");
         }
 
         public static IImageFilters Flip(this IImageFilters imageUrlBuilder, FlipMode flippingMode)
         {
-            imageUrlBuilder.Filter($"flip({flippingMode.ToUrlString()})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"flip({flippingMode.ToUrlString()})");
         }
 
         public static IImageFilters SvgRemoveSize(this IImageFilters imageUrlBuilder)
         {
-            imageUrlBuilder.Filter("removesize()");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter("removesize()");
         }
 
         public static IImageFilters PageToImage(this IImageFilters imageUrlBuilder, int pageIndex)
         {
-            imageUrlBuilder.Filter($"pagetoimage({pageIndex})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"pagetoimage({pageIndex})");
         }
 
         public static IImageFilters PageToImage(this IImageFilters imageUrlBuilder, int pageIndex, int width, int height)
         {
-            imageUrlBuilder.Filter($"pagetoimage({pageIndex},{width},{height})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"pagetoimage({pageIndex},{width},{height})");
         }
 
         public static IImageFilters DrawText(this IImageFilters imageUrlBuilder, string text, int? size = null, double? x = null, double? y = null, bool useBase64Url = true)
@@ -235,9 +183,7 @@ namespace ImageWizard
                 builder.Add($"y={y.Value.ToUrlString()}");
             }
 
-            imageUrlBuilder.Filter($"drawtext({string.Join(",", builder)})");
-
-            return imageUrlBuilder;
+            return imageUrlBuilder.Filter($"drawtext({string.Join(",", builder)})");
         }
     }
 }
