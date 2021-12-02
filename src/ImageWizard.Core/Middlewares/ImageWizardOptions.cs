@@ -22,7 +22,7 @@ namespace ImageWizard.Settings
             UseClintHints = false;
             AllowUnsafeUrl = false;
             UseAcceptHeader = false;
-            Key = null;
+            Key = string.Empty;
 
             AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
 
@@ -57,7 +57,7 @@ namespace ImageWizard.Settings
         /// <summary>
         /// Key
         /// </summary>
-        public string? Key { get; set; }
+        public string Key { get; set; }
 
         /// <summary>
         /// AllowedDPR

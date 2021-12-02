@@ -18,7 +18,6 @@ namespace ImageWizard
 {
     public static class ImageWizardExtensions
     {
-
         public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
         {
             return MapImageWizard(endpoints, ImageWizardConstants.DefaultBasePath);

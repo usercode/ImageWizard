@@ -1,4 +1,5 @@
 ﻿using ImageWizard.Client.Builder.Types;
+using ImageWizard.Core;
 using ImageWizard.Utils;
 using System;
 using System.Collections.Generic;
@@ -54,43 +55,18 @@ namespace ImageWizard
                 return LoaderSource;
             }
 
-            StringBuilder url = new StringBuilder();
+            ImageWizardUrl url;
 
-            for (int i = 0; i < Filters.Count; i++)
+            if (ImageUrlBuilder.Settings.UseUnsafeUrl)
             {
-                url.Append(Filters[i]);
-                url.Append("/");
-            }
-
-            url.Append(LoaderType);
-
-            if (LoaderSource.StartsWith("/") == false)
-            {
-                url.Append("/");
-            }
-
-            url.Append(LoaderSource);
-
-            string signature;
-
-            if (ImageUrlBuilder.Settings.UseUnsafeUrl == true)
-            {
-                signature = "unsafe";
+                url = ImageWizardUrl.CreateUnsafe(LoaderType, LoaderSource, Filters);
             }
             else
             {
-                signature = new CryptoService(ImageUrlBuilder.Settings.Key).Encrypt(url.ToString());
+                url = ImageWizardUrl.Create(ImageUrlBuilder.Settings.Key, LoaderType, LoaderSource, Filters);
             }
 
-            url.Insert(0, "/");
-            url.Insert(0, signature);
-            if (ImageUrlBuilder.Settings.BaseUrl.EndsWith("/") == false)
-            {
-                url.Insert(0, "/");
-            }
-            url.Insert(0, ImageUrlBuilder.Settings.BaseUrl);
-
-            return url.ToString();
+            return $"{ImageUrlBuilder.Settings.BaseUrl.TrimEnd('/')}/{url.Signature}/{url.Path}";
         }
     }
 }

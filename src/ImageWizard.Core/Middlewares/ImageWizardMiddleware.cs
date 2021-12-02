@@ -5,17 +5,13 @@ using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.Settings;
 using ImageWizard.Core.Types;
-using ImageWizard.Filters;
-using ImageWizard.Filters.ImageFormats;
 using ImageWizard.ImageLoaders;
 using ImageWizard.ImageStorages;
 using ImageWizard.Services.Types;
 using ImageWizard.Settings;
 using ImageWizard.Types;
-using ImageWizard.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -25,10 +21,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ImageWizard.Middlewares
@@ -38,27 +32,16 @@ namespace ImageWizard.Middlewares
     /// </summary>
     class ImageWizardMiddleware
     {
-        private readonly RequestDelegate _next;
-
         public ImageWizardMiddleware(
-            RequestDelegate next,
-            IOptions<ImageWizardOptions> options,
-            ILogger<ImageWizardMiddleware> logger,
-            ImageWizardBuilder builder
-            )
+                    RequestDelegate next,
+                    IOptions<ImageWizardOptions> options,
+                    ILogger<ImageWizardMiddleware> logger,
+                    ImageWizardBuilder builder                    
+                    )
         {
             Options = options.Value;
             Builder = builder;
             Logger = logger;
-
-            _next = next;
-
-            const string signature = @"[a-z0-9-_]+";
-            const string filter = @"[a-z]+\([^)]*\)";
-            const string loaderType = @"[a-z]+";
-            const string loaderSource = @".*";
-            
-            UrlRegex = new Regex($@"^(?<signature>{signature})/(?<path>(?<filter>{filter}/)*(?<loaderType>{loaderType})/(?<loaderSource>{loaderSource}))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         /// <summary>
@@ -76,11 +59,6 @@ namespace ImageWizard.Middlewares
         /// </summary>
         private ILogger<ImageWizardMiddleware> Logger { get; }
 
-        /// <summary>
-        /// UrlRegex
-        /// </summary>
-        private Regex UrlRegex { get; }
-
         public async Task InvokeAsync(HttpContext context)
         {
             string? path = (string?)context.GetRouteValue("imagePath");
@@ -95,9 +73,8 @@ namespace ImageWizard.Middlewares
                 path += context.Request.QueryString.Value;
             }
 
-            Match match = UrlRegex.Match(path);
-
-            if (match.Success == false)
+            //parse url
+            if (ImageWizardUrl.TryParse(path, out ImageWizardUrl url) == false)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
@@ -106,32 +83,22 @@ namespace ImageWizard.Middlewares
 
             IEnumerable<IImageWizardInterceptor> interceptors = context.RequestServices.GetServices<IImageWizardInterceptor>();
 
-            string url_signature = match.Groups["signature"].Value;
-            string url_path = match.Groups["path"].Value;
-            string url_loaderSource = match.Groups["loaderSource"].Value;
-            string url_loaderType = match.Groups["loaderType"].Value;
-            IList<string> url_filters = match.Groups["filter"].Captures
-                                                                        .Select(x => x.Value)
-                                                                        .Select(x => x[0..^1]) //remove "/"
-                                                                        .ToList();
-
             //unsafe url?
-            if (Options.AllowUnsafeUrl && url_signature == "unsafe")
+            if (Options.AllowUnsafeUrl && url.IsUnsafeUrl)
             {
                 Logger.LogTrace("unsafe request");
             }
             else
             {
                 //check signature
-                string signature = new CryptoService(Options.Key).Encrypt(url_path);
-
-                if (signature == url_signature)
+                if (url.IsSignatureValid(Options.Key))
                 {
                     Logger.LogTrace("signature is valid");
                 }
                 else
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
                     await context.Response.WriteAsync("signature is not valid!");
 
                     Logger.LogTrace("signature is not valid");
@@ -143,18 +110,18 @@ namespace ImageWizard.Middlewares
             }
 
             //get image loader
-            Type imageLoaderType = Builder.ImageLoaderManager.Get(url_loaderType);
+            Type imageLoaderType = Builder.ImageLoaderManager.Get(url.LoaderType);
             IImageLoader? loader = (IImageLoader?)context.RequestServices.GetService(imageLoaderType);
 
             if (loader == null)
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                await context.Response.WriteAsync("Image loader not found: " + url_loaderType);
+                await context.Response.WriteAsync("Image loader not found: " + url.LoaderType);
 
                 return;
             }
 
-            string url_Path_with_headers = url_path;
+            string url_path_with_headers = url.Path;
 
             //get compatible mime types by the accept header
             IEnumerable<string> acceptMimeTypes = context.Request.GetTypedHeaders().Accept
@@ -169,12 +136,12 @@ namespace ImageWizard.Middlewares
             {
                 if (acceptMimeTypes.Any())
                 {
-                    url_Path_with_headers += $"+Accept={string.Join(",", acceptMimeTypes)}";
+                    url_path_with_headers += $"+Accept={string.Join(",", acceptMimeTypes)}";
                 }
             }
 
             //generate image key
-            byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_Path_with_headers));
+            byte[] keyInBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(url_path_with_headers));
             string key = Convert.ToHexString(keyInBytes);
 
             //try to get the cached image
@@ -233,7 +200,7 @@ namespace ImageWizard.Middlewares
                 Logger.LogTrace("Create cached image");
 
                 //get original image
-                OriginalData? originalData = await loader.GetAsync(url_loaderSource, cachedImage);
+                OriginalData? originalData = await loader.GetAsync(url.LoaderSource, cachedImage);
 
                 if (originalData != null) //is there a new version of original image?
                 {
@@ -244,7 +211,7 @@ namespace ImageWizard.Middlewares
                                                                  clientHints,
                                                                  Options,
                                                                  acceptMimeTypes,
-                                                                 url_filters);
+                                                                 url.Filters);
 
                     while (processingContext.UrlFilters.Count > 0)
                     {
@@ -275,9 +242,9 @@ namespace ImageWizard.Middlewares
                         Cache = originalData.Cache,
                         Created = DateTime.UtcNow,
                         Key = key,
-                        Filters = url_filters,
-                        LoaderSource = url_loaderSource,
-                        LoaderType = url_loaderType,
+                        Filters = url.Filters,
+                        LoaderSource = url.LoaderSource,
+                        LoaderType = url.LoaderType,
                         Hash = Convert.ToHexString(hash),
                         MimeType = processingContext.Result.MimeType,
                         DPR = processingContext.Result.DPR,

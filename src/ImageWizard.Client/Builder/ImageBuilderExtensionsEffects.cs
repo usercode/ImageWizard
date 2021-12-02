@@ -57,6 +57,7 @@ namespace ImageWizard
         {
             return imageUrlBuilder.Filter($"crop({x.ToUrlString()},{y.ToUrlString()},{width.ToUrlString()},{heigth.ToUrlString()})");
         }
+
         public static IImageFilters Blur(this IImageFilters imageUrlBuilder)
         {
             return imageUrlBuilder.Filter($"blur()");
