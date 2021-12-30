@@ -10,34 +10,34 @@ namespace ImageWizard
     /// </summary>
     public static class ImageFilterFormatExtensions
     {
-        public static IBuildUrl Jpg(this IImageFilter imageUrlBuilder)
+        public static IBuildUrl Jpg(this Image image)
         {
-            return imageUrlBuilder.Filter("jpg()");
+            return image.Filter("jpg()");
         }
 
-        public static IBuildUrl Jpg(this IImageFilter imageUrlBuilder, int quality)
+        public static IBuildUrl Jpg(this Image image, int quality)
         {
-            return imageUrlBuilder.Filter($"jpg({quality})");
+            return image.Filter($"jpg({quality})");
         }
 
-        public static IBuildUrl Png(this IImageFilter imageUrlBuilder)
+        public static IBuildUrl Png(this Image image)
         {
-            return imageUrlBuilder.Filter("png()");
+            return image.Filter("png()");
         }
 
-        public static IBuildUrl Gif(this IImageFilter imageUrlBuilder)
+        public static IBuildUrl Gif(this Image image)
         {
-            return imageUrlBuilder.Filter("gif()");
+            return image.Filter("gif()");
         }
 
-        public static IBuildUrl Bmp(this IImageFilter imageUrlBuilder)
+        public static IBuildUrl Bmp(this Image image)
         {
-            return imageUrlBuilder.Filter("bmp()");
+            return image.Filter("bmp()");
         }
 
-        public static IBuildUrl WebP(this IImageFilter imageUrlBuilder)
+        public static IBuildUrl WebP(this Image image)
         {
-            return imageUrlBuilder.Filter("webp()");
+            return image.Filter("webp()");
         }
     }
 }

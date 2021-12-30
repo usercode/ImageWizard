@@ -27,7 +27,7 @@ namespace ImageWizard
         {
             UrlBuilderContext context = new UrlBuilderContext(this);
             
-            return context.OriginalData(loaderType, loaderSource);
+            return context.LoadData(loaderType, loaderSource);
         }
     }
 }

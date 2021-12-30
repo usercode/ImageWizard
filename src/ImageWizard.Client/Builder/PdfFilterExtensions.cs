@@ -11,14 +11,14 @@ namespace ImageWizard
     /// </summary>
     public static class PdfFilterExtensions
     {
-        public static IImageFilter PageToImage(this IPdfFilter imageUrlBuilder, int pageIndex)
+        public static Image PageToImage(this Pdf pdf, int pageIndex)
         {
-            return (IImageFilter)imageUrlBuilder.Filter($"pagetoimage({pageIndex})");
+            return new Image(pdf.Filter($"pagetoimage({pageIndex})"));
         }
 
-        public static IImageFilter PageToImage(this IPdfFilter imageUrlBuilder, int pageIndex, int width, int height)
+        public static Image PageToImage(this Pdf pdf, int pageIndex, int width, int height)
         {
-            return (IImageFilter)imageUrlBuilder.Filter($"pagetoimage({pageIndex},{width},{height})");
+            return new Image(pdf.Filter($"pagetoimage({pageIndex},{width},{height})"));
         }
     }
 }

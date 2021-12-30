@@ -26,17 +26,17 @@ namespace ImageWizard.Core
             Filters = filters;
         }
 
-        public static ImageWizardUrl CreateUnsafe(string loaderType, string loaderSource, IList<string> filters)
+        public static ImageWizardUrl CreateUnsafe(string loaderType, string loaderSource, IEnumerable<string> filters)
         {
             return CreateInternal(true, null, loaderType, loaderSource, filters);
         }
 
-        public static ImageWizardUrl Create(string key, string loaderType, string loaderSource, IList<string> filters)
+        public static ImageWizardUrl Create(string key, string loaderType, string loaderSource, IEnumerable<string> filters)
         {
             return CreateInternal(false, key, loaderType, loaderSource, filters);
         }
 
-        private static ImageWizardUrl CreateInternal(bool isUnsafe, string? key, string loaderType, string loaderSource, IList<string> filters)
+        private static ImageWizardUrl CreateInternal(bool isUnsafe, string? key, string loaderType, string loaderSource, IEnumerable<string> filters)
         {
             string signature = Unsafe;
             string path = $"{string.Join('/', filters)}/{loaderType}/{loaderSource.TrimStart('/')}".TrimStart('/');

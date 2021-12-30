@@ -12,9 +12,9 @@ namespace ImageWizard
     /// </summary>
     public static class YouTubeExtensions
     {
-        public static IImageFilter Youtube(this ILoader imageUrlBuilder, string id)
+        public static Image Youtube(this ILoader imageUrlBuilder, string id)
         {
-            return (IImageFilter)imageUrlBuilder.LoadData("youtube", id);
+            return new Image(imageUrlBuilder.LoadData("youtube", id));
         }
     }
 }

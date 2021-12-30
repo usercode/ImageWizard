@@ -7,64 +7,64 @@ using System.Text;
 namespace ImageWizard
 {
     /// <summary>
-    /// ImageEffectsExtensions
+    /// SvgEffectsExtensions
     /// </summary>
     public static class SvgEffectsExtensions
     {
-        public static ISvgFilter Blur(this ISvgFilter imageUrlBuilder)
+        public static Svg Blur(this Svg svg)
         {
-            imageUrlBuilder.Filter($"blur()");
+            svg.Filter($"blur()");
 
-            return imageUrlBuilder;
+            return svg;
         }
 
-        public static ISvgFilter Blur(this ISvgFilter imageUrlBuilder, int radius)
+        public static Svg Blur(this Svg svg, int radius)
         {
-            imageUrlBuilder.Filter($"blur({radius})");
+            svg.Filter($"blur({radius})");
 
-            return imageUrlBuilder;
+            return svg;
         }
 
-        public static ISvgFilter Grayscale(this ISvgFilter imageUrlBuilder)
+        public static Svg Grayscale(this Svg svg)
         {
-            imageUrlBuilder.Filter($"grayscale()");
+            svg.Filter($"grayscale()");
 
-            return imageUrlBuilder;
+            return svg;
         }
 
-        public static ISvgFilter Grayscale(this ISvgFilter imageUrlBuilder, double value)
+        public static Svg Grayscale(this Svg svg, double value)
         {
-            imageUrlBuilder.Filter($"grayscale({value.ToUrlString()})");
+            svg.Filter($"grayscale({value.ToUrlString()})");
 
-            return imageUrlBuilder;
+            return svg;
         }
 
-        public static ISvgFilter Rotate(this ISvgFilter imageUrlBuilder, double angle)
+        public static Svg Rotate(this Svg svg, double angle)
         {
-            imageUrlBuilder.Filter($"rotate({angle.ToUrlString()})");
+            svg.Filter($"rotate({angle.ToUrlString()})");
 
-            return imageUrlBuilder;
+            return svg;
         }
 
-        public static ISvgFilter Invert(this ISvgFilter imageUrlBuilder)
+        public static Svg Invert(this Svg svg)
         {
-            imageUrlBuilder.Filter($"invert()");
+            svg.Filter($"invert()");
 
-            return imageUrlBuilder;
+            return svg;
         }
 
-        public static ISvgFilter Saturate(this ISvgFilter imageUrlBuilder, double value)
+        public static Svg Saturate(this Svg svg, double value)
         {
-            imageUrlBuilder.Filter($"saturate({value.ToUrlString()})");
+            svg.Filter($"saturate({value.ToUrlString()})");
 
-            return imageUrlBuilder;
+            return svg;
         }
 
-        public static ISvgFilter RemoveSize(this ISvgFilter imageUrlBuilder)
+        public static Svg RemoveSize(this Svg svg)
         {
-            imageUrlBuilder.Filter("removesize()");
+            svg.Filter("removesize()");
 
-            return imageUrlBuilder;
+            return svg;
         }
     }
 }

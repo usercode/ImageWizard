@@ -13,19 +13,19 @@ namespace ImageWizard
     /// </summary>
     public static class FilterExtensions
     {
-        public static IImageFilter AsImage(this IFilter imageUrlBuilder)
+        public static Image AsImage(this IFilter filter)
         {
-            return (IImageFilter)imageUrlBuilder;
+            return new Image(filter);
         }
 
-        public static ISvgFilter AsSvg(this IFilter imageUrlBuilder)
+        public static Svg AsSvg(this IFilter filter)
         {
-            return (ISvgFilter)imageUrlBuilder;
+            return new Svg(filter);
         }
 
-        public static IPdfFilter AsPdf(this IFilter imageUrlBuilder)
+        public static Pdf AsPdf(this IFilter filter)
         {
-            return (IPdfFilter)imageUrlBuilder;
+            return new Pdf(filter);
         }
     }
 }

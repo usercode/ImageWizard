@@ -12,7 +12,7 @@ namespace ImageWizard
     /// <summary>
     /// UrlBuilderContext
     /// </summary>
-    class UrlBuilderContext : IFilter, IBuildUrl, IImageFilter, ISvgFilter, IVideoFilter, IPdfFilter
+    class UrlBuilderContext : ILoader, IFilter, IBuildUrl
     {
         public UrlBuilderContext(UrlBuilder imageUrlBuilder)
         {
@@ -28,7 +28,7 @@ namespace ImageWizard
         public ImageWizardClientSettings Settings => ImageUrlBuilder.Settings;
         public IServiceProvider ServiceProvider => ImageUrlBuilder.ServiceProvider;
 
-        public IFilter OriginalData(string loaderType, string loaderSource)
+        public IFilter LoadData(string loaderType, string loaderSource)
         {
             LoaderType = loaderType;
             LoaderSource = loaderSource;
