@@ -1,7 +1,6 @@
 ﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
 using ImageWizard.SkiaSharp.Filters.Base;
-using ImageWizard.Utils.FilterTypes;
-using Microsoft.AspNetCore.Routing.Constraints;
+using ImageWizard.Utils;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;

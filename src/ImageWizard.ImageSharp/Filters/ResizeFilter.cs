@@ -20,39 +20,39 @@ namespace ImageWizard.ImageSharp.Filters
         [Filter]
         public void Resize([DPR]int width, [DPR]int height)
         {
-            Resize(width, height, Utils.FilterTypes.ResizeMode.Max);
+            Resize(width, height, Utils.ResizeMode.Max);
         }
 
         [Filter]
-        public void Resize([DPR]int width, [DPR]int height, Utils.FilterTypes.ResizeMode mode)
+        public void Resize([DPR]int width, [DPR]int height, Utils.ResizeMode mode)
         {
-            Resize(width, height, mode, Utils.FilterTypes.AnchorPositionMode.Center);
+            Resize(width, height, mode, Utils.AnchorPositionMode.Center);
         }
 
         [Filter]
-        public void Resize([DPR]int width, [DPR]int height, Utils.FilterTypes.ResizeMode mode, Utils.FilterTypes.AnchorPositionMode position)
+        public void Resize([DPR]int width, [DPR]int height, Utils.ResizeMode mode, Utils.AnchorPositionMode position)
         {
             ResizeMode mode2 = mode switch
             {
-                Utils.FilterTypes.ResizeMode.Max => ResizeMode.Max,
-                Utils.FilterTypes.ResizeMode.Min => ResizeMode.Min,
-                Utils.FilterTypes.ResizeMode.Stretch => ResizeMode.Stretch,
-                Utils.FilterTypes.ResizeMode.Pad => ResizeMode.Pad,
-                Utils.FilterTypes.ResizeMode.Crop => ResizeMode.Crop,
+                Utils.ResizeMode.Max => ResizeMode.Max,
+                Utils.ResizeMode.Min => ResizeMode.Min,
+                Utils.ResizeMode.Stretch => ResizeMode.Stretch,
+                Utils.ResizeMode.Pad => ResizeMode.Pad,
+                Utils.ResizeMode.Crop => ResizeMode.Crop,
                 _ => throw new Exception(),
             };
 
             AnchorPositionMode anchorPositionMode = position switch
             {
-                Utils.FilterTypes.AnchorPositionMode.Bottom => AnchorPositionMode.Bottom,
-                Utils.FilterTypes.AnchorPositionMode.BottomLeft => AnchorPositionMode.BottomLeft,
-                Utils.FilterTypes.AnchorPositionMode.BottomRight => AnchorPositionMode.BottomRight,
-                Utils.FilterTypes.AnchorPositionMode.Center => AnchorPositionMode.Center,
-                Utils.FilterTypes.AnchorPositionMode.Left => AnchorPositionMode.Left,
-                Utils.FilterTypes.AnchorPositionMode.Right => AnchorPositionMode.Right,
-                Utils.FilterTypes.AnchorPositionMode.Top => AnchorPositionMode.Top,
-                Utils.FilterTypes.AnchorPositionMode.TopLeft => AnchorPositionMode.TopLeft,
-                Utils.FilterTypes.AnchorPositionMode.TopRight => AnchorPositionMode.TopRight,
+                Utils.AnchorPositionMode.Bottom => AnchorPositionMode.Bottom,
+                Utils.AnchorPositionMode.BottomLeft => AnchorPositionMode.BottomLeft,
+                Utils.AnchorPositionMode.BottomRight => AnchorPositionMode.BottomRight,
+                Utils.AnchorPositionMode.Center => AnchorPositionMode.Center,
+                Utils.AnchorPositionMode.Left => AnchorPositionMode.Left,
+                Utils.AnchorPositionMode.Right => AnchorPositionMode.Right,
+                Utils.AnchorPositionMode.Top => AnchorPositionMode.Top,
+                Utils.AnchorPositionMode.TopLeft => AnchorPositionMode.TopLeft,
+                Utils.AnchorPositionMode.TopRight => AnchorPositionMode.TopRight,
                 _ => throw new Exception(),
             };
 

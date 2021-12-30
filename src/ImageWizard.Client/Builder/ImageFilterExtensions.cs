@@ -1,6 +1,7 @@
 ﻿using ImageWizard.Client.Builder;
 using ImageWizard.Client.Builder.Types;
-using ImageWizard.Utils.FilterTypes;
+using ImageWizard.Utils;
+using ImageWizard.Utils;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;

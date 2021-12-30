@@ -56,23 +56,23 @@
     <div class="row">
         <div class="col-md-2">
             <p>resize(400,800,pad)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.FilterTypes.ResizeMode.Pad).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Pad).BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-md-2">
             <p>resize(400,800,crop)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.FilterTypes.ResizeMode.Crop).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Crop).BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-md-2">
             <p>resize(400,800,stretch)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.FilterTypes.ResizeMode.Stretch).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Stretch).BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-md-2">
             <p>resize(400,800,min)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.FilterTypes.ResizeMode.Min).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Min).BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-md-2">
             <p>resize(400,800,max)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.FilterTypes.ResizeMode.Max).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Max).BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-md-3">
             <p>blackwhite()</p>
@@ -104,11 +104,11 @@
         </div>
         <div class="col-lg-3">
             <p>flip(vertical)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Flip(Utils.FilterTypes.FlipMode.Vertical).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Flip(Utils.FlipMode.Vertical).BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-lg-3">
             <p>flip(horizontal)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Flip(Utils.FilterTypes.FlipMode.Horizontal).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Flip(Utils.FlipMode.Horizontal).BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-lg-3">
             <p>invert()</p>

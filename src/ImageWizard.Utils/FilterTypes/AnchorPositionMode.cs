@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Utils.FilterTypes
+namespace ImageWizard.Utils
 {
     public enum AnchorPositionMode
     {
