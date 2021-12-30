@@ -1,9 +1,9 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Settings;
 using ImageWizard.Core.Types;
+using ImageWizard.Processing;
+using ImageWizard.Processing.Results;
 using ImageWizard.Services.Types;
-using ImageWizard.Settings;
 using ImageWizard.SvgNet;
 using Svg;
 using Svg.FilterEffects;
@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ImageWizard.Filters
 {

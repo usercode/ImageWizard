@@ -1,9 +1,8 @@
-﻿using ImageWizard.Core.Middlewares;
+﻿using ImageWizard.Caches;
+using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.Settings;
-using ImageWizard.ImageLoaders;
-using ImageWizard.ImageStorages;
+using ImageWizard.Core.StreamPooling;
 using ImageWizard.Middlewares;
-using ImageWizard.Settings;
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -61,6 +60,9 @@ namespace ImageWizard
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
 
             services.AddSingleton(configuration);
+
+            //services.AddSingleton<IStreamPooling, MemoryStreamPooling>();
+            services.AddSingleton<IStreamPool, RecyclableMemoryPool>();
 
             return configuration;
         }

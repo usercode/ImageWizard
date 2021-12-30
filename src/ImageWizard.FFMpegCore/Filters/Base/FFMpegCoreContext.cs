@@ -1,5 +1,6 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageProcessing;
+using ImageWizard.Processing;
+using ImageWizard.Processing.Results;
 using ImageWizard.Services.Types;
 using System;
 using System.Collections.Generic;

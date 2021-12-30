@@ -3,11 +3,11 @@ using System;
 
 namespace ImageWizard.Azure
 {
-    public class AzureBlobOptions : ImageLoaderOptions
+    public class AzureBlobOptions : DataLoaderOptions
     {
         public AzureBlobOptions()
         {
-            RefreshMode = ImageLoaderRefreshMode.EveryTime;
+            RefreshMode = DataLoaderRefreshMode.EveryTime;
         }
 
         public string ConnectionString { get; set; }

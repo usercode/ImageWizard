@@ -1,13 +1,12 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Settings;
 using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
+using ImageWizard.Processing;
+using ImageWizard.Processing.Results;
 using ImageWizard.Services.Types;
-using ImageWizard.Settings;
-using ImageWizard.Utils.FilterTypes;
+using Microsoft.IO;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -77,12 +76,10 @@ namespace ImageWizard.ImageSharp.Filters
             //save image
             await ImageFormat.SaveImageAsync(Image, mem);
 
-            byte[] transformedImageData = mem.ToArray();
-
             //update some metadata
             //ProcessingContext.DisableCache = NoImageCache;
             return new ImageResult(
-                                            transformedImageData,
+                                            mem.ToArray(),
                                             ImageFormat.MimeType,
                                             Image.Width,
                                             Image.Height,

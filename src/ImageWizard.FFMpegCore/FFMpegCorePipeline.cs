@@ -1,11 +1,11 @@
 ﻿using ImageWizard.Core;
 using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Settings;
 using ImageWizard.Core.Types;
 using ImageWizard.FFMpegCore.Filters.Base;
 using ImageWizard.Filters;
+using ImageWizard.Processing;
 using ImageWizard.Services.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

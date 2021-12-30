@@ -8,11 +8,11 @@ namespace ImageWizard.Core.Middlewares
 {
     public interface IImageWizardInterceptor
     {
-        void OnResponseSending(HttpResponse response, ICachedImage cachedImage);
+        void OnResponseSending(HttpResponse response, ICachedData cachedImage);
 
-        void OnResponseCompleted(ICachedImage cachedImage);
+        void OnResponseCompleted(ICachedData cachedImage);
 
-        void OnCachedImageCreated(ICachedImage cachedImage);
+        void OnCachedImageCreated(ICachedData cachedImage);
 
         void OnFailedSignature();
 

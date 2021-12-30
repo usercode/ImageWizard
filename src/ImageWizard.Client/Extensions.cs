@@ -21,7 +21,7 @@ namespace ImageWizard.Client
         {
             services.Configure(setup);
 
-            services.AddTransient<ImageUrlBuilder>();
+            services.AddTransient<UrlBuilder>();
             services.AddHttpContextAccessor();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -35,9 +35,9 @@ namespace ImageWizard.Client
             return services;
         }
 
-        public static IImageLoader ImageWizard(this IUrlHelper urlHelper)
+        public static ILoader ImageWizard(this IUrlHelper urlHelper)
         {
-            ImageUrlBuilder imageWizard = urlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<ImageUrlBuilder>();
+            UrlBuilder imageWizard = urlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<UrlBuilder>();
 
             return imageWizard;
         }

@@ -10,14 +10,14 @@ namespace ImageWizard.Piranha
 {
     public static class Extensions
     {
-        public static IImageFilters Fetch(this IImageLoader imageLoader, ImageField imageField)
+        public static IFilter Fetch(this ILoader imageLoader, ImageField imageField)
         {
             //UrlDecode: fix whitespace handling for correct signature check
             IUrlHelper urlHelper = imageLoader.ServiceProvider.GetRequiredService<IUrlHelper>();
 
             imageLoader.FetchLocalFile(urlHelper.Content(HttpUtility.UrlDecode(imageField.Media.PublicUrl)));
 
-            return (IImageFilters)imageLoader;
+            return (IFilter)imageLoader;
         }
     }
 }

@@ -1,14 +1,15 @@
-﻿using ImageWizard.Core;
-using ImageWizard.Core.ImageFilters.Base;
+﻿using ImageWizard.Caches;
+using ImageWizard.Core;
 using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.Settings;
+using ImageWizard.Core.StreamPooling;
 using ImageWizard.Core.Types;
 using ImageWizard.ImageLoaders;
-using ImageWizard.ImageStorages;
+using ImageWizard.Metadatas;
+using ImageWizard.Processing;
+using ImageWizard.Processing.Results;
 using ImageWizard.Services.Types;
-using ImageWizard.Settings;
 using ImageWizard.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -110,13 +111,13 @@ namespace ImageWizard.Middlewares
             }
 
             //get image loader
-            Type imageLoaderType = Builder.ImageLoaderManager.Get(url.LoaderType);
-            IImageLoader? loader = (IImageLoader?)context.RequestServices.GetService(imageLoaderType);
+            Type loaderType = Builder.ImageLoaderManager.Get(url.LoaderType);
+            IDataLoader? loader = (IDataLoader?)context.RequestServices.GetService(loaderType);
 
             if (loader == null)
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                await context.Response.WriteAsync("Image loader not found: " + url.LoaderType);
+                await context.Response.WriteAsync("Data loader not found: " + url.LoaderType);
 
                 return;
             }
@@ -145,47 +146,46 @@ namespace ImageWizard.Middlewares
             string key = Convert.ToHexString(keyInBytes);
 
             //try to get the cached image
-            ICachedImage? cachedImage = null;
+            ICachedData? cachedData = null;
 
             //get image cache
-            IImageCache? imageCache = context.RequestServices.GetService<IImageCache>();
+            ICache? cache = context.RequestServices.GetService<ICache>();
 
-            if (imageCache != null)
+            if (cache != null)
             {
-                cachedImage = await imageCache.ReadAsync(key);
+                cachedData = await cache.ReadAsync(key);
             }
             else
             {
-                Logger.LogWarning("There is no image cache available.");
+                Logger.LogWarning("There is no cache available.");
             }
-            
-            bool createCachedImage = false;
-            
+
+            bool createCachedData = false;
             //no cached image found?
-            if (cachedImage == null)
+            if (cachedData == null)
             {
-                createCachedImage = true;
+                createCachedData = true;
             }
             else //use existing cached image
             {
                 switch (loader.RefreshMode)
                 {
-                    case ImageLoaderRefreshMode.None:
-                        createCachedImage = false;
+                    case DataLoaderRefreshMode.None:
+                        createCachedData = false;
                         break;
 
-                    case ImageLoaderRefreshMode.EveryTime:
-                        createCachedImage = true;
+                    case DataLoaderRefreshMode.EveryTime:
+                        createCachedData = true;
                         break;
 
-                    case ImageLoaderRefreshMode.UseRemoteCacheControl:
-                        if(cachedImage.Metadata.Cache.NoStore == true
-                            || cachedImage.Metadata.Cache.NoCache == true
-                            || (cachedImage.Metadata.Cache.Expires != null && cachedImage.Metadata.Cache.Expires < DateTime.UtcNow)
+                    case DataLoaderRefreshMode.UseRemoteCacheControl:
+                        if (cachedData.Metadata.Cache.NoStore == true
+                            || cachedData.Metadata.Cache.NoCache == true
+                            || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow)
                             //(cachedImage.Metadata.Cache.LastModified != null)
                             )
                         {
-                            createCachedImage = true;
+                            createCachedData = true;
                         }
                         break;
 
@@ -195,25 +195,26 @@ namespace ImageWizard.Middlewares
             }
 
             //create cached image
-            if (createCachedImage == true)
+            if (createCachedData == true)
             {
-                Logger.LogTrace("Create cached image");
+                Logger.LogTrace("Create cached data");
 
                 //get original image
-                OriginalData? originalData = await loader.GetAsync(url.LoaderSource, cachedImage);
+                OriginalData? originalData = await loader.GetAsync(url.LoaderSource, cachedData);
 
                 if (originalData != null) //is there a new version of original image?
                 {
                     ClientHints clientHints = context.Request.GetClientHints(Options.AllowedDPR);
 
                     ProcessingPipelineContext processingContext = new ProcessingPipelineContext(
+                                                                context.RequestServices.GetRequiredService<IStreamPool>(),
                                                                  new ImageResult(originalData.Data, originalData.MimeType),
                                                                  clientHints,
                                                                  Options,
                                                                  acceptMimeTypes,
                                                                  url.Filters);
 
-                    while (processingContext.UrlFilters.Count > 0)
+                    do
                     {
                         //find processing pipeline by mime type
                         Type processingPipelineType = Builder.GetPipeline(processingContext.Result.MimeType);
@@ -227,17 +228,20 @@ namespace ImageWizard.Middlewares
                             return;
                         }
 
+                        Logger.LogTrace($"Start pipline: {processingPipelineType.Name}");
+
                         //start processing
                         processingContext.Result = await processingPipeline.StartAsync(processingContext);
-                    }
-                    
+
+                    } while (processingContext.UrlFilters.Count > 0);
+
                     Logger.LogTrace("Save new cached image");
 
                     //create hash of cached image
                     byte[] hash = SHA256.Create().ComputeHash(processingContext.Result.Data);
 
                     //create metadata
-                    ImageMetadata imageMetadata = new ImageMetadata()
+                    Metadata imageMetadata = new Metadata()
                     {
                         Cache = originalData.Cache,
                         Created = DateTime.UtcNow,
@@ -248,37 +252,36 @@ namespace ImageWizard.Middlewares
                         Hash = Convert.ToHexString(hash),
                         MimeType = processingContext.Result.MimeType,
                         DPR = processingContext.Result.DPR,
-                        FileLength = processingContext.Result.Data.Length,                        
+                        FileLength = processingContext.Result.Data.Length,
                         Width = processingContext.Result.Width,
                         Height = processingContext.Result.Height
                     };
 
-                    cachedImage = new CachedImage(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(processingContext.Result.Data)));
+                    cachedData = new CachedData(imageMetadata, () => Task.FromResult<Stream>(new MemoryStream(processingContext.Result.Data)));
 
-                    if (imageCache != null)
+                    if (cache != null)
                     {
                         //disable cache?
-                        if (processingContext.DisableCache == false
-                            && (loader.RefreshMode == ImageLoaderRefreshMode.UseRemoteCacheControl && cachedImage.Metadata.Cache.NoStore) == false)
+                        if ((loader.RefreshMode == DataLoaderRefreshMode.UseRemoteCacheControl && cachedData.Metadata.Cache.NoStore) == false)
                         {
                             //save cached image
-                            await imageCache.WriteAsync(key, cachedImage);
+                            await cache.WriteAsync(key, cachedData);
                         }
                     }
 
-                    interceptors.Foreach(x => x.OnCachedImageCreated(cachedImage));
+                    interceptors.Foreach(x => x.OnCachedImageCreated(cachedData));
                 }
             }
 
-            if (cachedImage == null)
+            if (cachedData == null)
             {
-                throw new ArgumentNullException(nameof(cachedImage));
+                throw new ArgumentNullException(nameof(cachedData));
             }
 
             //send "304-NotModified" if etag is valid
             if (Options.UseETag)
             {
-                bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == $"\"{cachedImage.Metadata.Hash}\"");
+                bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == $"\"{cachedData.Metadata.Hash}\"");
 
                 if (isValid == true)
                 {
@@ -322,13 +325,13 @@ namespace ImageWizard.Middlewares
             //set ETag header
             if (Options.UseETag)
             {
-                context.Response.GetTypedHeaders().ETag = new EntityTagHeaderValue($"\"{cachedImage.Metadata.Hash}\"");
+                context.Response.GetTypedHeaders().ETag = new EntityTagHeaderValue($"\"{cachedData.Metadata.Hash}\"");
             }
 
             //DPR
-            if (cachedImage.Metadata.DPR != null)
+            if (cachedData.Metadata.DPR != null)
             {
-                context.Response.Headers.Add("Content-DPR", cachedImage.Metadata.DPR.Value.ToString(CultureInfo.InvariantCulture));
+                context.Response.Headers.Add("Content-DPR", cachedData.Metadata.DPR.Value.ToString(CultureInfo.InvariantCulture));
             }
 
             if (varyHeader.Count > 0)
@@ -337,23 +340,23 @@ namespace ImageWizard.Middlewares
             }
 
             //context.Response.Headers[HeaderNames.AcceptRanges] = "bytes";
-            context.Response.ContentLength = cachedImage.Metadata.FileLength;
-            context.Response.ContentType = cachedImage.Metadata.MimeType;
+            context.Response.ContentLength = cachedData.Metadata.FileLength;
+            context.Response.ContentType = cachedData.Metadata.MimeType;
 
             //is HEAD request?
             bool isHeadRequst = context.Request.Method.Equals("HEAD", StringComparison.OrdinalIgnoreCase);
 
             if (isHeadRequst == false)
             {
-                interceptors.Foreach(x => x.OnResponseSending(context.Response, cachedImage));
+                interceptors.Foreach(x => x.OnResponseSending(context.Response, cachedData));
 
                 //send response stream
-                using (Stream stream = await cachedImage.OpenReadAsync())
+                using (Stream stream = await cachedData.OpenReadAsync())
                 {
                     await stream.CopyToAsync(context.Response.Body);
                 }
 
-                interceptors.Foreach(x => x.OnResponseCompleted(cachedImage));
+                interceptors.Foreach(x => x.OnResponseCompleted(cachedData));
             }
 
             Logger.LogTrace("Operation completed");

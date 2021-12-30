@@ -1,4 +1,5 @@
 ﻿using ImageWizard.Core.Types;
+using ImageWizard.Metadatas;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
@@ -8,7 +9,7 @@ using System.Text;
 namespace ImageWizard.MongoDB.Models
 {
     [BsonIgnoreExtraElements]
-    public class ImageMetadataModel : IImageMetadata
+    public class ImageMetadataModel : IMetadata
     {
         public ImageMetadataModel()
         {
@@ -24,7 +25,7 @@ namespace ImageWizard.MongoDB.Models
         public int? Width { get; set; }
         public int? Height { get; set; }
         public double? DPR { get; set; }
-        public int FileLength { get; set; }
+        public long? FileLength { get; set; }
         public CacheSettings Cache { get; set; }
         public IEnumerable<string> Filters { get; set; }
         public string LoaderSource { get; set; }

@@ -1,6 +1,7 @@
 ﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
 using ImageWizard.Core.Types;
 using ImageWizard.Filters;
+using ImageWizard.Processing.Results;
 using ImageWizard.Services.Types;
 using Svg;
 using Svg.FilterEffects;

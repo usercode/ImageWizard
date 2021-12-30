@@ -1,10 +1,5 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Core.Settings;
-using ImageWizard.Core.Types;
+﻿using ImageWizard.Core.Middlewares;
 using ImageWizard.DocNET.Builder;
-using ImageWizard.Filters;
-using ImageWizard.Filters.ImageFormats;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;

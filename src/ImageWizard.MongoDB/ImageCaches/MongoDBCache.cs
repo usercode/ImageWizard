@@ -1,5 +1,4 @@
-﻿using ImageWizard.ImageStorages;
-using ImageWizard.Services.Types;
+﻿using ImageWizard.Services.Types;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Linq;
@@ -12,13 +11,14 @@ using ImageWizard.MongoDB.Models;
 using ImageWizard.Types;
 using ImageWizard.Core.Types;
 using System.IO;
+using ImageWizard.Caches;
 
 namespace ImageWizard.MongoDB.ImageCaches
 {
     /// <summary>
     /// MongoDBCache
     /// </summary>
-    public class MongoDBCache : IImageCache
+    public class MongoDBCache : ICache
     {
         public MongoDBCache(IOptions<MongoDBCacheOptions> settings)
         {
@@ -66,7 +66,7 @@ namespace ImageWizard.MongoDB.ImageCaches
         /// </summary>
         public IGridFSBucket ImageBuffer { get; }
 
-        public async Task<ICachedImage> ReadAsync(string key)
+        public async Task<ICachedData> ReadAsync(string key)
         {
             ImageMetadataModel foundMetadata = await ImageMetadatas
                                                             .AsQueryable()
@@ -77,12 +77,12 @@ namespace ImageWizard.MongoDB.ImageCaches
                 return null;
             }
 
-            CachedImage cachedImage = new CachedImage(foundMetadata, async () => await ImageBuffer.OpenDownloadStreamByNameAsync(key));
+            CachedData cachedImage = new CachedData(foundMetadata, async () => await ImageBuffer.OpenDownloadStreamByNameAsync(key));
 
             return cachedImage;
         }
 
-        public async Task WriteAsync(string key, ICachedImage cachedImage)
+        public async Task WriteAsync(string key, ICachedData cachedImage)
         {
             ImageMetadataModel model = new ImageMetadataModel()
             {

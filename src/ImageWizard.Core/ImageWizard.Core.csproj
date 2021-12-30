@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>usercode</Authors>
-    <Version>2.2.0</Version>
+    <Version>3.0.0</Version>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <Description>Image processing middleware based on ASP.NET and ImageSharp / SkiaSharp / SvgNet.</Description>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -17,6 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
   

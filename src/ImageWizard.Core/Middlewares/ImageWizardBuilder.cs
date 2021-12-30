@@ -1,10 +1,7 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
 using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.Middlewares;
-using ImageWizard.Filters;
-using ImageWizard.Filters.ImageFormats;
-using ImageWizard.ImageLoaders;
-using ImageWizard.ImageStorages;
+using ImageWizard.Processing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

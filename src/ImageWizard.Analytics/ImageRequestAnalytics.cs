@@ -24,26 +24,26 @@ namespace ImageWizard.Analytics
 
         private object _lock = new object();
 
-        public void OnResponseCompleted(ICachedImage cachedImage)
+        public void OnResponseCompleted(ICachedData cachedImage)
         {
             lock (_lock)
             {
                 AnalyticsData.TransferedImages++;
-                AnalyticsData.TransferedImagesInBytes += cachedImage.Metadata.FileLength;
+                //AnalyticsData.TransferedImagesInBytes += cachedImage.Metadata.FileLength.Value;
             }
         }
 
-        public void OnResponseSending(HttpResponse response, ICachedImage cachedImage)
+        public void OnResponseSending(HttpResponse response, ICachedData cachedImage)
         {
             
         }
 
-        public void OnCachedImageCreated(ICachedImage cachedImage)
+        public void OnCachedImageCreated(ICachedData cachedImage)
         {
             lock(_lock)
             {
                 AnalyticsData.CreatedImages++;
-                AnalyticsData.CreatedImagesInBytes += cachedImage.Metadata.FileLength;
+                //AnalyticsData.CreatedImagesInBytes += cachedImage.Metadata.FileLength.Value;
             }
         }
 

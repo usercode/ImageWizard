@@ -6,11 +6,11 @@ namespace ImageWizard.AWS
     /// <summary>
     /// AwsOptions
     /// </summary>
-    public class AwsOptions : ImageLoaderOptions
+    public class AwsOptions : DataLoaderOptions
     {
         public AwsOptions()
         {
-            RefreshMode = ImageLoaderRefreshMode.EveryTime;
+            RefreshMode = DataLoaderRefreshMode.EveryTime;
         }
 
         /// <summary>

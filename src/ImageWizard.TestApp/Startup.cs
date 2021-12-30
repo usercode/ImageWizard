@@ -14,8 +14,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using ImageWizard.ImageSharp.Filters;
 using ImageWizard.AWS;
 using ImageWizard.SkiaSharp;
-using ImageWizard.Core.Types;
-using ImageWizard.Settings;
 using Microsoft.Extensions.Options;
 using ImageWizard.FFMpegCore;
 using System.Text;
@@ -98,7 +96,7 @@ namespace ImageWizard.TestApp
                     x.SecretAccessKey = "";
                     x.BucketName = "MyBucket";
                 })
-                .SetDistributedCache()
+                //.SetDistributedCache()
                 ;
 
             services.AddImageWizardClient(x =>

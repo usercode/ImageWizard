@@ -1,5 +1,4 @@
 ﻿using ImageWizard.Core.Settings;
-using ImageWizard.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Settings
+namespace ImageWizard
 {
     /// <summary>
     /// ImageWizardOptions
@@ -25,6 +24,7 @@ namespace ImageWizard.Settings
             Key = string.Empty;
 
             AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
+            StreamingMimeTypes = MimeTypes.GetVideoMimeTypes();
 
             CacheControl = new CacheControl();
         }
@@ -45,12 +45,12 @@ namespace ImageWizard.Settings
         public bool UseAcceptHeader { get; set; }
 
         /// <summary>
-        /// UseETag
+        /// Use ETag. Default: true
         /// </summary>
         public bool UseETag { get; set; }
 
         /// <summary>
-        /// UseClintHints
+        /// Use clint hints. Default: false
         /// </summary>
         public bool UseClintHints { get; set; }
 
@@ -60,9 +60,14 @@ namespace ImageWizard.Settings
         public string Key { get; set; }
 
         /// <summary>
-        /// AllowedDPR
+        /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0, 4.0)
         /// </summary>
         public double[] AllowedDPR { get; set; }
+
+        /// <summary>
+        /// MIME types which need input and cache streaming. (Default: all video types)
+        /// </summary>
+        public string[] StreamingMimeTypes { get; set; }
 
         /// <summary>
         /// Generates random 64 byte key.

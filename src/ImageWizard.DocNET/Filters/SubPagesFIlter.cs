@@ -1,18 +1,10 @@
 ﻿using Docnet.Core;
 using Docnet.Core.Readers;
 using ImageWizard.Core.ImageFilters.Base.Attributes;
-using ImageWizard.Core.Types;
 using ImageWizard.DocNET.Filters.Base;
-using ImageWizard.Services.Types;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using ImageWizard.Processing.Results;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageWizard.DocNET.Filters
 {

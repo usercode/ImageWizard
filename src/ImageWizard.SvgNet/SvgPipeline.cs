@@ -1,15 +1,8 @@
 ﻿using ImageWizard.Core;
 using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageFilters.Base.Attributes;
-using ImageWizard.Core.ImageFilters.Base.Helpers;
-using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Settings;
-using ImageWizard.Core.Types;
 using ImageWizard.Filters;
-using ImageWizard.Filters.ImageFormats;
-using ImageWizard.Services.Types;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
+using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
 using Svg;
 using Svg.Transforms;

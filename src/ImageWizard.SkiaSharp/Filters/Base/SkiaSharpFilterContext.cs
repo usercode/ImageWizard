@@ -1,7 +1,8 @@
 ﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageProcessing;
 using ImageWizard.Core.Settings;
 using ImageWizard.ImageFormats.Base;
+using ImageWizard.Processing;
+using ImageWizard.Processing.Results;
 using ImageWizard.Services.Types;
 using SkiaSharp;
 using System;

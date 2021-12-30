@@ -18,7 +18,7 @@ namespace ImageWizard.Azure
     /// <summary>
     /// AzureBlobLoader
     /// </summary>
-    public class AzureBlobLoader : ImageLoaderBase
+    public class AzureBlobLoader : DataLoaderBase
     {
         public AzureBlobLoader(IOptions<AzureBlobOptions> options)
         {
@@ -31,9 +31,9 @@ namespace ImageWizard.Azure
 
         private BlobContainerClient Client { get; }
 
-        public override ImageLoaderRefreshMode RefreshMode => Options.RefreshMode;
+        public override DataLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
-        public override async Task<OriginalData> GetAsync(string source, ICachedImage existingCachedImage)
+        public override async Task<OriginalData> GetAsync(string source, ICachedData existingCachedImage)
         {
             BlobClient blob = Client.GetBlobClient(source);
 
@@ -51,9 +51,11 @@ namespace ImageWizard.Azure
                 return null;
             }
 
+            byte[] data = await response.Value.Content.ToByteArrayAsync();
+
             return new OriginalData(
-                        response.Value.ContentType, 
-                        await response.Value.Content.ToByteArrayAsync(), 
+                        response.Value.ContentType,
+                        await response.Value.Content.ToByteArrayAsync(),
                         new CacheSettings() { ETag = response.Value.Details.ETag.ToString().GetTagUnquoted() });
         }
     }

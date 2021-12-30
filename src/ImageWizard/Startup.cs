@@ -5,12 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using ImageWizard.MongoDB;
-using ImageWizard.Core.ImageCaches;
-using ImageWizard.Settings;
 using ImageWizard.MongoDB.ImageCaches;
-using System.Collections.Generic;
-using ImageWizard.ImageStorages;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using ImageWizard.Core.Middlewares;
 using ImageWizard.Core.ImageLoaders;
 using ImageWizard.Core.ImageLoaders.Files;
@@ -19,6 +14,7 @@ using ImageWizard.Analytics;
 using Microsoft.Extensions.Options;
 using ImageWizard.DocNET;
 using Microsoft.AspNetCore.HttpOverrides;
+using ImageWizard.Caches;
 
 namespace ImageWizard
 {

@@ -1,11 +1,11 @@
 ﻿using ImageWizard.Core.Middlewares;
-using ImageWizard.ImageStorages;
 using ImageWizard.MongoDB.ImageCaches;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using ImageWizard.Caches;
 
 namespace ImageWizard.MongoDB
 {
@@ -20,8 +20,8 @@ namespace ImageWizard.MongoDB
         {
             wizardConfiguration.Services.Configure(cacheSettingsSetup);
 
-            wizardConfiguration.Services.RemoveAll<IImageCache>();
-            wizardConfiguration.Services.AddSingleton<IImageCache, MongoDBCache>();
+            wizardConfiguration.Services.RemoveAll<ICache>();
+            wizardConfiguration.Services.AddSingleton<ICache, MongoDBCache>();
 
             return wizardConfiguration;
         }
