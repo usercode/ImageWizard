@@ -46,14 +46,14 @@ namespace ImageWizard
         {
             services.Configure(options);
 
-            ImageWizardBuilder configuration = new ImageWizardBuilder(services);
-
-            services.AddSingleton(configuration);
-
             //services.AddSingleton<IStreamPool, MemoryStreamPool>();
             services.AddSingleton<IStreamPool, RecyclableMemoryStreamPool>();
 
             services.AddTransient<ICache, OneTimeCache>();
+            services.AddHttpContextAccessor();
+
+            ImageWizardBuilder configuration = new ImageWizardBuilder(services);
+            services.AddSingleton(configuration);
 
             return configuration;
         }
