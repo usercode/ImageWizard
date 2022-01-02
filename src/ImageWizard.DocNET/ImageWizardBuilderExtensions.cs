@@ -1,5 +1,4 @@
-﻿using ImageWizard.Core.Middlewares;
-using ImageWizard.DocNET.Builder;
+﻿using ImageWizard.DocNET.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;

@@ -81,7 +81,7 @@ services.AddImageWizard(options =>
                             .WithFilter<BlurFilter>()
                        .AddSkiaSharp(MimeTypes.WebP)
                        .AddSvgNet()
-		       .AddDocNET()
+		       .           .AddDocNET()
                        //uses file cache (relative or absolute path)
                        .SetFileCache(options => options.Folder = "FileCache") 
                        //or MongoDB cache
@@ -93,13 +93,13 @@ services.AddImageWizard(options =>
                        .AddHttpLoader(options => 
 		       			      {
                                                //checks every time for a new version of the original image.
-                                               options.RefreshMode = ImageLoaderRefreshMode.EveryTime;
+                                               options.RefreshMode = DataLoaderRefreshMode.EveryTime;
                                                
                                                //set base url for relative urls
                                                options.DefaultBaseUrl = "https://mydomain";
                                                
                                                //allow only relative urls 
-					       //(use base url from request or DefaultBaseUrl from options)
+                                               //(use base url from request or DefaultBaseUrl from options)
                                                options.AllowAbsoluteUrls = false;
                                                
                                                //allow only specified hosts

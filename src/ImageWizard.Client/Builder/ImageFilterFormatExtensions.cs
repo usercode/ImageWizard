@@ -1,9 +1,8 @@
-﻿using ImageWizard.Client.Builder.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard.Client
 {
     /// <summary>
     /// ImageFilterFormatExtensions

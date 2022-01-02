@@ -1,8 +1,4 @@
-﻿using ImageWizard.Core.StreamPooling;
-using ImageWizard.Core.Types;
-using ImageWizard.Metadatas;
-using ImageWizard.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -12,43 +8,46 @@ using System.Threading.Tasks;
 namespace ImageWizard.Caches
 {
     /// <summary>
-    /// InMemoryCache
+    /// OneTimeCache
     /// </summary>
-    public class InMemoryCache : ICache, IDisposable
+    class OneTimeCache : ICache
     {
-        public InMemoryCache()
+        public OneTimeCache()
         {
             _data = Array.Empty<byte>();
         }
 
+        private string? _key;
         private IMetadata? _metadata;
         private byte[] _data;
 
         public async Task<ICachedData?> ReadAsync(string key)
         {
-            if (_metadata == null)
+            if (_key == null)
             {
                 return null;
             }
 
-            return new CachedData(_metadata, async () => new MemoryStream(_data));
+            if (_key != key)
+            {
+                throw new Exception("Internal cache error.");
+            }
+
+            return new CachedData(_metadata, () => Task.FromResult<Stream>(new MemoryStream(_data)));
         }
 
         public async Task WriteAsync(string key, ICachedData cachedData)
         {
+            _key = key;
             _metadata = cachedData.Metadata;
 
             MemoryStream mem = new MemoryStream();
 
             using Stream dataStream = await cachedData.OpenReadAsync();
-            dataStream.CopyTo(mem);
+
+            await dataStream.CopyToAsync(mem);
 
             _data = mem.ToArray();
-        }
-
-        public void Dispose()
-        {
-            
         }
     }
 }

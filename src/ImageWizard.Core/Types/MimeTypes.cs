@@ -67,7 +67,7 @@ namespace ImageWizard
                 ".webm" => Webm,
                 ".3gpp" => Mobile3GP,
 
-                _ => throw new Exception($"Unknown file extension: {extension}"),
+                _ => Object
             };
             return mimeType;
         }

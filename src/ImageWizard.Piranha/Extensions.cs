@@ -2,9 +2,9 @@
 using Piranha.Extend.Fields;
 using System;
 using Microsoft.AspNetCore.Html;
-using ImageWizard.Client.Builder.Types;
 using System.Web;
 using Microsoft.Extensions.DependencyInjection;
+using ImageWizard.Client;
 
 namespace ImageWizard.Piranha
 {

@@ -1,4 +1,4 @@
-﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+﻿using ImageWizard.Attributes;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -14,21 +14,12 @@ namespace ImageWizard.ImageSharp.Filters
         [Filter]
         public void Flip(Utils.FlipMode flippingMode)
         {
-            FlipMode flipMode;
-
-            switch(flippingMode)
+            var flipMode = flippingMode switch
             {
-                case Utils.FlipMode.Horizontal:
-                    flipMode = FlipMode.Horizontal;
-                    break;
-
-                case Utils.FlipMode.Vertical:
-                    flipMode = FlipMode.Vertical;
-                    break;
-
-                default:
-                    throw new Exception();
-            }
+                Utils.FlipMode.Horizontal => FlipMode.Horizontal,
+                Utils.FlipMode.Vertical => FlipMode.Vertical,
+                _ => throw new Exception(),
+            };
 
             Context.Image.Mutate(m => m.Flip(flipMode));
         }

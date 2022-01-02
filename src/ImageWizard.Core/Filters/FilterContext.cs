@@ -1,13 +1,11 @@
-﻿using ImageWizard.Core.Settings;
-using ImageWizard.Processing;
+﻿using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core.ImageFilters.Base
+namespace ImageWizard
 {
     /// <summary>
     /// FilterContext
@@ -24,21 +22,27 @@ namespace ImageWizard.Core.ImageFilters.Base
         /// </summary>
         public ProcessingPipelineContext ProcessingContext { get; }
 
+        private DataResult? _result;
+
         /// <summary>
         /// Result
         /// </summary>
-        public ImageResult? Result { get; set; }
+        public DataResult? Result 
+        {
+            get => _result;
+            set
+            {
+                _result?.Dispose();
 
-        /// <summary>
-        /// NoCache
-        /// </summary>
-        public bool NoImageCache { get; set; }
+                _result = value;
+            }
+        }
 
         public virtual void Dispose()
         {
             //Result?.Dispose();
         }
 
-        public abstract Task<ImageResult> BuildResultAsync();
+        public abstract Task<DataResult> BuildResultAsync();
     }
 }

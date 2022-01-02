@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.Settings
+namespace ImageWizard
 {
     public class CacheControl
     {

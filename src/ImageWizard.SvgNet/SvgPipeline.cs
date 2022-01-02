@@ -1,6 +1,4 @@
 ﻿using ImageWizard.Core;
-using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Settings;
 using ImageWizard.Filters;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
@@ -23,12 +21,11 @@ namespace ImageWizard.SvgNet.Filters
     public class SvgPipeline : ProcessingPipeline<SvgFilter>
     {
         public SvgPipeline(
-            IServiceProvider serviceProvider, 
+            IServiceProvider serviceProvider,
             ILogger<SvgPipeline> logger, 
             IEnumerable<PipelineAction<SvgPipeline>> actions)
             : base(serviceProvider, logger)
         {
-
             actions.Foreach(x => x(this));
         }
 
@@ -40,7 +37,7 @@ namespace ImageWizard.SvgNet.Filters
         protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
         {
             //load image
-            SvgDocument svg = SvgDocument.Open<SvgDocument>(new MemoryStream(context.Result.Data));
+            SvgDocument svg = SvgDocument.Open<SvgDocument>(context.Result.Data);
 
             svg.Transforms = new SvgTransformCollection();
 

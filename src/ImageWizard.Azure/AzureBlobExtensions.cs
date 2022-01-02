@@ -1,6 +1,4 @@
-﻿using ImageWizard.Core.Middlewares;
-using ImageWizard.ImageLoaders;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +17,7 @@ namespace ImageWizard.Azure
             wizardConfiguration.Services.Configure(setup);
 
             wizardConfiguration.Services.AddSingleton<AzureBlobLoader>();
-            wizardConfiguration.ImageLoaderManager.Register<AzureBlobLoader>("azure");
+            wizardConfiguration.LoaderManager.Register<AzureBlobLoader>("azure");
 
             return wizardConfiguration;
         }

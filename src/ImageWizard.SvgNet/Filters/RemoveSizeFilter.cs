@@ -1,4 +1,4 @@
-﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
+﻿using ImageWizard.Attributes;
 using ImageWizard.Filters;
 using Svg;
 using System;

@@ -1,17 +1,11 @@
 ﻿using ImageWizard.Caches;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Core.Settings;
-using ImageWizard.Core.StreamPooling;
-using ImageWizard.Middlewares;
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ImageWizard
 {
@@ -24,11 +18,7 @@ namespace ImageWizard
 
         public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, PathString path)
         {
-            RequestDelegate pipeline = endpoints.CreateApplicationBuilder()
-                                                         .UseMiddleware<ImageWizardMiddleware>()
-                                                         .Build();
-
-            return endpoints.MapMethods($"{path}/{{*imagePath}}", new[] { "GET", "HEAD" }, pipeline).WithDisplayName("ImageWizard");
+            return endpoints.MapMethods($"{path}/{{*path}}", new[] { "GET", "HEAD" }, new ImageWizardApi().ExecuteAsync);
         }
 
         public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder)
@@ -42,7 +32,6 @@ namespace ImageWizard
             {
                 x.UseRouting();
                 x.UseEndpoints(endpoits => endpoits.MapImageWizard(PathString.Empty));
-
             });
 
             return builder;
@@ -61,8 +50,10 @@ namespace ImageWizard
 
             services.AddSingleton(configuration);
 
-            //services.AddSingleton<IStreamPooling, MemoryStreamPooling>();
-            services.AddSingleton<IStreamPool, RecyclableMemoryPool>();
+            //services.AddSingleton<IStreamPool, MemoryStreamPool>();
+            services.AddSingleton<IStreamPool, RecyclableMemoryStreamPool>();
+
+            services.AddTransient<ICache, OneTimeCache>();
 
             return configuration;
         }

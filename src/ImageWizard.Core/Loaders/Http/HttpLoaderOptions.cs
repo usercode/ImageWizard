@@ -1,9 +1,8 @@
-﻿using ImageWizard.Core.ImageLoaders.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageLoaders
+namespace ImageWizard.Loaders
 {
     /// <summary>
     /// HttpLoaderSettings

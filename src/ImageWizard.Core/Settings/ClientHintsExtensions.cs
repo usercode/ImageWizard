@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core.Settings
+namespace ImageWizard
 {
     public static class ClientHintsExtensions
     {

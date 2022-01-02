@@ -1,13 +1,12 @@
-﻿using ImageWizard.Core.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Metadatas
+namespace ImageWizard
 {
     /// <summary>
-    /// ImageMetadata
+    /// Metadata
     /// </summary>
     public class Metadata : IMetadata
     {

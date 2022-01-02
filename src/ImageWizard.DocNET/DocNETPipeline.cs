@@ -1,7 +1,5 @@
 ﻿using Docnet.Core;
 using ImageWizard.Core;
-using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Settings;
 using ImageWizard.DocNET.Filters.Base;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;

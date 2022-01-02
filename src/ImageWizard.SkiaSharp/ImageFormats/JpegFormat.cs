@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ImageWizard.Core.Types;
 using ImageWizard.ImageFormats.Base;
 using SkiaSharp;
 

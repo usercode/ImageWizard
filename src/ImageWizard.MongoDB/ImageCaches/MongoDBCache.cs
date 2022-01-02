@@ -1,5 +1,4 @@
-﻿using ImageWizard.Services.Types;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Linq;
 using System;
@@ -8,8 +7,6 @@ using Mongo=MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver.GridFS;
 using ImageWizard.MongoDB.Models;
-using ImageWizard.Types;
-using ImageWizard.Core.Types;
 using System.IO;
 using ImageWizard.Caches;
 

@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace ImageWizard.Client.Builder
+namespace ImageWizard.Client
 {
     static class BuilderExtensions
     {

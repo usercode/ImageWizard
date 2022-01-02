@@ -1,11 +1,10 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ImageWizard.FFMpegCore.Filters.Base
 {
-    public class FFMpegCoreFilter : Filter<FFMpegCoreContext>
+    public class FFMpegCoreFilter : FilterBase<FFMpegCoreContext>
     {
         public override string Namespace => "ffmpegcore";
 

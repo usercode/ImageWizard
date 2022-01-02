@@ -1,11 +1,10 @@
-﻿using ImageWizard.Client.Builder.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard.Client
 {
     /// <summary>
     /// ImageBuilderYouTubeExtensions

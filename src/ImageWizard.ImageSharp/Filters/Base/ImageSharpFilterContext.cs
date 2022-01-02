@@ -1,12 +1,10 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Settings;
-using ImageWizard.ImageFormats;
-using ImageWizard.ImageFormats.Base;
+﻿using ImageWizard.ImageFormats.Base;
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
+using Microsoft.Extensions.Options;
 using Microsoft.IO;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,12 +18,16 @@ namespace ImageWizard.ImageSharp.Filters
     /// </summary>
     public class ImageSharpFilterContext : FilterContext
     {
-        public ImageSharpFilterContext(ProcessingPipelineContext processingContext, Image image, IImageFormat imageFormat)
-            : base(processingContext)
+        public ImageSharpFilterContext(
+                    ProcessingPipelineContext processingContext, 
+                    Image image, 
+                    IImageFormat imageFormat,
+                    IOptions<ImageSharpOptions> options)
+                    : base(processingContext)
         {
             Image = image;
             ImageFormat = imageFormat;
-            NoImageCache = false;
+            Options = options;
         }
 
         /// <summary>
@@ -38,15 +40,17 @@ namespace ImageWizard.ImageSharp.Filters
         /// </summary>
         public IImageFormat ImageFormat { get; set; }
 
+        /// <summary>
+        /// Options
+        /// </summary>
+        public IOptions<ImageSharpOptions> Options { get; }
+
         public override void Dispose()
         {
-            if (Image != null)
-            {
-                Image.Dispose();
-            }
+            Image.Dispose();
         }
 
-        public override async Task<ImageResult> BuildResultAsync()
+        public override async Task<DataResult> BuildResultAsync()
         {
             //check max width and height
             bool change = false;
@@ -54,36 +58,38 @@ namespace ImageWizard.ImageSharp.Filters
             int width = Image.Width;
             int height = Image.Height;
 
-            //if (ProcessingContext.ImageWizardOptions.ImageMaxWidth != null && width > Options.ImageMaxWidth)
-            //{
-            //    change = true;
-            //    width = Options.ImageMaxWidth.Value;
-            //}
+            if (Options.Value.ImageMaxWidth != null && width > Options.Value.ImageMaxWidth)
+            {
+                change = true;
+                width = Options.Value.ImageMaxWidth.Value;
+            }
 
-            //if (Options.ImageMaxHeight != null && height > Options.ImageMaxHeight)
-            //{
-            //    change = true;
-            //    height = Options.ImageMaxHeight.Value;
-            //}
+            if (Options.Value.ImageMaxHeight != null && height > Options.Value.ImageMaxHeight)
+            {
+                change = true;
+                height = Options.Value.ImageMaxHeight.Value;
+            }
 
-            //if (change == true)
-            //{
-            //    new ResizeFilter() { Context = filterContext }.Resize(width, height, ResizeMode.Max);
-            //}
+            if (change == true)
+            {
+                Image.Mutate(x => x.Resize(new ResizeOptions() { Mode = ResizeMode.Max, Size = new Size(width, height) }));
+            }
 
-            MemoryStream mem = new MemoryStream();
+            Stream mem = ProcessingContext.StreamPool.GetStream();
 
             //save image
             await ImageFormat.SaveImageAsync(Image, mem);
 
+            mem.Seek(0, SeekOrigin.Begin);
+
             //update some metadata
             //ProcessingContext.DisableCache = NoImageCache;
             return new ImageResult(
-                                            mem.ToArray(),
-                                            ImageFormat.MimeType,
-                                            Image.Width,
-                                            Image.Height,
-                                            ProcessingContext.ClientHints.DPR);
+                                        mem,
+                                        ImageFormat.MimeType,
+                                        Image.Width,
+                                        Image.Height,
+                                        ProcessingContext.ClientHints.DPR);
         }
     }
 }

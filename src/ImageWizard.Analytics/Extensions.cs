@@ -1,5 +1,4 @@
-﻿using ImageWizard.Core.Middlewares;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace ImageWizard.Analytics

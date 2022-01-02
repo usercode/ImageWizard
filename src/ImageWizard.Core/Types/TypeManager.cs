@@ -1,10 +1,9 @@
-﻿using ImageWizard.ImageLoaders;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ImageWizard.Core.ImageLoaders
+namespace ImageWizard
 {
     /// <summary>
     /// ImageLoadManager

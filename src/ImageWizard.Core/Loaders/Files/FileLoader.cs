@@ -1,7 +1,4 @@
-﻿using ImageWizard.Core.Types;
-using ImageWizard.ImageLoaders;
-using ImageWizard.Services.Types;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using System;
@@ -10,25 +7,20 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core.ImageLoaders.Files
+namespace ImageWizard.Loaders
 {
     /// <summary>
     /// FileLoader
     /// </summary>
-    public class FileLoader : DataLoaderBase
+    public class FileLoader : DataLoaderBase<FileLoaderOptions>
     {
         public FileLoader(IOptions<FileLoaderOptions> options, IWebHostEnvironment hostingEnvironment)
+            : base(options)
         {
-            Options = options.Value;
             HostingEnvironment = hostingEnvironment;
 
             FileProvider = new PhysicalFileProvider(Path.Combine(HostingEnvironment.ContentRootPath, options.Value.Folder));
         }
-
-        /// <summary>
-        /// Options
-        /// </summary>
-        private FileLoaderOptions Options { get; }
 
         /// <summary>
         /// FileProvider
@@ -39,8 +31,6 @@ namespace ImageWizard.Core.ImageLoaders.Files
         /// HostingEnvironment
         /// </summary>
         private IWebHostEnvironment HostingEnvironment { get; }
-
-        public override DataLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
         public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedImage)
         {
@@ -61,18 +51,11 @@ namespace ImageWizard.Core.ImageLoaders.Files
                 }
             }
 
-            MemoryStream mem = new MemoryStream((int)fileInfo.Length);
-
-            using (Stream stream = fileInfo.CreateReadStream())
-            {
-                await stream.CopyToAsync(mem);
-            }
-
+            Stream stream = fileInfo.CreateReadStream();
+            
             string mimeType = MimeTypes.GetByExtension(fileInfo.Name);
 
-            mem.Seek(0, SeekOrigin.Begin);
-
-            return new OriginalData(mimeType, mem.ToArray(), new CacheSettings() { ETag = etag });
+            return new OriginalData(mimeType, stream, new CacheSettings() { ETag = etag });
         }
     }
 }

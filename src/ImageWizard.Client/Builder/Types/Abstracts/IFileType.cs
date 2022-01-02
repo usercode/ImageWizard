@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Client.Builder.Types
+namespace ImageWizard.Client
 {
     public interface IFileType
     {

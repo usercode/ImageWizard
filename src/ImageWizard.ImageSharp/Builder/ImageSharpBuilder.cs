@@ -1,7 +1,4 @@
-﻿using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Core.Settings;
-using ImageWizard.ImageSharp.Filters;
+﻿using ImageWizard.ImageSharp.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -28,7 +25,6 @@ namespace ImageWizard.ImageSharp.Builder
             WithFilter<BrightnessFilter>();
             WithFilter<ContrastFilter>();
             WithFilter<DPRFilter>();
-            WithFilter<NoImageCacheFilter>();
             WithFilter<AutoOrientFilter>();
             WithFilter<ImageFormatFilter>();
             WithFilter<TextFilter>();
@@ -38,7 +34,7 @@ namespace ImageWizard.ImageSharp.Builder
 
         IServiceCollection IImageWizardBuilder.Services => Builder.Services;
 
-        TypeManager IImageWizardBuilder.ImageLoaderManager => Builder.ImageLoaderManager;
+        TypeManager IImageWizardBuilder.LoaderManager => Builder.LoaderManager;
 
         TypeManager IImageWizardBuilder.PipelineManager => Builder.PipelineManager;
 

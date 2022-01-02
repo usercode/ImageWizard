@@ -87,7 +87,7 @@
         </div>
         <div class="col-md-3">
             <p>rotate(45.0)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(45).BuildUrl()" class="auto-scale" />
+            @*<img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(45).BuildUrl()" class="auto-scale" />*@
         </div>
         <div class="col-md-3">
             <p>rotate(90.0)</p>
@@ -138,7 +138,7 @@
     </div>
 
     <h2>Fetch local file (from wwwroot folder)</h2>
-    <p>@@Url.ImageWizard().FetchLocalFile("/img/meerkat.jpg").Resize(400,400).BuildUrl()</p>
+    <p>@@Url.ImageWizard().FetchLocalFile("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
     <p>@Url.ImageWizard().FetchLocalFile("/img/meerkat.jpg").AsImage().Resize(400, 400).BuildUrl()</p>
 
     <div class="row">

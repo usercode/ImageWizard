@@ -1,5 +1,4 @@
-﻿using ImageWizard.Core.Middlewares;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +13,7 @@ namespace ImageWizard.Caches
             wizardBuilder.Services.AddDistributedMemoryCache();
 
             wizardBuilder.Services.RemoveAll<ICache>();
-            wizardBuilder.Services.AddTransient<ICache, DistributedCache>();
+            wizardBuilder.Services.AddSingleton<ICache, DistributedCache>();
 
             return wizardBuilder;
         }

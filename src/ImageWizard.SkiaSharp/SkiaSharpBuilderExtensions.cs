@@ -1,8 +1,4 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Core.Settings;
-using ImageWizard.Core.Types;
-using ImageWizard.SkiaSharp.Builder;
+﻿using ImageWizard.SkiaSharp.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

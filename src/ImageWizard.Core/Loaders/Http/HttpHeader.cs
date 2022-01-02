@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageLoaders.Http
+namespace ImageWizard.Loaders
 {
     /// <summary>
     /// HttpHeaderItem

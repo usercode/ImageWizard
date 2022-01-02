@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core
+namespace ImageWizard
 {
     /// <summary>
     /// Extenions
@@ -21,6 +21,15 @@ namespace ImageWizard.Core
             return mem.ToArray();
         }
 
+        public static byte[] ToByteArray(this Stream stream)
+        {
+            MemoryStream mem = new MemoryStream();
+
+            stream.CopyTo(mem);
+
+            return mem.ToArray();
+        }
+
         public static string GetTagUnquoted(this EntityTagHeaderValue value)
         {
             return value.Tag.GetTagUnquoted();
@@ -28,7 +37,7 @@ namespace ImageWizard.Core
 
         public static string GetTagUnquoted(this string value)
         {
-            return value.Substring(1, value.Length - 2);
+            return value[1..^1];
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ImageWizard.Core.Types;
 using ImageWizard.ImageFormats.Base;
 using SixLabors.ImageSharp;
 
@@ -21,6 +20,9 @@ namespace ImageWizard.ImageFormats
         /// </summary>
         public int Quality { get; set; }
 
+        /// <summary>
+        /// MimeType
+        /// </summary>
         public string MimeType => MimeTypes.Jpeg;
 
         public async Task SaveImageAsync(Image image, Stream stream)

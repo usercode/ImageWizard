@@ -1,11 +1,10 @@
-﻿using ImageWizard.Filters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageFilters.Base
+namespace ImageWizard
 {
-    public abstract class Filter<TContext> : IFilter
+    public abstract class FilterBase<TContext> : IFilter
         where TContext : FilterContext
     {
         FilterContext? IFilter.Context 

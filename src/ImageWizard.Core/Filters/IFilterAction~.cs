@@ -1,9 +1,8 @@
-﻿using ImageWizard.Filters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageFilters.Base
+namespace ImageWizard
 {
     /// <summary>
     /// IFilterAction

@@ -1,8 +1,4 @@
-﻿using ImageWizard.Core.Settings;
-using ImageWizard.Core.StreamPooling;
-using ImageWizard.Core.Types;
-using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
+﻿using ImageWizard.Processing.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,33 +8,45 @@ namespace ImageWizard.Processing
     /// <summary>
     /// ImageProcessingContext
     /// </summary>
-    public class ProcessingPipelineContext
+    public class ProcessingPipelineContext : IDisposable
     {
         public ProcessingPipelineContext(
-            IStreamPool streamPooling,
-            ImageResult result, 
+            IStreamPool streamPool,
+            DataResult result, 
             ClientHints clientHints, 
             ImageWizardOptions imageWizardOptions,
             IEnumerable<string> acceptMimeTypes,
             IEnumerable<string> urlFilters)
         {
-            StreamPooling = streamPooling;
-            Result = result;
+            StreamPool = streamPool;            
             ClientHints = clientHints;
             ImageWizardOptions = imageWizardOptions;
             AcceptMimeTypes = acceptMimeTypes;
             UrlFilters = new Queue<string>(urlFilters);
+
+            _dataResult = result;
         }
 
         /// <summary>
         /// StreamPooling
         /// </summary>
-        public IStreamPool StreamPooling { get; }
+        public IStreamPool StreamPool { get; }
+
+        private DataResult _dataResult;
 
         /// <summary>
-        /// OriginalImage
+        /// Result
         /// </summary>
-        public ImageResult Result { get; set; }
+        public DataResult Result 
+        {
+            get => _dataResult;
+            set
+            {
+                _dataResult.Dispose();
+
+                _dataResult = value;
+            }
+        }
 
         /// <summary>
         /// AcceptMimeTypes
@@ -59,5 +67,10 @@ namespace ImageWizard.Processing
         /// UrlFilters
         /// </summary>
         public Queue<string> UrlFilters { get; }
+
+        public void Dispose()
+        {
+            Result.Dispose();
+        }
     }
 }

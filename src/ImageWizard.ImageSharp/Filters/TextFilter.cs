@@ -4,8 +4,8 @@ using SixLabors.ImageSharp.Processing.Processors.Transforms;
 using System;
 using System.Threading.Tasks;
 using SixLabors.Fonts;
-using ImageWizard.Core.ImageFilters.Base.Attributes;
 using SixLabors.ImageSharp.Drawing.Processing;
+using ImageWizard.Attributes;
 
 namespace ImageWizard.ImageSharp.Filters
 {

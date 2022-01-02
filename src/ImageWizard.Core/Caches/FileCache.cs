@@ -1,9 +1,4 @@
-﻿using ImageWizard.Core;
-using ImageWizard.Core.Types;
-using ImageWizard.Metadatas;
-using ImageWizard.Services.Types;
-using ImageWizard.Types;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
@@ -33,7 +28,7 @@ namespace ImageWizard.Caches
             }
             else
             {
-                Folder = new DirectoryInfo(Path.Combine(hostingEnvironment.ContentRootPath, settings.Value.Folder));
+                Folder = new DirectoryInfo(Path.Join(hostingEnvironment.ContentRootPath, settings.Value.Folder));
             }            
         }
 
@@ -62,62 +57,55 @@ namespace ImageWizard.Caches
         {
             string[] parts = KeyToPath(key);
 
-            string basePath = Path.Combine(parts);
+            string basePath = Path.Join(parts);
+            
+            FileInfo metadataFile = new FileInfo(basePath + ".meta");
+            FileInfo blobFile = new FileInfo(basePath + ".blob");
 
-            FileInfo fileInfoData = new FileInfo(basePath);
-            FileInfo fileInfoMetadata = new FileInfo(basePath + ".meta");
-
-            if (fileInfoMetadata.Exists == false || fileInfoData.Exists == false)
+            if (metadataFile.Exists == false || blobFile.Exists == false)
             {
                 return null;
             }
 
-            MemoryStream mem = new MemoryStream((int)fileInfoMetadata.Length);
+            using Stream metadataStream = metadataFile.OpenRead();
 
-            using (Stream fs = fileInfoMetadata.OpenRead())
-            {
-                await fs.CopyToAsync(mem);
-            }
-
-            string json = Encoding.UTF8.GetString(mem.ToArray());
-
-            Metadata? metadata = JsonSerializer.Deserialize<Metadata>(json);
+            Metadata? metadata = JsonSerializer.Deserialize<Metadata>(metadataStream);
 
             if (metadata == null)
             {
                 throw new ArgumentNullException(nameof(metadata));
             }
 
-            return new CachedData(metadata, () => Task.FromResult<Stream>(fileInfoData.OpenRead()));
+            return new CachedData(metadata, () => Task.FromResult<Stream>(blobFile.OpenRead()));
         }
 
         public async Task WriteAsync(string key, ICachedData cachedData)
         {
+            //create json
+            byte[] metadataJson = JsonSerializer.SerializeToUtf8Bytes(cachedData.Metadata, new JsonSerializerOptions() { WriteIndented = true });
+
             string[] parts = KeyToPath(key);
 
             //create folder structure
-            DirectoryInfo sub = Directory.CreateDirectory(Path.Combine(parts.Take(parts.Length - 1).ToArray()));
+            DirectoryInfo sub = Directory.CreateDirectory(Path.Join(parts[0..^1]));
 
-            //write to file
-            FileInfo fileInfoMetadata = new FileInfo(Path.Combine(sub.FullName, parts.Last() + ".meta"));
+            FileInfo metadataFile = new FileInfo(Path.Join(sub.FullName, $"{parts[^1]}.meta"));
+            FileInfo blobFile = new FileInfo(Path.Join(sub.FullName, $"{parts[^1]}.blob"));
 
-            //write metadata
-            string json = JsonSerializer.Serialize(cachedData.Metadata, new JsonSerializerOptions() { WriteIndented = true });
-            Stream metadataStream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+            //delete old files if exist
+            metadataFile.Delete();
+            blobFile.Delete();
+            
+            using Stream jsonStream = new MemoryStream(metadataJson);
+            using Stream metadataStream = metadataFile.OpenWrite();
 
-            using (Stream fs = fileInfoMetadata.OpenWrite())
-            {
-                await metadataStream.CopyToAsync(fs);
-            }
+            await jsonStream.CopyToAsync(metadataStream);
 
             //write data
-            FileInfo fileInfoData = new FileInfo(Path.Combine(sub.FullName, parts.Last()));
+            using Stream blobStream = blobFile.OpenWrite();
+            using Stream cachedImageStream = await cachedData.OpenReadAsync();
 
-            using (Stream fs = fileInfoData.OpenWrite())
-            using (Stream cachedImageStream = await cachedData.OpenReadAsync())
-            {
-                await cachedImageStream.CopyToAsync(fs);
-            }
+            await cachedImageStream.CopyToAsync(blobStream);
         }
     }
 }

@@ -1,11 +1,5 @@
-﻿using ImageWizard.Core.ImageFilters.Base.Attributes;
-using ImageWizard.Core.Types;
-using ImageWizard.Filters;
+﻿using ImageWizard.Attributes;
 using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
-using Svg;
-using Svg.FilterEffects;
-using Svg.Transforms;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -44,21 +38,23 @@ namespace ImageWizard.SvgNet.Filters
         {
             var bitmap = Context.Image.Draw();
 
-            MemoryStream mem = new MemoryStream();
+            Stream mem = Context.ProcessingContext.StreamPool.GetStream();
 
             bitmap.Save(mem, format);
 
+            mem.Seek(0, SeekOrigin.Begin);
+
             string mimeType;
 
-            if(format == ImageFormat.Png)
+            if (format == ImageFormat.Png)
             {
                 mimeType = MimeTypes.Png;
             }
-            else if(format == ImageFormat.Jpeg)
+            else if (format == ImageFormat.Jpeg)
             {
                 mimeType = MimeTypes.Jpeg;
             }
-            else if(format == ImageFormat.Gif)
+            else if (format == ImageFormat.Gif)
             {
                 mimeType = MimeTypes.Gif;
             }
@@ -71,8 +67,7 @@ namespace ImageWizard.SvgNet.Filters
                 throw new Exception();
             }
 
-            Context.Result = new ImageResult(mem.ToArray(), mimeType);
+            Context.Result = new DataResult(mem, mimeType);
         }
-
     }
 }

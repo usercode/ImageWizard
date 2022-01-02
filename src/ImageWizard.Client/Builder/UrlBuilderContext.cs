@@ -1,13 +1,10 @@
-﻿using ImageWizard.Client.Builder.Types;
-using ImageWizard.Core;
-using ImageWizard.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard.Client
 {
     /// <summary>
     /// UrlBuilderContext
@@ -66,9 +63,7 @@ namespace ImageWizard
                 url = ImageWizardUrl.Create(ImageUrlBuilder.Settings.Key, LoaderType, LoaderSource, Filters);
             }
 
-            return $"{ImageUrlBuilder.Settings.BaseUrl.TrimEnd('/')}/{url.Signature}/{url.Path}";
+            return $"{ImageUrlBuilder.Settings.BaseUrl.TrimEnd('/')}/{url}";
         }
-
-       
     }
 }

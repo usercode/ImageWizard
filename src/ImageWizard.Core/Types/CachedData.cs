@@ -1,12 +1,10 @@
-﻿using ImageWizard.Core.Types;
-using ImageWizard.Metadatas;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Types
+namespace ImageWizard
 {
     public delegate Task<Stream> OpenStreamHandler();
 

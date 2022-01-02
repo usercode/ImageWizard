@@ -1,7 +1,4 @@
-﻿using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Core.Settings;
-using ImageWizard.DocNET.Filters;
+﻿using ImageWizard.DocNET.Filters;
 using ImageWizard.DocNET.Filters.Base;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -26,7 +23,7 @@ namespace ImageWizard.DocNET.Builder
 
         IServiceCollection IImageWizardBuilder.Services => Builder.Services;
 
-        TypeManager IImageWizardBuilder.ImageLoaderManager => Builder.ImageLoaderManager;
+        TypeManager IImageWizardBuilder.LoaderManager => Builder.LoaderManager;
 
         TypeManager IImageWizardBuilder.PipelineManager => Builder.PipelineManager;
 

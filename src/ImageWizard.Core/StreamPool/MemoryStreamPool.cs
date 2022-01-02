@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core.StreamPooling
+namespace ImageWizard
 {
     public class MemoryStreamPool : IStreamPool
     {

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageLoaders.Youtube
+namespace ImageWizard.Loaders
 {
     public class YouTubeOptions : DataLoaderOptions
     {
         public YouTubeOptions()
         {
-            RefreshMode = DataLoaderRefreshMode.UseRemoteCacheControl;
+            RefreshMode = DataLoaderRefreshMode.BasedOnCacheControl;
         }
     }
 }

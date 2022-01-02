@@ -1,5 +1,4 @@
-﻿using ImageWizard.Core.ImageLoaders.Gravatars;
-using ImageWizard.Core.Middlewares;
+﻿using ImageWizard.Loaders;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace ImageWizard
         {
             wizardConfiguration.Services.Configure(options);
             wizardConfiguration.Services.AddHttpClient<GravatarLoader>();
-            wizardConfiguration.ImageLoaderManager.Register<GravatarLoader>("gravatar");
+            wizardConfiguration.LoaderManager.Register<GravatarLoader>("gravatar");
 
             return wizardConfiguration;
         }

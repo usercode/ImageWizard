@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageLoaders
+namespace ImageWizard.Loaders
 {
+    /// <summary>
+    /// DataLoaderOptions
+    /// </summary>
     public class DataLoaderOptions
     {
         public DataLoaderOptions()
@@ -11,6 +14,14 @@ namespace ImageWizard.Core.ImageLoaders
             RefreshMode = DataLoaderRefreshMode.None;
         }
 
+        /// <summary>
+        /// RefreshMode
+        /// </summary>
         public DataLoaderRefreshMode RefreshMode { get; set; }
+
+        /// <summary>
+        /// CacheControl
+        /// </summary>
+        public TimeSpan? CacheControlMaxAge { get; set; }
     }
 }

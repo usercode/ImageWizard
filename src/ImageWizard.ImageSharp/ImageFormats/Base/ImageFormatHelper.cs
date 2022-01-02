@@ -1,5 +1,4 @@
-﻿using ImageWizard.Core.Types;
-using ImageWizard.ImageFormats;
+﻿using ImageWizard.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using System;
 using System.Collections.Generic;

@@ -1,12 +1,10 @@
-﻿using ImageWizard.Client.Builder;
-using ImageWizard.Client.Builder.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Security.Cryptography;
 
-namespace ImageWizard
+namespace ImageWizard.Client
 {
     /// <summary>
     /// FilterExtensions

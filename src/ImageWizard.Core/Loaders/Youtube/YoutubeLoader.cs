@@ -1,6 +1,4 @@
-﻿using ImageWizard.Core.Types;
-using ImageWizard.Services.Types;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,30 +7,23 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core.ImageLoaders.Youtube
+namespace ImageWizard.Loaders
 {
     /// <summary>
     /// YoutubeLoader
     /// </summary>
-    public class YouTubeLoader : DataLoaderBase
+    public class YouTubeLoader : DataLoaderBase<YouTubeOptions>
     {
         public YouTubeLoader(HttpClient client, IOptions<YouTubeOptions> options)
+            : base(options)
         {
             Client = client;
-            Options = options.Value;
         }
-
-        /// <summary>
-        /// Options
-        /// </summary>
-        private YouTubeOptions Options { get; }
 
         /// <summary>
         /// Client
         /// </summary>
         private HttpClient Client { get; }
-
-        public override DataLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
         public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedImage)
         {
@@ -49,25 +40,22 @@ namespace ImageWizard.Core.ImageLoaders.Youtube
                 }
             }
 
-            HttpResponseMessage response = await Client.SendAsync(request);
-
-            if (response.StatusCode == HttpStatusCode.NotModified)
-            {
-                return null;
-            }
-
-            response.EnsureSuccessStatusCode();
-
-            byte[] data = await response.Content.ReadAsByteArrayAsync();
+            HttpResponseMessage response = await Client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
             string? mimeType = response.Content.Headers.ContentType?.MediaType;
 
-            if (mimeType == null)
+            if (response.IsSuccessStatusCode == false
+                            || mimeType == null
+                            || response.StatusCode == HttpStatusCode.NotModified)
             {
-                throw new Exception("no content-type available");
+                response.Dispose();
+
+                return null;
             }
 
-            return new OriginalData(mimeType, data, new CacheSettings(response));
+            Stream data = await response.Content.ReadAsStreamAsync();
+
+            return new HttpOriginalData(response, mimeType, data, new CacheSettings(response));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using ImageWizard.Client.Builder.Types;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -9,7 +8,7 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard.Client
 {
     /// <summary>
     /// DeliveryTypeExtensions

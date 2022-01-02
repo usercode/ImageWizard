@@ -2,10 +2,7 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using ImageWizard;
-using ImageWizard.Core;
-using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.Types;
-using ImageWizard.Services.Types;
+using ImageWizard.Loaders;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -18,20 +15,15 @@ namespace ImageWizard.Azure
     /// <summary>
     /// AzureBlobLoader
     /// </summary>
-    public class AzureBlobLoader : DataLoaderBase
+    public class AzureBlobLoader : DataLoaderBase<AzureBlobOptions>
     {
         public AzureBlobLoader(IOptions<AzureBlobOptions> options)
+            : base(options)
         {
-            Options = options.Value;
-
             Client = new BlobContainerClient(options.Value.ConnectionString, options.Value.ContainerName);
         }
 
-        private AzureBlobOptions Options { get; }
-
         private BlobContainerClient Client { get; }
-
-        public override DataLoaderRefreshMode RefreshMode => Options.RefreshMode;
 
         public override async Task<OriginalData> GetAsync(string source, ICachedData existingCachedImage)
         {
@@ -51,11 +43,9 @@ namespace ImageWizard.Azure
                 return null;
             }
 
-            byte[] data = await response.Value.Content.ToByteArrayAsync();
-
             return new OriginalData(
                         response.Value.ContentType,
-                        await response.Value.Content.ToByteArrayAsync(),
+                        response.Value.Content,
                         new CacheSettings() { ETag = response.Value.Details.ETag.ToString().GetTagUnquoted() });
         }
     }

@@ -1,9 +1,7 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using ImageWizard.Core;
-using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.Types;
-using ImageWizard.Services.Types;
+using ImageWizard.Loaders;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -16,19 +14,13 @@ namespace ImageWizard.AWS
     /// <summary>
     /// AwsLoader
     /// </summary>
-    public class AwsLoader : DataLoaderBase
+    public class AwsLoader : DataLoaderBase<AwsOptions>
     {
         public AwsLoader(IOptions<AwsOptions> options)
+            : base(options)
         {
-            Options = options.Value;
-
-            Client = new AmazonS3Client(Options.AccessKeyId, Options.SecretAccessKey);
+            Client = new AmazonS3Client(Options.Value.AccessKeyId, Options.Value.SecretAccessKey);
         }
-
-        /// <summary>
-        /// Options
-        /// </summary>
-        public AwsOptions Options { get; }
 
         /// <summary>
         /// Client
@@ -39,7 +31,7 @@ namespace ImageWizard.AWS
         {
             GetObjectRequest request = new GetObjectRequest()
             {
-                BucketName = Options.BucketName,
+                BucketName = Options.Value.BucketName,
                 Key = source
             };
 
@@ -50,16 +42,14 @@ namespace ImageWizard.AWS
 
             GetObjectResponse result = await Client.GetObjectAsync(request);
 
-            if(result.HttpStatusCode == System.Net.HttpStatusCode.NotModified)
+            if (result.HttpStatusCode == System.Net.HttpStatusCode.NotModified)
             {
                 return null;
             }
 
-            byte[] data = await result.ResponseStream.ToByteArrayAsync();
-
             return new OriginalData(
                         result.Headers.ContentType,
-                        await result.ResponseStream.ToByteArrayAsync(),
+                        result.ResponseStream,
                         new CacheSettings() { ETag = result.ETag.GetTagUnquoted() });
         }
     }

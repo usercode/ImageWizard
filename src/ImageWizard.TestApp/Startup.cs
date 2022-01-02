@@ -20,6 +20,8 @@ using System.Text;
 using ImageWizard.DocNET;
 using Microsoft.AspNetCore.HttpOverrides;
 using ImageWizard.Client;
+using ImageWizard.OpenCvSharp;
+using ImageWizard.Caches;
 
 namespace ImageWizard.TestApp
 {
@@ -50,9 +52,9 @@ namespace ImageWizard.TestApp
                 x.AllowUnsafeUrl = false;
 #endif
                 x.UseAcceptHeader = true;
-                x.UseClintHints = true;
+                x.UseClintHints = false;
                 x.UseETag = true;
-                x.Key = key;                
+                x.Key = key;
             })
                 .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
                     .WithOptions(x =>
@@ -84,6 +86,7 @@ namespace ImageWizard.TestApp
                 .AddGravatarLoader()
                 .AddFFMpegCore()
                 .AddDocNET()
+                .AddOpenCvSharp()
                 .AddAnalytics()
                 .AddAzureBlob(x =>
                 {
@@ -97,6 +100,7 @@ namespace ImageWizard.TestApp
                     x.BucketName = "MyBucket";
                 })
                 //.SetDistributedCache()
+                .SetFileCache()
                 ;
 
             services.AddImageWizardClient(x =>

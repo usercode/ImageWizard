@@ -1,10 +1,9 @@
 ﻿using ImageWizard.Core;
-using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Settings;
 using ImageWizard.Filters.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
@@ -23,12 +22,20 @@ namespace ImageWizard.ImageSharp.Filters
     {
         public ImageSharpPipeline(
             IServiceProvider service, 
+            IOptions<ImageSharpOptions> options,
             ILogger<ImageSharpPipeline> logger, 
             IEnumerable<PipelineAction<ImageSharpPipeline>> actions)
             : base(service, logger)
         {
+            Options = options;
+
             actions.Foreach(x => x(this));
         }
+
+        /// <summary>
+        /// Options
+        /// </summary>
+        private IOptions<ImageSharpOptions> Options { get; }
 
         protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
         {
@@ -51,7 +58,7 @@ namespace ImageWizard.ImageSharp.Filters
                 targetFormat = ImageFormatHelper.FirstOrDefault(context.Result.MimeType);
             }
 
-            return new ImageSharpFilterContext(context, image, targetFormat);
+            return new ImageSharpFilterContext(context, image, targetFormat, Options);
         }
     }
 }

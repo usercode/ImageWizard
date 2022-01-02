@@ -1,6 +1,4 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageFilters.Base.Attributes;
-using ImageWizard.Core.Settings;
+﻿using ImageWizard.Attributes;
 using ImageWizard.Processing;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Filters
+namespace ImageWizard
 {
     /// <summary>
     /// FilterAction

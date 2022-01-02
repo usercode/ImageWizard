@@ -1,9 +1,6 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Settings;
-using ImageWizard.ImageFormats.Base;
+﻿using ImageWizard.ImageFormats.Base;
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -35,10 +32,7 @@ namespace ImageWizard.SkiaSharp.Filters.Base
             get => _image;
             set
             {
-                if(_image != null)
-                {
-                    _image.Dispose();
-                }
+                _image?.Dispose();
 
                 _image = value;
             }
@@ -51,19 +45,19 @@ namespace ImageWizard.SkiaSharp.Filters.Base
 
         public override void Dispose()
         {
-            if(Image != null)
-            {
-                Image.Dispose();
-            }
+            Image.Dispose();
         }
 
-        public override async Task<ImageResult> BuildResultAsync()
+        public override async Task<DataResult> BuildResultAsync()
         {
-            MemoryStream mem = new MemoryStream();
+            Stream mem = ProcessingContext.StreamPool.GetStream();
+
             ImageFormat.SaveImage(Image, mem);
 
+            mem.Seek(0, SeekOrigin.Begin);
+
             return new ImageResult(
-                                    mem.ToArray(),
+                                    mem,
                                     ImageFormat.MimeType,
                                     Image.Width,
                                     Image.Height,

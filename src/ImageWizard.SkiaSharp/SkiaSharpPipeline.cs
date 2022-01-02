@@ -1,13 +1,8 @@
 ﻿using ImageWizard.Core;
-using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Settings;
-using ImageWizard.Core.Types;
 using ImageWizard.Filters;
 using ImageWizard.Filters.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.Processing;
-using ImageWizard.Services.Types;
-using ImageWizard.SkiaSharp.Filters;
 using ImageWizard.SkiaSharp.Filters.Base;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

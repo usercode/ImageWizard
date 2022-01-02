@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Client.Builder.Types
+namespace ImageWizard.Client
 {
     public interface ILoader : IUrlBuilder
     {

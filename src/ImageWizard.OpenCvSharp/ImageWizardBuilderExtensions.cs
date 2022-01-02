@@ -1,5 +1,4 @@
-﻿using ImageWizard.Core.Middlewares;
-using ImageWizard.ImageSharp.Filters;
+﻿using ImageWizard.ImageSharp.Filters;
 
 namespace ImageWizard.OpenCvSharp
 {

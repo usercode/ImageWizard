@@ -1,7 +1,4 @@
-﻿using ImageWizard.Core.Types;
-using ImageWizard.Services.Types;
-using ImageWizard.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

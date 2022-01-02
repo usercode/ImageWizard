@@ -1,11 +1,4 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Core.Settings;
-using ImageWizard.Core.Types;
-using ImageWizard.Filters;
-using ImageWizard.Filters.ImageFormats;
-using ImageWizard.ImageSharp;
-using ImageWizard.ImageSharp.Builder;
+﻿using ImageWizard.ImageSharp.Builder;
 using ImageWizard.ImageSharp.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

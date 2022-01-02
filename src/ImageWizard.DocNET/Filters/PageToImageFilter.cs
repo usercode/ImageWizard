@@ -1,10 +1,10 @@
 ﻿using Docnet.Core;
 using Docnet.Core.Models;
 using Docnet.Core.Readers;
-using ImageWizard.Core.ImageFilters.Base.Attributes;
+using ImageWizard.Attributes;
+using ImageWizard.Core;
 using ImageWizard.DocNET.Filters.Base;
 using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
@@ -26,16 +26,18 @@ namespace ImageWizard.DocNET.Filters
         [Filter]
         public void PageToImage(int pageIndex, int width, int height)
         {
-            IDocReader docReader = DocLib.Instance.GetDocReader(Context.Document, new PageDimensions(width, height));
+            IDocReader docReader = DocLib.Instance.GetDocReader(Context.Document.ToByteArray(), new PageDimensions(width, height));
             IPageReader pageReader = docReader.GetPageReader(pageIndex);
 
-            MemoryStream mem = new MemoryStream();
+            Stream mem = Context.ProcessingContext.StreamPool.GetStream();
 
             Image<Bgra32> image = Image.LoadPixelData<Bgra32>(pageReader.GetImage(), pageReader.GetPageWidth(), pageReader.GetPageHeight());
 
             image.SaveAsPng(mem);
 
-            Context.Result = new ImageResult(mem.ToArray(), MimeTypes.Png);
+            mem.Seek(0, SeekOrigin.Begin);
+
+            Context.Result = new DataResult(mem, MimeTypes.Png);
         }
     }
 }

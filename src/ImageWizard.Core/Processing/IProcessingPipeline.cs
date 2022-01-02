@@ -1,6 +1,4 @@
-﻿using ImageWizard.Filters;
-using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
+﻿using ImageWizard.Processing.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +10,6 @@ namespace ImageWizard.Processing
     {
         string[] UsedMimeTypes { get; set; }
 
-        Task<ImageResult> StartAsync(ProcessingPipelineContext context);
+        Task<DataResult> StartAsync(ProcessingPipelineContext context);
     }
 }

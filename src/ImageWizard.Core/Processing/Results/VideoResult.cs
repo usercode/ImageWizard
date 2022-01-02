@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ImageWizard.Processing.Results
 {
-    public class VideoResult : IResult
+    public class VideoResult 
     {
 
     }

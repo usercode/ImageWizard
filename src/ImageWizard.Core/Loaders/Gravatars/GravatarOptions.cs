@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageLoaders.Gravatars
+namespace ImageWizard.Loaders
 {
     public class GravatarOptions : DataLoaderOptions
     {
         public GravatarOptions()
         {
-            RefreshMode = DataLoaderRefreshMode.UseRemoteCacheControl;
+            RefreshMode = DataLoaderRefreshMode.BasedOnCacheControl;
         }
     }
 }

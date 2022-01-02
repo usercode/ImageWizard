@@ -1,9 +1,4 @@
-﻿using ImageWizard.Core.Settings;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -24,7 +19,6 @@ namespace ImageWizard
             Key = string.Empty;
 
             AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
-            StreamingMimeTypes = MimeTypes.GetVideoMimeTypes();
 
             CacheControl = new CacheControl();
         }
@@ -63,11 +57,6 @@ namespace ImageWizard
         /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0, 4.0)
         /// </summary>
         public double[] AllowedDPR { get; set; }
-
-        /// <summary>
-        /// MIME types which need input and cache streaming. (Default: all video types)
-        /// </summary>
-        public string[] StreamingMimeTypes { get; set; }
 
         /// <summary>
         /// Generates random 64 byte key.

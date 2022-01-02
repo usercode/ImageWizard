@@ -1,7 +1,4 @@
-﻿using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Core.Settings;
-using ImageWizard.Filters;
+﻿using ImageWizard.Filters;
 using ImageWizard.SvgNet.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -29,7 +26,7 @@ namespace ImageWizard.SvgNet.Builder
 
         IServiceCollection IImageWizardBuilder.Services => Builder.Services;
 
-        TypeManager IImageWizardBuilder.ImageLoaderManager => Builder.ImageLoaderManager;
+        TypeManager IImageWizardBuilder.LoaderManager => Builder.LoaderManager;
 
         TypeManager IImageWizardBuilder.PipelineManager => Builder.PipelineManager;
 

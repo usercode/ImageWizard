@@ -1,10 +1,5 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Settings;
-using ImageWizard.Core.Types;
-using ImageWizard.Processing;
+﻿using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
-using ImageWizard.SvgNet;
 using Svg;
 using Svg.FilterEffects;
 using System;
@@ -20,11 +15,12 @@ namespace ImageWizard.Filters
     /// </summary>
     public class SvgFilterContext : FilterContext
     {
-        public SvgFilterContext(ProcessingPipelineContext processingContext, SvgDocument image)
+        public SvgFilterContext(
+            ProcessingPipelineContext processingContext, 
+            SvgDocument image)
             : base(processingContext)
         {
             Image = image;
-            NoImageCache = false;
             Filters = new List<SvgFilterPrimitive>();
         }
 
@@ -38,7 +34,7 @@ namespace ImageWizard.Filters
         /// </summary>
         public IList<SvgFilterPrimitive> Filters { get; set; }
 
-        public override async Task<ImageResult> BuildResultAsync()
+        public override async Task<DataResult> BuildResultAsync()
         {
             //apply filters
             if (Filters.Any())
@@ -64,10 +60,13 @@ namespace ImageWizard.Filters
                 Image.CustomAttributes.Add("filter", $"url(#{filterElement.ID})");
             }
 
-            MemoryStream mem = new MemoryStream();
+            Stream mem = ProcessingContext.StreamPool.GetStream();
+
             Image.Write(mem);
 
-            return new ImageResult(mem.ToArray(), MimeTypes.Svg);
+            mem.Seek(0, SeekOrigin.Begin);
+
+            return new DataResult(mem, MimeTypes.Svg);
         }
     }
 }

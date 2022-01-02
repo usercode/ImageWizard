@@ -1,10 +1,6 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageFilters.Base.Attributes;
-using ImageWizard.Core.ImageFilters.Base.Helpers;
-using ImageWizard.Core.Types;
-using ImageWizard.Filters;
+﻿using ImageWizard.Attributes;
+using ImageWizard.Helpers;
 using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -166,14 +162,14 @@ namespace ImageWizard.Processing
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<ImageResult> StartAsync(ProcessingPipelineContext context)
+        public async Task<DataResult> StartAsync(ProcessingPipelineContext context)
         {
             using FilterContext filterContext = CreateFilterContext(context);
 
             //execute filters
-            while (filterContext.ProcessingContext.UrlFilters.Count > 0)
+            while (context.UrlFilters.Count > 0)
             {
-                string filter = filterContext.ProcessingContext.UrlFilters.Peek();
+                string filter = context.UrlFilters.Peek();
 
                 //find and execute filter
                 IFilterAction? foundFilter = FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));

@@ -1,14 +1,11 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Processing;
+﻿using ImageWizard.Processing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace ImageWizard.Core.Settings
+namespace ImageWizard
 {
     public delegate void PipelineAction<T>(T pipeline);
 
@@ -21,7 +18,7 @@ namespace ImageWizard.Core.Settings
         {
             Services = services;
 
-            ImageLoaderManager = new TypeManager();
+            LoaderManager = new TypeManager();
             PipelineManager = new TypeManager();
         }
 
@@ -33,7 +30,7 @@ namespace ImageWizard.Core.Settings
         /// <summary>
         /// ImageLoaderManager
         /// </summary>
-        public TypeManager ImageLoaderManager { get; }
+        public TypeManager LoaderManager { get; }
 
         /// <summary>
         /// PipelineManager

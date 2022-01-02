@@ -1,6 +1,4 @@
-﻿using ImageWizard.Core.ImageLoaders.Youtube;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.ImageLoaders;
+﻿using ImageWizard.Loaders;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -19,7 +17,7 @@ namespace ImageWizard
         {
             wizardConfiguration.Services.Configure(options);
             wizardConfiguration.Services.AddHttpClient<YouTubeLoader>();
-            wizardConfiguration.ImageLoaderManager.Register<YouTubeLoader>("youtube");
+            wizardConfiguration.LoaderManager.Register<YouTubeLoader>("youtube");
 
             return wizardConfiguration;
         }

@@ -1,7 +1,5 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Processing;
+﻿using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,7 +16,7 @@ namespace ImageWizard.FFMpegCore.Filters.Base
 
         }
 
-        public override Task<ImageResult> BuildResultAsync()
+        public override Task<DataResult> BuildResultAsync()
         {
             throw new NotImplementedException();
         }

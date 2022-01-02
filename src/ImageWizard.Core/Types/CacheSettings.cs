@@ -1,9 +1,10 @@
-﻿using System;
+﻿using ImageWizard;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace ImageWizard.Core.Types
+namespace ImageWizard
 {
     /// <summary>
     /// CacheSettings

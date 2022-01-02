@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageFilters.Base.Attributes
+namespace ImageWizard.Attributes
 {
     /// <summary>
     /// It marks a parameter which have to be multiply with the DPR (device pixel ratio) value.

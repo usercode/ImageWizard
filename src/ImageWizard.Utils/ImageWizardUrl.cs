@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core
+namespace ImageWizard
 {
     /// <summary>
     /// ImageWizardUrl
@@ -48,7 +48,7 @@ namespace ImageWizard.Core
                     throw new ArgumentNullException(nameof(key));
                 }
 
-                signature = new CryptoService(key).Encrypt(path);
+                signature = new CryptoService().Encrypt(key, path);
             }
 
             ImageWizardUrl url = new ImageWizardUrl(signature, path, loaderType, loaderSource, filters);
@@ -109,7 +109,7 @@ namespace ImageWizard.Core
         /// <summary>
         /// IsUnsafeUrl
         /// </summary>
-        public bool IsUnsafeUrl => Signature == "unsafe";
+        public bool IsUnsafeUrl => Signature == Unsafe;
 
         /// <summary>
         /// IsSignatureValid
@@ -118,9 +118,14 @@ namespace ImageWizard.Core
         /// <returns></returns>
         public bool IsSignatureValid(string key)
         {
-            string signature = new CryptoService(key).Encrypt(Path);
+            string signature = new CryptoService().Encrypt(key, Path);
 
             return signature == Signature;
+        }
+
+        public override string ToString()
+        {
+            return $"{Signature}/{Path}";
         }
     }
 }

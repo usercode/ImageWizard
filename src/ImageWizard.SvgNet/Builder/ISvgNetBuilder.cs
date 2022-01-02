@@ -1,6 +1,4 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Filters;
+﻿using ImageWizard.Filters;
 using ImageWizard.SvgNet;
 using System;
 using System.Collections.Generic;

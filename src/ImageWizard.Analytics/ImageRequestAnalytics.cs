@@ -1,6 +1,4 @@
-﻿using ImageWizard.Core.Middlewares;
-using ImageWizard.Core.Types;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,20 +20,15 @@ namespace ImageWizard.Analytics
         /// </summary>
         private IAnalyticsData AnalyticsData { get; }
 
-        private object _lock = new object();
-
-        public void OnResponseCompleted(ICachedData cachedImage)
-        {
-            lock (_lock)
-            {
-                AnalyticsData.TransferedImages++;
-                //AnalyticsData.TransferedImagesInBytes += cachedImage.Metadata.FileLength.Value;
-            }
-        }
+        private readonly object _lock = new object();
 
         public void OnResponseSending(HttpResponse response, ICachedData cachedImage)
         {
-            
+            lock (_lock)
+            {
+                AnalyticsData.TransferedImages++;                
+                AnalyticsData.TransferedImagesInBytes += cachedImage.Metadata.FileLength ?? 0;
+            }
         }
 
         public void OnCachedImageCreated(ICachedData cachedImage)
@@ -43,7 +36,7 @@ namespace ImageWizard.Analytics
             lock(_lock)
             {
                 AnalyticsData.CreatedImages++;
-                //AnalyticsData.CreatedImagesInBytes += cachedImage.Metadata.FileLength.Value;
+                AnalyticsData.CreatedImagesInBytes += cachedImage.Metadata.FileLength ?? 0;
             }
         }
 

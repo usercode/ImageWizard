@@ -1,4 +1,4 @@
-﻿using ImageWizard.Core.ImageLoaders;
+﻿using ImageWizard.Loaders;
 using System;
 
 namespace ImageWizard.AWS

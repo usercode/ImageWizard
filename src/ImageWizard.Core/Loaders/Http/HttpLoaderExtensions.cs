@@ -1,11 +1,8 @@
-﻿using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.ImageLoaders;
+﻿using ImageWizard.Loaders;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ImageWizard
 {
@@ -21,7 +18,7 @@ namespace ImageWizard
             wizardConfiguration.Services.Configure(setup);
 
             wizardConfiguration.Services.AddHttpClient<HttpLoader>();
-            wizardConfiguration.ImageLoaderManager.Register<HttpLoader>("fetch");
+            wizardConfiguration.LoaderManager.Register<HttpLoader>("fetch");
 
             return wizardConfiguration;
         }

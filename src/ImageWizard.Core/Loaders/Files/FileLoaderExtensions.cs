@@ -1,10 +1,8 @@
-﻿using ImageWizard.Core.Middlewares;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
-using ImageWizard.ImageLoaders;
-using ImageWizard.Core.ImageLoaders.Files;
+using ImageWizard.Loaders;
 
 namespace ImageWizard
 {
@@ -19,7 +17,7 @@ namespace ImageWizard
         {
             wizardConfiguration.Services.Configure(setup);
             wizardConfiguration.Services.AddSingleton<FileLoader>();
-            wizardConfiguration.ImageLoaderManager.Register<FileLoader>("file");
+            wizardConfiguration.LoaderManager.Register<FileLoader>("file");
 
             return wizardConfiguration;
         }

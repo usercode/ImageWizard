@@ -1,6 +1,4 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Middlewares;
-using ImageWizard.Filters;
+﻿using ImageWizard.Filters;
 using ImageWizard.SkiaSharp.Filters.Base;
 using System;
 using System.Collections.Generic;

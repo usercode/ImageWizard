@@ -1,11 +1,10 @@
-﻿using ImageWizard.Metadatas;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core.Types
+namespace ImageWizard
 {
     /// <summary>
     /// ICachedData

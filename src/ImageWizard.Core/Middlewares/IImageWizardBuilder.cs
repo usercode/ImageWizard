@@ -1,11 +1,10 @@
-﻿using ImageWizard.Core.ImageLoaders;
-using ImageWizard.Processing;
+﻿using ImageWizard.Processing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.Middlewares
+namespace ImageWizard
 {
     /// <summary>
     /// IImageWizardBuilder
@@ -18,9 +17,9 @@ namespace ImageWizard.Core.Middlewares
         IServiceCollection Services { get; }
 
         /// <summary>
-        /// ImageLoaderManager
+        /// LoaderManager
         /// </summary>
-        TypeManager ImageLoaderManager { get; }
+        TypeManager LoaderManager { get; }
 
         /// <summary>
         /// PipelineManager

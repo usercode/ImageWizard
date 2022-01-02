@@ -1,9 +1,6 @@
 ﻿using Docnet.Core.Readers;
-using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.Types;
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using ImageWizard.Services.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,19 +12,19 @@ namespace ImageWizard.DocNET.Filters.Base
 {
     public class DocNETFilterContext : FilterContext
     {
-        public DocNETFilterContext(ProcessingPipelineContext processingContext, byte[] document)
+        public DocNETFilterContext(ProcessingPipelineContext processingContext, Stream document)
             : base(processingContext)
         {
             Document = document;
         }
 
-        public byte[] Document { get; }
+        public Stream Document { get; }
 
-        public override async Task<ImageResult> BuildResultAsync()
+        public override async Task<DataResult> BuildResultAsync()
         {
 
 
-            return new ImageResult(Document, MimeTypes.Pdf);
+            return new DataResult(Document, MimeTypes.Pdf);
         }
     }
 }

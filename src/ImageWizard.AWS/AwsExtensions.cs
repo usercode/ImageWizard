@@ -1,5 +1,4 @@
-﻿using ImageWizard.Core.Middlewares;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace ImageWizard.AWS
@@ -16,7 +15,7 @@ namespace ImageWizard.AWS
             wizardConfiguration.Services.Configure(setup);
 
             wizardConfiguration.Services.AddSingleton<AwsLoader>();
-            wizardConfiguration.ImageLoaderManager.Register<AwsLoader>("aws");
+            wizardConfiguration.LoaderManager.Register<AwsLoader>("aws");
 
             return wizardConfiguration;
         }

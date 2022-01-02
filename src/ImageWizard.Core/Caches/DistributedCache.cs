@@ -1,8 +1,4 @@
-﻿using ImageWizard.Core.Types;
-using ImageWizard.Metadatas;
-using ImageWizard.Services.Types;
-using ImageWizard.Types;
-using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,11 +23,21 @@ namespace ImageWizard.Caches
         /// </summary>
         public IDistributedCache Cache { get; }
 
-        private const string KeyPrefix = "ImageWizard:";
+        private const string KeyPrefix = "ImageWizard";
+
+        private string GetBlobKey(string key)
+        {
+            return $"{KeyPrefix}_{key}_blob";
+        }
+
+        private string GetMetaKey(string key)
+        {
+            return $"{KeyPrefix}_{key}_meta";
+        }
 
         public async Task<ICachedData?> ReadAsync(string key)
         {
-            string json = await Cache.GetStringAsync($"{KeyPrefix}{key}#meta");
+            byte[] json = await Cache.GetAsync(GetMetaKey(key));
 
             if (json == null)
             {
@@ -40,14 +46,14 @@ namespace ImageWizard.Caches
 
             Metadata? metadata = JsonSerializer.Deserialize<Metadata>(json);
 
-            if(metadata == null)
+            if (metadata == null)
             {
                 throw new Exception("Metadata is not available.");
             }
 
             return new CachedData(metadata, async () =>
             {
-                byte[] b = await Cache.GetAsync($"{KeyPrefix}{key}");
+                byte[] b = await Cache.GetAsync(GetBlobKey(key));
 
                 return new MemoryStream(b);
             });
@@ -55,17 +61,16 @@ namespace ImageWizard.Caches
 
         public async Task WriteAsync(string key, ICachedData cachedImage)
         {
-            string json = JsonSerializer.Serialize(cachedImage.Metadata);
+            byte[] json = JsonSerializer.SerializeToUtf8Bytes(cachedImage.Metadata);
 
-            await Cache.SetStringAsync($"{KeyPrefix}{key}#meta", json);
+            await Cache.SetAsync(GetMetaKey(key), json);
 
-            using (Stream cachedImageStream = await cachedImage.OpenReadAsync())
-            {
-                MemoryStream mem = new MemoryStream();
-                await cachedImageStream.CopyToAsync(mem);
+            using Stream cachedImageStream = await cachedImage.OpenReadAsync();
+            using MemoryStream mem = new MemoryStream();
 
-                await Cache.SetAsync($"{KeyPrefix}{key}", mem.ToArray());
-            }
+            await cachedImageStream.CopyToAsync(mem);
+
+            await Cache.SetAsync(GetBlobKey(key), mem.ToArray());
         }
     }
 }

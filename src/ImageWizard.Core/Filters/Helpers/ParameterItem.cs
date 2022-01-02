@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core.ImageFilters.Base.Helpers
+namespace ImageWizard.Helpers
 {
     class ParameterItem
     {

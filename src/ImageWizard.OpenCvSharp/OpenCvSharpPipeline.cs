@@ -1,10 +1,6 @@
 ﻿using ImageWizard.Core;
-using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageProcessing;
-using ImageWizard.Core.Settings;
-using ImageWizard.Core.Types;
-using ImageWizard.Filters;
 using ImageWizard.OpenCvSharp.Filters;
+using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;

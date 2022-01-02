@@ -1,7 +1,7 @@
 ﻿using FFMpegCore;
 using FFMpegCore.Enums;
 using FFMpegCore.Pipes;
-using ImageWizard.Core.ImageFilters.Base.Attributes;
+using ImageWizard.Attributes;
 using ImageWizard.FFMpegCore.Filters.Base;
 using System;
 using System.Collections.Generic;

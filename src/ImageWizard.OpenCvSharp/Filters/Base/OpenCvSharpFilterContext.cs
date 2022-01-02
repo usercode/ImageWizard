@@ -1,9 +1,6 @@
-﻿using ImageWizard.Core.ImageFilters.Base;
-using ImageWizard.Core.ImageProcessing;
-using ImageWizard.Core.Settings;
-using ImageWizard.Services.Types;
-using ImageWizard.Settings;
-using ImageWizard.Utils.FilterTypes;
+﻿using ImageWizard.Processing;
+using ImageWizard.Processing.Results;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +18,6 @@ namespace ImageWizard.OpenCvSharp.Filters
             : base(processingContext)
         {
 
-            NoImageCache = false;
         }
 
 
@@ -31,14 +27,20 @@ namespace ImageWizard.OpenCvSharp.Filters
 
         }
 
-        public override async Task<ImageResult> BuildResultAsync()
+        public override async Task<DataResult> BuildResultAsync()
         {
+            //using var haarCascade = new CascadeClassifier(TextPath.HaarCascade);
+            //using Mat src = new Mat("lenna.png", ImreadModes.Unchanged);
 
+            //Stream mem = ProcessingContext.StreamPool.GetStream();
 
-            //update some metadata
-            //ProcessingContext.DisableCache = NoImageCache;
+            //src.WriteToStream(mem);
 
-            return null;
+            //mem.Seek(0, SeekOrigin.Begin);
+
+            //return new DataResult(mem, MimeTypes.Png);
+
+            throw new Exception();
         }
     }
 }

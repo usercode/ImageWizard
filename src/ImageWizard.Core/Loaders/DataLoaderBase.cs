@@ -1,23 +1,23 @@
-﻿using ImageWizard.Core.Types;
-using ImageWizard.ImageLoaders;
-using ImageWizard.Services.Types;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core.ImageLoaders
+namespace ImageWizard.Loaders
 {
-    public abstract class DataLoaderBase : IDataLoader
+    public abstract class DataLoaderBase<TOptions> : IDataLoader
+        where TOptions : DataLoaderOptions
     {
-        public DataLoaderBase()
+        public DataLoaderBase(IOptions<TOptions> options)
         {
-            RefreshMode = DataLoaderRefreshMode.None;
+            Options = options;
         }
 
-        public virtual DataLoaderRefreshMode RefreshMode { get; }
+        public IOptions<TOptions> Options { get; }
 
-        public abstract Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedImage);
+        IOptions<DataLoaderOptions> IDataLoader.Options => Options;
+
+        public abstract Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData);
     }
 }
