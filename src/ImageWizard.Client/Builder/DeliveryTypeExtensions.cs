@@ -38,10 +38,13 @@ namespace ImageWizard.Client
                 IWebHostEnvironment env = imageBuilder.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
                 IFileInfo file = env.WebRootFileProvider.GetFileInfo(path);
 
-                string hash = $"{file.Length}#{file.LastModified.Ticks}";
+                string hash = $"{file.Length}_{file.LastModified.UtcTicks}";
 
-                byte[] hashBytes = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(hash));
-                string hashBase64 = WebEncoders.Base64UrlEncode(hashBytes);
+                Span<byte> hashBufferSpan = stackalloc byte[32];
+
+                SHA256.HashData(Encoding.UTF8.GetBytes(hash), hashBufferSpan);
+
+                string hashBase64 = WebEncoders.Base64UrlEncode(hashBufferSpan);
 
                 path += $"?v={hashBase64}";
             }

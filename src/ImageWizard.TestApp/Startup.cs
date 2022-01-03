@@ -106,7 +106,7 @@ namespace ImageWizard.TestApp
             services.AddImageWizardClient(x =>
             {
 #if DEBUG
-                x.UseUnsafeUrl = true;
+                x.UseUnsafeUrl = false;
 #endif
                 x.Key = key;
             });

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -16,26 +17,32 @@ namespace ImageWizard.Utils
         /// <summary>
         /// Encrypt
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public string Encrypt(string key, string data)
+        public string Encrypt(string key, string input)
         {
-            byte[] keyBytes;
+            byte[] keyBuffer;
 
             try
             {
-                keyBytes = WebEncoders.Base64UrlDecode(key);
+                keyBuffer = WebEncoders.Base64UrlDecode(key);
             }
             catch (Exception ex)
             {
                 throw new Exception("No valid key: " + ex.Message);
             }
-            
-            byte[] buffer = Encoding.UTF8.GetBytes(data);
 
-            byte[] buf = HMACSHA256.HashData(keyBytes, buffer);
+            //convert data string to buffer
+            byte[] inputBuffer = Encoding.UTF8.GetBytes(input);
 
-            return WebEncoders.Base64UrlEncode(buf);
+            //HMACSHA256 => 256 / 8 = 32
+            Span<byte> hashBufferSpan = stackalloc byte[32];
+
+            //create hash
+            HMACSHA256.HashData(keyBuffer, inputBuffer, hashBufferSpan);
+
+            //convert to Base64Url
+            return WebEncoders.Base64UrlEncode(hashBufferSpan);
         }
     }
 }

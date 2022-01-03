@@ -3,6 +3,7 @@ using ImageWizard.Core;
 using ImageWizard.Loaders;
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
+using ImageWizard.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -85,11 +86,10 @@ namespace ImageWizard
                 {
                     url_path_with_headers += $"+Accept={string.Join(",", acceptMimeTypes)}";
                 }
-            }            
+            }
 
             //generate image key
-            byte[] keyInBytes = SHA256.HashData(Encoding.UTF8.GetBytes(url_path_with_headers));
-            string key = Convert.ToHexString(keyInBytes);
+            string key = CachedDataKeyHelper.Create(url_path_with_headers);
 
             //get image loader
             Type loaderType = builder.LoaderManager.Get(url.LoaderType);
@@ -160,7 +160,7 @@ namespace ImageWizard
 
                     } while (processingContext.UrlFilters.Count > 0);
 
-                    logger.LogTrace("Save new cached image");
+                    logger.LogTrace("Save new cached data");
 
                     using SHA256 sha256 = SHA256.Create();
 

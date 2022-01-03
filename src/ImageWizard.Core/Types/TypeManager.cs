@@ -10,16 +10,16 @@ namespace ImageWizard
     /// </summary>
     public class TypeManager
     {
-        private IDictionary<string, Type> ImageLoaderTypes;
+        private IDictionary<string, Type> LoaderTypes;
 
         public TypeManager()
         {
-            ImageLoaderTypes = new Dictionary<string, Type>();
+            LoaderTypes = new Dictionary<string, Type>();
         }
 
         public IEnumerable<string> GetAllKeys()
         {
-            return ImageLoaderTypes.Keys;
+            return LoaderTypes.Keys;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace ImageWizard
         /// <returns></returns>
         public Type Get(string key)
         {
-            if(ImageLoaderTypes.TryGetValue(key, out Type? loaderType) == false)
+            if (LoaderTypes.TryGetValue(key, out Type? loaderType) == false)
             {
                 throw new Exception($"Type was not found: {key}");
             }
@@ -55,13 +55,13 @@ namespace ImageWizard
         /// <param name="loader"></param>
         public void Register(string key, Type type)
         {
-            if(ImageLoaderTypes.ContainsKey(key) == false)
+            if(LoaderTypes.ContainsKey(key) == false)
             {
-                ImageLoaderTypes.Add(key, type);
+                LoaderTypes.Add(key, type);
             }
             else
             {
-                ImageLoaderTypes[key] = type;
+                LoaderTypes[key] = type;
             }
         }
     }

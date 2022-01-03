@@ -87,8 +87,6 @@ namespace ImageWizard
 
             app.UseHttpsRedirection();
 
-            //app.UseImageWizard();
-
             app.UseRouting();
             app.UseEndpoints(x =>
             {
