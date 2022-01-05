@@ -72,8 +72,7 @@ namespace ImageWizard
             string url_loaderSource = match.Groups["loaderSource"].Value;
             string url_loaderType = match.Groups["loaderType"].Value;
             IList<string> url_filters = match.Groups["filter"].Captures.OfType<Capture>()
-                                                                            .Select(x => x.Value)
-                                                                            .Select(x => x[0..^1]) //remove "/"
+                                                                            .Select(x => x.ValueSpan[0..^1].ToString()) //remove "/"
                                                                             .ToList();
 
             url = new ImageWizardUrl(url_signature, url_path, url_loaderType, url_loaderSource, url_filters);
