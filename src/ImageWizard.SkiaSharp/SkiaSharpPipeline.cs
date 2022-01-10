@@ -47,13 +47,20 @@ namespace ImageWizard.SkiaSharp
                 targetFormat = ImageFormatHelper.FirstOrDefault(context.AcceptMimeTypes);
             }
 
-            if(targetFormat == null)
+            if (targetFormat == null)
             {
                 //use mime type of the original image
                 targetFormat = ImageFormatHelper.FirstOrDefault(context.Result.MimeType);
             }
 
-            SKBitmap bitmap = SKBitmap.Decode(context.Result.Data);
+            //SkiaSharp don't support http streaming?!
+            using MemoryStream mem = context.Result.Data.ToMemoryStream();
+            SKBitmap bitmap = SKBitmap.Decode(mem);
+
+            if (bitmap == null)
+            {
+                throw new Exception("SkiaSharp could not load the image.");
+            }
 
             return new SkiaSharpFilterContext(context, bitmap, targetFormat);
         }

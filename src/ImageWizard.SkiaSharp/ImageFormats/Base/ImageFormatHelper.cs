@@ -29,7 +29,7 @@ namespace ImageWizard.Filters.ImageFormats
                     _ => null,
                 };
 
-                if(imageFormat != null)
+                if (imageFormat != null)
                 {
                     return imageFormat;
                 }
