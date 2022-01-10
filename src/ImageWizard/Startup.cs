@@ -13,6 +13,7 @@ using ImageWizard.DocNET;
 using Microsoft.AspNetCore.HttpOverrides;
 using ImageWizard.Caches;
 using ImageWizard.Loaders;
+using ImageWizard.SkiaSharp;
 
 namespace ImageWizard
 {
@@ -43,6 +44,7 @@ namespace ImageWizard
 
             IImageWizardBuilder imageWizard = services.AddImageWizard()
                                                         .AddImageSharp()
+                                                        .AddSkiaSharp(MimeTypes.WebP)
                                                         .AddSvgNet()
                                                         .AddDocNET()
                                                         .AddHttpLoader()
