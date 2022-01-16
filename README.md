@@ -81,7 +81,7 @@ services.AddImageWizard(options =>
                             .WithFilter<BlurFilter>()
                        .AddSkiaSharp(MimeTypes.WebP)
                        .AddSvgNet()
-		       .           .AddDocNET()
+		       .AddDocNET()
                        //uses file cache (relative or absolute path)
                        .SetFileCache(options => options.Folder = "FileCache") 
                        //or MongoDB cache
