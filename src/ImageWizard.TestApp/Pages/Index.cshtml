@@ -86,10 +86,6 @@
             <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-md-3">
-            <p>rotate(45.0)</p>
-            @*<img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(45).BuildUrl()" class="auto-scale" />*@
-        </div>
-        <div class="col-md-3">
             <p>rotate(90.0)</p>
             <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(90).BuildUrl()" class="auto-scale" />
         </div>
@@ -137,12 +133,12 @@
         </div>
     </div>
 
-    <h2>Resize WebP image with SkiaSharp</h2>
+   @* <h2>Resize WebP image with SkiaSharp</h2>
     <div class="row">
         <div class="col-lg-4">
             <img src="@Url.ImageWizard().FetchLocalFile("/img/raccoon.webp").AsImage().Resize(400,400).BuildUrl()" class="auto-scale" />
         </div>
-    </div>
+    </div>*@
 
     <h2>Fetch local file (from wwwroot folder)</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
@@ -202,7 +198,14 @@
 
     <h2>Use youtube taghelper (DSGVO friendly)</h2>
 
-    <youtube video-id="AQHZQ8p6FCA" width="1920" height="1080" />
+     <div class="row">
+        <div class="col-lg">
+            <youtube video-id="AQHZQ8p6FCA" width="1920" height="1080" />
+        </div>
+        <div class="col-lg">
+            <youtube video-id="8gwSU3oaMV8" width="1920" height="1080" />
+        </div>
+    </div>
 
     <h2>Fetch gravatar image</h2>
 

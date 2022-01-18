@@ -18,6 +18,8 @@ namespace ImageWizard.Client.TagHelpers
     /// </summary>
     public class YoutubeTagHelper : TagHelper
     {
+        private static int id_counter = 0;
+
         public YoutubeTagHelper(IUrlHelper imageUrlBuilder)
         {
             UrlBuilder = imageUrlBuilder;
@@ -66,17 +68,24 @@ namespace ImageWizard.Client.TagHelpers
                                             new XAttribute("class", "imagewizard-responsive-video"),
                                             youtubeTag);
 
-            output.PreElement.AppendHtml($"<style>{css}</style>");
-            output.PreElement.AppendHtml($"<script>{js}</script>");
+            if (id_counter == 0)
+            {
+                output.PreElement.AppendHtml($"<style>{css}</style>");
+                output.PreElement.AppendHtml($"<script>{js}</script>");
+            }
+
+            string id_name = "yt_" + id_counter;
 
             output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.Attributes.SetAttribute("id", "y1");
+            output.Attributes.SetAttribute("id", id_name);
             output.Attributes.SetAttribute("class", "imagewizard-youtube");
             output.Attributes.SetAttribute("data-embeded", HttpUtility.HtmlEncode(responsiveTag.ToString()));
 
-            output.Content.AppendHtml($"<img src=\"{UrlBuilder.ImageWizard().Youtube(VideoId).Resize(Width, Height).BuildUrl()}\" class=\"imagewizard-youtube-image\" onclick=\"openYoutube('y1','{VideoId}')\" />");
+            output.Content.AppendHtml($"<img src=\"{UrlBuilder.ImageWizard().Youtube(VideoId).Resize(Width, Height).BuildUrl()}\" class=\"imagewizard-youtube-image\" onclick=\"openYoutube('{id_name}','{VideoId}')\" />");
             output.Content.AppendHtml($"<div>{svg}</div>");
+
+            id_counter++;
         }
 
         private string ReadResource(string name)
