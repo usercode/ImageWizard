@@ -18,14 +18,14 @@ namespace ImageWizard.Client.TagHelpers
     /// </summary>
     public class YoutubeTagHelper : TagHelper
     {
-        private static int id_counter = 0;
-
         public YoutubeTagHelper(IUrlHelper imageUrlBuilder)
         {
             UrlBuilder = imageUrlBuilder;
 
             Width = 1920;
             Height = 1080;
+
+            UseNoCookie = true;
         }
 
         /// <summary>
@@ -39,9 +39,24 @@ namespace ImageWizard.Client.TagHelpers
         public int Height { get; set; }
 
         /// <summary>
+        /// Grayscale
+        /// </summary>
+        public bool Grayscale { get; set; }
+
+        /// <summary>
+        /// Blur
+        /// </summary>
+        public bool Blur { get; set; }
+
+        /// <summary>
         /// VideoId
         /// </summary>
         public string VideoId { get; set; }
+
+        /// <summary>
+        /// Use the youtube-nocookie domain. (default: true)
+        /// </summary>
+        public bool UseNoCookie { get; set; }
 
         /// <summary>
         /// UrlBuilder
@@ -56,8 +71,10 @@ namespace ImageWizard.Client.TagHelpers
             string js = ReadResource("ImageWizard.Client.wwwroot.youtube.youtube.js");
             string svg = ReadResource("ImageWizard.Client.wwwroot.youtube.youtube.svg");
 
+            string youtubeBaseUrl = UseNoCookie ? "https://www.youtube-nocookie.com" : "https://www.youtube.com";
+
             XElement youtubeTag = new XElement("iframe",
-                        new XAttribute("src", $"https://www.youtube-nocookie.com/embed/{VideoId}"),
+                        new XAttribute("src", $"{youtubeBaseUrl}/embed/{VideoId}"),
                         new XAttribute("frameborder", "0"),
                         new XAttribute("allow", "autoplay; encrypted-media"),
                         new XAttribute("allowfullscreen", "allowfullscreen"),
@@ -68,30 +85,40 @@ namespace ImageWizard.Client.TagHelpers
                                             new XAttribute("class", "imagewizard-responsive-video"),
                                             youtubeTag);
 
-            if (id_counter == 0)
-            {
-                output.PreElement.AppendHtml($"<style>{css}</style>");
-                output.PreElement.AppendHtml($"<script>{js}</script>");
-            }
-
-            string id_name = "yt_" + id_counter;
+            output.PreElement.AppendHtml($"<style>{css}</style>");
+            output.PreElement.AppendHtml($"<script>{js}</script>");
+            
+            string elementId = $"yt_{context.UniqueId}";
 
             output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.Attributes.SetAttribute("id", id_name);
+            output.Attributes.SetAttribute("id", elementId);
             output.Attributes.SetAttribute("class", "imagewizard-youtube");
             output.Attributes.SetAttribute("data-embeded", HttpUtility.HtmlEncode(responsiveTag.ToString()));
 
-            output.Content.AppendHtml($"<img src=\"{UrlBuilder.ImageWizard().Youtube(VideoId).Resize(Width, Height).BuildUrl()}\" class=\"imagewizard-youtube-image\" onclick=\"openYoutube('{id_name}','{VideoId}')\" />");
-            output.Content.AppendHtml($"<div>{svg}</div>");
+            var image = UrlBuilder.ImageWizard()
+                                            .Youtube(VideoId)
+                                            .Resize(Width, Height);
 
-            id_counter++;
+            if (Grayscale)
+            {
+                image.Grayscale();
+            }
+
+            if (Blur)
+            {
+                image.Blur();
+            }
+
+            output.Content.AppendHtml($"<img src=\"{image.BuildUrl()}\" class=\"imagewizard-youtube-image\" onclick=\"openYoutube('{elementId}')\" />");
+            output.Content.AppendHtml($"<div>{svg}</div>");
         }
 
         private string ReadResource(string name)
         {
-            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
-            StreamReader readerCss = new StreamReader(stream);
+            using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
+            using StreamReader readerCss = new StreamReader(stream);
+
             return readerCss.ReadToEnd();
         }
     }
