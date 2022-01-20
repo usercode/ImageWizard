@@ -4,6 +4,15 @@ A ASP.NET Core service / middleware to resize your images dynamically as alterna
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard)](https://hub.docker.com/r/usercode/imagewizard)
 
+## Features
+- different image loader (http, file, youtube, gravatar) and caches (file, distributed cache, MongoDB)
+- resize, crop, rotate images
+- page to image for pdf documents
+- common image effects like grayscale and blur are available or you create your own image filter
+- url is protected by a HMACSHA256 signature
+- can handle the device pixel ratio (DPR)
+- support for cache control and ETag
+
 | Package                       | Release | 
 |--------------------------------|-----------------|
 | ImageWizard.Core          | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
@@ -51,7 +60,7 @@ https://www.nuget.org/packages/ImageWizard.Core/
 
 
 ```csharp
-services.AddImageWizard(); //use only http loader and distributed cache
+services.AddImageWizard();
 
 //or
 
