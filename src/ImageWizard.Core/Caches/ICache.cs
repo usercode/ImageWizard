@@ -22,10 +22,9 @@ namespace ImageWizard.Caches
         /// WriteAsync
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="originalImage"></param>
-        /// <param name="imageFormat"></param>
-        /// <param name="transformedImageData"></param>
+        /// <param name="metadata"></param>
+        /// <param name="stream"></param>
         /// <returns></returns>
-        Task WriteAsync(string key, ICachedData cachedData);
+        Task WriteAsync(string key, IMetadata metadata, Stream stream);
     }
 }

@@ -5,6 +5,7 @@ using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -50,7 +51,7 @@ namespace ImageWizard
             }
 
             //unsafe url?
-            if (options.Value.AllowUnsafeUrl && url.IsUnsafeUrl)
+            if (url.IsUnsafeUrl && options.Value.AllowUnsafeUrl)
             {
                 logger.LogTrace("unsafe request");
             }
@@ -88,10 +89,10 @@ namespace ImageWizard
                 }
             }
 
-            //generate image key
+            //generate data key
             string key = CachedDataKeyHelper.Create(url_path_with_headers);
 
-            //get image loader
+            //get data loader
             Type loaderType = builder.LoaderManager.Get(url.LoaderType);
             IDataLoader? loader = (IDataLoader?)context.RequestServices.GetService(loaderType);
 
@@ -102,21 +103,17 @@ namespace ImageWizard
 
             ICachedData? cachedData = await cache.ReadAsync(key);
 
-            bool createCachedData = false;
+            bool createCachedData = true;
 
-            //no cached data found?
-            if (cachedData == null)
-            {
-                createCachedData = true;
-            }
-            else //use existing cached image
+            //cached data found?
+            if (cachedData != null)
             {
                 createCachedData = loader.Options.Value.RefreshMode switch
                 {
                     DataLoaderRefreshMode.None => false,
                     DataLoaderRefreshMode.EveryTime => true,
-                    DataLoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true 
-                                                                    || cachedData.Metadata.Cache.NoCache == true 
+                    DataLoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
+                                                                    || cachedData.Metadata.Cache.NoCache == true
                                                                     || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
                     _ => throw new Exception("Unknown refresh mode.")
                 };
@@ -189,13 +186,10 @@ namespace ImageWizard
                         metadata.Height = imageResult.Height;
                     }
 
-                    //write cached image
-                    await cache.WriteAsync(key, new CachedData(metadata, () =>
-                                                {
-                                                    processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
+                    processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
 
-                                                    return Task.FromResult(processingContext.Result.Data);
-                                                }));
+                    //write cached data
+                    await cache.WriteAsync(key, metadata, processingContext.Result.Data);
                     
                     //read cached data
                     cachedData = await cache.ReadAsync(key);
@@ -227,26 +221,30 @@ namespace ImageWizard
                 }
             }
 
-            IList<string> varyHeader = new List<string>();
+            ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
 
             //use accept header
             if (options.Value.UseAcceptHeader)
             {
-                varyHeader.Add(HeaderNames.Accept);
+                responseHeaders.Append(HeaderNames.Vary, HeaderNames.Accept);
             }
 
             //use client hints
             if (options.Value.UseClintHints)
             {
-                varyHeader.Add(ClientHints.DPRHeader);
-                varyHeader.Add(ClientHints.WidthHeader);
-                varyHeader.Add(ClientHints.ViewportWidthHeader);
+                responseHeaders.AppendList(
+                                            HeaderNames.Vary,
+                                            new[] {
+                                                ClientHints.DPRHeader,
+                                                ClientHints.WidthHeader,
+                                                ClientHints.ViewportWidthHeader
+                                            });
             }
 
             //set cache control header
             if (options.Value.CacheControl.IsEnabled)
             {
-                context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue()
+                responseHeaders.CacheControl = new CacheControlHeaderValue()
                 {
                     Public = options.Value.CacheControl.Public,
                     MustRevalidate = options.Value.CacheControl.MustRevalidate,
@@ -259,22 +257,17 @@ namespace ImageWizard
             //set ETag header
             if (options.Value.UseETag)
             {
-                context.Response.GetTypedHeaders().ETag = etag;
+                responseHeaders.ETag = etag;
             }
 
             //DPR
             if (cachedData.Metadata.DPR != null)
             {
-                context.Response.Headers.Add("Content-DPR", cachedData.Metadata.DPR.Value.ToString(CultureInfo.InvariantCulture));
-            }
-
-            if (varyHeader.Count > 0)
-            {
-                context.Response.Headers.Add(HeaderNames.Vary, string.Join(", ", varyHeader));
+                responseHeaders.Append("Content-DPR", cachedData.Metadata.DPR.Value.ToString(CultureInfo.InvariantCulture));
             }
 
             //is HEAD request?
-            bool isHeadRequst = context.Request.Method.Equals("HEAD", StringComparison.OrdinalIgnoreCase);
+            bool isHeadRequst = HttpMethods.IsHead(context.Request.Method);
 
             if (isHeadRequst == true)
             {

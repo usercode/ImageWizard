@@ -79,32 +79,29 @@ namespace ImageWizard.MongoDB.ImageCaches
             return cachedImage;
         }
 
-        public async Task WriteAsync(string key, ICachedData cachedImage)
+        public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
         {
             ImageMetadataModel model = new ImageMetadataModel()
             {
-                Created = cachedImage.Metadata.Created,
-                Cache = cachedImage.Metadata.Cache,
-                Hash = cachedImage.Metadata.Hash,
-                Key = cachedImage.Metadata.Key,
-                LoaderSource = cachedImage.Metadata.LoaderSource,
-                Filters = cachedImage.Metadata.Filters,
-                LoaderType = cachedImage.Metadata.LoaderType,
-                MimeType = cachedImage.Metadata.MimeType,
-                Width = cachedImage.Metadata.Width,
-                Height = cachedImage.Metadata.Height,
-                DPR = cachedImage.Metadata.DPR,
-                FileLength = cachedImage.Metadata.FileLength
+                Created = metadata.Created,
+                Cache = metadata.Cache,
+                Hash = metadata.Hash,
+                Key = metadata.Key,
+                LoaderSource = metadata.LoaderSource,
+                Filters = metadata.Filters,
+                LoaderType = metadata.LoaderType,
+                MimeType = metadata.MimeType,
+                Width = metadata.Width,
+                Height = metadata.Height,
+                DPR = metadata.DPR,
+                FileLength = metadata.FileLength
             };
 
             //upload image metadata
             await ImageMetadatas.ReplaceOneAsync(Builders<ImageMetadataModel>.Filter.Where(x => x.Key == key), model, new ReplaceOptions() { IsUpsert = true });
 
-            using (Stream cachedImageStream = await cachedImage.OpenReadAsync())
-            {
-                //upload transformed image
-                await ImageBuffer.UploadFromStreamAsync(key, cachedImageStream);
-            }
+            //upload transformed image
+            await ImageBuffer.UploadFromStreamAsync(key, stream);
         }
     }
 }

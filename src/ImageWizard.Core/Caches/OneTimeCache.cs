@@ -36,16 +36,14 @@ namespace ImageWizard.Caches
             return new CachedData(_metadata, () => Task.FromResult<Stream>(new MemoryStream(_data)));
         }
 
-        public async Task WriteAsync(string key, ICachedData cachedData)
+        public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
         {
             _key = key;
-            _metadata = cachedData.Metadata;
+            _metadata = metadata;
 
             MemoryStream mem = new MemoryStream();
 
-            using Stream dataStream = await cachedData.OpenReadAsync();
-
-            await dataStream.CopyToAsync(mem);
+            await stream.CopyToAsync(mem);
 
             _data = mem.ToArray();
         }

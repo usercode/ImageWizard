@@ -15,41 +15,30 @@ namespace ImageWizard.Loaders
     /// <summary>
     /// HttpLoader
     /// </summary>
-    public class HttpLoader : DataLoaderBase<HttpLoaderOptions>
+    public class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
     {
-        private static readonly Regex AbsoluteUrlRegex = new Regex("^https?://", RegexOptions.Compiled);
+        private static readonly Regex AbsoluteUrlRegex = new Regex("^https?://", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public HttpLoader(
-                    HttpClient httpClient,
+                    HttpClient client,
                     IOptions<HttpLoaderOptions> options,
                     IHttpContextAccessor httpContextAccessor)
-            :base(options)
+            : base(client, options)
         {
-            HttpClient = httpClient;
             HttpContextAccessor = httpContextAccessor;
 
             foreach (HttpHeaderItem header in options.Value.Headers)
             {
-                HttpClient.DefaultRequestHeaders.Add(header.Name, header.Value);
+                client.DefaultRequestHeaders.Add(header.Name, header.Value);
             }
         }
-
-        /// <summary>
-        /// HttpClient
-        /// </summary>
-        private HttpClient HttpClient { get; }
 
         /// <summary>
         /// HttpContextAccessor
         /// </summary>
         private IHttpContextAccessor HttpContextAccessor { get; }
 
-        /// <summary>
-        /// GetAsync
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData)
+        protected override Uri CreateRequestUrl(string source)
         {
             Uri sourceUri;
 
@@ -85,33 +74,7 @@ namespace ImageWizard.Loaders
                 }
             }
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, sourceUri);
-            request.AddUserAgentHeader();
-
-            if (existingCachedData != null)
-            {
-                if (existingCachedData.Metadata.Cache.ETag != null)
-                {
-                    request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue($"\"{existingCachedData.Metadata.Cache.ETag}\""));
-                }
-            }
-
-            HttpResponseMessage response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-
-            string? mimeType = response.Content.Headers.ContentType?.MediaType;
-
-            if (response.IsSuccessStatusCode == false 
-                            || mimeType == null
-                            || response.StatusCode == HttpStatusCode.NotModified)
-            {
-                response.Dispose();
-
-                return null;
-            }
-
-            Stream data = await response.Content.ReadAsStreamAsync();
-
-            return new HttpOriginalData(response, mimeType, data, new CacheSettings(response));
+            return sourceUri;
         }
     }
 }

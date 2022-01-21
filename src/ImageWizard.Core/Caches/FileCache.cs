@@ -79,10 +79,10 @@ namespace ImageWizard.Caches
             return new CachedData(metadata, () => Task.FromResult<Stream>(blobFile.OpenRead()));
         }
 
-        public async Task WriteAsync(string key, ICachedData cachedData)
+        public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
         {
             //create json
-            byte[] metadataJson = JsonSerializer.SerializeToUtf8Bytes(cachedData.Metadata, new JsonSerializerOptions() { WriteIndented = true });
+            byte[] metadataJson = JsonSerializer.SerializeToUtf8Bytes(metadata, new JsonSerializerOptions() { WriteIndented = true });
 
             string[] parts = KeyToPath(key);
 
@@ -103,9 +103,8 @@ namespace ImageWizard.Caches
 
             //write data
             using Stream blobStream = blobFile.OpenWrite();
-            using Stream cachedImageStream = await cachedData.OpenReadAsync();
 
-            await cachedImageStream.CopyToAsync(blobStream);
+            await stream.CopyToAsync(blobStream);
         }
     }
 }
