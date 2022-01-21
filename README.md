@@ -330,7 +330,6 @@ Create url with fluent api
 
 #### Special options
 - dpr(value) //set allowed device pixel ratio
-- nocache() //do not store the transformed image
 
 ### SkiaSharp
 #### Image transformations
