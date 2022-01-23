@@ -7,12 +7,12 @@ namespace ImageWizard.Azure
 {
     public static class AzureBlobExtensions
     {
-        public static IImageWizardBuilder AddAzureBlob(this IImageWizardBuilder wizardConfiguration)
+        public static IImageWizardBuilder AddAzureLoader(this IImageWizardBuilder wizardConfiguration)
         {
-            return AddAzureBlob(wizardConfiguration, x => { });
+            return AddAzureLoader(wizardConfiguration, x => { });
         }
         
-        public static IImageWizardBuilder AddAzureBlob(this IImageWizardBuilder wizardConfiguration, Action<AzureBlobOptions> setup)
+        public static IImageWizardBuilder AddAzureLoader(this IImageWizardBuilder wizardConfiguration, Action<AzureBlobOptions> setup)
         {
             wizardConfiguration.Services.Configure(setup);
 

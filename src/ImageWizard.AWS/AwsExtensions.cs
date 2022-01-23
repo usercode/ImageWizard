@@ -5,12 +5,12 @@ namespace ImageWizard.AWS
 {
     public static class AwsExtensions
     {
-        public static IImageWizardBuilder AddAWS(this IImageWizardBuilder wizardConfiguration)
+        public static IImageWizardBuilder AddAWSLoader(this IImageWizardBuilder wizardConfiguration)
         {
-            return AddAWS(wizardConfiguration, x => { });
+            return AddAWSLoader(wizardConfiguration, x => { });
         }
 
-        public static IImageWizardBuilder AddAWS(this IImageWizardBuilder wizardConfiguration, Action<AwsOptions> setup)
+        public static IImageWizardBuilder AddAWSLoader(this IImageWizardBuilder wizardConfiguration, Action<AwsOptions> setup)
         {
             wizardConfiguration.Services.Configure(setup);
 

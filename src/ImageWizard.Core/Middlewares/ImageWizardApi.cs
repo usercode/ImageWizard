@@ -68,7 +68,7 @@ namespace ImageWizard
 
                     return Results.Problem(detail: "signature is not valid!", statusCode: StatusCodes.Status403Forbidden);
                 }
-            }            
+            }
 
             string url_path_with_headers = url.Path;
 

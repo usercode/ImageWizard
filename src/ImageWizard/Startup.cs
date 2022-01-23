@@ -4,16 +4,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using ImageWizard.MongoDB;
-using ImageWizard.MongoDB.ImageCaches;
 using Microsoft.Extensions.Hosting;
-using ImageWizard.Analytics;
 using Microsoft.Extensions.Options;
 using ImageWizard.DocNET;
 using Microsoft.AspNetCore.HttpOverrides;
 using ImageWizard.Caches;
 using ImageWizard.Loaders;
 using ImageWizard.SkiaSharp;
+using ImageWizard.Azure;
 
 namespace ImageWizard
 {
@@ -35,12 +33,9 @@ namespace ImageWizard
             services.Configure<HttpLoaderOptions>(Configuration.GetSection("HttpLoader"));
             services.Configure<FileCacheSettings>(Configuration.GetSection("FileCache"));
             services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
-            services.Configure<MongoDBCacheOptions>(Configuration.GetSection("MongoDBCache"));
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-
-            string cache = Configuration.GetSection("General")["Cache"];
 
             IImageWizardBuilder imageWizard = services.AddImageWizard()
                                                         .AddImageSharp()
@@ -51,25 +46,8 @@ namespace ImageWizard
                                                         .AddFileLoader()
                                                         .AddYoutubeLoader()
                                                         .AddGravatarLoader()
-                                                        .AddAnalytics();
-
-            switch (cache)
-            {
-                case "InMemory":
-                    imageWizard.SetDistributedCache();
-                    break;
-
-                case "File":
-                    imageWizard.SetFileCache();
-                    break;
-
-                case "MongoDB":
-                    imageWizard.SetMongoDBCache();
-                    break;
-
-                default:
-                    throw new Exception("unknown cache type selected");
-            }
+                                                        .AddAzureLoader()
+                                                        .SetFileCache();
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {

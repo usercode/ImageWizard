@@ -38,11 +38,9 @@ namespace ImageWizard.TestApp
         public void ConfigureServices(IServiceCollection services)
         {
             //generate random key
-            byte[] keyBuffer = new byte[64];
-            RandomNumberGenerator.Create().GetBytes(keyBuffer);
+            byte[] keyBuffer = RandomNumberGenerator.GetBytes(64);
 
             string key = WebEncoders.Base64UrlEncode(keyBuffer);
-            //string key = "DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==";
 
             services.AddImageWizard(x =>
             {
@@ -88,12 +86,12 @@ namespace ImageWizard.TestApp
                 .AddDocNET()
                 .AddOpenCvSharp()
                 .AddAnalytics()
-                .AddAzureBlob(x =>
+                .AddAzureLoader(x =>
                 {
                     x.ConnectionString = "";
                     x.ContainerName = "MyContainer";
                 })
-                .AddAWS(x =>
+                .AddAWSLoader(x =>
                 {
                     x.AccessKeyId = "";
                     x.SecretAccessKey = "";
