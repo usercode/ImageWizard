@@ -15,6 +15,24 @@ Demo: [imagewizard.net](https://imagewizard.net)
 - can handle the device pixel ratio (DPR)
 - support for cache control and ETag
 
+## Docker 
+```yml
+static:
+    image: usercode/imagewizard
+    container_name: imagewizard
+    restart: always
+    networks:
+      - default      
+    volumes:
+      - file_cache:/data
+    environment:
+      - General__Key=DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==
+      - FileCache__Folder=/data
+      - HttpLoader__DefaultBaseUrl=https://domain.tld
+      - HttpLoader__AllowAbsoluteUrls=true
+```
+
+## Packages
 | Package                       | Release | 
 |--------------------------------|-----------------|
 | ImageWizard.Core          | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
