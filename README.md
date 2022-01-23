@@ -4,6 +4,8 @@ A ASP.NET Core service / middleware to resize your images dynamically as alterna
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard)](https://hub.docker.com/r/usercode/imagewizard)
 
+Demo: [imagewizard.net](https://imagewizard.net)
+
 ## Features
 - different image loader (http, file, youtube, gravatar) and caches (file, distributed cache, MongoDB)
 - resize, crop, rotate images
