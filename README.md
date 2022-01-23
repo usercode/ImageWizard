@@ -29,7 +29,7 @@ static:
       - General__Key=DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==
       - FileCache__Folder=/data
       - HttpLoader__DefaultBaseUrl=https://domain.tld
-      - HttpLoader__AllowAbsoluteUrls=true
+      - HttpLoader__AllowAbsoluteUrls=false
 ```
 
 ## Packages
