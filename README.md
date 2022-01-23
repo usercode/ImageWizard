@@ -27,6 +27,9 @@ static:
       - file_cache:/data
     environment:
       - General__Key=DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==
+      - General__AllowUnsafeUrl=false
+      - General__UseAcceptHeader=false
+      - General__UseETag=true
       - FileCache__Folder=/data
       - HttpLoader__DefaultBaseUrl=https://domain.tld
       - HttpLoader__AllowAbsoluteUrls=false
