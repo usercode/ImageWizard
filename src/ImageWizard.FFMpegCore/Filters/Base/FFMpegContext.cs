@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.FFMpegCore.Filters.Base
 {
-    public class FFMpegCoreContext : FilterContext
+    public class FFMpegContext : FilterContext
     {
 
-        public FFMpegCoreContext(ProcessingPipelineContext processingContext)
+        public FFMpegContext(ProcessingPipelineContext processingContext)
             : base(processingContext)
         {
 

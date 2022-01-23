@@ -25,5 +25,10 @@ namespace ImageWizard.Client
         {
             return new Pdf(filter);
         }
+
+        public static Video AsVideo(this IFilter filter)
+        {
+            return new Video(filter);
+        }
     }
 }

@@ -231,6 +231,10 @@
         </div>
     </div>
 
+    <h2>Video thumbnail</h2>
+
+    <img src="@Url.ImageWizard().Fetch("video/test.mp4").AsVideo().GetFrame().BuildUrl()" />
+
     <h2>PDF (page to image)</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("/pdf/earth.pdf").AsPdf().PageToImage(0).BuildUrl()</p>
     <p>@Url.ImageWizard().FetchLocalFile("/pdf/earth.pdf").AsPdf().PageToImage(0).BuildUrl()</p>

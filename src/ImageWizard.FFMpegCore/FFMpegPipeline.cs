@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.FFMpegCore
 {
-    public class FFMpegCorePipeline : ProcessingPipeline<FFMpegCoreFilter>
+    public class FFMpegPipeline : ProcessingPipeline<FFMpegFilter>
     {
-        public FFMpegCorePipeline(
+        public FFMpegPipeline(
             IServiceProvider serviceProvider, 
-            ILogger<FFMpegCorePipeline> logger, 
-            IEnumerable<PipelineAction<FFMpegCorePipeline>> actions)
+            ILogger<FFMpegPipeline> logger, 
+            IEnumerable<PipelineAction<FFMpegPipeline>> actions)
             : base(serviceProvider, logger)
         {
             actions.Foreach(x => x(this));
@@ -24,12 +24,12 @@ namespace ImageWizard.FFMpegCore
 
         protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
         {
-            return new FFMpegCoreFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
+            return new FFMpegFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
         }
 
         protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
         {
-            return new FFMpegCoreContext(context);
+            return new FFMpegContext(context);
         }
     }
 }
