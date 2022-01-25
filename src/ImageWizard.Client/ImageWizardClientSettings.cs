@@ -11,7 +11,7 @@ namespace ImageWizard
         {
             UseUnsafeUrl = false;
             Enabled = true;
-            BaseUrl = ImageWizardConstants.DefaultBasePath;
+            BaseUrl = ImageWizardDefaults.BasePath;
             Key = null;
         }
 

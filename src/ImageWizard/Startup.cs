@@ -12,6 +12,7 @@ using ImageWizard.Caches;
 using ImageWizard.Loaders;
 using ImageWizard.SkiaSharp;
 using ImageWizard.Azure;
+using ImageWizard.Analytics;
 
 namespace ImageWizard
 {
@@ -27,16 +28,17 @@ namespace ImageWizard
 
         public IWebHostEnvironment HostingEnvironment { get; }
 
+        public bool UseAnalytics = false;
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ImageWizardOptions>(Configuration.GetSection("General"));
             services.Configure<HttpLoaderOptions>(Configuration.GetSection("HttpLoader"));
             services.Configure<FileCacheSettings>(Configuration.GetSection("FileCache"));
             services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
-
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-
+            services.Configure<AzureBlobOptions>(Configuration.GetSection("Azure"));
+            services.Configure<ImageWizardAppOptions>(Configuration.GetSection("App"));
+            
             IImageWizardBuilder imageWizard = services.AddImageWizard()
                                                         .AddImageSharp()
                                                         .AddSkiaSharp(MimeTypes.WebP)
@@ -47,7 +49,9 @@ namespace ImageWizard
                                                         .AddYoutubeLoader()
                                                         .AddGravatarLoader()
                                                         .AddAzureLoader()
-                                                        .SetFileCache();
+                                                        .AddAnalytics()
+                                                        .SetFileCache()
+                                                        ;
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -56,23 +60,21 @@ namespace ImageWizard
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ImageWizardAppOptions> options)
         {
-            app.UseForwardedHeaders();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseForwardedHeaders();
             app.UseHttpsRedirection();
-
-            app.UseRouting();
-            app.UseEndpoints(x =>
+            app.UseImageWizard(x =>
             {
-                x.MapImageWizard();
-                x.MapRazorPages();
-                x.MapControllers();
+                if (options.Value.UseAnalytics)
+                {
+                    x.UseAnalytics();
+                }
             });
         }
     }

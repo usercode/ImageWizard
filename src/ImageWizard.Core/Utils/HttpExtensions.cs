@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard
 {
-    public static class ClientHintsExtensions
+    public static class HttpExtensions
     {
         public static ClientHints GetClientHints(this HttpRequest request, double[] allowedDPR)
         {

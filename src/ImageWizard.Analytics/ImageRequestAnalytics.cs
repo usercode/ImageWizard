@@ -10,7 +10,7 @@ namespace ImageWizard.Analytics
     /// </summary>
     class ImageRequestAnalytics : IImageWizardInterceptor
     {
-        public ImageRequestAnalytics(IAnalyticsData analyticsData)
+        public ImageRequestAnalytics(AnalyticsData analyticsData)
         {
             AnalyticsData = analyticsData;
         }
@@ -18,34 +18,63 @@ namespace ImageWizard.Analytics
         /// <summary>
         /// AnalyticsData
         /// </summary>
-        private IAnalyticsData AnalyticsData { get; }
+        private AnalyticsData AnalyticsData { get; }
 
         private readonly object _lock = new object();
 
-        public void OnResponseSending(HttpResponse response, ICachedData cachedImage)
+        private void SetData(string? mimeType, Action<AnalyticsDataItem> action)
         {
             lock (_lock)
             {
-                AnalyticsData.TransferedImages++;                
-                AnalyticsData.TransferedImagesInBytes += cachedImage.Metadata.FileLength ?? 0;
+                //total stats
+                action(AnalyticsData.Total);
+
+                //stats by mime type
+                mimeType ??= string.Empty;
+
+                if (AnalyticsData.ByMimeType.TryGetValue(mimeType, out AnalyticsDataItem? value) == false)
+                {
+                    value = new AnalyticsDataItem();
+
+                    AnalyticsData.ByMimeType.Add(mimeType, value);
+                }
+
+                action(value);
             }
         }
 
-        public void OnCachedImageCreated(ICachedData cachedImage)
+        public void OnCachedDataSending(HttpResponse response, ICachedData cachedData, bool notModified)
         {
-            lock(_lock)
+            SetData(cachedData.Metadata.MimeType, x =>
             {
-                AnalyticsData.CreatedImages++;
-                AnalyticsData.CreatedImagesInBytes += cachedImage.Metadata.FileLength ?? 0;
-            }
+                if (notModified)
+                {
+                    x.CachedDataSendNotModified++;
+                    x.CachedDataSendNotModifiedInBytes += cachedData.Metadata.FileLength ?? 0;
+                }
+                else
+                {
+                    x.CachedDataSend++;
+                    x.CachedDataSendInBytes += cachedData.Metadata.FileLength ?? 0;
+                }
+            });
         }
 
-        public void OnFailedSignature()
+        public void OnCachedDataCreated(ICachedData cachedData)
         {
-            lock(_lock)
+            SetData(cachedData.Metadata.MimeType, x =>
             {
-                AnalyticsData.InvalidSignature++;
-            }
+                x.CachedDataCreated++;
+                x.CachedDataCreatedInBytes += cachedData.Metadata.FileLength ?? 0;
+            });
+        }
+
+        public void OnFailedSignature(string? mimeType)
+        {
+            SetData(mimeType, x =>
+            {
+                x.InvalidSignature++;
+            });
         }
     }
 }

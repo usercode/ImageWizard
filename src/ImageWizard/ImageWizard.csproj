@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	<ProjectReference Include="..\ImageWizard.Analytics\ImageWizard.Analytics.csproj" />
 	<ProjectReference Include="..\ImageWizard.Azure\ImageWizard.Azure.csproj" />
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
     <ProjectReference Include="..\ImageWizard.DocNET\ImageWizard.DocNET.csproj" />

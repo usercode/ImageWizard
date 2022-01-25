@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
+﻿using ImageWizard.Utils;
+using Microsoft.AspNetCore.WebUtilities;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace ImageWizard
             UseAcceptHeader = false;
             Key = string.Empty;
 
-            AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
+            AllowedDPR = ImageWizardDefaults.AllowedDPR;
 
             CacheControl = new CacheControl();
         }
@@ -54,7 +55,7 @@ namespace ImageWizard
         public string Key { get; set; }
 
         /// <summary>
-        /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0, 4.0)
+        /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0)
         /// </summary>
         public double[] AllowedDPR { get; set; }
 

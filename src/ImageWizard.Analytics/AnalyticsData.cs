@@ -4,16 +4,25 @@ using System.Text;
 
 namespace ImageWizard.Analytics
 {
-    public class AnalyticsData : IAnalyticsData
+    /// <summary>
+    /// AnalyticsData
+    /// </summary>
+    public class AnalyticsData
     {
-        public long TransferedImages { get; set; }
+        public AnalyticsData()
+        {
+            Total = new AnalyticsDataItem();
+            ByMimeType = new Dictionary<string, AnalyticsDataItem>();
+        }
 
-        public long TransferedImagesInBytes { get; set; }
+        /// <summary>
+        /// Total
+        /// </summary>
+        public AnalyticsDataItem Total { get; set; }
 
-        public long InvalidSignature { get; set; }
-
-        public long CreatedImages { get; set; }
-
-        public long CreatedImagesInBytes { get; set; }
+        /// <summary>
+        /// ByMimeType
+        /// </summary>
+        public IDictionary<string, AnalyticsDataItem> ByMimeType { get; }
     }
 }

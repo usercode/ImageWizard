@@ -28,7 +28,7 @@ namespace ImageWizard
         public IServiceCollection Services { get; }
 
         /// <summary>
-        /// ImageLoaderManager
+        /// LoaderManager
         /// </summary>
         public TypeManager LoaderManager { get; }
 

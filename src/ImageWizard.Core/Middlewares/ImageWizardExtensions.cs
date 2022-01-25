@@ -1,4 +1,5 @@
 ﻿using ImageWizard.Caches;
+using ImageWizard.Core;
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -13,25 +14,35 @@ namespace ImageWizard
     {
         public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
         {
-            return MapImageWizard(endpoints, ImageWizardConstants.DefaultBasePath);
+            return MapImageWizard(endpoints, ImageWizardDefaults.BasePath);
         }
 
         public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, PathString path)
         {
-            return endpoints.MapMethods($"{path}/{{*path}}", new[] { "GET", "HEAD" }, new ImageWizardApi().ExecuteAsync);
+            return endpoints.MapMethods($"{path}/{{*path}}", new[] { HttpMethods.Get, HttpMethods.Head }, new ImageWizardApi().ExecuteAsync);
         }
 
         public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder)
         {
-            return UseImageWizard(builder, ImageWizardConstants.DefaultBasePath);
+            return UseImageWizard(builder, ImageWizardDefaults.BasePath);
         }
 
-        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, PathString path)
+        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
+        {
+            return UseImageWizard(builder, ImageWizardDefaults.BasePath, endpointsHandler);
+        }
+
+        public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, PathString path, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
         {
             builder.Map(path, x =>
             {
                 x.UseRouting();
-                x.UseEndpoints(endpoits => endpoits.MapImageWizard(PathString.Empty));
+                x.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapImageWizard(PathString.Empty);
+
+                    endpointsHandler?.Invoke(new ImageWizardEndpointBuilder(endpoints));
+                });
             });
 
             return builder;

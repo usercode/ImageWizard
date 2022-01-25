@@ -7,11 +7,11 @@ namespace ImageWizard
 {
     public interface IImageWizardInterceptor
     {
-        void OnResponseSending(HttpResponse response, ICachedData cachedImage);
+        void OnCachedDataSending(HttpResponse response, ICachedData cachedData, bool notModified);
 
-        void OnCachedImageCreated(ICachedData cachedImage);
+        void OnCachedDataCreated(ICachedData cachedData);
 
-        void OnFailedSignature();
+        void OnFailedSignature(string? mimeType);
 
     }
 }

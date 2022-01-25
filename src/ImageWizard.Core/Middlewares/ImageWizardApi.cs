@@ -64,7 +64,7 @@ namespace ImageWizard
                 }
                 else
                 {
-                    interceptors.Foreach(x => x.OnFailedSignature());
+                    interceptors.Foreach(x => x.OnFailedSignature(context.Request.ContentType));
 
                     return Results.Problem(detail: "signature is not valid!", statusCode: StatusCodes.Status403Forbidden);
                 }
@@ -101,6 +101,7 @@ namespace ImageWizard
                 return Results.Problem(detail: $"Data loader not found: {url.LoaderType}", statusCode: StatusCodes.Status500InternalServerError);
             }
 
+            //read cached data
             ICachedData? cachedData = await cache.ReadAsync(key);
 
             bool createCachedData = true;
@@ -115,7 +116,7 @@ namespace ImageWizard
                     DataLoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
                                                                     || cachedData.Metadata.Cache.NoCache == true
                                                                     || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
-                    _ => throw new Exception("Unknown refresh mode.")
+                    _ => throw new Exception($"Unknown refresh mode: {loader.Options.Value.RefreshMode}")
                 };
             }
 
@@ -196,7 +197,7 @@ namespace ImageWizard
 
                     if (cachedData != null)
                     {
-                        interceptors.Foreach(x => x.OnCachedImageCreated(cachedData));
+                        interceptors.Foreach(x => x.OnCachedDataCreated(cachedData));
                     }
                 }
             }
@@ -216,6 +217,8 @@ namespace ImageWizard
                 if (isValid == true)
                 {
                     logger.LogTrace("Operation completed: 304 Not modified");
+
+                    interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, true));
 
                     return Results.StatusCode(StatusCodes.Status304NotModified);
                 }
@@ -274,7 +277,7 @@ namespace ImageWizard
                 return Results.Ok();
             }
 
-            interceptors.Foreach(x => x.OnResponseSending(context.Response, cachedData));
+            interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, false));
 
             //send response stream
             Stream stream = await cachedData.OpenReadAsync();

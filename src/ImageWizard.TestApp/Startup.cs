@@ -137,7 +137,7 @@ namespace ImageWizard.TestApp
             
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseImageWizard();
+            app.UseImageWizard(x => x.UseAnalytics());
             app.UseRouting();
             app.UseEndpoints(x =>
             {
