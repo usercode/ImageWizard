@@ -31,9 +31,22 @@ static:
       - General__AllowUnsafeUrl=false
       - General__UseAcceptHeader=false
       - General__UseETag=true
+      - General__AllowedDPR__0=1.0
+      - General__AllowedDPR__1=1.5
+      - General__AllowedDPR__2=2.0
+      - General__AllowedDPR__3=3.0
+      - General__CacheControl__IsEnabled=true
+      - General__CacheControl__Public=true
+      - General__CacheControl__MaxAge=60
+      - General__CacheControl__MustRevalidate=false
+      - General__CacheControl__NoCache=true
+      - General__CacheControl__NoStore=true      
       - FileCache__Folder=/data
       - HttpLoader__DefaultBaseUrl=https://domain.tld
       - HttpLoader__AllowAbsoluteUrls=false
+      - HttpLoader__AllowedHosts__0=domain.tld
+      - HttpLoader__Headers__0__Name=ApiKey
+      - HttpLoader__Headers__0__Value=123      
 ```
 
 ## Packages
