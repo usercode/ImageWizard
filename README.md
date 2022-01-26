@@ -166,7 +166,11 @@ app.UseEndpoints(x => x.MapImageWizard());
 
 or
 
-app.UseImageWizard();
+app.UseImageWizard(x =>
+		{
+			//default url: image/analytics
+			x.UseAnalytics();
+		});
 ```
 
 ## Create custom filter
@@ -178,7 +182,6 @@ app.UseImageWizard();
     - bool ("True" or "False")
     - enum (value)
     - string ('Hello')
-- add filter context parameter to get access to image and settings
 
 ```csharp
  public class BackgroundColorFilter : ImageSharpFilter
@@ -307,7 +310,6 @@ services.AddImageWizardClient(options =>
     options.UseUnsafeUrl = false;
 });
 ```
-
 Create url with fluent api
 
 ```csharp
@@ -324,6 +326,18 @@ Create url with fluent api
 .Resize(160,140)
 .Jpg(90)
 .BuildUrl()
+```
+
+Use dependency injection
+```csharp
+@IImageWizardUrlBuilder UrlBuilder
+
+<img src="UrlBuilder.FetchLocalFile("picture.jpg").Resize(400,200,max).Grayscale().BuildUrl()" />
+```
+
+Use IUrlHelper
+```csharp
+<img src="@Url.ImageWizard().FetchLocalFile("picture.jpg").Resize(400,200,max).Grayscale().BuildUrl()" />
 ```
 
 ## Processing pipelines
