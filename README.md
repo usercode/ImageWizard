@@ -332,7 +332,7 @@ Use dependency injection
 ```csharp
 @IImageWizardUrlBuilder UrlBuilder
 
-<img src="UrlBuilder.FetchLocalFile("picture.jpg").Resize(400,200,max).Grayscale().BuildUrl()" />
+<img src="@UrlBuilder.FetchLocalFile("picture.jpg").Resize(400,200,max).Grayscale().BuildUrl()" />
 ```
 
 Use IUrlHelper
