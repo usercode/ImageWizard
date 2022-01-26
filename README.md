@@ -323,7 +323,10 @@ Create url with fluent api
 .File("test/picture.jpg")
 //or azure
 .Azure("image.jpg")
-.Resize(160,140)
+.AsImage()
+.Resize(160,140,ResizeMode.Max)
+.Blur()
+.Grayscale()
 .Jpg(90)
 .BuildUrl()
 ```
@@ -332,12 +335,12 @@ Use dependency injection
 ```csharp
 @IImageWizardUrlBuilder UrlBuilder
 
-<img src="@UrlBuilder.FetchLocalFile("picture.jpg").Resize(400, 200, ResizeMode.Max).Grayscale().BuildUrl()" />
+<img src="@UrlBuilder.FetchLocalFile("picture.jpg").AsImage().Resize(400, 200, ResizeMode.Max).Grayscale().BuildUrl()" />
 ```
 
 Use IUrlHelper
 ```csharp
-<img src="@Url.ImageWizard().FetchLocalFile("picture.jpg").Resize(400, 200, ResizeMode.Max).Grayscale().BuildUrl()" />
+<img src="@Url.ImageWizard().FetchLocalFile("picture.jpg").AsImage().Resize(400, 200, ResizeMode.Max).Grayscale().BuildUrl()" />
 ```
 
 ## Processing pipelines
