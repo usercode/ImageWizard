@@ -19,7 +19,7 @@ namespace ImageWizard.Loaders
         {
             HostingEnvironment = hostingEnvironment;
 
-            FileProvider = new PhysicalFileProvider(Path.Combine(HostingEnvironment.ContentRootPath, options.Value.Folder));
+            FileProvider = new PhysicalFileProvider(Path.Join(HostingEnvironment.ContentRootPath, options.Value.Folder));
         }
 
         /// <summary>

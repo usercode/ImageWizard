@@ -8,7 +8,7 @@ namespace ImageWizard.Client
     /// <summary>
     /// UrlBuilder
     /// </summary>
-    public class UrlBuilder : ILoader
+    class UrlBuilder : IImageWizardUrlBuilder, ILoader
     {
         /// <summary>
         /// Settings

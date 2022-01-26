@@ -18,7 +18,7 @@ namespace ImageWizard.Client.TagHelpers
     /// </summary>
     public class YoutubeTagHelper : TagHelper
     {
-        public YoutubeTagHelper(IUrlHelper imageUrlBuilder)
+        public YoutubeTagHelper(IImageWizardUrlBuilder imageUrlBuilder)
         {
             UrlBuilder = imageUrlBuilder;
 
@@ -59,9 +59,9 @@ namespace ImageWizard.Client.TagHelpers
         public bool UseNoCookie { get; set; }
 
         /// <summary>
-        /// UrlBuilder
+        /// IImageWizardUrlBuilder
         /// </summary>
-        private IUrlHelper UrlBuilder { get; }
+        private IImageWizardUrlBuilder UrlBuilder { get; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -96,9 +96,9 @@ namespace ImageWizard.Client.TagHelpers
             output.Attributes.SetAttribute("class", "imagewizard-youtube");
             output.Attributes.SetAttribute("data-embeded", HttpUtility.HtmlEncode(responsiveTag.ToString()));
 
-            var image = UrlBuilder.ImageWizard()
-                                            .Youtube(VideoId)
-                                            .Resize(Width, Height);
+            Image image = UrlBuilder
+                                .Youtube(VideoId)
+                                .Resize(Width, Height);
 
             if (Grayscale)
             {
