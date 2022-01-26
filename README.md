@@ -332,12 +332,12 @@ Use dependency injection
 ```csharp
 @IImageWizardUrlBuilder UrlBuilder
 
-<img src="@UrlBuilder.FetchLocalFile("picture.jpg").Resize(400,200,max).Grayscale().BuildUrl()" />
+<img src="@UrlBuilder.FetchLocalFile("picture.jpg").Resize(400, 200, ResizeMode.Max).Grayscale().BuildUrl()" />
 ```
 
 Use IUrlHelper
 ```csharp
-<img src="@Url.ImageWizard().FetchLocalFile("picture.jpg").Resize(400,200,max).Grayscale().BuildUrl()" />
+<img src="@Url.ImageWizard().FetchLocalFile("picture.jpg").Resize(400, 200, ResizeMode.Max).Grayscale().BuildUrl()" />
 ```
 
 ## Processing pipelines
