@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Client
 {
-    public abstract class File : IFileType, IFilter
+    public abstract class File : IFilter
     {
         public File(IFilter filter)
         {

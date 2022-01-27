@@ -110,7 +110,6 @@ namespace ImageWizard.TestApp
             });
 
             services.AddRazorPages();
-            services.AddControllersWithViews();
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -142,7 +141,6 @@ namespace ImageWizard.TestApp
             app.UseEndpoints(x =>
             {
                 x.MapRazorPages();
-                x.MapControllers();
             });
         }
     }
