@@ -5,19 +5,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Utils
+namespace ImageWizard.Caches
 {
-    /// <summary>
-    /// CachedDataKeyHelper
-    /// </summary>
-    class CachedDataKeyHelper
+    public class SHA256CacheKey : ICacheKey
     {
-        /// <summary>
-        /// Create
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string Create(string input)
+        public string Create(string input)
         {
             Span<byte> keyBufferSpan = stackalloc byte[32];
 

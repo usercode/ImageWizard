@@ -63,6 +63,8 @@ namespace ImageWizard
             services.AddTransient<ICache, OneTimeCache>();
             services.AddHttpContextAccessor();
 
+            services.AddSingleton<ICacheKey, SHA256CacheKey>();
+
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
             services.AddSingleton(configuration);
 

@@ -35,6 +35,7 @@ namespace ImageWizard
                                                 IOptions<ImageWizardOptions> options,
                                                 ILogger<ImageWizardApi> logger,
                                                 ICache cache,
+                                                ICacheKey cacheKey,
                                                 IEnumerable<IImageWizardInterceptor> interceptors,
                                                 ImageWizardBuilder builder,
                                                 string path)
@@ -90,7 +91,7 @@ namespace ImageWizard
             }
 
             //generate data key
-            string key = CachedDataKeyHelper.Create(url_path_with_headers);
+            string key = cacheKey.Create(url_path_with_headers);
 
             //get data loader
             Type loaderType = builder.LoaderManager.Get(url.LoaderType);
