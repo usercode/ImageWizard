@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Caches
 {
-    public class SHA256CacheKey : ICacheKey
+    public class SHA256CachedDataKey : ICachedDataKey
     {
         public string Create(string input)
         {

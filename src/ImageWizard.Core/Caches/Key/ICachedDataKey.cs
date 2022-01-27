@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace ImageWizard.Caches
 {
     /// <summary>
-    /// ICacheKey
+    /// ICachedDataKey
     /// </summary>
-    public interface ICacheKey
+    public interface ICachedDataKey
     {
         /// <summary>
         /// Create

@@ -35,7 +35,8 @@ namespace ImageWizard
                                                 IOptions<ImageWizardOptions> options,
                                                 ILogger<ImageWizardApi> logger,
                                                 ICache cache,
-                                                ICacheKey cacheKey,
+                                                ICachedDataKey cachedDataKey,
+                                                ICachedDataHash cachedDataHash,
                                                 IEnumerable<IImageWizardInterceptor> interceptors,
                                                 ImageWizardBuilder builder,
                                                 string path)
@@ -91,7 +92,7 @@ namespace ImageWizard
             }
 
             //generate data key
-            string key = cacheKey.Create(url_path_with_headers);
+            string key = cachedDataKey.Create(url_path_with_headers);
 
             //get data loader
             Type loaderType = builder.LoaderManager.Get(url.LoaderType);
@@ -161,10 +162,10 @@ namespace ImageWizard
 
                     logger.LogTrace("Save new cached data");
 
-                    using SHA256 sha256 = SHA256.Create();
+                    processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
 
                     //create hash of cached image
-                    byte[] hash = sha256.ComputeHash(processingContext.Result.Data);
+                    string hash = await cachedDataHash.CreateAsync(processingContext.Result.Data);
 
                     //create metadata
                     Metadata metadata = new Metadata()
@@ -175,7 +176,7 @@ namespace ImageWizard
                         Filters = url.Filters,
                         LoaderSource = url.LoaderSource,
                         LoaderType = url.LoaderType,
-                        Hash = Convert.ToHexString(hash),
+                        Hash = hash,
                         MimeType = processingContext.Result.MimeType,
                         FileLength = processingContext.Result.Data.Length
                     };
