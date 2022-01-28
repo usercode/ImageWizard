@@ -17,7 +17,7 @@ namespace ImageWizard
 
         private readonly static Regex Regex = new Regex($@"^(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([^)]*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public ImageWizardUrl(string signature, string path, string loaderType, string loaderSource, IEnumerable<string> filters)
+        private ImageWizardUrl(string signature, string path, string loaderType, string loaderSource, IEnumerable<string> filters)
         {
             Signature = signature;
             Path = path;

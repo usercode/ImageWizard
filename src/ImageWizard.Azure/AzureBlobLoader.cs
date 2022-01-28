@@ -36,15 +36,17 @@ namespace ImageWizard.Azure
                 conditions.IfNoneMatch = new ETag(existingCachedImage.Metadata.Cache.ETag);
             }
 
-            var response = await blob.DownloadAsync(conditions: conditions);
+            var response = await blob.DownloadStreamingAsync(conditions: conditions);
 
             if (response.GetRawResponse().Status == (int)System.Net.HttpStatusCode.NotModified)
             {
+                response.Value.Dispose();
+
                 return null;
             }
 
             return new OriginalData(
-                        response.Value.ContentType,
+                        response.Value.Details.ContentType,
                         response.Value.Content,
                         new CacheSettings() { ETag = response.Value.Details.ETag.ToString().GetTagUnquoted() });
         }
