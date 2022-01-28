@@ -66,6 +66,8 @@ namespace ImageWizard
             services.AddSingleton<ICachedDataKey, SHA256CachedDataKey>();
             services.AddSingleton<ICachedDataHash, SHA256CachedDataHash>();
 
+            services.AddSingleton<ISignatureService, HMACSHA256SignatureService>();
+
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
             services.AddSingleton(configuration);
 

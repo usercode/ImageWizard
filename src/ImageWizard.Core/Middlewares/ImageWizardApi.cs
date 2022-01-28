@@ -34,6 +34,7 @@ namespace ImageWizard
                                                 HttpContext context,
                                                 IOptions<ImageWizardOptions> options,
                                                 ILogger<ImageWizardApi> logger,
+                                                ISignatureService signatureService,
                                                 ICache cache,
                                                 ICachedDataKey cachedDataKey,
                                                 ICachedDataHash cachedDataHash,
@@ -60,7 +61,9 @@ namespace ImageWizard
             else
             {
                 //check signature
-                if (url.IsSignatureValid(options.Value.Key))
+                string signature = signatureService.Encrypt(options.Value.Key, url.Path);
+
+                if (url.Signature == signature)
                 {
                     logger.LogTrace("signature is valid");
                 }
@@ -173,10 +176,10 @@ namespace ImageWizard
                         Cache = originalData.Cache,
                         Created = DateTime.UtcNow,
                         Key = key,
+                        Hash = hash,
                         Filters = url.Filters,
                         LoaderSource = url.LoaderSource,
-                        LoaderType = url.LoaderType,
-                        Hash = hash,
+                        LoaderType = url.LoaderType,                        
                         MimeType = processingContext.Result.MimeType,
                         FileLength = processingContext.Result.Data.Length
                     };

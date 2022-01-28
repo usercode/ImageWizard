@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ImageWizard.Utils;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,7 +62,9 @@ namespace ImageWizard.Client
             }
             else
             {
-                url = ImageWizardUrl.Create(ImageUrlBuilder.Settings.Key, LoaderType, LoaderSource, Filters);
+                ISignatureService signatureService = ServiceProvider.GetRequiredService<ISignatureService>();
+
+                url = ImageWizardUrl.Create(signatureService, ImageUrlBuilder.Settings.Key, LoaderType, LoaderSource, Filters);
             }
 
             return $"{ImageUrlBuilder.Settings.BaseUrl.TrimEnd('/')}/{url}";

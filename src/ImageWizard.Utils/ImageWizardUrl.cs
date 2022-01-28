@@ -28,27 +28,33 @@ namespace ImageWizard
 
         public static ImageWizardUrl CreateUnsafe(string loaderType, string loaderSource, IEnumerable<string> filters)
         {
-            return CreateInternal(true, null, loaderType, loaderSource, filters);
+            return CreateInternal(true, null, null, loaderType, loaderSource, filters);
         }
 
-        public static ImageWizardUrl Create(string key, string loaderType, string loaderSource, IEnumerable<string> filters)
+        public static ImageWizardUrl Create(ISignatureService signatureService, string key, string loaderType, string loaderSource, IEnumerable<string> filters)
         {
-            return CreateInternal(false, key, loaderType, loaderSource, filters);
+            return CreateInternal(false, signatureService, key, loaderType, loaderSource, filters);
         }
 
-        private static ImageWizardUrl CreateInternal(bool isUnsafe, string? key, string loaderType, string loaderSource, IEnumerable<string> filters)
+        private static ImageWizardUrl CreateInternal(bool useUnsafe, ISignatureService? signatureService, string? key, string loaderType, string loaderSource, IEnumerable<string> filters)
         {
-            string signature = Unsafe;
             string path = $"{string.Join('/', filters)}/{loaderType}/{loaderSource.TrimStart('/')}".TrimStart('/');
+            string signature = Unsafe;
 
-            if (isUnsafe == false)
+            //create signature?
+            if (useUnsafe == false)
             {
+                if (signatureService == null)
+                {
+                    throw new ArgumentNullException(nameof(signatureService));
+                }
+
                 if (key == null)
                 {
                     throw new ArgumentNullException(nameof(key));
                 }
 
-                signature = new CryptoService().Encrypt(key, path);
+                signature = signatureService.Encrypt(key, path);
             }
 
             ImageWizardUrl url = new ImageWizardUrl(signature, path, loaderType, loaderSource, filters);
@@ -109,18 +115,6 @@ namespace ImageWizard
         /// IsUnsafeUrl
         /// </summary>
         public bool IsUnsafeUrl => Signature == Unsafe;
-
-        /// <summary>
-        /// IsSignatureValid
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public bool IsSignatureValid(string key)
-        {
-            string signature = new CryptoService().Encrypt(key, Path);
-
-            return signature == Signature;
-        }
 
         public override string ToString()
         {

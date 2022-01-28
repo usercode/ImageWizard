@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ImageWizard.Utils;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,8 +21,10 @@ namespace ImageWizard.Client
         {
             services.Configure(setup);
 
-            services.AddTransient<IImageWizardUrlBuilder, UrlBuilder>();
             services.AddHttpContextAccessor();
+            services.AddTransient<IImageWizardUrlBuilder, UrlBuilder>();
+            
+            services.AddSingleton<ISignatureService, HMACSHA256SignatureService>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IUrlHelper>(x =>

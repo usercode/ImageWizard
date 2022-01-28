@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace ImageWizard.Utils
 {
     /// <summary>
-    /// CryptoService
+    /// HMACSHA256SignatureService
     /// </summary>
-    public class CryptoService
+    public class HMACSHA256SignatureService : ISignatureService
     {
         /// <summary>
         /// Encrypt
