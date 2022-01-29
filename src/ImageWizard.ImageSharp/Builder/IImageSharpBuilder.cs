@@ -4,14 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.ImageSharp.Builder
+namespace ImageWizard
 {
     public interface IImageSharpBuilder : IImageWizardBuilder
     {
-        IImageSharpBuilder WithOptions(Action<ImageSharpOptions> action);
-
-        IImageSharpBuilder WithFilter<TFilter>() where TFilter : ImageSharpFilter;
-
-
+        
     }
 }

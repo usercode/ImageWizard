@@ -1,7 +1,4 @@
-﻿using ImageWizard.ImageSharp.Builder;
-using ImageWizard.ImageSharp.Filters;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using ImageWizard.ImageSharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Text;

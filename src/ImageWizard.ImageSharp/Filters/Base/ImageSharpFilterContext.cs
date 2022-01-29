@@ -1,6 +1,7 @@
 ﻿using ImageWizard.ImageFormats.Base;
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IO;
 using SixLabors.ImageSharp;
@@ -74,6 +75,10 @@ namespace ImageWizard.ImageSharp.Filters
             {
                 Image.Mutate(x => x.Resize(new ResizeOptions() { Mode = ResizeMode.Max, Size = new Size(width, height) }));
             }
+
+            //execute postprocessing
+            ImagePostProcessing postProcessing = ProcessingContext.ServiceProvider.GetService<ImagePostProcessing>();
+            postProcessing?.Invoke(this);
 
             Stream mem = ProcessingContext.StreamPool.GetStream();
 

@@ -33,6 +33,7 @@ namespace ImageWizard
         public async Task<IResult> ExecuteAsync(
                                                 HttpContext context,
                                                 IOptions<ImageWizardOptions> options,
+                                                IServiceProvider serviceProvider,
                                                 ILogger<ImageWizardApi> logger,
                                                 ISignatureService signatureService,
                                                 ICache cache,
@@ -138,6 +139,7 @@ namespace ImageWizard
                     ClientHints clientHints = context.Request.GetClientHints(options.Value.AllowedDPR);
 
                     using ProcessingPipelineContext processingContext = new ProcessingPipelineContext(
+                                                                serviceProvider,
                                                                 context.RequestServices.GetRequiredService<IStreamPool>(),
                                                                  new DataResult(originalData.Data, originalData.MimeType),
                                                                  clientHints,

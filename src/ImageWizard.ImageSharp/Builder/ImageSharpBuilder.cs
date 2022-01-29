@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.ImageSharp.Builder
+namespace ImageWizard
 {
     class ImageSharpBuilder : IImageSharpBuilder
     {
@@ -12,23 +12,23 @@ namespace ImageWizard.ImageSharp.Builder
         {
             Builder = builder;
 
-            WithFilter<ResizeFilter>();
-            WithFilter<BackgroundColorFilter>();
-            WithFilter<CropFilter>();
-            WithFilter<GrayscaleFilter>();
-            WithFilter<BlackWhiteFilter>();
-            WithFilter<TrimFilter>();
-            WithFilter<FlipFilter>();
-            WithFilter<RotateFilter>();
-            WithFilter<BlurFilter>();
-            WithFilter<InvertFilter>();
-            WithFilter<BrightnessFilter>();
-            WithFilter<ContrastFilter>();
-            WithFilter<DPRFilter>();
-            WithFilter<AutoOrientFilter>();
-            WithFilter<MetadataFilter>();
-            WithFilter<ImageFormatFilter>();
-            WithFilter<TextFilter>();
+            this.WithFilter<ResizeFilter>();
+            this.WithFilter<BackgroundColorFilter>();
+            this.WithFilter<CropFilter>();
+            this.WithFilter<GrayscaleFilter>();
+            this.WithFilter<BlackWhiteFilter>();
+            this.WithFilter<TrimFilter>();
+            this.WithFilter<FlipFilter>();
+            this.WithFilter<RotateFilter>();
+            this.WithFilter<BlurFilter>();
+            this.WithFilter<InvertFilter>();
+            this.WithFilter<BrightnessFilter>();
+            this.WithFilter<ContrastFilter>();
+            this.WithFilter<DPRFilter>();
+            this.WithFilter<AutoOrientFilter>();
+            this.WithFilter<MetadataFilter>();
+            this.WithFilter<ImageFormatFilter>();
+            this.WithFilter<TextFilter>();
         }
 
         private IImageWizardBuilder Builder { get; }
@@ -42,21 +42,6 @@ namespace ImageWizard.ImageSharp.Builder
         void IImageWizardBuilder.AddPipeline<T>(string[] mimeTypes)
         {
             Builder.AddPipeline<T>(mimeTypes);
-        }
-
-        public IImageSharpBuilder WithFilter<TFilter>() where TFilter : ImageSharpFilter
-        {
-            Builder.Services.AddTransient<TFilter>();
-            Builder.Services.AddSingleton(new PipelineAction<ImageSharpPipeline>(x => x.AddFilter<TFilter>()));
-
-            return this;
-        }
-
-        public IImageSharpBuilder WithOptions(Action<ImageSharpOptions> action)
-        {
-            Builder.Services.Configure(action);
-
-            return this;
         }
     }
 }

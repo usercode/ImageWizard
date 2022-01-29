@@ -2,6 +2,7 @@
 using ImageWizard.Filters.ImageFormats;
 using ImageWizard.ImageFormats.Base;
 using ImageWizard.Processing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
@@ -58,7 +59,13 @@ namespace ImageWizard.ImageSharp.Filters
                 targetFormat = ImageFormatHelper.FirstOrDefault(context.Result.MimeType);
             }
 
-            return new ImageSharpFilterContext(context, image, targetFormat, Options);
+            ImageSharpFilterContext imageSharpContext = new ImageSharpFilterContext(context, image, targetFormat, Options);
+
+            //execute preprocessing            
+            ImagePreProcessing preProcessing = ServiceProvider.GetService<ImagePreProcessing>();
+            preProcessing?.Invoke(imageSharpContext);
+
+            return imageSharpContext;
         }
     }
 }

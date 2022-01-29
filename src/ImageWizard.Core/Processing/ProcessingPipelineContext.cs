@@ -11,6 +11,7 @@ namespace ImageWizard.Processing
     public class ProcessingPipelineContext : IDisposable
     {
         public ProcessingPipelineContext(
+            IServiceProvider serviceProvider,
             IStreamPool streamPool,
             DataResult result, 
             ClientHints clientHints, 
@@ -18,7 +19,8 @@ namespace ImageWizard.Processing
             IEnumerable<string> acceptMimeTypes,
             IEnumerable<string> urlFilters)
         {
-            StreamPool = streamPool;            
+            ServiceProvider = serviceProvider;
+            StreamPool = streamPool;
             ClientHints = clientHints;
             ImageWizardOptions = imageWizardOptions;
             AcceptMimeTypes = acceptMimeTypes;
@@ -26,6 +28,11 @@ namespace ImageWizard.Processing
 
             _dataResult = result;
         }
+
+        /// <summary>
+        /// ServiceProvider
+        /// </summary>
+        public IServiceProvider ServiceProvider { get; }
 
         /// <summary>
         /// StreamPooling

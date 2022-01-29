@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using ImageWizard.Client;
 using ImageWizard.OpenCvSharp;
 using ImageWizard.Caches;
+using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.TestApp
 {
@@ -61,6 +62,14 @@ namespace ImageWizard.TestApp
                                     x.ImageMaxWidth = 4000;
                                 })
                     .WithFilter<ResizeFilter>()
+                    .WithPreProcessing(x =>
+                    {
+                        x.Image.Mutate(m => m.AutoOrient());
+                    })
+                    .WithPostProcessing(x=>
+                    {
+                        //x.Image.Mutate(m => m.Grayscale());
+                    })
                 .AddSkiaSharp(MimeTypes.WebP)
                     .WithOptions(x =>
                                 {
