@@ -380,6 +380,7 @@ Use IUrlHelper
 - jpg(quality)
 - png()
 - gif()
+- tga()
 - bmp()
 
 #### Special options
