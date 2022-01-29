@@ -26,6 +26,7 @@ namespace ImageWizard.ImageSharp.Builder
             WithFilter<ContrastFilter>();
             WithFilter<DPRFilter>();
             WithFilter<AutoOrientFilter>();
+            WithFilter<MetadataFilter>();
             WithFilter<ImageFormatFilter>();
             WithFilter<TextFilter>();
         }
