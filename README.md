@@ -2,6 +2,8 @@
 A ASP.NET Core service / middleware to resize your images dynamically as alternative for thumbor.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)
+[![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard)](https://hub.docker.com/r/usercode/imagewizard)
 
 Demo: [imagewizard.net](https://imagewizard.net)
 
@@ -14,57 +16,7 @@ Demo: [imagewizard.net](https://imagewizard.net)
 - can handle the device pixel ratio (DPR)
 - support for cache control and ETag
 
-## Docker 
-[![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard)](https://hub.docker.com/r/usercode/imagewizard)
-
-```yml
-static:
-    image: usercode/imagewizard
-    container_name: imagewizard
-    restart: always
-    networks:
-      - default      
-    volumes:
-      - file_cache:/data
-    environment:
-      - General__Key=DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==
-      - General__AllowUnsafeUrl=false
-      - General__UseAcceptHeader=false
-      - General__UseETag=true
-      - General__AllowedDPR__0=1.0
-      - General__AllowedDPR__1=1.5
-      - General__AllowedDPR__2=2.0
-      - General__AllowedDPR__3=3.0
-      - General__CacheControl__IsEnabled=true
-      - General__CacheControl__Public=true
-      - General__CacheControl__MaxAge=60
-      - General__CacheControl__MustRevalidate=false
-      - General__CacheControl__NoCache=true
-      - General__CacheControl__NoStore=true      
-      - FileCache__Folder=/data
-      - HttpLoader__DefaultBaseUrl=https://domain.tld
-      - HttpLoader__AllowAbsoluteUrls=false
-      - HttpLoader__AllowedHosts__0=domain.tld
-      - HttpLoader__Headers__0__Name=ApiKey
-      - HttpLoader__Headers__0__Value=123      
-```
-
-## Packages
-| Package                       | Release | 
-|--------------------------------|-----------------|
-| ImageWizard.Core          | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) |
-| ImageWizard.Client        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Client.svg)](https://www.nuget.org/packages/ImageWizard.Client/) |
-| ImageWizard.ImageSharp    | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.ImageSharp.svg)](https://www.nuget.org/packages/ImageWizard.ImageSharp/)|
-| ImageWizard.SkiaSharp     | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SkiaSharp.svg)](https://www.nuget.org/packages/ImageWizard.SkiaSharp/)|
-| ImageWizard.SvgNet        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SvgNet.svg)](https://www.nuget.org/packages/ImageWizard.SvgNet/)|
-| ImageWizard.MongoDB       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
-| ImageWizard.Piranha       | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/) |
-| ImageWizard.Azure         | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Azure.svg)](https://www.nuget.org/packages/ImageWizard.Azure/) |
-| ImageWizard.DocNET        | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.DocNET.svg)](https://www.nuget.org/packages/ImageWizard.DocNET/) |
-
-## Overview
-
-Example:
+## Example
 <p align="center">
 https://localhost/  <br/>
 image/  <br/>
@@ -76,25 +28,38 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 | Description         | Url segment |
 |---------------------------------|-----------------|
-| base path                       | "image" |
+| base path                       | "image" | 
 | signature based on HMACSHA256   | "cGiAwFYGYWx0SzO0YyCidWIfkdlUYrVgBwbm7bcTOjE" or "unsafe" (if enabled) |
 | any filters                     | "resize(200,200)/grayscale()/jpg(90)" |
 | loader type                     | "fetch" |
 | loader source                   | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
+## Image loaders
+| Name                | Loader type | Loader source | NuGet |
+|-----------------------------------|-----------------|----|---|
+| http loader        | fetch       | absolute or relative url of the original image |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) 
+| file loader         | file        | relative path to file   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) 
+| youtube loader      | youtube     | video id                | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)
+| gravatar loader     | gravatar    | encoded email address   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)
+| Azure loader       | azure       | relative path to file   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Azure.svg)](https://www.nuget.org/packages/ImageWizard.Azure/)
+
+## Image caches
+| Name                 | Description        | NuGet     |
+|----------------------|--------------------|-----------|
+|  file cache         |                    |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
+|  distributed cache   | MS SQL, Redis      |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
+|  MongoDB cache       | Use GridFS |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
+
 ## Processing pipelines
 
-| package  |  mime type |
-|------------------------------------|-----------------|
-| ImageWizard.ImageSharp | image/jpeg, image/png, image/gif, image/bmp | 
-| ImageWizard.SkiaSharp  | image/jpeg, image/png, image/gif, image/bmp, image/webp  | 
-| ImageWizard.SvgNet     | image/svg+xml |
-| ImageWizard.DocNET     | application/pdf |
+| Package  |  Mime type | NuGet |
+|------------------------------------|-----------------|------------|
+| ImageSharp | image/jpeg, image/png, image/gif, image/bmp, image/tga |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.ImageSharp.svg)](https://www.nuget.org/packages/ImageWizard.ImageSharp/)
+| SkiaSharp  | image/jpeg, image/png, image/gif, image/bmp, image/webp  | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SkiaSharp.svg)](https://www.nuget.org/packages/ImageWizard.SkiaSharp/)
+| SvgNet     | image/svg+xml | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SvgNet.svg)](https://www.nuget.org/packages/ImageWizard.SvgNet/)
+| DocNET     | application/pdf | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.DocNET.svg)](https://www.nuget.org/packages/ImageWizard.DocNET/)
 
 ## Integrate into existing ASP.NET Core applications
-
-https://www.nuget.org/packages/ImageWizard.Core/
-
 
 ```csharp
 services.AddImageWizard();
@@ -437,23 +402,6 @@ Use IUrlHelper
 - rotate(angle)
   - value: float
 
-## Image loaders
-- HTTP loader ("fetch")
-  - absolute or relative url of the original image
-- file loader ("file")
-  - relative url to file
-- youtube loader ("youtube")
-  - video id
-- gravatar loader ("gravatar")
-- Azure loader ("azure")
-
-## Image caches
-- file cache
-- distributed cache
-  - MS SQL
-  - Redis
-- MongoDB cache
-
 
 ## Plugin for Piranha CMS 8.0
 
@@ -463,4 +411,39 @@ Useful to resize imagefields.
 
 ```csharp
 <img src="@Url.ImageWizard().Fetch(Model.Body).Resize(900,900).Grayscale().Blur().BuildUrl()">
+```
+
+## Docker 
+[![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard)](https://hub.docker.com/r/usercode/imagewizard)
+
+```yml
+static:
+    image: usercode/imagewizard
+    container_name: imagewizard
+    restart: always
+    networks:
+      - default      
+    volumes:
+      - file_cache:/data
+    environment:
+      - General__Key=DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==
+      - General__AllowUnsafeUrl=false
+      - General__UseAcceptHeader=false
+      - General__UseETag=true
+      - General__AllowedDPR__0=1.0
+      - General__AllowedDPR__1=1.5
+      - General__AllowedDPR__2=2.0
+      - General__AllowedDPR__3=3.0
+      - General__CacheControl__IsEnabled=true
+      - General__CacheControl__Public=true
+      - General__CacheControl__MaxAge=60
+      - General__CacheControl__MustRevalidate=false
+      - General__CacheControl__NoCache=true
+      - General__CacheControl__NoStore=true      
+      - FileCache__Folder=/data
+      - HttpLoader__DefaultBaseUrl=https://domain.tld
+      - HttpLoader__AllowAbsoluteUrls=false
+      - HttpLoader__AllowedHosts__0=domain.tld
+      - HttpLoader__Headers__0__Name=ApiKey
+      - HttpLoader__Headers__0__Value=123      
 ```
