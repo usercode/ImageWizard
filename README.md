@@ -34,7 +34,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | loader type                     | "fetch" |
 | loader source                   | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
-## Image loaders
+## Data loaders
 | Name                | Loader type | Loader source | NuGet |
 |-----------------------------------|-----------------|----|---|
 | http loader        | fetch       | absolute or relative url of the original image |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) 
@@ -43,14 +43,14 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | gravatar loader     | gravatar    | encoded email address   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)
 | Azure loader       | azure       | relative path to file   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Azure.svg)](https://www.nuget.org/packages/ImageWizard.Azure/)
 
-## Image caches
+## Data caches
 | Name                 | Description        | NuGet     |
 |----------------------|--------------------|-----------|
 |  file cache         |                    |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
 |  distributed cache   | MS SQL, Redis      |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
 |  MongoDB cache       | Use GridFS |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
 
-## Processing pipelines
+## Data pipelines
 
 | Package  |  Mime type | NuGet |
 |------------------------------------|-----------------|------------|
