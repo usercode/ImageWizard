@@ -38,5 +38,11 @@ namespace ImageWizard.ImageSharp.Filters
         {
             Context.ImageFormat = new PngFormat();
         }
+
+        [Filter]
+        public void Tga()
+        {
+            Context.ImageFormat = new TgaFormat();
+        }
     }
 }

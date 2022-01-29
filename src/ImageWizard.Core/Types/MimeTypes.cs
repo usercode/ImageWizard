@@ -19,6 +19,7 @@ namespace ImageWizard
         public const string WebP = "image/webp";
         public const string Avif = "image/avif";
         public const string Svg = "image/svg+xml";
+        public const string Tga = "image/tga";
         
         public const string Mpeg = "video/mpeg";
         public const string Mp4 = "video/mp4";

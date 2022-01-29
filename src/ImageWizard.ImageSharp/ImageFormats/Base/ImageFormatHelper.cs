@@ -23,7 +23,8 @@ namespace ImageWizard.Filters.ImageFormats
                 {
                     MimeTypes.Jpeg => new JpegFormat(),
                     MimeTypes.Png => new PngFormat(),
-                    MimeTypes.Gif => new GifFormat(),
+                    MimeTypes.Gif => new GifFormat(),                    
+                    MimeTypes.Tga => new TgaFormat(),
                     MimeTypes.Bmp => new BmpFormat(),
                     _ => null,
                 };
