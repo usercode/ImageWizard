@@ -125,6 +125,14 @@ services.AddImageWizard(options =>
                                         })
                             //Adds your custom filters
                             .WithFilter<BlurFilter>()
+			    .WithPreProcessing(x =>
+			    {
+				x.Image.Mutate(m => m.AutoOrient());
+			    })
+			    .WithPostProcessing(x =>
+			    {
+				//x.Image.Mutate(m => m.Grayscale());
+			    })
                        .AddSkiaSharp(MimeTypes.WebP)
                        .AddSvgNet()
 		       .AddDocNET()
@@ -372,6 +380,7 @@ Use IUrlHelper
 - invert()
 - brightness(value)
 - contrast(value)
+- autoorient()
 - drawtext(text='Hello',size=24,x=0.5,y=0.5)
   - string: raw ('Hello') or base64url (SGVsbG8)
 
