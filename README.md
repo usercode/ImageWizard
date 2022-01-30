@@ -53,7 +53,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 ## Data pipelines
 
-| Package  |  Mime type | NuGet |
+| Name  |  Mime type | NuGet |
 |------------------------------------|-----------------|------------|
 | ImageSharp | image/jpeg, image/png, image/gif, image/bmp, image/tga |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.ImageSharp.svg)](https://www.nuget.org/packages/ImageWizard.ImageSharp/)
 | SkiaSharp  | image/jpeg, image/png, image/gif, image/bmp, image/webp  | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SkiaSharp.svg)](https://www.nuget.org/packages/ImageWizard.SkiaSharp/)
