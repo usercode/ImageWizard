@@ -3,10 +3,7 @@ using Microsoft.Extensions.Options;
 using OpenGraphNet;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace ImageWizard.Loaders
@@ -23,7 +20,19 @@ namespace ImageWizard.Loaders
 
         protected override async Task<Uri> CreateRequestUrl(string source)
         {
-            OpenGraph result = await OpenGraph.ParseUrlAsync(source);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, source);
+            request.SetUserAgentHeader();
+
+            HttpResponseMessage response = await Client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode == false)
+            {
+                throw new Exception($"Could not load page: {source}");
+            }
+
+            string html = await response.Content.ReadAsStringAsync();
+
+            OpenGraph result = OpenGraph.ParseHtml(html);
 
             return result.Image;
         }
