@@ -1,4 +1,4 @@
-# ImageWizard
+# ImageWizard 3.2
 A ASP.NET Core service / middleware to resize your images dynamically as alternative for thumbor.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -70,7 +70,7 @@ services.AddImageWizard();
 services.AddImageWizard(options => 
                        {
                            options.AllowUnsafeUrl = true;             
-			   options.AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
+                           options.AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
                            options.Key = "DEMO-KEY..."; //64 byte key encoded in Base64Url
                            options.UseETag = true;                                                
                            options.CacheControl.IsEnabled = true;
@@ -79,60 +79,64 @@ services.AddImageWizard(options =>
                            options.CacheControl.Public = true;
                            options.CacheControl.NoCache = false;
                            options.CacheControl.NoStore = false;
-			   //select automatically the compatible mime type by request header
-			   options.UseAcceptHeader = true;
+                           //select automatically the compatible mime type by request header
+                           options.UseAcceptHeader = true;
                        })
-		       //registers ImageSharp pipeline for specified mime types
-                       .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif)
-                            .WithOptions(x =>
-                                        {
-                                            x.ImageMaxHeight = 4000;
-                                            x.ImageMaxWidth = 4000;
-                                        })
-                            //Adds your custom filters
-                            .WithFilter<BlurFilter>()
-			    .WithPreProcessing(x =>
-			    {
-				x.Image.Mutate(m => m.AutoOrient());
-			    })
-			    .WithPostProcessing(x =>
-			    {
-				//x.Image.Mutate(m => m.Grayscale());
-			    })
-                       .AddSkiaSharp(MimeTypes.WebP)
-                       .AddSvgNet()
+            //registers ImageSharp pipeline for specified mime types
+           .AddImageSharp(c => c
+                .WithMimeTypes(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
+                .WithOptions(x =>
+                            {
+                                x.ImageMaxHeight = 4000;
+                                x.ImageMaxWidth = 4000;
+                            })
+                //Adds your custom filters
+                .WithFilter<BlurFilter>()
+                .WithPreProcessing(x =>
+                            {
+                                x.Image.Mutate(m => m.AutoOrient());
+                            })
+                .WithPostProcessing(x =>
+                            {
+                                //x.Image.Mutate(m => m.Grayscale());
+                              
+                                //override target format
+                                //x.ImageFormat = new JpegFormat();
+                            }))
+           .AddSkiaSharp(MimeTypes.WebP)
+           .AddSvgNet()
 		       .AddDocNET()
-                       //uses file cache (relative or absolute path)
-                       .SetFileCache(options => options.Folder = "FileCache") 
-                       //or MongoDB cache
-                       .SetMongoDBCache(options => options.Hostname = "localhost")
-                       //or distributed cache
-                       .SetDistributedCache()
-                       //adds some loaders
-                       .AddFileLoader(options => options.Folder = "FileStorage")
-                       .AddHttpLoader(options => 
-		       			      {
-                                               //checks every time for a new version of the original image.
-                                               options.RefreshMode = DataLoaderRefreshMode.EveryTime;
-                                               
-                                               //set base url for relative urls
-                                               options.DefaultBaseUrl = "https://mydomain";
-                                               
-                                               //allow only relative urls 
-                                               //(use base url from request or DefaultBaseUrl from options)
-                                               options.AllowAbsoluteUrls = false;
-                                               
-                                               //allow only specified hosts
-                                               options.AllowedHosts = new [] { "mydomain" };
-                                               
-                                               //adds custom http header like apikey to prevent 
-                                               //that user can download the original image
-                                               options.SetHeader("ApiKey", "123456");
-					       })
-                       .AddYoutubeLoader()
-                       .AddGravatarLoader()
-                       .AddAnalytics()
-                       ;
+           //uses file cache (relative or absolute path)
+           .SetFileCache(options => options.Folder = "FileCache") 
+           //or MongoDB cache
+           .SetMongoDBCache(options => options.Hostname = "localhost")
+           //or distributed cache
+           .SetDistributedCache()
+           //adds some loaders
+           .AddFileLoader(options => options.Folder = "FileStorage")
+           .AddHttpLoader(options => 
+          {
+                                   //checks every time for a new version of the original image.
+                                   options.RefreshMode = DataLoaderRefreshMode.EveryTime;
+                                   
+                                   //set base url for relative urls
+                                   options.DefaultBaseUrl = "https://mydomain";
+                                   
+                                   //allow only relative urls 
+                                   //(use base url from request or DefaultBaseUrl from options)
+                                   options.AllowAbsoluteUrls = false;
+                                   
+                                   //allow only specified hosts
+                                   options.AllowedHosts = new [] { "mydomain" };
+                                   
+                                   //adds custom http header like apikey to prevent 
+                                   //that user can download the original image
+                                   options.SetHeader("ApiKey", "123456");
+     })
+           .AddYoutubeLoader()
+           .AddGravatarLoader()
+           .AddAnalytics()
+           ;
 ```
 
 ```csharp
