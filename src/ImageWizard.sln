@@ -43,6 +43,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.OpenCvSharp", "ImageWizard.OpenCvSharp\ImageWizard.OpenCvSharp.csproj", "{9B852380-14DA-4AB8-BF0F-824BD501A24D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.OpenGraph", "ImageWizard.OpenGraph\ImageWizard.OpenGraph.csproj", "{9F5A2233-A9F3-41EB-BF87-C79A2D9E44C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{9B852380-14DA-4AB8-BF0F-824BD501A24D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B852380-14DA-4AB8-BF0F-824BD501A24D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B852380-14DA-4AB8-BF0F-824BD501A24D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F5A2233-A9F3-41EB-BF87-C79A2D9E44C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F5A2233-A9F3-41EB-BF87-C79A2D9E44C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F5A2233-A9F3-41EB-BF87-C79A2D9E44C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F5A2233-A9F3-41EB-BF87-C79A2D9E44C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -138,6 +144,7 @@ Global
 		{BBDEFA71-5570-4A1A-AACF-E01887DA3AF3} = {49937EE0-864A-4B97-B53D-7803B4890482}
 		{70DCFA79-8F02-41F6-9D15-58B7145EBFC5} = {49937EE0-864A-4B97-B53D-7803B4890482}
 		{9B852380-14DA-4AB8-BF0F-824BD501A24D} = {49937EE0-864A-4B97-B53D-7803B4890482}
+		{9F5A2233-A9F3-41EB-BF87-C79A2D9E44C2} = {49937EE0-864A-4B97-B53D-7803B4890482}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4E07FA6-DEC4-4ED4-946E-38BCD59BBF92}

@@ -30,7 +30,7 @@ namespace ImageWizard.Loaders
         /// CreateRequestUrl
         /// </summary>
         /// <returns></returns>
-        protected abstract Uri CreateRequestUrl(string source);
+        protected abstract Task<Uri> CreateRequestUrl(string source);
 
         /// <summary>
         /// GetAsync
@@ -40,7 +40,7 @@ namespace ImageWizard.Loaders
         /// <returns></returns>
         public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData)
         {
-            Uri url = CreateRequestUrl(source);
+            Uri url = await CreateRequestUrl(source);
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
             request.SetUserAgentHeader();

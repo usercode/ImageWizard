@@ -20,9 +20,9 @@ namespace ImageWizard.Loaders
         {
         }
 
-        protected override Uri CreateRequestUrl(string source)
+        protected override Task<Uri> CreateRequestUrl(string source)
         {
-            return new Uri($"https://www.gravatar.com/avatar/{source}?size=512");
+            return Task.FromResult(new Uri($"https://www.gravatar.com/avatar/{source}?size=512"));
         }
     }
 }

@@ -38,7 +38,7 @@ namespace ImageWizard.Loaders
         /// </summary>
         private IHttpContextAccessor HttpContextAccessor { get; }
 
-        protected override Uri CreateRequestUrl(string source)
+        protected override Task<Uri> CreateRequestUrl(string source)
         {
             Uri sourceUri;
 
@@ -74,7 +74,7 @@ namespace ImageWizard.Loaders
                 }
             }
 
-            return sourceUri;
+            return Task.FromResult(sourceUri);
         }
     }
 }

@@ -11,6 +11,12 @@
 
     <a href="https://github.com/usercode/ImageWizard" class="btn btn-success">Go to GitHub</a>
 
+    <h2>OpenGraph loader</h2>
+    <p>@@Url.ImageWizard().OpenGraph("https://github.com/usercode/ImageWizard").BuildUrl()</p>
+    <p>@Url.ImageWizard().OpenGraph("https://github.com/usercode/ImageWizard").BuildUrl()</p>
+
+    <img src="@Url.ImageWizard().OpenGraph("https://github.com/usercode/ImageWizard").BuildUrl()" />
+
     <h2>SVG transforming</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").BuildUrl()</p>
     <p>@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").BuildUrl()</p>

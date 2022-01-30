@@ -19,9 +19,9 @@ namespace ImageWizard.Loaders
         {
         }
 
-        protected override Uri CreateRequestUrl(string source)
+        protected override Task<Uri> CreateRequestUrl(string source)
         {
-            return new Uri($"https://i.ytimg.com/vi/{source}/maxresdefault.jpg");
+            return Task.FromResult(new Uri($"https://i.ytimg.com/vi/{source}/maxresdefault.jpg"));
         }
     }    
 }

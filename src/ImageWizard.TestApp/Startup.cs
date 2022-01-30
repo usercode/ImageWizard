@@ -99,6 +99,7 @@ namespace ImageWizard.TestApp
                 .AddFFMpegCore()
                 .AddDocNET()
                 .AddOpenCvSharp()
+                .AddOpenGraphLoader()
                 .AddAnalytics()
                 .AddAzureLoader(x =>
                 {
