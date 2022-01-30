@@ -189,7 +189,7 @@ Register filter:
 
 ```csharp
 services.AddImageWizard()
-	.AddImageSharp().WithFilter<BackgroundColorFilter>();
+	.AddImageSharp(c => c.WithFilter<BackgroundColorFilter>());
 ```
 
 URL segments: 
