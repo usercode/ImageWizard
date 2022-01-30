@@ -37,7 +37,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 ## Data loaders
 | Name                | Loader type | Loader source | NuGet |
 |-----------------------------------|-----------------|----|---|
-| Http loader        | fetch       | absolute or relative url of the original image |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) 
+| Http loader        | fetch       | absolute or relative url |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) 
 | File loader         | file        | relative path to file   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) 
 | YouTube loader      | youtube     | video id                | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)
 | Gravatar loader     | gravatar    | encoded email address   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)
