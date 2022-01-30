@@ -6,14 +6,21 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Loaders
 {
-    public abstract class DataLoaderBase<TOptions> : IDataLoader
+    /// <summary>
+    /// DataLoader
+    /// </summary>
+    /// <typeparam name="TOptions"></typeparam>
+    public abstract class DataLoader<TOptions> : IDataLoader
         where TOptions : DataLoaderOptions
     {
-        public DataLoaderBase(IOptions<TOptions> options)
+        public DataLoader(IOptions<TOptions> options)
         {
             Options = options;
         }
 
+        /// <summary>
+        /// Options
+        /// </summary>
         public IOptions<TOptions> Options { get; }
 
         IOptions<DataLoaderOptions> IDataLoader.Options => Options;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageWizard.Core.Processing.Builder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.DocNET.Builder
 {
-    public interface IDocNETBuilder : IImageWizardBuilder
+    public interface IDocNETBuilder : IPipelineBuilder
     {
 
     }

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ImageWizard.ImageFormats.Base;
 using SkiaSharp;
 
-namespace ImageWizard.ImageFormats
+namespace ImageWizard.SkiaSharp
 {
     public class JpegFormat : IImageFormat
     {

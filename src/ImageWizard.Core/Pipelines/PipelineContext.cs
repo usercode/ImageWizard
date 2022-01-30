@@ -6,11 +6,11 @@ using System.Text;
 namespace ImageWizard.Processing
 {
     /// <summary>
-    /// ImageProcessingContext
+    /// PipelineContext
     /// </summary>
-    public class ProcessingPipelineContext : IDisposable
+    public class PipelineContext : IDisposable
     {
-        public ProcessingPipelineContext(
+        public PipelineContext(
             IServiceProvider serviceProvider,
             IStreamPool streamPool,
             DataResult result, 

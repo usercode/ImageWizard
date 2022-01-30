@@ -13,7 +13,7 @@ namespace ImageWizard
     /// </summary>
     public readonly struct ImageWizardUrl
     {
-        public const string Unsafe = "unsafe";
+        public readonly static string Unsafe = "unsafe";
 
         private readonly static Regex Regex = new Regex($@"^(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([^)]*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

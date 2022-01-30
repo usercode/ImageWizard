@@ -14,7 +14,7 @@ namespace ImageWizard.OpenCvSharp.Filters
     /// </summary>
     public class OpenCvSharpFilterContext : FilterContext
     {
-        public OpenCvSharpFilterContext(ProcessingPipelineContext processingContext)
+        public OpenCvSharpFilterContext(PipelineContext processingContext)
             : base(processingContext)
         {
 

@@ -12,7 +12,7 @@ namespace ImageWizard.Loaders
     /// <summary>
     /// HttpLoaderBase
     /// </summary>
-    public abstract class HttpLoaderBase<TOptions> : DataLoaderBase<TOptions>
+    public abstract class HttpLoaderBase<TOptions> : DataLoader<TOptions>
          where TOptions : DataLoaderOptions
     {
         public HttpLoaderBase(HttpClient client, IOptions<TOptions> options)

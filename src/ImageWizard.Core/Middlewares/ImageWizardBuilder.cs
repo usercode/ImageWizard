@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 
@@ -42,8 +43,8 @@ namespace ImageWizard
             return PipelineManager.GetAllKeys();
         }
 
-        public void AddPipeline<T>(string[] mimeTypes) 
-            where T : class, IProcessingPipeline
+        public void AddPipeline<T>(IEnumerable<string> mimeTypes) 
+            where T : class, IPipeline
         {
             Services.AddSingleton<T>();
 
@@ -51,8 +52,6 @@ namespace ImageWizard
             {
                 PipelineManager.Register<T>(mimeType);
             }
-
-            Services.AddSingleton(new PipelineAction<T>(x => x.UsedMimeTypes = mimeTypes));
         }
 
         public Type GetPipeline(string key)

@@ -1,6 +1,4 @@
 ﻿using ImageWizard.Core;
-using ImageWizard.Filters.ImageFormats;
-using ImageWizard.ImageFormats.Base;
 using ImageWizard.Processing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -19,7 +17,7 @@ namespace ImageWizard.ImageSharp.Filters
     /// <summary>
     /// ImageSharpPipeline
     /// </summary>
-    public class ImageSharpPipeline : ProcessingPipeline<ImageSharpFilter>
+    public class ImageSharpPipeline : Pipeline<ImageSharpFilter>
     {
         public ImageSharpPipeline(
             IServiceProvider service, 
@@ -43,7 +41,7 @@ namespace ImageWizard.ImageSharp.Filters
             return new ImageSharpFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
         }
 
-        protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
+        protected override FilterContext CreateFilterContext(PipelineContext context)
         {
             Image image = Image.Load(context.Result.Data);
 

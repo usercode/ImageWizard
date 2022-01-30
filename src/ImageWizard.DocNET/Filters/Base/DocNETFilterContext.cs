@@ -12,7 +12,7 @@ namespace ImageWizard.DocNET.Filters.Base
 {
     public class DocNETFilterContext : FilterContext
     {
-        public DocNETFilterContext(ProcessingPipelineContext processingContext, Stream document)
+        public DocNETFilterContext(PipelineContext processingContext, Stream document)
             : base(processingContext)
         {
             Document = document;

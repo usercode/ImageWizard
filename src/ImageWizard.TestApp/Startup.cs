@@ -23,6 +23,8 @@ using ImageWizard.Client;
 using ImageWizard.OpenCvSharp;
 using ImageWizard.Caches;
 using SixLabors.ImageSharp.Processing;
+using ImageWizard.Core.Processing.Builder;
+using ImageWizard.ImageSharp;
 
 namespace ImageWizard.TestApp
 {
@@ -47,15 +49,14 @@ namespace ImageWizard.TestApp
             {
 #if DEBUG
                 x.AllowUnsafeUrl = true;
-#else
-                x.AllowUnsafeUrl = false;
 #endif
                 x.UseAcceptHeader = true;
                 x.UseClintHints = false;
                 x.UseETag = true;
                 x.Key = key;
             })
-                .AddImageSharp(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
+                .AddImageSharp(c => c
+                    .WithMimeTypes(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
                     .WithOptions(x =>
                                 {
                                     x.ImageMaxHeight = 4000;
@@ -66,17 +67,21 @@ namespace ImageWizard.TestApp
                     {
                         x.Image.Mutate(m => m.AutoOrient());
                     })
-                    .WithPostProcessing(x=>
+                    .WithPostProcessing(x =>
                     {
                         //x.Image.Mutate(m => m.Grayscale());
-                    })
-                .AddSkiaSharp(MimeTypes.WebP)
+
+                        //override target format
+                        //x.ImageFormat = new JpegFormat();
+                    }))
+                .AddSkiaSharp(c => c
+                    .WithMimeTypes(MimeTypes.WebP)
                     .WithOptions(x =>
                                 {
                                     x.ImageMaxHeight = 4000;
                                     x.ImageMaxWidth = 4000;
                                 })
-                    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>()
+                    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>())
                 .AddSvgNet()
                 //.SetFileCache()
                 //.SetMongoDBCache()

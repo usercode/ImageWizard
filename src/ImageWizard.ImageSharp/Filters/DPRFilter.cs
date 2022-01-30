@@ -1,5 +1,4 @@
 ﻿using ImageWizard.Attributes;
-using ImageWizard.Filters;
 using System;
 using System.Collections.Generic;
 using System.Text;

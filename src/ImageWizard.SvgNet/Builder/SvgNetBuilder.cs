@@ -1,4 +1,5 @@
-﻿using ImageWizard.Filters;
+﻿using ImageWizard.Core.Processing.Builder;
+using ImageWizard.Filters;
 using ImageWizard.SvgNet.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -7,47 +8,11 @@ using System.Text;
 
 namespace ImageWizard.SvgNet.Builder
 {
-    class SvgNetBuilder : ISvgNetBuilder
+    class SvgNetBuilder : PipelineBuilder, ISvgNetBuilder
     {
-        public SvgNetBuilder(IImageWizardBuilder builder)
+        public SvgNetBuilder(IServiceCollection service)
+            : base(service)
         {
-            Builder = builder;
-
-            WithFilter<RemoveSizeFilter>();
-            WithFilter<RotateFilter>();
-            WithFilter<BlurFilter>();
-            WithFilter<GrayscaleFilter>();
-            WithFilter<InvertFilter>();
-            WithFilter<SaturateFilter>();
-            WithFilter<ImageFormatFilter>();
-        }
-
-        private IImageWizardBuilder Builder { get; }
-
-        IServiceCollection IImageWizardBuilder.Services => Builder.Services;
-
-        TypeManager IImageWizardBuilder.LoaderManager => Builder.LoaderManager;
-
-        TypeManager IImageWizardBuilder.PipelineManager => Builder.PipelineManager;
-
-        void IImageWizardBuilder.AddPipeline<T>(string[] mimeTypes)
-        {
-            Builder.AddPipeline<T>(mimeTypes);
-        }
-
-        public ISvgNetBuilder WithFilter<TFilter>() where TFilter : SvgFilter, new()
-        {
-            Builder.Services.AddTransient<TFilter>();
-            Builder.Services.AddSingleton(new PipelineAction<SvgPipeline>(x => x.AddFilter<TFilter>()));
-
-            return this;
-        }
-
-        public ISvgNetBuilder WithOptions(Action<SvgOptions> action)
-        {
-            Builder.Services.Configure(action);
-
-            return this;
-        }
+        }      
     }
 }

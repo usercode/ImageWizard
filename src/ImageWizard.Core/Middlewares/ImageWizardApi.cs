@@ -33,7 +33,6 @@ namespace ImageWizard
         public async Task<IResult> ExecuteAsync(
                                                 HttpContext context,
                                                 IOptions<ImageWizardOptions> options,
-                                                IServiceProvider serviceProvider,
                                                 ILogger<ImageWizardApi> logger,
                                                 ISignatureService signatureService,
                                                 ICache cache,
@@ -138,20 +137,20 @@ namespace ImageWizard
                 {
                     ClientHints clientHints = context.Request.GetClientHints(options.Value.AllowedDPR);
 
-                    using ProcessingPipelineContext processingContext = new ProcessingPipelineContext(
-                                                                serviceProvider,
-                                                                context.RequestServices.GetRequiredService<IStreamPool>(),
-                                                                 new DataResult(originalData.Data, originalData.MimeType),
-                                                                 clientHints,
-                                                                 options.Value,
-                                                                 acceptMimeTypes,
-                                                                 url.Filters);
+                    using PipelineContext processingContext = new PipelineContext(
+                                                                     context.RequestServices,
+                                                                     context.RequestServices.GetRequiredService<IStreamPool>(),
+                                                                     new DataResult(originalData.Data, originalData.MimeType),
+                                                                     clientHints,
+                                                                     options.Value,
+                                                                     acceptMimeTypes,
+                                                                     url.Filters);
 
                     do
                     {
                         //find processing pipeline by mime type
                         Type processingPipelineType = builder.GetPipeline(processingContext.Result.MimeType);
-                        IProcessingPipeline? processingPipeline = (IProcessingPipeline?)context.RequestServices.GetService(processingPipelineType);
+                        IPipeline? processingPipeline = (IPipeline?)context.RequestServices.GetService(processingPipelineType);
 
                         if (processingPipeline == null)
                         {

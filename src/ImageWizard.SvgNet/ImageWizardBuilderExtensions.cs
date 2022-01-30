@@ -13,9 +13,26 @@ namespace ImageWizard
     {
         public static IImageWizardBuilder AddSvgNet(this IImageWizardBuilder builder)
         {
-            builder.AddPipeline<SvgPipeline>(new[] { MimeTypes.Svg });
+            return AddSvgNet(builder, x => x.WithMimeTypes(MimeTypes.Svg));
+        }
 
-            return new SvgNetBuilder(builder);
+        public static IImageWizardBuilder AddSvgNet(this IImageWizardBuilder builder, Action<ISvgNetBuilder> options)
+        {
+            SvgNetBuilder pipelineBuilder = new SvgNetBuilder(builder.Services);
+
+            pipelineBuilder.WithFilter<RemoveSizeFilter>();
+            pipelineBuilder.WithFilter<RotateFilter>();
+            pipelineBuilder.WithFilter<BlurFilter>();
+            pipelineBuilder.WithFilter<GrayscaleFilter>();
+            pipelineBuilder.WithFilter<InvertFilter>();
+            pipelineBuilder.WithFilter<SaturateFilter>();
+            pipelineBuilder.WithFilter<ImageFormatFilter>();
+
+            options(pipelineBuilder);
+
+            builder.AddPipeline<SvgPipeline>(pipelineBuilder.MimeTypes);
+
+            return builder;
         }
     }
 }

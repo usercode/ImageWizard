@@ -1,5 +1,4 @@
-﻿using ImageWizard.ImageFormats.Base;
-using ImageWizard.Processing;
+﻿using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
 using SkiaSharp;
 using System;
@@ -15,7 +14,7 @@ namespace ImageWizard.SkiaSharp.Filters.Base
     /// </summary>
     public class SkiaSharpFilterContext : FilterContext
     {
-        public SkiaSharpFilterContext(ProcessingPipelineContext processingContext, SKBitmap image, IImageFormat imageFormat)
+        public SkiaSharpFilterContext(PipelineContext processingContext, SKBitmap image, IImageFormat imageFormat)
             : base(processingContext)
         {
             Image = image;

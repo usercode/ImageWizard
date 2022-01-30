@@ -1,5 +1,4 @@
 ﻿using ImageWizard.Attributes;
-using ImageWizard.ImageFormats;
 using ImageWizard.SkiaSharp.Filters.Base;
 using System;
 using System.Collections.Generic;

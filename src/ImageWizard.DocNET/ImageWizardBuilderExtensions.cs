@@ -1,11 +1,12 @@
-﻿using ImageWizard.DocNET.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using ImageWizard.Core.Processing.Builder;
+using ImageWizard.DocNET;
+using ImageWizard.DocNET.Builder;
+using ImageWizard.DocNET.Filters;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.DocNET
+namespace ImageWizard
 {
     /// <summary>
     /// FilterExtensions
@@ -17,11 +18,23 @@ namespace ImageWizard.DocNET
             return AddDocNET(builder, MimeTypes.Pdf);
         }
 
-        public static IDocNETBuilder AddDocNET(this IImageWizardBuilder builder, params string[] mimeTypes)
+        public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder, params string[] mimeTypes)
         {
-            builder.AddPipeline<DocNETPipeline>(mimeTypes);
+            return AddDocNET(builder, x => x.WithMimeTypes(mimeTypes));
+        }
 
-            return new DocNETBuilder(builder);
+        public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder, Action<IDocNETBuilder> options)
+        {
+            DocNETBuilder pipelineBuilder = new DocNETBuilder(builder.Services);
+
+            pipelineBuilder.WithFilter<PageToImageFilter>();
+            pipelineBuilder.WithFilter<SubPagesFilter>();
+
+            options(pipelineBuilder);
+
+            builder.AddPipeline<DocNETPipeline>(pipelineBuilder.MimeTypes);
+
+            return builder;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace ImageWizard.SvgNet.Filters
     /// <summary>
     /// ImageSharpPipeline
     /// </summary>
-    public class SvgPipeline : ProcessingPipeline<SvgFilter>
+    public class SvgPipeline : Pipeline<SvgFilter>
     {
         public SvgPipeline(
             IServiceProvider serviceProvider,
@@ -34,7 +34,7 @@ namespace ImageWizard.SvgNet.Filters
             return new SvgFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
         }
 
-        protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
+        protected override FilterContext CreateFilterContext(PipelineContext context)
         {
             //load image
             SvgDocument svg = SvgDocument.Open<SvgDocument>(context.Result.Data);

@@ -26,6 +26,6 @@ namespace ImageWizard
         /// </summary>
         TypeManager PipelineManager { get; }
 
-        void AddPipeline<T>(string[] mimeTypes) where T : class, IProcessingPipeline;
+        void AddPipeline<T>(IEnumerable<string> mimeTypes) where T : class, IPipeline;
     }
 }

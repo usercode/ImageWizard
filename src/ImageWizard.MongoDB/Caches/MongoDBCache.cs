@@ -10,7 +10,7 @@ using ImageWizard.MongoDB.Models;
 using System.IO;
 using ImageWizard.Caches;
 
-namespace ImageWizard.MongoDB.ImageCaches
+namespace ImageWizard.MongoDB
 {
     /// <summary>
     /// MongoDBCache

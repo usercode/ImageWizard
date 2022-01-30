@@ -16,7 +16,7 @@ namespace ImageWizard.Filters
     public class SvgFilterContext : FilterContext
     {
         public SvgFilterContext(
-            ProcessingPipelineContext processingContext, 
+            PipelineContext processingContext, 
             SvgDocument image)
             : base(processingContext)
         {

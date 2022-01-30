@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ImageWizard.AWS;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace ImageWizard.AWS
+namespace ImageWizard
 {
     public static class AwsExtensions
     {

@@ -14,7 +14,7 @@ namespace ImageWizard.AWS
     /// <summary>
     /// AwsLoader
     /// </summary>
-    public class AwsLoader : DataLoaderBase<AwsOptions>
+    public class AwsLoader : DataLoader<AwsOptions>
     {
         public AwsLoader(IOptions<AwsOptions> options)
             : base(options)
@@ -44,6 +44,8 @@ namespace ImageWizard.AWS
 
             if (result.HttpStatusCode == System.Net.HttpStatusCode.NotModified)
             {
+                result.Dispose();
+
                 return null;
             }
 

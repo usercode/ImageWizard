@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageFormats.Base
+namespace ImageWizard.SkiaSharp
 {
     public interface IImageFormat
     {

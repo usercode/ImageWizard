@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using ImageWizard.Caches;
 
-namespace ImageWizard.Caches
+namespace ImageWizard
 {
     public static class FileCacheExtensions
     {

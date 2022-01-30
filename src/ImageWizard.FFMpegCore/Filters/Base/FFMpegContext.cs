@@ -10,7 +10,7 @@ namespace ImageWizard.FFMpegCore.Filters.Base
     public class FFMpegContext : FilterContext
     {
 
-        public FFMpegContext(ProcessingPipelineContext processingContext)
+        public FFMpegContext(PipelineContext processingContext)
             : base(processingContext)
         {
 

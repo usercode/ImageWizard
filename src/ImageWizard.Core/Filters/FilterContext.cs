@@ -12,7 +12,7 @@ namespace ImageWizard
     /// </summary>
     public abstract class FilterContext : IDisposable
     {
-        public FilterContext(ProcessingPipelineContext context)
+        public FilterContext(PipelineContext context)
         {
             ProcessingContext = context;
         }
@@ -20,7 +20,7 @@ namespace ImageWizard
         /// <summary>
         /// ProcessingContext
         /// </summary>
-        public ProcessingPipelineContext ProcessingContext { get; }
+        public PipelineContext ProcessingContext { get; }
 
         private DataResult? _result;
 

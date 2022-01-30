@@ -1,7 +1,4 @@
 ﻿using ImageWizard.Core;
-using ImageWizard.Filters;
-using ImageWizard.Filters.ImageFormats;
-using ImageWizard.ImageFormats.Base;
 using ImageWizard.Processing;
 using ImageWizard.SkiaSharp.Filters.Base;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +18,7 @@ namespace ImageWizard.SkiaSharp
     /// <summary>
     /// SkiaPipeline
     /// </summary>
-    public class SkiaSharpPipeline : ProcessingPipeline<SkiaSharpFilter>
+    public class SkiaSharpPipeline : Pipeline<SkiaSharpFilter>
     {
         public SkiaSharpPipeline(
             IServiceProvider serviceProvider, 
@@ -37,7 +34,7 @@ namespace ImageWizard.SkiaSharp
             return new SkiaSharpFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
         }
 
-        protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
+        protected override FilterContext CreateFilterContext(PipelineContext context)
         {
             IImageFormat targetFormat = null;
 

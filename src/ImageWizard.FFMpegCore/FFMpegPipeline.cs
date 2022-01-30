@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.FFMpegCore
 {
-    public class FFMpegPipeline : ProcessingPipeline<FFMpegFilter>
+    public class FFMpegPipeline : Pipeline<FFMpegFilter>
     {
         public FFMpegPipeline(
             IServiceProvider serviceProvider, 
@@ -27,7 +27,7 @@ namespace ImageWizard.FFMpegCore
             return new FFMpegFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
         }
 
-        protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
+        protected override FilterContext CreateFilterContext(PipelineContext context)
         {
             return new FFMpegContext(context);
         }

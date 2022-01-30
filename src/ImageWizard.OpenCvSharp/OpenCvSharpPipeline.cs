@@ -16,7 +16,7 @@ namespace ImageWizard.ImageSharp.Filters
     /// <summary>
     /// ImageSharpPipeline
     /// </summary>
-    public class OpenCvSharpPipeline : ProcessingPipeline<OpenCvSharpFilter>
+    public class OpenCvSharpPipeline : Pipeline<OpenCvSharpFilter>
     {
         public OpenCvSharpPipeline(
             IServiceProvider service, 
@@ -32,7 +32,7 @@ namespace ImageWizard.ImageSharp.Filters
             return new OpenCvSharpFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
         }
 
-        protected override FilterContext CreateFilterContext(ProcessingPipelineContext context)
+        protected override FilterContext CreateFilterContext(PipelineContext context)
         {
             
 

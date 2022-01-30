@@ -12,7 +12,7 @@ namespace ImageWizard.Loaders
     /// <summary>
     /// FileLoader
     /// </summary>
-    public class FileLoader : DataLoaderBase<FileLoaderOptions>
+    public class FileLoader : DataLoader<FileLoaderOptions>
     {
         public FileLoader(IOptions<FileLoaderOptions> options, IWebHostEnvironment hostingEnvironment)
             : base(options)

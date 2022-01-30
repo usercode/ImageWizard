@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ImageWizard.Azure;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Azure
+namespace ImageWizard
 {
     public static class AzureBlobExtensions
     {

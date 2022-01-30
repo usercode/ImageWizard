@@ -15,24 +15,18 @@ using System.Threading.Tasks;
 namespace ImageWizard.Processing
 {
     /// <summary>
-    /// ProcessingPipeline
+    /// Processing pipeline
     /// </summary>
-    public abstract class ProcessingPipeline<TFilterBase> : IProcessingPipeline
+    public abstract class Pipeline<TFilterBase> : IPipeline
         where TFilterBase : IFilter
     {
-        public ProcessingPipeline(IServiceProvider serviceProvider, ILogger<ProcessingPipeline<TFilterBase>> logger)
+        public Pipeline(IServiceProvider serviceProvider, ILogger<Pipeline<TFilterBase>> logger)
         {
             ServiceProvider = serviceProvider;
             Logger = logger;
 
             FilterActions = new List<IFilterAction>();
-            UsedMimeTypes = Array.Empty<string>();
         }
-
-        /// <summary>
-        /// UsedMimeTypes
-        /// </summary>
-        public string[] UsedMimeTypes { get; set; }
 
         /// <summary>
         /// ServiceProvider
@@ -42,7 +36,7 @@ namespace ImageWizard.Processing
         /// <summary>
         /// Logger
         /// </summary>
-        protected ILogger<ProcessingPipeline<TFilterBase>> Logger { get; }
+        protected ILogger<Pipeline<TFilterBase>> Logger { get; }
 
         /// <summary>
         /// FilterActions
@@ -155,14 +149,14 @@ namespace ImageWizard.Processing
         /// CreateFilterContext
         /// </summary>
         /// <returns></returns>
-        protected abstract FilterContext CreateFilterContext(ProcessingPipelineContext context);
+        protected abstract FilterContext CreateFilterContext(PipelineContext context);
 
         /// <summary>
         /// StartAsync
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<DataResult> StartAsync(ProcessingPipelineContext context)
+        public async Task<DataResult> StartAsync(PipelineContext context)
         {
             using FilterContext filterContext = CreateFilterContext(context);
 

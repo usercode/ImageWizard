@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Authors>usercode</Authors>
-    <Version>3.0.1</Version>
+    <Version>3.1.0</Version>
      <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>usercode.png</PackageIcon>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.7.4" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.7.17" />
   </ItemGroup>
   
   <ItemGroup>

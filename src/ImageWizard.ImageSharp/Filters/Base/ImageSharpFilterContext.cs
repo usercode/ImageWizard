@@ -1,5 +1,4 @@
-﻿using ImageWizard.ImageFormats.Base;
-using ImageWizard.Processing;
+﻿using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -20,7 +19,7 @@ namespace ImageWizard.ImageSharp.Filters
     public class ImageSharpFilterContext : FilterContext
     {
         public ImageSharpFilterContext(
-                    ProcessingPipelineContext processingContext, 
+                    PipelineContext processingContext, 
                     Image image, 
                     IImageFormat imageFormat,
                     IOptions<ImageSharpOptions> options)

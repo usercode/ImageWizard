@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ImageWizard.Analytics;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text.Json;
 
-namespace ImageWizard.Analytics
+namespace ImageWizard
 {
     public static class Extensions
     {
