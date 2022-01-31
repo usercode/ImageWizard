@@ -25,6 +25,7 @@ using ImageWizard.Caches;
 using SixLabors.ImageSharp.Processing;
 using ImageWizard.Core.Processing.Builder;
 using ImageWizard.ImageSharp;
+using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 
 namespace ImageWizard.TestApp
 {
@@ -73,6 +74,9 @@ namespace ImageWizard.TestApp
 
                         //override target format
                         //x.ImageFormat = new JpegFormat();
+
+                        x.Image.Metadata.ExifProfile = new ExifProfile();
+                        x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
                     }))
                 .AddSkiaSharp(c => c
                     .WithMimeTypes(MimeTypes.WebP)

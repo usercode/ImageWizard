@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ImageWizard
 {
     /// <summary>
-    /// Extenions
+    /// Extensions
     /// </summary>
     public static class Extensions
     {

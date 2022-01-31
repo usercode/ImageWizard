@@ -13,6 +13,7 @@ using ImageWizard.Loaders;
 using ImageWizard.SkiaSharp;
 using ImageWizard.Azure;
 using ImageWizard.Analytics;
+using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 
 namespace ImageWizard
 {
@@ -38,9 +39,19 @@ namespace ImageWizard
             services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
             services.Configure<AzureBlobOptions>(Configuration.GetSection("Azure"));
             services.Configure<ImageWizardAppOptions>(Configuration.GetSection("App"));
-            
+
             IImageWizardBuilder imageWizard = services.AddImageWizard()
-                                                        .AddImageSharp()
+                                                        .AddImageSharp(i => i.WithPostProcessing(x =>
+                                                        {
+                                                            IOptions<ImageWizardAppOptions> options = x.ProcessingContext
+                                                                                                       .ServiceProvider.GetRequiredService<IOptions<ImageWizardAppOptions>>();
+
+                                                            if (options.Value.AddMetadata)
+                                                            {
+                                                                x.Image.Metadata.ExifProfile = new ExifProfile();
+                                                                x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, options.Value.MetadataCopyright);
+                                                            }
+                                                        }))
                                                         .AddSkiaSharp(MimeTypes.WebP)
                                                         .AddSvgNet()
                                                         .AddDocNET()
@@ -49,6 +60,7 @@ namespace ImageWizard
                                                         .AddYoutubeLoader()
                                                         .AddGravatarLoader()
                                                         .AddAzureLoader()
+                                                        .AddOpenGraphLoader()
                                                         .AddAnalytics()
                                                         .SetFileCache()
                                                         ;

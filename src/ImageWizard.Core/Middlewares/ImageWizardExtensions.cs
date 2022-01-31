@@ -19,7 +19,9 @@ namespace ImageWizard
 
         public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, PathString path)
         {
-            return endpoints.MapMethods($"{path}/{{*path}}", new[] { HttpMethods.Get, HttpMethods.Head }, new ImageWizardApi().ExecuteAsync);
+            return endpoints
+                        .MapMethods($"{path}/{{*path}}", new[] { HttpMethods.Get, HttpMethods.Head }, new ImageWizardApi().ExecuteAsync)
+                        .WithName("ImageWizard");
         }
 
         public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder)

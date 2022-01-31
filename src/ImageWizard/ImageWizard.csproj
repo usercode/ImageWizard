@@ -20,6 +20,7 @@
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
     <ProjectReference Include="..\ImageWizard.DocNET\ImageWizard.DocNET.csproj" />
     <ProjectReference Include="..\ImageWizard.ImageSharp\ImageWizard.ImageSharp.csproj" />
+    <ProjectReference Include="..\ImageWizard.OpenGraph\ImageWizard.OpenGraph.csproj" />
     <ProjectReference Include="..\ImageWizard.SkiaSharp\ImageWizard.SkiaSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.SvgNet\ImageWizard.SvgNet.csproj" />
   </ItemGroup>
