@@ -14,6 +14,7 @@ using ImageWizard.SkiaSharp;
 using ImageWizard.Azure;
 using ImageWizard.Analytics;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
+using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard
 {
@@ -41,17 +42,22 @@ namespace ImageWizard
             services.Configure<ImageWizardAppOptions>(Configuration.GetSection("App"));
 
             IImageWizardBuilder imageWizard = services.AddImageWizard()
-                                                        .AddImageSharp(i => i.WithPostProcessing(x =>
-                                                        {
-                                                            IOptions<ImageWizardAppOptions> options = x.ProcessingContext
-                                                                                                       .ServiceProvider.GetRequiredService<IOptions<ImageWizardAppOptions>>();
-
-                                                            if (options.Value.AddMetadata)
+                                                        .AddImageSharp(i => i
+                                                            .WithPreProcessing(x =>
                                                             {
-                                                                x.Image.Metadata.ExifProfile = new ExifProfile();
-                                                                x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, options.Value.MetadataCopyright);
-                                                            }
-                                                        }))
+                                                                x.Image.Mutate(m => m.AutoOrient());
+                                                            })
+                                                            .WithPostProcessing(x =>
+                                                            {
+                                                                IOptions<ImageWizardAppOptions> options = x.ProcessingContext
+                                                                                                           .ServiceProvider.GetRequiredService<IOptions<ImageWizardAppOptions>>();
+
+                                                                if (options.Value.AddMetadata)
+                                                                {
+                                                                    x.Image.Metadata.ExifProfile = new ExifProfile();
+                                                                    x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, options.Value.MetadataCopyright);
+                                                                }
+                                                            }))
                                                         .AddSkiaSharp(MimeTypes.WebP)
                                                         .AddSvgNet()
                                                         .AddDocNET()
