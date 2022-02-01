@@ -98,10 +98,14 @@ services.AddImageWizard(options =>
                             })
                 .WithPostProcessing(x =>
                             {
-                                //x.Image.Mutate(m => m.Grayscale());
+                                x.Image.Mutate(m => m.Grayscale());
                               
                                 //override target format
-                                //x.ImageFormat = new JpegFormat();
+                                x.ImageFormat = new JpegFormat();
+				
+				//set metadata
+				x.Image.Metadata.ExifProfile = new ExifProfile();
+                        	x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
                             }))
            .AddSkiaSharp(MimeTypes.WebP)
            .AddSvgNet()
