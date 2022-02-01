@@ -11,8 +11,6 @@ namespace ImageWizard
     {
         public static IImageWizardBuilder SetDistributedCache(this IImageWizardBuilder wizardBuilder)
         {
-            wizardBuilder.Services.AddDistributedMemoryCache();
-
             wizardBuilder.Services.RemoveAll<ICache>();
             wizardBuilder.Services.AddSingleton<ICache, DistributedCache>();
 

@@ -13,6 +13,8 @@ namespace ImageWizard.Caches
     /// </summary>
     public class FileCache : ICache
     {
+        private static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
+
         public FileCache(IOptions<FileCacheSettings> settings, IWebHostEnvironment hostingEnvironment)
         {
             Settings = settings;
@@ -77,7 +79,7 @@ namespace ImageWizard.Caches
         public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
         {
             //create json
-            byte[] metadataJson = JsonSerializer.SerializeToUtf8Bytes(metadata, new JsonSerializerOptions() { WriteIndented = true });
+            byte[] metadataJson = JsonSerializer.SerializeToUtf8Bytes(metadata, JsonSerializerOptions);
 
             string[] parts = KeyToPath(key);
 
