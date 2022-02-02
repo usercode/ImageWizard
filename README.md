@@ -149,9 +149,10 @@ app.UseEndpoints(x => x.MapImageWizard());
 
 or
 
+//default path: /image
 app.UseImageWizard(x =>
 		{
-			//default url: image/analytics
+			//default path: /analytics
 			x.UseAnalytics();
 		});
 ```
