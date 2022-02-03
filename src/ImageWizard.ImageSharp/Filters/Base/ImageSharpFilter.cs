@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
-    public abstract class ImageSharpFilter : FilterBase<ImageSharpFilterContext>
+    public abstract class ImageSharpFilter : Filter<ImageSharpFilterContext>
     {
         public ImageSharpFilter()
         {

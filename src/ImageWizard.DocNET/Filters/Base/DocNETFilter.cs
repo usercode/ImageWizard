@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.DocNET.Filters.Base
 {
-    public abstract class DocNETFilter : FilterBase<DocNETFilterContext>
+    public abstract class DocNETFilter : Filter<DocNETFilterContext>
     {
         public DocNETFilter()
         {

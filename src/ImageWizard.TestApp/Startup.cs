@@ -70,11 +70,10 @@ namespace ImageWizard.TestApp
                     })
                     .WithPostProcessing(x =>
                     {
-                        //x.Image.Mutate(m => m.Grayscale());
-
                         //override target format
                         //x.ImageFormat = new JpegFormat();
 
+                        //override metadata
                         x.Image.Metadata.ExifProfile = new ExifProfile();
                         x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
                     }))

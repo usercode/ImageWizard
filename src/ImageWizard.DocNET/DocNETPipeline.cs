@@ -16,7 +16,7 @@ namespace ImageWizard.DocNET
     /// <summary>
     /// DocNETPipeline
     /// </summary>
-    public class DocNETPipeline : Pipeline<DocNETFilter>
+    public class DocNETPipeline : Pipeline<DocNETFilter, DocNETFilterContext>
     {
         public DocNETPipeline(
             IServiceProvider service, 
@@ -27,12 +27,7 @@ namespace ImageWizard.DocNET
             actions.Foreach(x => x(this));
         }
 
-        protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
-        {
-            return new DocNETFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
-        }
-
-        protected override FilterContext CreateFilterContext(PipelineContext context)
+        protected override DocNETFilterContext CreateFilterContext(PipelineContext context)
         {
             return new DocNETFilterContext(context, context.Result.Data);
         }

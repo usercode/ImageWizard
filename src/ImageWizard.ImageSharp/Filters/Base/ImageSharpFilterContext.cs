@@ -73,11 +73,7 @@ namespace ImageWizard.ImageSharp.Filters
             if (change == true)
             {
                 Image.Mutate(x => x.Resize(new ResizeOptions() { Mode = ResizeMode.Max, Size = new Size(width, height) }));
-            }
-
-            //execute postprocessing
-            ImagePostProcessing postProcessing = ProcessingContext.ServiceProvider.GetService<ImagePostProcessing>();
-            postProcessing?.Invoke(this);
+            }           
 
             Stream mem = ProcessingContext.StreamPool.GetStream();
 

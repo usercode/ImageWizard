@@ -18,8 +18,9 @@ namespace ImageWizard
     /// <summary>
     /// FilterAction
     /// </summary>
-    public abstract class FilterAction<TFilter> : IFilterAction
-        where TFilter : IFilter
+    public class FilterAction<TFilter, TFilterContext> : IFilterAction<TFilterContext>
+        where TFilter : IFilter<TFilterContext>
+        where TFilterContext : FilterContext
     {
         public delegate void FilterActionHandler(GroupCollection groups, TFilter filer);
 
@@ -52,7 +53,7 @@ namespace ImageWizard
         /// </summary>
         private FilterActionHandler MethodDelegate { get; }
 
-        public bool TryExecute(string input, FilterContext filterContext)
+        public bool TryExecute(string input, TFilterContext filterContext)
         {
             Match match = Regex.Match(input);
 
@@ -187,7 +188,6 @@ namespace ImageWizard
                                                     throw new Exception("Parameter type is not supported: " + x.ParameterType.Name);
                                                 }
 
-
                                                 result = Expression.Condition(
                                                                             groupSuccess,
                                                                             parsedValue,
@@ -205,10 +205,10 @@ namespace ImageWizard
                                                 {
                                                     //multiply parameter with dpr value
                                                     results.Add(
-                                                    Expression.IfThen(Expression.NotEqual(Expression.Property(Expression.Property(Expression.Property(Expression.Property(filterParameter, nameof(IFilter.Context)), nameof(FilterContext.ProcessingContext)), nameof(PipelineContext.ClientHints)), nameof(ClientHints.DPR)), Expression.Constant(null)),
+                                                    Expression.IfThen(Expression.NotEqual(Expression.Property(Expression.Property(Expression.Property(Expression.Property(filterParameter, nameof(IFilter<TFilterContext>.Context)), nameof(FilterContext.ProcessingContext)), nameof(PipelineContext.ClientHints)), nameof(ClientHints.DPR)), Expression.Constant(null)),
                                                     Expression.Assign(propertyExpression,
                                                         Expression.Convert(
-                                                            Expression.Multiply(Expression.Convert(propertyExpression, typeof(double)), Expression.Property(Expression.Property(Expression.Property(Expression.Property(Expression.Property(filterParameter, nameof(IFilter.Context)), nameof(FilterContext.ProcessingContext)), nameof(PipelineContext.ClientHints)), nameof(ClientHints.DPR)), nameof(Nullable<double>.Value))),
+                                                            Expression.Multiply(Expression.Convert(propertyExpression, typeof(double)), Expression.Property(Expression.Property(Expression.Property(Expression.Property(Expression.Property(filterParameter, nameof(IFilter<TFilterContext>.Context)), nameof(FilterContext.ProcessingContext)), nameof(PipelineContext.ClientHints)), nameof(ClientHints.DPR)), nameof(Nullable<double>.Value))),
                                                             x.ParameterType))));
                                                 }
 

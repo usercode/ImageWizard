@@ -17,15 +17,19 @@ namespace ImageWizard.Processing
     /// <summary>
     /// Processing pipeline
     /// </summary>
-    public abstract class Pipeline<TFilterBase> : IPipeline
-        where TFilterBase : IFilter
+    public abstract class Pipeline<TFilterBase, TFilterContext> : IPipeline
+        where TFilterBase : IFilter<TFilterContext>
+        where TFilterContext : FilterContext
     {
-        public Pipeline(IServiceProvider serviceProvider, ILogger<Pipeline<TFilterBase>> logger)
+        public delegate void PreProcessing(TFilterContext context);
+        public delegate void PostProcessing(TFilterContext context);
+
+        public Pipeline(IServiceProvider serviceProvider, ILogger<Pipeline<TFilterBase, TFilterContext>> logger)
         {
             ServiceProvider = serviceProvider;
             Logger = logger;
 
-            FilterActions = new List<IFilterAction>();
+            FilterActions = new List<IFilterAction<TFilterContext>>();
         }
 
         /// <summary>
@@ -36,17 +40,17 @@ namespace ImageWizard.Processing
         /// <summary>
         /// Logger
         /// </summary>
-        protected ILogger<Pipeline<TFilterBase>> Logger { get; }
+        protected ILogger<Pipeline<TFilterBase, TFilterContext>> Logger { get; }
 
         /// <summary>
         /// FilterActions
         /// </summary>
-        protected IList<IFilterAction> FilterActions { get; set; }
+        protected IList<IFilterAction<TFilterContext>> FilterActions { get; }
 
         /// <summary>
         /// AddFilter
         /// </summary>
-        /// <typeparam name="TFilter"></typeparam>
+        /// <typeparam name="TFilterBase"></typeparam>
         public void AddFilter<TFilter>()
             where TFilter : TFilterBase
         {
@@ -56,7 +60,7 @@ namespace ImageWizard.Processing
                                         .Where(x=> x.GetCustomAttribute<FilterAttribute>() != null)
                                         .ToArray();
 
-            foreach(MethodInfo method in methods)
+            foreach (MethodInfo method in methods)
             {
                 ParameterInfo[] parameters = method.GetParameters();
 
@@ -130,7 +134,7 @@ namespace ImageWizard.Processing
                 //function end
                 builder.Append(@"\)$");
 
-                IFilterAction filterAction = CreateFilterAction<TFilter>(new Regex(builder.ToString(), RegexOptions.Compiled), method);
+                IFilterAction<TFilterContext> filterAction = CreateFilterAction<TFilter>(new Regex(builder.ToString(), RegexOptions.Compiled), method);
 
                 FilterActions.Add(filterAction);
             }
@@ -143,13 +147,17 @@ namespace ImageWizard.Processing
         /// <param name="regex"></param>
         /// <param name="methodInfo"></param>
         /// <returns></returns>
-        protected abstract IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo) where TFilter : TFilterBase;
+        protected virtual IFilterAction<TFilterContext> CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo) 
+            where TFilter : TFilterBase
+        {
+            return new FilterAction<TFilter, TFilterContext>(ServiceProvider, regex, methodInfo);
+        }
 
         /// <summary>
         /// CreateFilterContext
         /// </summary>
         /// <returns></returns>
-        protected abstract FilterContext CreateFilterContext(PipelineContext context);
+        protected abstract TFilterContext CreateFilterContext(PipelineContext context);
 
         /// <summary>
         /// StartAsync
@@ -158,7 +166,11 @@ namespace ImageWizard.Processing
         /// <returns></returns>
         public async Task<DataResult> StartAsync(PipelineContext context)
         {
-            using FilterContext filterContext = CreateFilterContext(context);
+            using TFilterContext filterContext = CreateFilterContext(context);
+
+            //execute preprocessing
+            PreProcessing? preProcessing = ServiceProvider.GetService<PreProcessing>();
+            preProcessing?.Invoke(filterContext);
 
             //execute filters
             while (context.UrlFilters.Count > 0)
@@ -189,6 +201,10 @@ namespace ImageWizard.Processing
                     return filterContext.Result;
                 }
             }
+
+            //execute postprocessing
+            PostProcessing? postProcessing = ServiceProvider.GetService<PostProcessing>();
+            postProcessing?.Invoke(filterContext);
 
             return await filterContext.BuildResultAsync();
         }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ImageWizard.FFMpegCore.Filters.Base
 {
-    public class FFMpegFilter : FilterBase<FFMpegContext>
+    public class FFMpegFilter : Filter<FFMpegContext>
     {
         public override string Namespace => "ffmpegcore";
 

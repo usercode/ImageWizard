@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace ImageWizard.Filters
 {
-    public abstract class SvgFilter : FilterBase<SvgFilterContext>
+    public abstract class SvgFilter : Filter<SvgFilterContext>
     {
         public SvgFilter()
         {

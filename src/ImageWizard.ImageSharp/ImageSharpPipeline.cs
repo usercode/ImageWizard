@@ -17,7 +17,7 @@ namespace ImageWizard.ImageSharp.Filters
     /// <summary>
     /// ImageSharpPipeline
     /// </summary>
-    public class ImageSharpPipeline : Pipeline<ImageSharpFilter>
+    public class ImageSharpPipeline : Pipeline<ImageSharpFilter, ImageSharpFilterContext>
     {
         public ImageSharpPipeline(
             IServiceProvider service, 
@@ -36,12 +36,7 @@ namespace ImageWizard.ImageSharp.Filters
         /// </summary>
         private IOptions<ImageSharpOptions> Options { get; }
 
-        protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
-        {
-            return new ImageSharpFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
-        }
-
-        protected override FilterContext CreateFilterContext(PipelineContext context)
+        protected override ImageSharpFilterContext CreateFilterContext(PipelineContext context)
         {
             Image image = Image.Load(context.Result.Data);
 
@@ -58,10 +53,6 @@ namespace ImageWizard.ImageSharp.Filters
             }
 
             ImageSharpFilterContext imageSharpContext = new ImageSharpFilterContext(context, image, targetFormat, Options);
-
-            //execute preprocessing            
-            ImagePreProcessing preProcessing = ServiceProvider.GetService<ImagePreProcessing>();
-            preProcessing?.Invoke(imageSharpContext);
 
             return imageSharpContext;
         }

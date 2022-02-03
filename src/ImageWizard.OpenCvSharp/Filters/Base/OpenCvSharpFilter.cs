@@ -8,7 +8,7 @@ namespace ImageWizard.OpenCvSharp.Filters
     /// <summary>
     /// OpenCvSharpFilter
     /// </summary>
-    public abstract class OpenCvSharpFilter : FilterBase<OpenCvSharpFilterContext>
+    public abstract class OpenCvSharpFilter : Filter<OpenCvSharpFilterContext>
     {
         public OpenCvSharpFilter()
         {

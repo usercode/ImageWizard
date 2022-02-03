@@ -9,12 +9,5 @@ namespace ImageWizard
     /// </summary>
     public interface IFilterAction
     {
-        /// <summary>
-        /// TryExecute
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="filterContext"></param>
-        /// <returns></returns>
-        bool TryExecute(string input, FilterContext filterContext);
     }
 }

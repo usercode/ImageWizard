@@ -1,5 +1,6 @@
 ﻿using ImageWizard.ImageSharp;
 using ImageWizard.ImageSharp.Filters;
+using ImageWizard.Processing;
 using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using System;
@@ -10,9 +11,6 @@ using System.Threading.Tasks;
 
 namespace ImageWizard
 {
-    public delegate void ImagePreProcessing(ImageSharpFilterContext context);
-    public delegate void ImagePostProcessing(ImageSharpFilterContext context);
-
     public static class ImageSharpBuilderExtensions
     {
         /// <summary>
@@ -48,7 +46,7 @@ namespace ImageWizard
         /// <param name="builder"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static IImageSharpBuilder WithPreProcessing(this IImageSharpBuilder builder, ImagePreProcessing action)
+        public static IImageSharpBuilder WithPreProcessing(this IImageSharpBuilder builder, ImageSharpPipeline.PreProcessing action)
         {
             builder.Services.AddSingleton(action);
 
@@ -61,7 +59,7 @@ namespace ImageWizard
         /// <param name="builder"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static IImageSharpBuilder WithPostProcessing(this IImageSharpBuilder builder, ImagePostProcessing action)
+        public static IImageSharpBuilder WithPostProcessing(this IImageSharpBuilder builder, ImageSharpPipeline.PostProcessing action)
         {
             builder.Services.AddSingleton(action);
 

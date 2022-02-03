@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ImageWizard.SkiaSharp.Filters.Base
 {
-    public class SkiaSharpFilter : FilterBase<SkiaSharpFilterContext>
+    public class SkiaSharpFilter : Filter<SkiaSharpFilterContext>
     {
         public override string Namespace => "skiasharp";
     }

@@ -7,7 +7,8 @@ namespace ImageWizard
     /// <summary>
     /// IFilterAction
     /// </summary>
-    public interface IFilterAction<TContext>
+    public interface IFilterAction<TFilerContext> : IFilterAction
+        where TFilerContext : FilterContext
     {
         /// <summary>
         /// TryExecute
@@ -15,6 +16,6 @@ namespace ImageWizard
         /// <param name="input"></param>
         /// <param name="filterContext"></param>
         /// <returns></returns>
-        bool TryExecute(string input, TContext filterContext);
+        bool TryExecute(string input, TFilerContext filterContext);
     }
 }

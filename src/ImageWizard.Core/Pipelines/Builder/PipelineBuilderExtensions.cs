@@ -1,4 +1,6 @@
 ﻿using ImageWizard.Core.Processing.Builder;
+using ImageWizard.Processing;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +28,19 @@ namespace ImageWizard
 
             return builder;
         }
+
+        ///// <summary>
+        ///// Executes custom action before the pipeline is started.
+        ///// </summary>
+        ///// <param name="builder"></param>
+        ///// <param name="action"></param>
+        ///// <returns></returns>
+        //public static T WithPreProcessing2<T>(this T builder, Action<FilterContext> action)
+        //    where T : IPipelineBuilder
+        //{
+        //    builder.Services.AddSingleton(action);
+
+        //    return builder;
+        //}
     }
 }

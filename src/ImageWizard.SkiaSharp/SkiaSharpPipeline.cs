@@ -18,7 +18,7 @@ namespace ImageWizard.SkiaSharp
     /// <summary>
     /// SkiaPipeline
     /// </summary>
-    public class SkiaSharpPipeline : Pipeline<SkiaSharpFilter>
+    public class SkiaSharpPipeline : Pipeline<SkiaSharpFilter, SkiaSharpFilterContext>
     {
         public SkiaSharpPipeline(
             IServiceProvider serviceProvider, 
@@ -29,12 +29,7 @@ namespace ImageWizard.SkiaSharp
             actions.Foreach(x => x(this));
         }
 
-        protected override IFilterAction CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo)
-        {
-            return new SkiaSharpFilterAction<TFilter>(ServiceProvider, regex, methodInfo);
-        }
-
-        protected override FilterContext CreateFilterContext(PipelineContext context)
+        protected override SkiaSharpFilterContext CreateFilterContext(PipelineContext context)
         {
             IImageFormat targetFormat = null;
 
