@@ -8,13 +8,25 @@ A ASP.NET Core service / middleware to resize your images dynamically as alterna
 Demo: [imagewizard.net](https://imagewizard.net)
 
 ## Features
-- different image loader (http, file, youtube, gravatar) and caches (file, distributed cache, MongoDB)
-- resize, crop, rotate images
-- page to image for pdf documents
-- common image effects like grayscale and blur are available or you create your own image filter
-- url is protected by a HMACSHA256 signature
+- any data loader:
+	- Http (streaming mode)
+	- File (use IFileProvider)
+	- YouTube (get thumbnail)
+	- Gravatar
+	- OpenGraph
+- any data caches:
+	-  File
+	-  Distributed cache
+	-  MongoDB
+- image filters: resize, crop, rotate,..
+- common image effects like grayscale and blur are available 
+- create your custom data filter
+- pdf filters: page-to-image for documents
+- url is protected by a HMACSHA256 signature to prevent DDoS attacks
 - can handle the device pixel ratio (DPR)
 - support for cache control and ETag
+- enable range processing by http request
+- use RecyclableMemoryStream for smarter memory management (IStreamPool)
 
 ## Example
 <p align="center">
