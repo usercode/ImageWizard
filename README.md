@@ -110,12 +110,13 @@ services.AddImageWizard(options =>
                             })
                 .WithPostProcessing(x =>
                             {
-                                x.Image.Mutate(m => m.Grayscale());
+			    	//blur all images
+                                x.Image.Mutate(m => m.Blur());
                               
                                 //override target format
                                 x.ImageFormat = new JpegFormat();
 				
-				//set metadata
+				//override metadata
 				x.Image.Metadata.ExifProfile = new ExifProfile();
                         	x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
                             }))
