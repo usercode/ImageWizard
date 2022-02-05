@@ -30,8 +30,16 @@ namespace ImageWizard.Client
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static IFilter FetchLocalFile(this ILoader imageBuilder, string path)
+        public static IFilter FetchLocalFile(this ILoader imageBuilder, string path, int? hashNameLength = null)
         {
+            if (hashNameLength != null)
+            {
+                if (hashNameLength < 1 || hashNameLength > 43)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(hashNameLength));
+                }
+            }
+
             IWebHostEnvironment env = imageBuilder.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
             IFileInfo file = env.WebRootFileProvider.GetFileInfo(path);
 
@@ -43,7 +51,14 @@ namespace ImageWizard.Client
 
             string hashBase64 = WebEncoders.Base64UrlEncode(hashBufferSpan);
 
-            path += $"?v={hashBase64}";
+            if (hashNameLength == null)
+            {
+                path += $"?v={hashBase64}";
+            }
+            else
+            {
+                path += $"?v={hashBase64.AsSpan(0, hashNameLength.Value)}";
+            }
 
             return imageBuilder.LoadData("fetch", path);
         }
