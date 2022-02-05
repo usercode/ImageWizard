@@ -1,12 +1,29 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Image processing webservice based on ASP.NET Core and ImageSharp / SkiaSharp / SvgNet / DocNET";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to ImageWizard</h1>
-    <p>Image processing webservice based on ASP.NET Core and ImageSharp / SkiaSharp / SvgNet / DocNET</p>
+    <h1 class="display-4">ImageWizard <br /> » Image processing webservice based on ASP.NET Core and ImageSharp / SkiaSharp</h1>
+    <br />
+
+    <div>
+        <ul style="text-align:left">
+            <li>Based on ASP.NET and ImageSharp / SkiaSharp / SvgNet / DocNET</li>
+            <li>Any data loaders: Http, File, YouTube (thumbnail), Gravatar, OpenGraph</li>
+            <li>Any data caches: File, Distributed cache, MongoDB cache</li>
+            <li>Image filters: resize, crop, rotate,..</li>
+            <li>Common image effects like grayscale and blur are available</li>
+            <li>Pdf filters: page-to-image for documents</li>
+            <li>Url is protected by a HMACSHA256 signature to prevent DDoS attacks</li>
+            <li>Can handle the device pixel ratio (DPR)</li>
+            <li>Support for cache control and ETag</li>
+            <li>Enable range processing by http request</li>
+            <li>Use RecyclableMemoryStream for smarter memory management (IStreamPool)</li>
+        </ul>
+    </div>
+
     <p>Use the standalone version or middleware.</p>
 
     <a href="https://github.com/usercode/ImageWizard" class="btn btn-success">Go to GitHub</a>
@@ -182,6 +199,22 @@
         </div>
     </div>
 
+    <h2>Use file provider (IFileProvider)</h2>
+    <p>@@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
+    <p>@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400, 400).BuildUrl()</p>
+
+    @*<div class="row">
+        <div class="col-lg-4">
+            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()" class="auto-scale" />
+        </div>
+        <div class="col-lg-4">
+            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+        </div>
+        <div class="col-lg-4">
+            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
+        </div>
+    </div>*@
+
     <h2>Fetch youtube image</h2>
 
     <p>@@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(400,400).BuildUrl()</p>
@@ -235,11 +268,7 @@
             <img src=@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).Blur().BuildUrl() class="auto-scale" />
             <p>Blur</p>
         </div>
-    </div>
-
-    <h2>Video thumbnail</h2>
-
-    <img src="@Url.ImageWizard().Fetch("video/test.mp4").AsVideo().GetFrame().BuildUrl()" />
+    </div>   
 
     <h2>PDF (page to image)</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("/pdf/earth.pdf").AsPdf().PageToImage(0).BuildUrl()</p>

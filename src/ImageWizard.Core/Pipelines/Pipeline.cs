@@ -48,7 +48,7 @@ namespace ImageWizard.Processing
         protected IList<IFilterAction<TFilterContext>> FilterActions { get; }
 
         /// <summary>
-        /// AddFilter
+        /// Adds filter to pipeline.
         /// </summary>
         /// <typeparam name="TFilterBase"></typeparam>
         public void AddFilter<TFilter>()
@@ -154,13 +154,13 @@ namespace ImageWizard.Processing
         }
 
         /// <summary>
-        /// CreateFilterContext
+        /// Creates filter context.
         /// </summary>
         /// <returns></returns>
         protected abstract TFilterContext CreateFilterContext(PipelineContext context);
 
         /// <summary>
-        /// StartAsync
+        /// Starts processing pipeline.
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>

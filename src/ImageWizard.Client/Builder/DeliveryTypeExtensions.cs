@@ -16,7 +16,7 @@ namespace ImageWizard.Client
     public static class DeliveryTypeExtensions
     {
         /// <summary>
-        /// Fetch file from absolute or relative url
+        /// Fetch file from absolute or relative url.
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
@@ -26,28 +26,24 @@ namespace ImageWizard.Client
         }
 
         /// <summary>
-        /// Fetch file from wwwroot folder
+        /// Fetch file from wwwroot folder with fingerprint.
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="addFingerprint"></param>
         /// <returns></returns>
-        public static IFilter FetchLocalFile(this ILoader imageBuilder, string path, bool addFileVersion = true)
+        public static IFilter FetchLocalFile(this ILoader imageBuilder, string path)
         {
-            if (addFileVersion == true)
-            {
-                IWebHostEnvironment env = imageBuilder.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-                IFileInfo file = env.WebRootFileProvider.GetFileInfo(path);
+            IWebHostEnvironment env = imageBuilder.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+            IFileInfo file = env.WebRootFileProvider.GetFileInfo(path);
 
-                string hash = $"{file.Length}_{file.LastModified.UtcTicks}";
+            string hash = $"{file.Length}_{file.LastModified.UtcTicks}";
 
-                Span<byte> hashBufferSpan = stackalloc byte[32];
+            Span<byte> hashBufferSpan = stackalloc byte[32];
 
-                SHA256.HashData(Encoding.UTF8.GetBytes(hash), hashBufferSpan);
+            SHA256.HashData(Encoding.UTF8.GetBytes(hash), hashBufferSpan);
 
-                string hashBase64 = WebEncoders.Base64UrlEncode(hashBufferSpan);
+            string hashBase64 = WebEncoders.Base64UrlEncode(hashBufferSpan);
 
-                path += $"?v={hashBase64}";
-            }
+            path += $"?v={hashBase64}";
 
             return imageBuilder.LoadData("fetch", path);
         }

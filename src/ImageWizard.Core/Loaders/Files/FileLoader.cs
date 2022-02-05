@@ -25,7 +25,7 @@ namespace ImageWizard.Loaders
         /// <summary>
         /// FileProvider
         /// </summary>
-        private PhysicalFileProvider FileProvider { get; }
+        private IFileProvider FileProvider { get; }
 
         /// <summary>
         /// HostingEnvironment
@@ -38,7 +38,7 @@ namespace ImageWizard.Loaders
 
             if (fileInfo.Exists == false)
             {
-                throw new Exception("file not found: " + source);
+                throw new Exception($"file not found: {source}");
             }
 
             string etag = (fileInfo.Length ^ fileInfo.LastModified.UtcTicks).ToString();
