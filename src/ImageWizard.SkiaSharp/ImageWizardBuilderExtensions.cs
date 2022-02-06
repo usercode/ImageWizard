@@ -10,9 +10,11 @@ namespace ImageWizard
 {
     public static class ImageWizardBuilderExtensions
     {
+        private readonly static string[] SupportedMimeTypes = new[] { MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp };
+
         public static IImageWizardBuilder AddSkiaSharp(this IImageWizardBuilder builder)
         {
-            return AddSkiaSharp(builder, MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp);
+            return AddSkiaSharp(builder, SupportedMimeTypes);
         }
 
         public static IImageWizardBuilder AddSkiaSharp(this IImageWizardBuilder builder, params string[] mimeTypes)
@@ -33,6 +35,8 @@ namespace ImageWizard
             pipelineBuilder.WithFilter<DPRFilter>();
             pipelineBuilder.WithFilter<ImageFormatFilter>();
             pipelineBuilder.WithFilter<TextFilter>();
+
+            pipelineBuilder.WithMimeTypes(SupportedMimeTypes);
 
             options(pipelineBuilder);
 

@@ -11,6 +11,8 @@ namespace ImageWizard
     /// </summary>
     public static class ImageWizardBuilderExtensions
     {
+        private readonly static string[] SupportedMimeTypes = new[] { MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Tga, MimeTypes.Bmp };
+
         /// <summary>
         /// Adds the ImageSharp pipeline with default mime types (jpg, gif, png, tga, bmp).
         /// </summary>
@@ -18,7 +20,7 @@ namespace ImageWizard
         /// <returns></returns>
         public static IImageWizardBuilder AddImageSharp(this IImageWizardBuilder builder)
         {
-            return AddImageSharp(builder, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Tga, MimeTypes.Bmp);
+            return AddImageSharp(builder, SupportedMimeTypes);
         }
 
         /// <summary>
@@ -59,6 +61,8 @@ namespace ImageWizard
             pipelineBuilder.WithFilter<MetadataFilter>();
             pipelineBuilder.WithFilter<ImageFormatFilter>();
             pipelineBuilder.WithFilter<TextFilter>();
+
+            pipelineBuilder.WithMimeTypes(SupportedMimeTypes);
 
             options(pipelineBuilder);
 

@@ -15,12 +15,7 @@ namespace ImageWizard
     {
         public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder)
         {
-            return AddDocNET(builder, MimeTypes.Pdf);
-        }
-
-        public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder, params string[] mimeTypes)
-        {
-            return AddDocNET(builder, x => x.WithMimeTypes(mimeTypes));
+            return AddDocNET(builder, x => x.WithMimeTypes(MimeTypes.Pdf));
         }
 
         public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder, Action<IDocNETBuilder> options)
@@ -29,6 +24,8 @@ namespace ImageWizard
 
             pipelineBuilder.WithFilter<PageToImageFilter>();
             pipelineBuilder.WithFilter<SubPagesFilter>();
+
+            pipelineBuilder.WithMimeTypes(MimeTypes.Pdf);
 
             options(pipelineBuilder);
 

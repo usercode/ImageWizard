@@ -28,6 +28,8 @@ namespace ImageWizard
             pipelineBuilder.WithFilter<SaturateFilter>();
             pipelineBuilder.WithFilter<ImageFormatFilter>();
 
+            pipelineBuilder.WithMimeTypes(MimeTypes.Svg);
+
             options(pipelineBuilder);
 
             builder.AddPipeline<SvgPipeline>(pipelineBuilder.MimeTypes);

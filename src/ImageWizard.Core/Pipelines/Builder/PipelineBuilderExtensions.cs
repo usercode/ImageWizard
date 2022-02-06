@@ -21,6 +21,8 @@ namespace ImageWizard
         public static T WithMimeTypes<T>(this T builder, params string[] mimeTypes)
             where T : IPipelineBuilder
         {
+            builder.MimeTypes.Clear();
+
             foreach (string mimeType in mimeTypes)
             {
                 builder.MimeTypes.Add(mimeType);
