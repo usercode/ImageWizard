@@ -36,9 +36,9 @@ namespace ImageWizard.ImageSharp.Filters
         /// </summary>
         private IOptions<ImageSharpOptions> Options { get; }
 
-        protected override ImageSharpFilterContext CreateFilterContext(PipelineContext context)
+        protected override async Task<ImageSharpFilterContext> CreateFilterContext(PipelineContext context)
         {
-            Image image = Image.Load(context.Result.Data);
+            Image image = await Image.LoadAsync(context.Result.Data);
 
             IImageFormat targetFormat = null;
 

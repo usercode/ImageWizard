@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace ImageWizard.DocNET
 {
@@ -27,9 +28,9 @@ namespace ImageWizard.DocNET
             actions.Foreach(x => x(this));
         }
 
-        protected override DocNETFilterContext CreateFilterContext(PipelineContext context)
+        protected override Task<DocNETFilterContext> CreateFilterContext(PipelineContext context)
         {
-            return new DocNETFilterContext(context, context.Result.Data);
+            return Task.FromResult(new DocNETFilterContext(context, context.Result.Data));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace ImageWizard.SvgNet.Filters
             actions.Foreach(x => x(this));
         }
 
-        protected override SvgFilterContext CreateFilterContext(PipelineContext context)
+        protected override async Task<SvgFilterContext> CreateFilterContext(PipelineContext context)
         {
             //load image
             SvgDocument svg = SvgDocument.Open<SvgDocument>(context.Result.Data);

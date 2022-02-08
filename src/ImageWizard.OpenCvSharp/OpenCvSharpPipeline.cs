@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters
 {
@@ -27,10 +28,9 @@ namespace ImageWizard.ImageSharp.Filters
             actions.Foreach(x => x(this));
         }
 
-        protected override OpenCvSharpFilterContext CreateFilterContext(PipelineContext context)
-        {
-            
-            return new OpenCvSharpFilterContext(context);
+        protected override Task<OpenCvSharpFilterContext> CreateFilterContext(PipelineContext context)
+        {            
+            return Task.FromResult(new OpenCvSharpFilterContext(context));
         }
     }
 }

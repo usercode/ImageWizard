@@ -157,7 +157,7 @@ namespace ImageWizard.Processing
         /// Creates filter context.
         /// </summary>
         /// <returns></returns>
-        protected abstract TFilterContext CreateFilterContext(PipelineContext context);
+        protected abstract Task<TFilterContext> CreateFilterContext(PipelineContext context);
 
         /// <summary>
         /// Starts processing pipeline.
@@ -166,7 +166,7 @@ namespace ImageWizard.Processing
         /// <returns></returns>
         public async Task<DataResult> StartAsync(PipelineContext context)
         {
-            using TFilterContext filterContext = CreateFilterContext(context);
+            using TFilterContext filterContext = await CreateFilterContext(context);
 
             //execute preprocessing
             PreProcessing? preProcessing = ServiceProvider.GetService<PreProcessing>();

@@ -22,6 +22,11 @@ namespace ImageWizard
             return LoaderTypes.Keys;
         }
 
+        public bool ContainsKey(string key)
+        {
+            return LoaderTypes.ContainsKey(key);
+        }
+
         /// <summary>
         /// Get
         /// </summary>

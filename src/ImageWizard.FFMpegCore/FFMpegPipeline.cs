@@ -22,9 +22,9 @@ namespace ImageWizard.FFMpegCore
             actions.Foreach(x => x(this));
         }
 
-        protected override FFMpegContext CreateFilterContext(PipelineContext context)
+        protected override Task<FFMpegContext> CreateFilterContext(PipelineContext context)
         {
-            return new FFMpegContext(context);
+            return Task.FromResult(new FFMpegContext(context));
         }
     }
 }

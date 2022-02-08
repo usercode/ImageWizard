@@ -38,11 +38,6 @@ namespace ImageWizard
         /// </summary>
         public TypeManager PipelineManager { get; }
 
-        public IEnumerable<string> GetAllMimeTypes()
-        {
-            return PipelineManager.GetAllKeys();
-        }
-
         public void AddPipeline<T>(IEnumerable<string> mimeTypes) 
             where T : class, IPipeline
         {

@@ -82,7 +82,7 @@ namespace ImageWizard
                                                                         .Where(x => x.MatchesAllSubTypes == false)
                                                                         .Select(x => x.MediaType.Value)
                                                                         //filter unknown mime types
-                                                                        .Where(x => builder.GetAllMimeTypes().Contains(x))
+                                                                        .Where(x => builder.PipelineManager.ContainsKey(x))
                                                                         .ToList();
 
             //use accept header?
