@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Caches
 {
-    public class SHA256CachedDataHash : ICachedDataHash
+    public class SHA256CacheHash : ICacheHash
     {
         public async Task<string> CreateAsync(Stream stream)
         {

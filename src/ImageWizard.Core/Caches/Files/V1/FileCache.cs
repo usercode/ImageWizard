@@ -13,7 +13,7 @@ namespace ImageWizard.Caches
     /// </summary>
     public class FileCache : ICache
     {
-        private static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
+        protected static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
 
         public FileCache(IOptions<FileCacheSettings> settings, IWebHostEnvironment hostingEnvironment)
         {
@@ -26,7 +26,7 @@ namespace ImageWizard.Caches
             else
             {
                 Folder = new DirectoryInfo(Path.Join(hostingEnvironment.ContentRootPath, settings.Value.Folder));
-            }            
+            }
         }
 
         /// <summary>
@@ -35,35 +35,35 @@ namespace ImageWizard.Caches
         public IOptions<FileCacheSettings> Settings { get; }
 
         /// <summary>
-        /// FileProvider
+        /// Folder
         /// </summary>
-        private DirectoryInfo Folder { get; }
+        public DirectoryInfo Folder { get; }
 
-        private FileCacheLocations GetFileCacheLocations(string secret)
+        protected (FileInfo metafile, FileInfo blobfile) GetFileCacheLocations(string key)
         {
             string folders = Path.Join(
-                                    secret.AsSpan(0, 2),
-                                    secret.AsSpan(2, 2),
-                                    secret.AsSpan(4, 2),
-                                    secret.AsSpan(6, 2));
+                                    key.AsSpan(0, 2),
+                                    key.AsSpan(2, 2),
+                                    key.AsSpan(4, 2),
+                                    key.AsSpan(6, 2));
 
-            ReadOnlySpan<char> filename = secret.AsSpan(8);
+            ReadOnlySpan<char> filename = key.AsSpan(8);
 
             string basePath = Path.Join(Folder.FullName, folders, filename);
 
-            return new FileCacheLocations(new FileInfo(basePath + ".meta"), new FileInfo(basePath + ".blob"));
+            return (new FileInfo(basePath + ".meta"), new FileInfo(basePath + ".blob"));
         }
 
         public async Task<ICachedData?> ReadAsync(string key)
         {
-            FileCacheLocations locations = GetFileCacheLocations(key);
+            var locations = GetFileCacheLocations(key);
 
-            if (locations.MetaFile.Exists == false || locations.BlobFile.Exists == false)
+            if (locations.metafile.Exists == false || locations.blobfile.Exists == false)
             {
                 return null;
             }
 
-            using Stream metadataStream = locations.MetaFile.OpenRead();
+            using Stream metadataStream = locations.metafile.OpenRead();
 
             Metadata? metadata = await JsonSerializer.DeserializeAsync<Metadata>(metadataStream);
 
@@ -72,20 +72,20 @@ namespace ImageWizard.Caches
                 throw new ArgumentNullException(nameof(metadata));
             }
 
-            return new CachedData(metadata, () => Task.FromResult<Stream>(locations.BlobFile.OpenRead()));
+            return new CachedData(metadata, () => Task.FromResult<Stream>(locations.blobfile.OpenRead()));
         }
 
         public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
         {
-            FileCacheLocations locations = GetFileCacheLocations(key);
+            var locations = GetFileCacheLocations(key);
 
-            if (locations.MetaFile.Directory != null)
+            if (locations.metafile.Directory != null)
             {
-                //create folder structure
-                locations.MetaFile.Directory.Create();
+                //create folder structure for meta and blob file
+                locations.metafile.Directory.Create();
             }
 
-            using Stream metadataStream = locations.MetaFile.OpenWrite();
+            using Stream metadataStream = locations.metafile.OpenWrite();
 
             //delete existing data
             metadataStream.SetLength(0);
@@ -93,7 +93,7 @@ namespace ImageWizard.Caches
             await JsonSerializer.SerializeAsync(metadataStream, metadata, JsonSerializerOptions);
 
             //write data
-            using Stream blobStream = locations.BlobFile.OpenWrite();
+            using Stream blobStream = locations.blobfile.OpenWrite();
 
             //delete existing data
             blobStream.SetLength(0);

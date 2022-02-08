@@ -93,7 +93,7 @@ namespace ImageWizard.TestApp
                     //x.RefreshMode = ImageLoaderRefreshMode.EveryTime;
                     x.SetHeader("Api", "XYZ");
 
-                    x.AllowedHosts = new [] { "upload.wikimedia.org" };
+                    x.AllowedHosts = new[] { "upload.wikimedia.org" };
                     x.AllowAbsoluteUrls = true;
                 })
                 .AddFileLoader()
@@ -117,6 +117,7 @@ namespace ImageWizard.TestApp
                 })
                 //.SetDistributedCache()
                 .SetFileCache()
+                .SetFileCacheV2();
                 ;
 
             services.AddImageWizardClient(x =>

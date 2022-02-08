@@ -31,12 +31,12 @@ namespace ImageWizard
             return CreateInternal(true, null, null, loaderType, loaderSource, filters);
         }
 
-        public static ImageWizardUrl Create(ISignatureService signatureService, string key, string loaderType, string loaderSource, IEnumerable<string> filters)
+        public static ImageWizardUrl Create(IUrlSignature signatureService, string key, string loaderType, string loaderSource, IEnumerable<string> filters)
         {
             return CreateInternal(false, signatureService, key, loaderType, loaderSource, filters);
         }
 
-        private static ImageWizardUrl CreateInternal(bool useUnsafe, ISignatureService? signatureService, string? key, string loaderType, string loaderSource, IEnumerable<string> filters)
+        private static ImageWizardUrl CreateInternal(bool useUnsafe, IUrlSignature? signatureService, string? key, string loaderType, string loaderSource, IEnumerable<string> filters)
         {
             string path = $"{string.Join('/', filters)}/{loaderType}/{loaderSource.TrimStart('/')}".TrimStart('/');
             string signature = Unsafe;

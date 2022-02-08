@@ -65,9 +65,9 @@ namespace ImageWizard
             services.AddSingleton<IStreamPool, RecyclableMemoryStreamPool>();
 
             services.AddTransient<ICache, OneTimeCache>();
-            services.AddTransient<ICachedDataKey, SHA256CachedDataKey>();
-            services.AddTransient<ICachedDataHash, SHA256CachedDataHash>();
-            services.AddTransient<ISignatureService, HMACSHA256SignatureService>();
+            services.AddTransient<ICacheKey, SHA256CacheKey>();
+            services.AddTransient<ICacheHash, SHA256CacheHash>();
+            services.AddTransient<IUrlSignature, HMACSHA256UrlSignature>();
 
             ImageWizardBuilder configuration = new ImageWizardBuilder(services);
             services.AddSingleton(configuration);

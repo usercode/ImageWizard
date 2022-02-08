@@ -12,6 +12,8 @@ namespace ImageWizard
     {
         public Metadata()
         {
+            Key = string.Empty;
+            Hash = string.Empty;
             Cache = new CacheSettings();
             Filters = Array.Empty<string>();
 
@@ -21,17 +23,17 @@ namespace ImageWizard
         /// <summary>
         /// CreatedAt
         /// </summary>
-        public DateTime? Created { get; set; }
+        public DateTime Created { get; set; }
 
         /// <summary>
         /// Signature
         /// </summary>
-        public string? Key { get; set; }
+        public string Key { get; set; }
 
         /// <summary>
         /// Hash
         /// </summary>
-        public string? Hash { get; set; }
+        public string Hash { get; set; }
 
         /// <summary>
         /// MimeType
@@ -51,7 +53,7 @@ namespace ImageWizard
         /// <summary>
         /// FileLength
         /// </summary>
-        public long? FileLength { get; set; }
+        public long FileLength { get; set; }
 
         /// <summary>
         /// DPR

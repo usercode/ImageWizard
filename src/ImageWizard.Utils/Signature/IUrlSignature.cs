@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Caches
+namespace ImageWizard.Utils
 {
     /// <summary>
-    /// ICachedDataKey
+    /// IUrlSignature
     /// </summary>
-    public interface ICachedDataKey
+    public interface IUrlSignature
     {
         /// <summary>
-        /// Create
+        /// Encrypt
         /// </summary>
+        /// <param name="key"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        string Create(string input);
+        string Encrypt(string key, string input);
     }
 }

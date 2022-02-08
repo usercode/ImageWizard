@@ -62,7 +62,7 @@ namespace ImageWizard.Client
             }
             else
             {
-                ISignatureService signatureService = ServiceProvider.GetRequiredService<ISignatureService>();
+                IUrlSignature signatureService = ServiceProvider.GetRequiredService<IUrlSignature>();
 
                 url = ImageWizardUrl.Create(signatureService, ImageUrlBuilder.Settings.Key, LoaderType, LoaderSource, Filters);
             }

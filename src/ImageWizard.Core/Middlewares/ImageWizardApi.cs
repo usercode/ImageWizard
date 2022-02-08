@@ -34,10 +34,10 @@ namespace ImageWizard
                                                 HttpContext context,
                                                 IOptions<ImageWizardOptions> options,
                                                 ILogger<ImageWizardApi> logger,
-                                                ISignatureService signatureService,
+                                                IUrlSignature signatureService,
                                                 ICache cache,
-                                                ICachedDataKey cachedDataKey,
-                                                ICachedDataHash cachedDataHash,
+                                                ICacheKey cachedDataKey,
+                                                ICacheHash cachedDataHash,
                                                 IEnumerable<IImageWizardInterceptor> interceptors,
                                                 ImageWizardBuilder builder,
                                                 string path)

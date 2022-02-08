@@ -9,9 +9,9 @@ namespace ImageWizard
     /// </summary>
     public interface IMetadata
     {
-        DateTime? Created { get; set; }
-        string? Key { get; set; }
-        string? Hash { get; set; }
+        DateTime Created { get; set; }
+        string Key { get; set; }
+        string Hash { get; set; }
         string MimeType { get; set; }        
         IEnumerable<string> Filters { get; set; }
         string? LoaderSource { get; set; }
@@ -19,7 +19,7 @@ namespace ImageWizard
         int? Width { get; set; }
         int? Height { get; set; }
         double? DPR { get; set; }
-        long? FileLength { get; set; }
+        long FileLength { get; set; }
         CacheSettings Cache { get; }
     }
 }

@@ -24,7 +24,7 @@ namespace ImageWizard.Client
             services.AddHttpContextAccessor();
             services.AddTransient<IImageWizardUrlBuilder, UrlBuilder>();
             
-            services.AddSingleton<ISignatureService, HMACSHA256SignatureService>();
+            services.AddSingleton<IUrlSignature, HMACSHA256UrlSignature>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddScoped<IUrlHelper>(x =>

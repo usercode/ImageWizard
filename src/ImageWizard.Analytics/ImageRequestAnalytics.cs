@@ -50,12 +50,12 @@ namespace ImageWizard.Analytics
                 if (notModified)
                 {
                     x.CachedDataSendNotModified++;
-                    x.CachedDataSendNotModifiedInBytes += cachedData.Metadata.FileLength ?? 0;
+                    x.CachedDataSendNotModifiedInBytes += cachedData.Metadata.FileLength;
                 }
                 else
                 {
                     x.CachedDataSend++;
-                    x.CachedDataSendInBytes += cachedData.Metadata.FileLength ?? 0;
+                    x.CachedDataSendInBytes += cachedData.Metadata.FileLength;
                 }
             });
         }
@@ -65,7 +65,7 @@ namespace ImageWizard.Analytics
             SetData(cachedData.Metadata.MimeType, x =>
             {
                 x.CachedDataCreated++;
-                x.CachedDataCreatedInBytes += cachedData.Metadata.FileLength ?? 0;
+                x.CachedDataCreatedInBytes += cachedData.Metadata.FileLength;
             });
         }
 
