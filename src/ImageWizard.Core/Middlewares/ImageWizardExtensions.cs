@@ -12,11 +12,22 @@ namespace ImageWizard
 {
     public static class ImageWizardExtensions
     {
+        /// <summary>
+        /// Maps ImageWizard API with default base path. ("/image")
+        /// </summary>
+        /// <param name="endpoints"></param>
+        /// <returns></returns>
         public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
         {
             return MapImageWizard(endpoints, ImageWizardDefaults.BasePath);
         }
 
+        /// <summary>
+        /// Maps ImageWizard API with specified base path.
+        /// </summary>
+        /// <param name="endpoints"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, PathString path)
         {
             return endpoints
@@ -50,11 +61,36 @@ namespace ImageWizard
             return builder;
         }
 
+        /// <summary>
+        /// Adds ImageWizard services.
+        /// <br /><br />
+        /// Default services:<br/>
+        /// <see cref="ICache"/> -> <see cref="OneTimeCache"/><br/>
+        /// <see cref="ICacheKey"/> -> <see cref="SHA256CacheKey"/><br/>
+        /// <see cref="ICacheHash"/> -> <see cref="SHA256CacheHash"/><br/>
+        /// <see cref="IUrlSignature"/> -> <see cref="HMACSHA256UrlSignature"/><br/>
+        /// <see cref="IStreamPool"/> -> <see cref="RecyclableMemoryStreamPool"/><br/>
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services)
         {
             return AddImageWizard(services, options => { });
         }
 
+        /// <summary>
+        /// Adds ImageWizard services with custom options.
+        /// <br /><br />
+        /// Default services:<br/>
+        /// <see cref="ICache"/> -> <see cref="OneTimeCache"/><br/>
+        /// <see cref="ICacheKey"/> -> <see cref="SHA256CacheKey"/><br/>
+        /// <see cref="ICacheHash"/> -> <see cref="SHA256CacheHash"/><br/>
+        /// <see cref="IUrlSignature"/> -> <see cref="HMACSHA256UrlSignature"/><br/>
+        /// <see cref="IStreamPool"/> -> <see cref="RecyclableMemoryStreamPool"/><br/>
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardOptions> options)
         {
             services.Configure(options);

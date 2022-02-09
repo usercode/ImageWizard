@@ -71,7 +71,10 @@ namespace ImageWizard.TestApp
                     .WithPostProcessing(x =>
                     {
                         //override target format
-                        //x.ImageFormat = new JpegFormat();
+                        //if (x.ImageFormat is ImageSharp.JpegFormat)
+                        //{
+                        //    x.ImageFormat = new ImageSharp.WebPFormat();
+                        //}
 
                         //override metadata
                         x.Image.Metadata.ExifProfile = new ExifProfile();

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace ImageWizard.ImageSharp
 {
@@ -11,7 +12,7 @@ namespace ImageWizard.ImageSharp
     {
         public JpegFormat()
         {
-            Quality = 85;
+            Quality = 80;
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace ImageWizard.ImageSharp
 
         public async Task SaveImageAsync(Image image, Stream stream)
         {
-            await image.SaveAsJpegAsync(stream, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder() { Quality = Quality });
+            await image.SaveAsJpegAsync(stream, new JpegEncoder() { Quality = Quality });
         }
     }
 }

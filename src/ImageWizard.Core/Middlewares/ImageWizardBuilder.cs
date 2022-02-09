@@ -11,7 +11,7 @@ namespace ImageWizard
     public delegate void PipelineAction<T>(T pipeline);
 
     /// <summary>
-    /// ServiceConfiguration
+    /// ImageWizardBuilder
     /// </summary>
     public class ImageWizardBuilder : IImageWizardBuilder
     {

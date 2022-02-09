@@ -61,7 +61,7 @@ namespace ImageWizard.Caches
 
             string basePath = Path.Join(Folder.FullName, type, folders, filename);
 
-            return new FileInfo(basePath + $".{type}");
+            return new FileInfo($"{basePath}.{type}");
         }
 
         public async Task<ICachedData?> ReadAsync(string key)
