@@ -33,6 +33,18 @@ namespace ImageWizard.ImageSharp.Filters
         }
 
         [Filter]
+        public void WebP()
+        {
+            Context.ImageFormat = new WebPFormat();
+        }
+
+        [Filter]
+        public void WebP(int quality)
+        {
+            Context.ImageFormat = new WebPFormat() { Quality = quality };
+        }
+
+        [Filter]
         public void Png()
         {
             Context.ImageFormat = new PngFormat();
