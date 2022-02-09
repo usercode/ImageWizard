@@ -1,4 +1,4 @@
-# ImageWizard 3.2
+# ImageWizard 3.4
 A ASP.NET Core service / middleware to resize your images dynamically as alternative for thumbor.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -381,6 +381,8 @@ Use IUrlHelper
 - gif()
 - tga()
 - bmp()
+- webp()
+- webp(quality)
 
 #### Special options
 - dpr(value) //set allowed device pixel ratio
