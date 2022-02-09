@@ -8,13 +8,13 @@ A ASP.NET Core service / middleware to resize your images dynamically as alterna
 Demo: [imagewizard.net](https://imagewizard.net)
 
 ## Features
-- any data loader:
+- data loader:
 	- Http (streaming mode)
 	- File (use IFileProvider)
 	- YouTube (get thumbnail)
 	- Gravatar
 	- OpenGraph
-- any data caches:
+- data caches:
 	-  File
 	-  Distributed cache
 	-  MongoDB
