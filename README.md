@@ -114,8 +114,11 @@ services.AddImageWizard(options =>
 			    	//blur all images
                                 x.Image.Mutate(m => m.Blur());
                               
-                                //override target format
-                                x.ImageFormat = new JpegFormat();
+                                //override target format (Jpeg to WebP)
+				if (x.ImageFormat is JpegFormat)
+				{
+                                    x.ImageFormat = new WebPFormat();
+				}
 				
 				//override metadata
 				x.Image.Metadata.ExifProfile = new ExifProfile();
