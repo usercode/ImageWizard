@@ -18,7 +18,7 @@ namespace ImageWizard.ImageSharp.Filters
              {
                  m.DrawText(
                      text,
-                     new Font(SystemFonts.Find(font), size),
+                     new Font(SystemFonts.Get(font), size),
                      Color.Black,
                      new PointF(Context.Image.Width * x, Context.Image.Height * y));
              });
