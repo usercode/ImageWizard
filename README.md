@@ -1,9 +1,9 @@
 # ImageWizard 3.4
 A ASP.NET Core service / middleware to resize your images dynamically as alternative for thumbor.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)
-[![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard)](https://hub.docker.com/r/usercode/imagewizard)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg?style=flat-square)](https://www.nuget.org/packages/ImageWizard.Core/)
+[![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard?style=flat-square)](https://hub.docker.com/r/usercode/imagewizard)
 
 Demo: [imagewizard.net](https://imagewizard.net)
 
