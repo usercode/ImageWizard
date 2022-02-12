@@ -17,6 +17,6 @@ namespace ImageWizard.Utils
         /// <param name="key"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        string Encrypt(string key, string input);
+        string Encrypt(byte[] key, ImageWizardRequest request);
     }
 }

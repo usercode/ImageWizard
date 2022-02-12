@@ -11,8 +11,8 @@
     <div>
         <ul style="text-align:left">
             <li>Based on ASP.NET and ImageSharp / SkiaSharp / SvgNet / DocNET</li>
-            <li>Any data loaders: Http, File, YouTube (thumbnail), Gravatar, OpenGraph</li>
-            <li>Any data caches: File, Distributed cache, MongoDB cache</li>
+            <li>Different data loaders: Http, File, YouTube (thumbnail), Gravatar, OpenGraph</li>
+            <li>Different data caches: File, Distributed cache, MongoDB cache</li>
             <li>Image filters: resize, crop, rotate,..</li>
             <li>Common image effects like grayscale and blur are available</li>
             <li>Pdf filters: page-to-image for documents</li>
@@ -35,44 +35,44 @@
     <img src="@Url.ImageWizard().OpenGraph("https://github.com/usercode/ImageWizard").BuildUrl()" />
 
     <h2>SVG transforming</h2>
-    <p>@@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").BuildUrl()</p>
-    <p>@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").BuildUrl()</p>
+    <p>@@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").BuildUrl()</p>
+    <p>@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").BuildUrl()</p>
 
     <div class="row">
         <div class="col-lg-3">
             <p>Original (width=100px, height=100px)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").BuildUrl()" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>RemoveSize()</p>
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").AsSvg().RemoveSize().BuildUrl()" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").AsSvg().RemoveSize().BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>Rotate(45.0) </p>
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").AsSvg().RemoveSize().Rotate(45).BuildUrl()" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").AsSvg().RemoveSize().Rotate(45).BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>Blur() </p>
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").AsSvg().RemoveSize().Blur().BuildUrl()" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").AsSvg().RemoveSize().Blur().BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>Grayscale() </p>
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").AsSvg().Grayscale().BuildUrl()" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").AsSvg().Grayscale().BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>Invert() </p>
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").AsSvg().Invert().BuildUrl()" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").AsSvg().Invert().BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>Saturate(0.3) </p>
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/dot-net-core.svg").AsSvg().Saturate(0.3).BuildUrl()" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").AsSvg().Saturate(0.3).BuildUrl()" />
         </div>
     </div>
 
     <h2>ImageSharp filters</h2>
 
     @{
-        string fileImageSharpFilter = "/img/bat-eared-fox.jpg";
+        string fileImageSharpFilter = "img/bat-eared-fox.jpg";
     }
 
     <div class="row">
@@ -147,12 +147,12 @@
     </div>
 
     <h2>Draw text</h2>
-    <p>@@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
-    <p>@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
+    <p>@@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
+    <p>@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" class="auto-scale" />
         </div>
     </div>
 
@@ -164,18 +164,18 @@
     </div>*@
 
     <h2>Fetch local file (from wwwroot folder)</h2>
-    <p>@@Url.ImageWizard().FetchLocalFile("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
-    <p>@Url.ImageWizard().FetchLocalFile("/img/meerkat.jpg").AsImage().Resize(400, 400).BuildUrl()</p>
+    <p>@@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
+    <p>@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400, 400).BuildUrl()</p>
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/meerkat.jpg").AsImage().Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
         </div>
     </div>
 
@@ -200,8 +200,8 @@
     </div>
 
     <h2>Use file provider (IFileProvider)</h2>
-    <p>@@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
-    <p>@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400, 400).BuildUrl()</p>
+    <p>@@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
+    <p>@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400, 400).BuildUrl()</p>
 
     @*<div class="row">
         <div class="col-lg-4">

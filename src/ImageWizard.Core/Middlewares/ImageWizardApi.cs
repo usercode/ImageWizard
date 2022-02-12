@@ -36,10 +36,11 @@ namespace ImageWizard
                                                 ILogger<ImageWizardApi> logger,
                                                 IUrlSignature signatureService,
                                                 ICache cache,
-                                                ICacheKey cachedDataKey,
-                                                ICacheHash cachedDataHash,
+                                                ICacheKey cacheKey,
+                                                ICacheHash cacheHash,
                                                 IEnumerable<IImageWizardInterceptor> interceptors,
                                                 ImageWizardBuilder builder,
+                                                string signature,
                                                 string path)
         {
             if (context.Request.QueryString.HasValue)
@@ -50,28 +51,35 @@ namespace ImageWizard
             //parse url
             if (ImageWizardUrl.TryParse(path, out ImageWizardUrl url) == false)
             {
-                return Results.Problem(detail: "The url is invalid.", statusCode: StatusCodes.Status400BadRequest);
+                return Results.Problem(detail: "Url is invalid.", statusCode: StatusCodes.Status400BadRequest);
             }
 
             //unsafe url?
-            if (url.IsUnsafeUrl && options.Value.AllowUnsafeUrl)
+            if (signature == ImageWizardDefaults.Unsafe)
             {
-                logger.LogTrace("unsafe request");
+                if (options.Value.AllowUnsafeUrl)
+                {
+                    logger.LogTrace("Unsafe request");
+                }
+                else
+                {
+                    Results.Problem(detail: "Unsafe url is not allowed!", statusCode: StatusCodes.Status403Forbidden);
+                }
             }
             else
             {
                 //check signature
-                string signature = signatureService.Encrypt(options.Value.Key, url.Path);
+                string validSignature = signatureService.Encrypt(options.Value.KeyInBytes, new ImageWizardRequest(url, context.Request.Host));
 
-                if (url.Signature == signature)
+                if (signature == validSignature)
                 {
-                    logger.LogTrace("signature is valid");
+                    logger.LogTrace("Signature is valid");
                 }
                 else
                 {
                     interceptors.Foreach(x => x.OnInvalidSignature(context.Request.ContentType));
 
-                    return Results.Problem(detail: "signature is not valid!", statusCode: StatusCodes.Status403Forbidden);
+                    return Results.Problem(detail: "Signature is not valid!", statusCode: StatusCodes.Status403Forbidden);
                 }
             }
 
@@ -95,7 +103,7 @@ namespace ImageWizard
             }
 
             //generate data key
-            string key = cachedDataKey.Create(url_path_with_headers);
+            string key = cacheKey.Create(url_path_with_headers);
 
             //get data loader
             Type loaderType = builder.LoaderManager.Get(url.LoaderType);
@@ -169,7 +177,7 @@ namespace ImageWizard
                     processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
 
                     //create hash of cached image
-                    string hash = await cachedDataHash.CreateAsync(processingContext.Result.Data);
+                    string hash = await cacheHash.CreateAsync(processingContext.Result.Data);
 
                     //create metadata
                     Metadata metadata = new Metadata()

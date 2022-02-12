@@ -13,53 +13,30 @@ namespace ImageWizard
     /// </summary>
     public readonly struct ImageWizardUrl
     {
-        public readonly static string Unsafe = "unsafe";
+        private readonly static Regex Regex = new Regex($@"^(?<path>(?<filter>[a-z]+\([^)]*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private readonly static Regex Regex = new Regex($@"^(?<signature>[a-z0-9-_]+)/(?<path>(?<filter>[a-z]+\([^)]*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        private ImageWizardUrl(string signature, string path, string loaderType, string loaderSource, IEnumerable<string> filters)
+        public ImageWizardUrl(string loaderType, string loaderSource, string[] filters)
         {
-            Signature = signature;
-            Path = path;
+            LoaderType = loaderType;
+            LoaderSource = loaderSource.TrimStart('/');
+            Filters = filters;
+
+            if (Filters.Length > 0)
+            {
+                Path = $"{string.Join('/', Filters)}/{LoaderType}/{LoaderSource}";
+            }
+            else
+            {
+                Path = $"{LoaderType}/{LoaderSource}";
+            }
+        }
+
+        private ImageWizardUrl(string path, string loaderType, string loaderSource, string[] filters)
+        {
             LoaderType = loaderType;
             LoaderSource = loaderSource;
             Filters = filters;
-        }
-
-        public static ImageWizardUrl CreateUnsafe(string loaderType, string loaderSource, IEnumerable<string> filters)
-        {
-            return CreateInternal(true, null, null, loaderType, loaderSource, filters);
-        }
-
-        public static ImageWizardUrl Create(IUrlSignature signatureService, string key, string loaderType, string loaderSource, IEnumerable<string> filters)
-        {
-            return CreateInternal(false, signatureService, key, loaderType, loaderSource, filters);
-        }
-
-        private static ImageWizardUrl CreateInternal(bool useUnsafe, IUrlSignature? signatureService, string? key, string loaderType, string loaderSource, IEnumerable<string> filters)
-        {
-            string path = $"{string.Join('/', filters)}/{loaderType}/{loaderSource.TrimStart('/')}".TrimStart('/');
-            string signature = Unsafe;
-
-            //create signature?
-            if (useUnsafe == false)
-            {
-                if (signatureService == null)
-                {
-                    throw new ArgumentNullException(nameof(signatureService));
-                }
-
-                if (key == null)
-                {
-                    throw new ArgumentNullException(nameof(key));
-                }
-
-                signature = signatureService.Encrypt(key, path);
-            }
-
-            ImageWizardUrl url = new ImageWizardUrl(signature, path, loaderType, loaderSource, filters);
-
-            return url;
+            Path = path;
         }
 
         public static bool TryParse(string path, out ImageWizardUrl url)
@@ -73,23 +50,17 @@ namespace ImageWizard
                 return false;
             }
 
-            string url_signature = match.Groups["signature"].Value;
             string url_path = match.Groups["path"].Value;
             string url_loaderSource = match.Groups["loaderSource"].Value;
             string url_loaderType = match.Groups["loaderType"].Value;
-            IList<string> url_filters = match.Groups["filter"].Captures.OfType<Capture>()
+            string[] url_filters = match.Groups["filter"].Captures.OfType<Capture>()
                                                                             .Select(x => x.ValueSpan[0..^1].ToString()) //remove "/"
-                                                                            .ToList();
+                                                                            .ToArray();
 
-            url = new ImageWizardUrl(url_signature, url_path, url_loaderType, url_loaderSource, url_filters);
+            url = new ImageWizardUrl(url_path, url_loaderType, url_loaderSource, url_filters);
 
             return true;
         }
-
-        /// <summary>
-        /// Signature
-        /// </summary>
-        public string Signature { get; }
 
         /// <summary>
         /// Path
@@ -109,16 +80,11 @@ namespace ImageWizard
         /// <summary>
         /// Filters
         /// </summary>
-        public IEnumerable<string> Filters { get; }
-
-        /// <summary>
-        /// IsUnsafeUrl
-        /// </summary>
-        public bool IsUnsafeUrl => Signature == Unsafe;
+        public string[] Filters { get; }
 
         public override string ToString()
         {
-            return $"{Signature}/{Path}";
+            return Path;
         }
     }
 }

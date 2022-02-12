@@ -1,4 +1,5 @@
 ﻿using ImageWizard.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -54,20 +55,18 @@ namespace ImageWizard.Client
                 return LoaderSource;
             }
 
-            ImageWizardUrl url;
+            IUrlSignature signatureService = ServiceProvider.GetRequiredService<IUrlSignature>();
 
-            if (ImageUrlBuilder.Settings.UseUnsafeUrl)
-            {
-                url = ImageWizardUrl.CreateUnsafe(LoaderType, LoaderSource, Filters);
-            }
-            else
-            {
-                IUrlSignature signatureService = ServiceProvider.GetRequiredService<IUrlSignature>();
+            string signature = ImageWizardDefaults.Unsafe;
 
-                url = ImageWizardUrl.Create(signatureService, ImageUrlBuilder.Settings.Key, LoaderType, LoaderSource, Filters);
+            ImageWizardUrl url = new ImageWizardUrl(LoaderType, LoaderSource, Filters.ToArray());
+
+            if (ImageUrlBuilder.Settings.UseUnsafeUrl == false)
+            {
+                signature = signatureService.Encrypt(ImageUrlBuilder.Settings.KeyInBytes, new ImageWizardRequest(url, new HostString(ImageUrlBuilder.Settings.Host)));
             }
 
-            return $"{ImageUrlBuilder.Settings.BaseUrl.TrimEnd('/')}/{url}";
+            return $"{ImageUrlBuilder.Settings.BaseUrl.TrimEnd('/')}/{signature}/{url.Path}";
         }
     }
 }

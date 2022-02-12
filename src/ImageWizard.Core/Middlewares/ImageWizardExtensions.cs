@@ -13,25 +13,15 @@ namespace ImageWizard
     public static class ImageWizardExtensions
     {
         /// <summary>
-        /// Maps ImageWizard API with default base path. ("/image")
-        /// </summary>
-        /// <param name="endpoints"></param>
-        /// <returns></returns>
-        public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
-        {
-            return MapImageWizard(endpoints, ImageWizardDefaults.BasePath);
-        }
-
-        /// <summary>
         /// Maps ImageWizard API with specified base path.
         /// </summary>
         /// <param name="endpoints"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, PathString path)
+        public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
         {
             return endpoints
-                        .MapMethods($"{path}/{{*path}}", new[] { HttpMethods.Get, HttpMethods.Head }, new ImageWizardApi().ExecuteAsync)
+                        .MapMethods("{signature}/{*path}", new[] { HttpMethods.Get, HttpMethods.Head }, new ImageWizardApi().ExecuteAsync)
                         .WithName("ImageWizard");
         }
 
@@ -52,7 +42,7 @@ namespace ImageWizard
                 x.UseRouting();
                 x.UseEndpoints(endpoints =>
                 {
-                    endpoints.MapImageWizard(PathString.Empty);
+                    endpoints.MapImageWizard();
 
                     endpointsHandler?.Invoke(new ImageWizardEndpointBuilder(endpoints));
                 });

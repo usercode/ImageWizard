@@ -40,6 +40,8 @@ namespace ImageWizard.Client
                 }
             }
 
+            path = path.TrimStart('/');
+
             IWebHostEnvironment env = imageBuilder.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
             IFileInfo file = env.WebRootFileProvider.GetFileInfo(path);
 

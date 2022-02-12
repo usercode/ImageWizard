@@ -5,22 +5,22 @@ using System.Text;
 
 namespace ImageWizard
 {
-    public class ImageWizardClientSettings
+    public class ImageWizardClientSettings : ImageWizardBaseOptions
     {
         public ImageWizardClientSettings()
         {
             UseUnsafeUrl = false;
             Enabled = true;
             BaseUrl = ImageWizardDefaults.BasePath;
-            Key = null;
         }
+
+        public bool Enabled { get; set; }
 
         public bool UseUnsafeUrl { get; set; }
 
         public string BaseUrl { get; set; }
 
-        public string Key { get; set; }
-
-        public bool Enabled { get; set; }
+        public string Host { get; set; }
+        
     }
 }
