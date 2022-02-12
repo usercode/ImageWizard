@@ -4,7 +4,7 @@
 	  <TargetFramework>net6.0</TargetFramework>
 	  <Nullable>enable</Nullable>
 	  <Authors>usercode</Authors>
-	  <Version>3.4.0</Version>
+	  <Version>3.5.0</Version>
 	  <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
 	  <Description>Image processing middleware based on ASP.NET and ImageSharp / SkiaSharp / SvgNet.</Description>
 	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
