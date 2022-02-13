@@ -68,7 +68,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 | Name  |  Mime type | NuGet |
 |------------------------------------|-----------------|------------|
-| ImageSharp | image/jpeg, image/png, image/gif, image/bmp, image/tga |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.ImageSharp.svg)](https://www.nuget.org/packages/ImageWizard.ImageSharp/)
+| ImageSharp | image/jpeg, image/png, image/gif, image/bmp, image/webp, image/tga |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.ImageSharp.svg)](https://www.nuget.org/packages/ImageWizard.ImageSharp/)
 | SkiaSharp  | image/jpeg, image/png, image/gif, image/bmp, image/webp  | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SkiaSharp.svg)](https://www.nuget.org/packages/ImageWizard.SkiaSharp/)
 | SvgNet     | image/svg+xml | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SvgNet.svg)](https://www.nuget.org/packages/ImageWizard.SvgNet/)
 | DocNET     | application/pdf | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.DocNET.svg)](https://www.nuget.org/packages/ImageWizard.DocNET/)
