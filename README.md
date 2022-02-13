@@ -164,10 +164,6 @@ services.AddImageWizard(options =>
 ```
 
 ```csharp
-app.UseEndpoints(x => x.MapImageWizard());
-
-or
-
 //default path: /image
 app.UseImageWizard(x =>
 		{
