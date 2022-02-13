@@ -77,7 +77,7 @@ namespace ImageWizard
                 }
                 else
                 {
-                    interceptors.Foreach(x => x.OnInvalidSignature(context.Request.ContentType));
+                    interceptors.Foreach(x => x.OnInvalidSignature());
 
                     return Results.Problem(detail: "Signature is not valid!", statusCode: StatusCodes.Status403Forbidden);
                 }

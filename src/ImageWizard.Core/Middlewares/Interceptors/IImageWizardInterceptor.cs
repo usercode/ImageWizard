@@ -11,7 +11,7 @@ namespace ImageWizard
 
         void OnCachedDataCreated(ICachedData cachedData);
 
-        void OnInvalidSignature(string? mimeType);
+        void OnInvalidSignature();
 
     }
 }

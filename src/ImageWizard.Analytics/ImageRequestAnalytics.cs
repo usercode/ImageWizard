@@ -69,9 +69,9 @@ namespace ImageWizard.Analytics
             });
         }
 
-        public void OnInvalidSignature(string? mimeType)
+        public void OnInvalidSignature()
         {
-            SetData(mimeType, x =>
+            SetData(null, x =>
             {
                 x.InvalidSignature++;
             });
