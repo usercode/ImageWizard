@@ -129,6 +129,8 @@ services.AddImageWizard(options =>
 	   .AddDocNET()
            //uses file cache (relative or absolute path)
            .SetFileCache(options => options.Folder = "FileCache") 
+	   //or FileCache V2 with data deduplication
+	   .SetFileCacheV2()
            //or MongoDB cache
            .SetMongoDBCache(options => options.Hostname = "localhost")
            //or distributed cache
