@@ -30,11 +30,18 @@ namespace ImageWizard.ImageSharp.Filters
         }
 
         [Filter]
+        public void RemoveXmp()
+        {
+            Context.Image.Metadata.XmpProfile = null;
+        }
+
+        [Filter]
         public void RemoveMetadata()
         {
             RemoveExif();
             RemoveIcc();
             RemoveIptc();
+            RemoveXmp();
         }
     }
 }
