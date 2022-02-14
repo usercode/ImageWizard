@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace ImageWizard.Loaders
 {
     /// <summary>
-    /// DataLoader
+    /// Loader
     /// </summary>
     /// <typeparam name="TOptions"></typeparam>
-    public abstract class DataLoader<TOptions> : IDataLoader
-        where TOptions : DataLoaderOptions
+    public abstract class Loader<TOptions> : ILoader
+        where TOptions : LoaderOptions
     {
-        public DataLoader(IOptions<TOptions> options)
+        public Loader(IOptions<TOptions> options)
         {
             Options = options;
         }
@@ -23,7 +23,7 @@ namespace ImageWizard.Loaders
         /// </summary>
         public IOptions<TOptions> Options { get; }
 
-        IOptions<DataLoaderOptions> IDataLoader.Options => Options;
+        IOptions<LoaderOptions> ILoader.Options => Options;
 
         public abstract Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData);
     }

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace ImageWizard.Loaders
 {
     /// <summary>
-    /// IDataLoader
+    /// ILoader
     /// </summary>
-    public interface IDataLoader
+    public interface ILoader
     {
-        IOptions<DataLoaderOptions> Options { get; }
+        IOptions<LoaderOptions> Options { get; }
 
         /// <summary>
         /// GetAsync

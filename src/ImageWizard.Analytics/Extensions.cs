@@ -19,7 +19,7 @@ namespace ImageWizard
             return builder;
         }
 
-        public static void UseAnalytics(this IImageWizardEndpointBuilder endpoints)
+        public static void MapAnalytics(this IImageWizardEndpointBuilder endpoints)
         {
             endpoints.MapGet("analytics", (AnalyticsData data) => Results.Json(data, JsonOptions));
         }

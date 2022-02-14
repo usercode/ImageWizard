@@ -91,7 +91,7 @@ namespace ImageWizard
             {
                 if (options.Value.UseAnalytics)
                 {
-                    x.UseAnalytics();
+                    x.MapAnalytics();
                 }
             });
         }

@@ -5,19 +5,19 @@ using System.Text;
 namespace ImageWizard.Loaders
 {
     /// <summary>
-    /// DataLoaderOptions
+    /// LoaderOptions
     /// </summary>
-    public class DataLoaderOptions
+    public class LoaderOptions
     {
-        public DataLoaderOptions()
+        public LoaderOptions()
         {
-            RefreshMode = DataLoaderRefreshMode.None;
+            RefreshMode = LoaderRefreshMode.None;
         }
 
         /// <summary>
         /// RefreshMode
         /// </summary>
-        public DataLoaderRefreshMode RefreshMode { get; set; }
+        public LoaderRefreshMode RefreshMode { get; set; }
 
         /// <summary>
         /// CacheControl

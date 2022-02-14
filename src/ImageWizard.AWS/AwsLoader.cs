@@ -14,7 +14,7 @@ namespace ImageWizard.AWS
     /// <summary>
     /// AwsLoader
     /// </summary>
-    public class AwsLoader : DataLoader<AwsOptions>
+    public class AwsLoader : Loader<AwsOptions>
     {
         public AwsLoader(IOptions<AwsOptions> options)
             : base(options)

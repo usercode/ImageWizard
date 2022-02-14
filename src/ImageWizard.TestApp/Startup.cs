@@ -137,7 +137,6 @@ namespace ImageWizard.TestApp
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -158,7 +157,7 @@ namespace ImageWizard.TestApp
             
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseImageWizard(x => x.UseAnalytics());
+            app.UseImageWizard(x => x.MapAnalytics());
             app.UseRouting();
             app.UseEndpoints(x =>
             {

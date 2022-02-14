@@ -11,6 +11,10 @@ namespace ImageWizard
 
         void OnCachedDataCreated(ICachedData cachedData);
 
+        void OnUnsafeSignature();
+
+        void OnValidSignature();
+
         void OnInvalidSignature();
 
     }

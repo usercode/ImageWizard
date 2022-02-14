@@ -69,6 +69,22 @@ namespace ImageWizard.Analytics
             });
         }
 
+        public void OnUnsafeSignature()
+        {
+            SetData(null, x =>
+            {
+                x.UnsafeSignature++;
+            });
+        }
+
+        public void OnValidSignature()
+        {
+            SetData(null, x =>
+            {
+                x.ValidSignature++;
+            });
+        }
+
         public void OnInvalidSignature()
         {
             SetData(null, x =>

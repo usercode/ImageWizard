@@ -7,7 +7,7 @@ namespace ImageWizard.Loaders
     /// <summary>
     /// Refresh strategy for the original data.
     /// </summary>
-    public enum DataLoaderRefreshMode
+    public enum LoaderRefreshMode
     {
         /// <summary>
         /// The cached data will be never refreshed. (Recommend for fingerprint strategy.)

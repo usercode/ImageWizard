@@ -7,13 +7,13 @@ namespace ImageWizard.Loaders
     /// <summary>
     /// HttpLoaderSettings
     /// </summary>
-    public class HttpLoaderOptions : DataLoaderOptions
+    public class HttpLoaderOptions : LoaderOptions
     {
         public HttpLoaderOptions()
         {
             AllowAbsoluteUrls = false;
             AllowedHosts = Array.Empty<string>();
-            RefreshMode = DataLoaderRefreshMode.None;
+            RefreshMode = LoaderRefreshMode.None;
             Headers = new List<HttpHeaderItem>();
         }
 

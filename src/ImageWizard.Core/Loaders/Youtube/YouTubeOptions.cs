@@ -4,11 +4,11 @@ using System.Text;
 
 namespace ImageWizard.Loaders
 {
-    public class YouTubeOptions : DataLoaderOptions
+    public class YouTubeOptions : LoaderOptions
     {
         public YouTubeOptions()
         {
-            RefreshMode = DataLoaderRefreshMode.BasedOnCacheControl;
+            RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
         }
     }
 }

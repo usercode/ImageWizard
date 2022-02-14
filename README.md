@@ -168,7 +168,7 @@ services.AddImageWizard(options =>
 app.UseImageWizard(x =>
 		{
 			//default path: /analytics
-			x.UseAnalytics();
+			x.MapAnalytics();
 		});
 ```
 

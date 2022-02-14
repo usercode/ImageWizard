@@ -4,11 +4,11 @@ using System.Text;
 
 namespace ImageWizard.Loaders
 {
-    public class FileLoaderOptions : DataLoaderOptions
+    public class FileLoaderOptions : LoaderOptions
     {
         public FileLoaderOptions()
         {
-            RefreshMode = DataLoaderRefreshMode.EveryTime;
+            RefreshMode = LoaderRefreshMode.EveryTime;
             Folder = "FileStorage";
         }
 

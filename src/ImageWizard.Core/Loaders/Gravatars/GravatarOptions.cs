@@ -4,11 +4,11 @@ using System.Text;
 
 namespace ImageWizard.Loaders
 {
-    public class GravatarOptions : DataLoaderOptions
+    public class GravatarOptions : LoaderOptions
     {
         public GravatarOptions()
         {
-            RefreshMode = DataLoaderRefreshMode.BasedOnCacheControl;
+            RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
         }
     }
 }

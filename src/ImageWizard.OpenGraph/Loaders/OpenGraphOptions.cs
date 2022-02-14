@@ -5,11 +5,11 @@ using System.Text;
 
 namespace ImageWizard.Loaders
 {
-    public class OpenGraphOptions : DataLoaderOptions
+    public class OpenGraphOptions : LoaderOptions
     {
         public OpenGraphOptions()
         {
-            RefreshMode = DataLoaderRefreshMode.BasedOnCacheControl;
+            RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
         }
     }
 }

@@ -60,6 +60,8 @@ namespace ImageWizard
                 if (options.Value.AllowUnsafeUrl)
                 {
                     logger.LogTrace("Unsafe request");
+
+                    interceptors.Foreach(x => x.OnUnsafeSignature());
                 }
                 else
                 {
@@ -74,6 +76,8 @@ namespace ImageWizard
                 if (signature == validSignature)
                 {
                     logger.LogTrace("Signature is valid");
+
+                    interceptors.Foreach(x => x.OnValidSignature());
                 }
                 else
                 {
@@ -107,7 +111,7 @@ namespace ImageWizard
 
             //get data loader
             Type loaderType = builder.LoaderManager.Get(url.LoaderType);
-            IDataLoader? loader = (IDataLoader?)context.RequestServices.GetService(loaderType);
+            ILoader? loader = (ILoader?)context.RequestServices.GetService(loaderType);
 
             if (loader == null)
             {
@@ -124,9 +128,9 @@ namespace ImageWizard
             {
                 createCachedData = loader.Options.Value.RefreshMode switch
                 {
-                    DataLoaderRefreshMode.None => false,
-                    DataLoaderRefreshMode.EveryTime => true,
-                    DataLoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
+                    LoaderRefreshMode.None => false,
+                    LoaderRefreshMode.EveryTime => true,
+                    LoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
                                                                     || cachedData.Metadata.Cache.NoCache == true
                                                                     || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
                     _ => throw new Exception($"Unknown refresh mode: {loader.Options.Value.RefreshMode}")

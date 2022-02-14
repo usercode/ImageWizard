@@ -14,7 +14,7 @@ namespace ImageWizard
         private readonly static string[] SupportedMimeTypes = new[] { MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Tga, MimeTypes.Bmp };
 
         /// <summary>
-        /// Adds the ImageSharp pipeline with default mime types (jpg, gif, png, tga, bmp).
+        /// Adds the ImageSharp pipeline with default mime types (webp, jpg, gif, png, tga, bmp).
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>

@@ -15,7 +15,7 @@ namespace ImageWizard.Azure
     /// <summary>
     /// AzureBlobLoader
     /// </summary>
-    public class AzureBlobLoader : DataLoader<AzureBlobOptions>
+    public class AzureBlobLoader : Loader<AzureBlobOptions>
     {
         public AzureBlobLoader(IOptions<AzureBlobOptions> options)
             : base(options)
