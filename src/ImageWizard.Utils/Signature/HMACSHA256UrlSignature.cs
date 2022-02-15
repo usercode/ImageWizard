@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Buffers;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace ImageWizard.Utils
         public virtual bool IncludeHost { get; }
 
         /// <summary>
-        /// CaseSensitive
+        /// Use CaseSensitive url (Default: false)
         /// </summary>
         public virtual bool IsCaseInsensitive { get; }
 
@@ -47,6 +48,16 @@ namespace ImageWizard.Utils
         }
 
         /// <summary>
+        /// Selects part of the host.
+        /// </summary>
+        /// <param name="host"></param>
+        /// <returns></returns>
+        protected virtual string GetHostValue(HostString host)
+        {
+            return host.Value;
+        }
+
+        /// <summary>
         /// Encrypt
         /// </summary>
         /// <param name="input"></param>
@@ -54,19 +65,16 @@ namespace ImageWizard.Utils
         public string Encrypt(byte[] key, ImageWizardRequest request)
         {
             //build data string
-            StringBuilder builder = new StringBuilder();
+            string data;
 
             if (IncludeHost == true)
             {
-                //add host
-                builder.Append(request.Host.Value);
-                builder.Append('/');
+                data = $"{GetHostValue(request.Host)}/{GetUrlValue(request.Url)}";
             }
-
-            //add url
-            builder.Append(GetUrlValue(request.Url));
-
-            string data = builder.ToString();
+            else
+            {
+                data = GetUrlValue(request.Url);
+            }
 
             if (IsCaseInsensitive == true)
             {
