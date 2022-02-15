@@ -46,7 +46,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | loader type                     | "fetch" |
 | loader source                   | https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png | 
 
-## Data loaders
+## Loader
 | Name                | Loader type | Loader source | NuGet |
 |-----------------------------------|-----------------|----|---|
 | Http loader        | fetch       | absolute or relative url |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/) 
@@ -56,15 +56,15 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | OpenGraph loader     | opengraph  | absolute url   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.OpenGraph.svg)](https://www.nuget.org/packages/ImageWizard.OpenGraph/)
 | Azure loader       | azure       | relative path to file   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Azure.svg)](https://www.nuget.org/packages/ImageWizard.Azure/)
 
-## Data caches
+## Cache
 | Name                 | Description        | NuGet     |
 |----------------------|--------------------|-----------|
-|  File cache         |                    |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
-|  File cache (V2)    | with data deduplication |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
+|  File cache         |  Meta and blob file path based on cache id.  |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
+|  File cache (V2)    | With data deduplication support: <br />Meta file path based on cache id.<br /> Blob file path based on cache hash. |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
 |  Distributed cache   | MS SQL, Redis      |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
 |  MongoDB cache       | Use GridFS |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
 
-## Data pipelines
+## Pipeline
 
 | Name  |  Mime type | NuGet |
 |------------------------------------|-----------------|------------|
