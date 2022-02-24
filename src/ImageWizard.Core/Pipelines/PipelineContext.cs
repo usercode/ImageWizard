@@ -1,4 +1,8 @@
-﻿using ImageWizard.Processing.Results;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.Processing.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;

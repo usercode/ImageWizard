@@ -1,4 +1,8 @@
-﻿using ImageWizard.Analytics;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.Analytics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;

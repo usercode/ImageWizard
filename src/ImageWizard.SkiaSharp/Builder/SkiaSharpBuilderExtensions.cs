@@ -1,4 +1,8 @@
-﻿using ImageWizard.SkiaSharp;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.SkiaSharp;
 using ImageWizard.SkiaSharp.Builder;
 using ImageWizard.SkiaSharp.Filters.Base;
 using Microsoft.Extensions.DependencyInjection;

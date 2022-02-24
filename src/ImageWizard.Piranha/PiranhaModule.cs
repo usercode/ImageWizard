@@ -1,4 +1,8 @@
-﻿using Piranha;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using Piranha;
 using Piranha.Extend;
 using Piranha.Extend.Blocks;
 using System;

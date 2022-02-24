@@ -1,4 +1,8 @@
-﻿using ImageWizard.ImageSharp;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.ImageSharp;
 using ImageWizard.ImageSharp.Filters;
 using ImageWizard.Processing;
 using Microsoft.Extensions.DependencyInjection;

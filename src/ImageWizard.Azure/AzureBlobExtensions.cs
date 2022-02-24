@@ -1,4 +1,8 @@
-﻿using ImageWizard.Azure;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.Azure;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

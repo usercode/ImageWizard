@@ -1,4 +1,8 @@
-﻿using ImageWizard.Caches;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.Caches;
 using ImageWizard.Core;
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.Builder;

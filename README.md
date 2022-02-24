@@ -140,7 +140,7 @@ services.AddImageWizard(options =>
            .AddHttpLoader(options => 
           {
                                    //checks every time for a new version of the original image.
-                                   options.RefreshMode = DataLoaderRefreshMode.EveryTime;
+                                   options.RefreshMode = LoaderRefreshMode.EveryTime;
                                    
                                    //set base url for relative urls
                                    options.DefaultBaseUrl = "https://mydomain";

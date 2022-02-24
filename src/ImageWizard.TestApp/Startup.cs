@@ -1,3 +1,7 @@
+// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,14 +84,13 @@ namespace ImageWizard.TestApp
                         x.Image.Metadata.ExifProfile = new ExifProfile();
                         x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
                     }))
-                .AddSkiaSharp(c => c
-                    .WithMimeTypes(MimeTypes.WebP)
-                    .WithOptions(x =>
-                                {
-                                    x.ImageMaxHeight = 4000;
-                                    x.ImageMaxWidth = 4000;
-                                })
-                    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>())
+                //.AddSkiaSharp(c => c                    
+                //    .WithOptions(x =>
+                //                {
+                //                    x.ImageMaxHeight = 4000;
+                //                    x.ImageMaxWidth = 4000;
+                //                })
+                //    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>())
                 .AddSvgNet()
                 //.SetFileCache()
                 //.SetMongoDBCache()

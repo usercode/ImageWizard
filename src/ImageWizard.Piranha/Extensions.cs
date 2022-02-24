@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using Microsoft.AspNetCore.Mvc;
 using Piranha.Extend.Fields;
 using System;
 using Microsoft.AspNetCore.Html;

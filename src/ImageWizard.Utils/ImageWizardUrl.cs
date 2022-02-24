@@ -1,4 +1,8 @@
-﻿using ImageWizard.Utils;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,9 +57,9 @@ namespace ImageWizard
             string url_path = match.Groups["path"].Value;
             string url_loaderSource = match.Groups["loaderSource"].Value;
             string url_loaderType = match.Groups["loaderType"].Value;
-            string[] url_filters = match.Groups["filter"].Captures.OfType<Capture>()
-                                                                            .Select(x => x.ValueSpan[0..^1].ToString()) //remove "/"
-                                                                            .ToArray();
+            string[] url_filters = match.Groups["filter"].Captures
+                                                                .Select(x => x.ValueSpan[0..^1].ToString()) //remove "/"
+                                                                .ToArray();
 
             url = new ImageWizardUrl(url_path, url_loaderType, url_loaderSource, url_filters);
 

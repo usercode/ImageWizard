@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.IO;

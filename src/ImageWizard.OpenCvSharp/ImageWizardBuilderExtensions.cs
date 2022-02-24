@@ -1,4 +1,8 @@
-﻿using ImageWizard.ImageSharp.Filters;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.ImageSharp.Filters;
 
 namespace ImageWizard.OpenCvSharp
 {

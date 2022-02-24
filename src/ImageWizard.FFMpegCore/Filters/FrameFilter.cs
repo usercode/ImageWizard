@@ -1,4 +1,8 @@
-﻿using FFMpegCore;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using FFMpegCore;
 using FFMpegCore.Enums;
 using FFMpegCore.Pipes;
 using ImageWizard.Attributes;

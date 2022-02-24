@@ -1,4 +1,8 @@
-﻿using ImageWizard.AWS;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.AWS;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 

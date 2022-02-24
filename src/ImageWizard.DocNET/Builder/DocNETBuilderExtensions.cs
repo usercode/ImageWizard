@@ -1,4 +1,8 @@
-﻿using ImageWizard.DocNET;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.DocNET;
 using ImageWizard.DocNET.Builder;
 using ImageWizard.DocNET.Filters.Base;
 using Microsoft.Extensions.DependencyInjection;

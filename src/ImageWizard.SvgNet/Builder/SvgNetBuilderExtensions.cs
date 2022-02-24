@@ -1,4 +1,8 @@
-﻿using ImageWizard.Filters;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.Filters;
 using ImageWizard.SvgNet;
 using ImageWizard.SvgNet.Builder;
 using ImageWizard.SvgNet.Filters;

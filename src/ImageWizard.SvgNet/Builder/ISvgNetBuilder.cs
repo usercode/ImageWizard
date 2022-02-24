@@ -1,4 +1,8 @@
-﻿using ImageWizard.Core.Processing.Builder;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.Core.Processing.Builder;
 using ImageWizard.Filters;
 using ImageWizard.SvgNet;
 using System;

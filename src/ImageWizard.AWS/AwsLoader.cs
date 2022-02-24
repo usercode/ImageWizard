@@ -1,4 +1,8 @@
-﻿using Amazon.S3;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using Amazon.S3;
 using Amazon.S3.Model;
 using ImageWizard.Core;
 using ImageWizard.Loaders;

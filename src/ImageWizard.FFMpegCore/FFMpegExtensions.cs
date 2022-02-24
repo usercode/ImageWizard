@@ -1,4 +1,8 @@
-﻿using ImageWizard.FFMpegCore;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.FFMpegCore;
 using ImageWizard.FFMpegCore.Builder;
 using ImageWizard.FFMpegCore.Filters;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Options;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Linq;
 using System;

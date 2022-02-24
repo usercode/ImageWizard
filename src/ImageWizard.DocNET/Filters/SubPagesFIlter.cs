@@ -1,4 +1,8 @@
-﻿using Docnet.Core;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using Docnet.Core;
 using Docnet.Core.Readers;
 using ImageWizard.Attributes;
 using ImageWizard.DocNET.Filters.Base;

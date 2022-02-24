@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +14,9 @@ namespace ImageWizard
     public static class FileCacheV2Extensions
     {
         /// <summary>
-        /// Adds file cache with data deduplication.
+        /// Adds file cache (<see cref="FileCacheV2"/>) with data deduplication support: <br/>
+        /// Meta file path based on cache id.<br/>
+        /// Blob file path based on cache hash.
         /// </summary>
         /// <param name="wizardBuilder"></param>
         /// <returns></returns>
@@ -20,7 +26,9 @@ namespace ImageWizard
         }
 
         /// <summary>
-        /// Adds file cache with data deduplication.
+        /// Adds file cache (<see cref="FileCacheV2"/>) with data deduplication support: <br/>
+        /// Meta file path based on cache id.<br/>
+        /// Blob file path based on cache hash.
         /// </summary>
         /// <param name="wizardBuilder"></param>
         /// <param name="fileCacheSettingsSetup"></param>

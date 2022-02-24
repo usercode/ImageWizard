@@ -43,7 +43,15 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.OpenCvSharp", "ImageWizard.OpenCvSharp\ImageWizard.OpenCvSharp.csproj", "{9B852380-14DA-4AB8-BF0F-824BD501A24D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.OpenGraph", "ImageWizard.OpenGraph\ImageWizard.OpenGraph.csproj", "{9F5A2233-A9F3-41EB-BF87-C79A2D9E44C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.OpenGraph", "ImageWizard.OpenGraph\ImageWizard.OpenGraph.csproj", "{9F5A2233-A9F3-41EB-BF87-C79A2D9E44C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C9111732-EF68-4333-AC90-34FD1EC10F7E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+	ProjectSection(FolderGlobals) = preProject
+		C_5_4github_4_3_4ImageWizard_4src_4_1editorconfig__JsonSchema = editor
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

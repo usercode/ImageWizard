@@ -1,4 +1,8 @@
-﻿using ImageWizard.Core;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using ImageWizard.Core;
 using ImageWizard.Filters;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;

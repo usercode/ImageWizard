@@ -1,4 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿// Copyright (c) usercode
+// https://github.com/usercode/ImageWizard
+// MIT License
+
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using System;
