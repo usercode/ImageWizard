@@ -1,4 +1,4 @@
-# ImageWizard 3.4
+# ImageWizard
 A ASP.NET Core service / middleware to resize your images dynamically as alternative for thumbor.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
