@@ -23,6 +23,7 @@ namespace ImageWizard.ImageSharp
             {
                 IImageFormat imageFormat = mimeType switch
                 {
+                    MimeTypes.WebP => new WebPFormat(),
                     MimeTypes.Jpeg => new JpegFormat(),
                     MimeTypes.Png => new PngFormat(),
                     MimeTypes.Gif => new GifFormat(),                    
