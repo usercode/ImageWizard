@@ -13,6 +13,7 @@ namespace ImageWizard.Loaders
         public GravatarOptions()
         {
             RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
+            CacheControlMaxAge = TimeSpan.FromDays(7);
         }
     }
 }

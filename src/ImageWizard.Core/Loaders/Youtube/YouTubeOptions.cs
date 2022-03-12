@@ -13,6 +13,7 @@ namespace ImageWizard.Loaders
         public YouTubeOptions()
         {
             RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
+            CacheControlMaxAge = TimeSpan.FromDays(7);
         }
     }
 }
