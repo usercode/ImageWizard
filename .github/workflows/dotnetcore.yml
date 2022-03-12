@@ -44,4 +44,6 @@ jobs:
       run: dotnet nuget push "./src/ImageWizard.DocNET/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}    
     - name: Publish "ImageWizard.OpenGraph" to nuget
       run: dotnet nuget push "./src/ImageWizard.OpenGraph/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}    
+    - name: Publish "ImageWizard.PuppeteerSharp" to nuget
+      run: dotnet nuget push "./src/ImageWizard.PuppeteerSharp/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}    
     

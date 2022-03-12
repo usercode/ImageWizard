@@ -124,7 +124,7 @@ services.AddImageWizard(options =>
 				x.Image.Metadata.ExifProfile = new ExifProfile();
                         	x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
                             }))
-           .AddSkiaSharp(MimeTypes.WebP)
+           //.AddSkiaSharp()
            .AddSvgNet()
 	   .AddDocNET()
            //uses file cache (relative or absolute path)

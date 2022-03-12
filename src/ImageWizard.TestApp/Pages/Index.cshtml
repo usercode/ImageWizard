@@ -34,6 +34,13 @@
 
     <img src="@Url.ImageWizard().OpenGraph("https://github.com/usercode/ImageWizard").BuildUrl()" />
 
+    <h2>Screenshot loader</h2>
+
+    <p>@@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()</p>
+    <p>@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()</p>
+
+    <img src="@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()" />
+
     <h2>SVG transforming</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").BuildUrl()</p>
     <p>@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").BuildUrl()</p>

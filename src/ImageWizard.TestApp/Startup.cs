@@ -105,6 +105,7 @@ namespace ImageWizard.TestApp
                 .AddFileLoader()
                 .AddYoutubeLoader()
                 .AddGravatarLoader()
+                .AddPuppeteerLoader()
                 .AddFFMpegCore()
                 .AddDocNET()
                 .AddOpenCvSharp()

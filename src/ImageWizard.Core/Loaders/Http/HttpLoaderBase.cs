@@ -65,7 +65,9 @@ namespace ImageWizard.Loaders
 
             Stream data = await response.Content.ReadAsStreamAsync();
 
-            return new HttpOriginalData(response, mimeType, data, new CacheSettings(response));
+            return new HttpOriginalData(response, mimeType, data, new CacheSettings()
+                                                                        .ApplyHttpResponse(response)
+                                                                        .ApplyLoaderOptions(Options.Value));
         }
     }
 }
