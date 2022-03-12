@@ -22,7 +22,6 @@ namespace ImageWizard
         string? LoaderType { get; set; }
         int? Width { get; set; }
         int? Height { get; set; }
-        double? DPR { get; set; }
         long FileLength { get; set; }
         CacheSettings Cache { get; }
     }

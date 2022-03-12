@@ -91,7 +91,7 @@ namespace ImageWizard
                 }
             }
 
-            string url_path_with_headers = url.Path;
+            StringBuilder pathBuilder = new StringBuilder(url.Path);
 
             //get compatible mime types by the accept header
             IEnumerable<string> acceptMimeTypes = context.Request.GetTypedHeaders().Accept
@@ -106,12 +106,35 @@ namespace ImageWizard
             {
                 if (acceptMimeTypes.Any())
                 {
-                    url_path_with_headers += $"+Accept={string.Join(",", acceptMimeTypes)}";
+                    pathBuilder.Append($"+Accept={string.Join(",", acceptMimeTypes)}");
+                }
+            }
+
+            ClientHints clientHints = new ClientHints();
+
+            //use client hints?
+            if (options.Value.UseClintHints)
+            {
+                clientHints = context.Request.GetClientHints(options.Value.AllowedDPR);
+
+                if (clientHints.DPR != null)
+                {
+                    pathBuilder.Append($"+CH_DPR={clientHints.DPR}");
+                }
+
+                if (clientHints.Width != null)
+                {
+                    pathBuilder.Append($"+CH_Width={clientHints.Width}");
+                }
+
+                if (clientHints.ViewportWidth != null)
+                {
+                    pathBuilder.Append($"+CH_ViewportWidth={clientHints.ViewportWidth}");
                 }
             }
 
             //generate data key
-            string key = cacheKey.Create(url_path_with_headers);
+            string key = cacheKey.Create(pathBuilder.ToString());
 
             //get data loader
             Type loaderType = builder.LoaderManager.Get(url.LoaderType);
@@ -151,8 +174,6 @@ namespace ImageWizard
 
                 if (originalData != null) //is there a new version of original image?
                 {
-                    ClientHints clientHints = context.Request.GetClientHints(options.Value.AllowedDPR);
-
                     using PipelineContext processingContext = new PipelineContext(
                                                                      context.RequestServices,
                                                                      context.RequestServices.GetRequiredService<IStreamPool>(),
@@ -264,6 +285,22 @@ namespace ImageWizard
                                                 ClientHints.WidthHeader,
                                                 ClientHints.ViewportWidthHeader
                                             });
+
+                //is image?
+                if (cachedData.Metadata.Width != null)
+                {
+                    double? dpr = clientHints.DPR;
+
+                    if (clientHints.DPR != null && clientHints.Width != null)
+                    {
+                        dpr = (double)cachedData.Metadata.Width.Value / clientHints.Width.Value / clientHints.DPR.Value;
+                    }       
+
+                    if (dpr != null)
+                    {
+                        responseHeaders.Append("Content-DPR", dpr.Value.ToString(CultureInfo.InvariantCulture));
+                    }
+                }
             }
 
             //set cache control header
@@ -283,12 +320,6 @@ namespace ImageWizard
             if (options.Value.UseETag)
             {
                 responseHeaders.ETag = etag;
-            }
-
-            //DPR
-            if (cachedData.Metadata.DPR != null)
-            {
-                responseHeaders.Append("Content-DPR", cachedData.Metadata.DPR.Value.ToString(CultureInfo.InvariantCulture));
             }
 
             //is HEAD request?

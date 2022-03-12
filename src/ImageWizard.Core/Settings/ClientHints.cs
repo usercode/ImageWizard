@@ -18,6 +18,11 @@ namespace ImageWizard
         public const string WidthHeader = "Width";
         public const string ViewportWidthHeader = "Viewport-Width";
 
+        public ClientHints()
+        {
+            AllowedDPR = Array.Empty<double>();
+        }
+
         public ClientHints(double[] allowedDPR)
         {
             AllowedDPR = allowedDPR;

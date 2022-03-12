@@ -33,13 +33,13 @@
     <p>@Url.ImageWizard().OpenGraph("https://github.com/usercode/ImageWizard").BuildUrl()</p>
 
     <img src="@Url.ImageWizard().OpenGraph("https://github.com/usercode/ImageWizard").BuildUrl()" />
-
+    
     <h2>Screenshot loader</h2>
 
     <p>@@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()</p>
     <p>@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()</p>
-
-    <img src="@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()" />
+       
+    <img src="@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()" />       
 
     <h2>SVG transforming</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").BuildUrl()</p>
@@ -85,71 +85,71 @@
     <div class="row">
         <div class="col-md-2">
             <p>resize(400,800,pad)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Pad).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Pad).BuildUrl()" />
         </div>
         <div class="col-md-2">
             <p>resize(400,800,crop)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Crop).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Crop).BuildUrl()" />
         </div>
         <div class="col-md-2">
             <p>resize(400,800,stretch)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Stretch).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Stretch).BuildUrl()" />
         </div>
         <div class="col-md-2">
             <p>resize(400,800,min)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Min).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Min).BuildUrl()" />
         </div>
         <div class="col-md-2">
             <p>resize(400,800,max)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Max).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,800, Utils.ResizeMode.Max).BuildUrl()" />
         </div>
         <div class="col-md-3">
             <p>blackwhite()</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).BlackWhite().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).BlackWhite().BuildUrl()"  />
         </div>
         <div class="col-md-3">
             <p>Grayscale()</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Grayscale().BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>blur()</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Blur().BuildUrl()" />
         </div>
         <div class="col-md-3">
             <p>rotate(90.0)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(90).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(90).BuildUrl()" />
         </div>
         <div class="col-md-3">
             <p>rotate(180.0)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(180).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(180).BuildUrl()" />
         </div>
         <div class="col-md-3">
             <p>rotate(270.0)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(270).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Rotate(270).BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>flip(vertical)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Flip(Utils.FlipMode.Vertical).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Flip(Utils.FlipMode.Vertical).BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>flip(horizontal)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Flip(Utils.FlipMode.Horizontal).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Flip(Utils.FlipMode.Horizontal).BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>invert()</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Invert().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Invert().BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>brightness(0.5)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Brightness(0.5f).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Brightness(0.5f).BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>brightness(0.5)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Contrast(0.5f).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Resize(400,400).Contrast(0.5f).BuildUrl()" />
         </div>
         <div class="col-lg-3">
             <p>crop(0.17, 0.22, 0.3, 0.3)</p>
-            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Crop(0.17f, 0.22f, 0.30f, 0.30f).Resize(400,400).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile(fileImageSharpFilter).AsImage().Crop(0.17f, 0.22f, 0.30f, 0.30f).Resize(400,400).BuildUrl()" />
         </div>
     </div>
 
@@ -159,14 +159,14 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" />
         </div>
     </div>
 
    @* <h2>Resize WebP image with SkiaSharp</h2>
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/raccoon.webp").AsImage().Resize(400,400).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("/img/raccoon.webp").AsImage().Resize(400,400).BuildUrl()" />
         </div>
     </div>*@
 
@@ -176,13 +176,13 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()" />
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).Grayscale().BuildUrl()" />
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" />
         </div>
     </div>
 
@@ -193,15 +193,15 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().Resize(400,400).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().Resize(400,400).BuildUrl()" />
             <p>Default</p>
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().Resize(400,400).Grayscale().BuildUrl()" />
             <p>Grayscale</p>
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().Resize(400,400).Blur().BuildUrl()" />
             <p>Blur</p>
         </div>
     </div>
@@ -212,13 +212,13 @@
 
     @*<div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()" />
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).Grayscale().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).Grayscale().BuildUrl()" />
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" />
         </div>
     </div>*@
 
@@ -229,15 +229,15 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(600,600).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(600,600).BuildUrl()" />
             <p>Default</p>
         </div>
         <div class="col-lg-4">
-            <img src=@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(600,600).Grayscale().BuildUrl() class="auto-scale" />
+            <img src=@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(600,600).Grayscale().BuildUrl() />
             <p>Grayscale</p>
         </div>
         <div class="col-lg-4">
-            <img src=@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(600,600).Blur().BuildUrl() class="auto-scale" />
+            <img src=@Url.ImageWizard().Youtube("lzyWFew_w8Y").Resize(600,600).Blur().BuildUrl() />
             <p>Blur</p>
         </div>
     </div>
@@ -264,15 +264,15 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).BuildUrl()" class="auto-scale" />
+            <img src="@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).BuildUrl()" />
             <p>Default</p>
         </div>
         <div class="col-lg-4">
-            <img src=@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).Grayscale().BuildUrl() class="auto-scale" />
+            <img src=@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).Grayscale().BuildUrl() />
             <p>Grayscale</p>
         </div>
         <div class="col-lg-4">
-            <img src=@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).Blur().BuildUrl() class="auto-scale" />
+            <img src=@Url.ImageWizard().Gravatar("MyEmailAddress@example.com").Resize(200,200).Blur().BuildUrl() />
             <p>Blur</p>
         </div>
     </div>   

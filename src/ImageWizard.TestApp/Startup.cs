@@ -61,7 +61,7 @@ namespace ImageWizard.TestApp
                 x.Key = key;
             })
                 .AddImageSharp(c => c
-                    .WithMimeTypes(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
+                    .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
                     .WithOptions(x =>
                                 {
                                     x.ImageMaxHeight = 4000;

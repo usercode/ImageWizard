@@ -50,17 +50,17 @@ namespace ImageWizard.MongoDB
         /// <summary>
         /// Client
         /// </summary>
-        public Mongo.MongoClient Client { get; }
+        public MongoClient Client { get; }
 
         /// <summary>
         /// Database
         /// </summary>
-        public Mongo.IMongoDatabase Database { get; }
+        public IMongoDatabase Database { get; }
 
         /// <summary>
         /// ImageMetadatas
         /// </summary>
-        public Mongo.IMongoCollection<ImageMetadataModel> ImageMetadatas { get; set; }
+        public IMongoCollection<ImageMetadataModel> ImageMetadatas { get; set; }
 
         /// <summary>
         /// ImageDatas
@@ -97,7 +97,6 @@ namespace ImageWizard.MongoDB
                 MimeType = metadata.MimeType,
                 Width = metadata.Width,
                 Height = metadata.Height,
-                DPR = metadata.DPR,
                 FileLength = metadata.FileLength
             };
 
