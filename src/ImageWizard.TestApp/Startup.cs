@@ -30,6 +30,7 @@ using SixLabors.ImageSharp.Processing;
 using ImageWizard.Core.Processing.Builder;
 using ImageWizard.ImageSharp;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
+using ImageWizard.Loaders;
 
 namespace ImageWizard.TestApp
 {
@@ -56,7 +57,7 @@ namespace ImageWizard.TestApp
                 x.AllowUnsafeUrl = true;
 #endif
                 x.UseAcceptHeader = true;
-                x.UseClintHints = false;
+                x.UseClientHints = false;
                 x.UseETag = true;
                 x.Key = key;
             })
@@ -75,10 +76,10 @@ namespace ImageWizard.TestApp
                     .WithPostProcessing(x =>
                     {
                         //override target format
-                        //if (x.ImageFormat is ImageSharp.JpegFormat)
-                        //{
-                        //    x.ImageFormat = new ImageSharp.WebPFormat();
-                        //}
+                        if (x.ImageFormat is ImageSharp.JpegFormat or ImageSharp.PngFormat)
+                        {
+                            x.ImageFormat = new ImageSharp.WebPFormat();
+                        }
 
                         //override metadata
                         x.Image.Metadata.ExifProfile = new ExifProfile();
@@ -96,16 +97,17 @@ namespace ImageWizard.TestApp
                 //.SetMongoDBCache()
                 .AddHttpLoader(x =>
                 {
-                    //x.RefreshMode = ImageLoaderRefreshMode.EveryTime;
+                    x.RefreshMode = LoaderRefreshMode.None;
+
                     x.SetHeader("Api", "XYZ");
 
                     x.AllowedHosts = new[] { "upload.wikimedia.org" };
                     x.AllowAbsoluteUrls = true;
                 })
                 .AddFileLoader()
-                .AddYoutubeLoader()
-                .AddGravatarLoader()
-                .AddPuppeteerLoader()
+                .AddYoutubeLoader(x => x.RefreshMode = LoaderRefreshMode.None)
+                .AddGravatarLoader(x => x.RefreshMode = LoaderRefreshMode.None)
+                .AddPuppeteerLoader(x => x.RefreshMode = LoaderRefreshMode.None)
                 .AddFFMpegCore()
                 .AddDocNET()
                 .AddOpenCvSharp()

@@ -63,8 +63,7 @@ namespace ImageWizard.SkiaSharp.Filters.Base
                                     mem,
                                     ImageFormat.MimeType,
                                     Image.Width,
-                                    Image.Height,
-                                    ProcessingContext.ClientHints.DPR);
+                                    Image.Height);
         }
     }
 }

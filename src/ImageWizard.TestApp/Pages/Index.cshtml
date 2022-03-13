@@ -206,6 +206,26 @@
         </div>
     </div>
 
+    <h2>DPR (Device Pixel Ratio)</h2>
+
+    <p>@@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().Resize(400,400).BuildUrl()</p>
+    <p>@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().Resize(400, 400).BuildUrl()</p>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().DPR(1).Resize(100,100).BuildUrl()" />
+            <p>DPR 1.0</p>
+        </div>
+       <div class="col-lg-4">
+            <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().DPR(2).Resize(100,100).BuildUrl()" />
+            <p>DPR 2.0</p>
+        </div>
+        <div class="col-lg-4">
+            <img src="@Url.ImageWizard().Fetch("https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png").AsImage().DPR(3).Resize(100,100).BuildUrl()" />
+            <p>DPR 3.0</p>
+        </div>
+    </div>
+
     <h2>Use file provider (IFileProvider)</h2>
     <p>@@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
     <p>@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400, 400).BuildUrl()</p>

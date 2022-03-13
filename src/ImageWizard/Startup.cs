@@ -14,11 +14,15 @@ using ImageWizard.DocNET;
 using Microsoft.AspNetCore.HttpOverrides;
 using ImageWizard.Caches;
 using ImageWizard.Loaders;
-using ImageWizard.SkiaSharp;
 using ImageWizard.Azure;
 using ImageWizard.Analytics;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Png;
+using ImageWizard.ImageSharp;
+using JpegFormat = ImageWizard.ImageSharp.JpegFormat;
+using PngFormat = ImageWizard.ImageSharp.PngFormat;
 
 namespace ImageWizard
 {
@@ -34,13 +38,11 @@ namespace ImageWizard
 
         public IWebHostEnvironment HostingEnvironment { get; }
 
-        public bool UseAnalytics = false;
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ImageWizardOptions>(Configuration.GetSection("General"));
             services.Configure<HttpLoaderOptions>(Configuration.GetSection("HttpLoader"));
-            services.Configure<FileCacheSettings>(Configuration.GetSection("FileCache"));
+            services.Configure<FileCacheV2Settings>(Configuration.GetSection("FileCache"));
             services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
             services.Configure<AzureBlobOptions>(Configuration.GetSection("Azure"));
             services.Configure<ImageWizardAppOptions>(Configuration.GetSection("App"));
@@ -56,13 +58,20 @@ namespace ImageWizard
                                                                 IOptions<ImageWizardAppOptions> options = x.ProcessingContext
                                                                                                            .ServiceProvider.GetRequiredService<IOptions<ImageWizardAppOptions>>();
 
+                                                                if (options.Value.UseWebP)
+                                                                {
+                                                                    if (x.ImageFormat is JpegFormat or PngFormat)
+                                                                    {
+                                                                        x.ImageFormat = new WebPFormat();
+                                                                    }
+                                                                }
+
                                                                 if (options.Value.AddMetadata)
                                                                 {
                                                                     x.Image.Metadata.ExifProfile = new ExifProfile();
                                                                     x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, options.Value.MetadataCopyright);
                                                                 }
                                                             }))
-                                                        .AddSkiaSharp(MimeTypes.WebP)
                                                         .AddSvgNet()
                                                         .AddDocNET()
                                                         .AddHttpLoader()
@@ -72,7 +81,7 @@ namespace ImageWizard
                                                         .AddAzureLoader()
                                                         .AddOpenGraphLoader()
                                                         .AddAnalytics()
-                                                        .SetFileCache()
+                                                        .SetFileCacheV2()
                                                         ;
 
             services.Configure<ForwardedHeadersOptions>(options =>

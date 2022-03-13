@@ -60,11 +60,6 @@ namespace ImageWizard
         public long FileLength { get; set; }
 
         /// <summary>
-        /// DPR
-        /// </summary>
-        public double? DPR { get; set; }
-
-        /// <summary>
         /// CacheSettings
         /// </summary>
         public CacheSettings Cache { get; set; }

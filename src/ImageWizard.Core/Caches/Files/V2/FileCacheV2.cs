@@ -19,7 +19,7 @@ namespace ImageWizard.Caches
     {
         protected static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
 
-        public FileCacheV2(IOptions<FileCacheSettings> settings, IWebHostEnvironment hostingEnvironment)
+        public FileCacheV2(IOptions<FileCacheV2Settings> settings, IWebHostEnvironment hostingEnvironment)
         {
             Settings = settings;
 
@@ -36,7 +36,7 @@ namespace ImageWizard.Caches
         /// <summary>
         /// Settings
         /// </summary>
-        public IOptions<FileCacheSettings> Settings { get; }
+        public IOptions<FileCacheV2Settings> Settings { get; }
 
         /// <summary>
         /// Folder

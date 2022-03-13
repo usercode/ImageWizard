@@ -110,10 +110,10 @@ namespace ImageWizard
                 }
             }
 
-            ClientHints clientHints = new ClientHints();
+            ClientHints clientHints = new ClientHints(options.Value.AllowedDPR);
 
             //use client hints?
-            if (options.Value.UseClintHints)
+            if (options.Value.UseClientHints)
             {
                 clientHints = context.Request.GetClientHints(options.Value.AllowedDPR);
 
@@ -225,7 +225,6 @@ namespace ImageWizard
                     //image result?
                     if (processingContext.Result is ImageResult imageResult)
                     {
-                        metadata.DPR = imageResult.DPR;
                         metadata.Width = imageResult.Width;
                         metadata.Height = imageResult.Height;
                     }
@@ -276,7 +275,7 @@ namespace ImageWizard
             }
 
             //use client hints
-            if (options.Value.UseClintHints)
+            if (options.Value.UseClientHints)
             {
                 responseHeaders.AppendList(
                                             HeaderNames.Vary,

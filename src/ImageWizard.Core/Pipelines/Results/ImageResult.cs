@@ -15,12 +15,11 @@ namespace ImageWizard.Processing.Results
     /// </summary>
     public class ImageResult : DataResult
     {
-        public ImageResult(Stream data, string mimeType, int? width, int? height, double? dpr)
+        public ImageResult(Stream data, string mimeType, int? width, int? height)
             : base(data, mimeType)
         {
             Width = width;
             Height = height;
-            DPR = dpr;
         }
 
         /// <summary>
@@ -32,10 +31,5 @@ namespace ImageWizard.Processing.Results
         /// Height
         /// </summary>
         public int? Height { get; }
-
-        /// <summary>
-        /// DPR
-        /// </summary>
-        public double? DPR { get; }
     }
 }

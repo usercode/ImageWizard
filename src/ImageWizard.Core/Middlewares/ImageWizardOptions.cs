@@ -19,7 +19,7 @@ namespace ImageWizard
         public ImageWizardOptions()
         {
             UseETag = true;
-            UseClintHints = false;
+            UseClientHints = false;
             AllowUnsafeUrl = false;
             UseAcceptHeader = false;
             Key = string.Empty;
@@ -50,11 +50,9 @@ namespace ImageWizard
         public bool UseETag { get; set; }
 
         /// <summary>
-        /// Use clint hints. (Default: false)
+        /// Use client hints. (Default: false)
         /// </summary>
-        public bool UseClintHints { get; set; }
-
-        
+        public bool UseClientHints { get; set; }        
 
         /// <summary>
         /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0)
