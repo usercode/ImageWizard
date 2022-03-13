@@ -98,7 +98,7 @@ services.AddImageWizard(options =>
                        })
             //registers ImageSharp pipeline for specified mime types
            .AddImageSharp(c => c
-                .WithMimeTypes(MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
+                .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif)
                 .WithOptions(x =>
                             {
                                 x.ImageMaxHeight = 4000;
