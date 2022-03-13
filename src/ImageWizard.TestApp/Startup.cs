@@ -142,7 +142,11 @@ namespace ImageWizard.TestApp
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
             });
+
+            services.AddHttpsRedirection(x => x.HttpsPort = 443);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
