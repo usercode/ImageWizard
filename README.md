@@ -55,6 +55,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | Gravatar loader     | gravatar    | encoded email address   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)
 | OpenGraph loader     | opengraph  | absolute url   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.OpenGraph.svg)](https://www.nuget.org/packages/ImageWizard.OpenGraph/)
 | Azure loader       | azure       | relative path to file   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Azure.svg)](https://www.nuget.org/packages/ImageWizard.Azure/)
+| PuppeteerSharp loader  | screenshot  | absolute url   | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.PuppeteerSharp.svg)](https://www.nuget.org/packages/ImageWizard.PuppeteerSharp/)
 
 ## Cache
 | Name                 | Description        | NuGet     |
