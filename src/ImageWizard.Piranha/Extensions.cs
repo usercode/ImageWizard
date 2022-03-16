@@ -19,9 +19,7 @@ namespace ImageWizard.Piranha
             //UrlDecode: fix whitespace handling for correct signature check
             IUrlHelper urlHelper = imageLoader.ServiceProvider.GetRequiredService<IUrlHelper>();
 
-            imageLoader.FetchLocalFile(urlHelper.Content(HttpUtility.UrlDecode(imageField.Media.PublicUrl)));
-
-            return (IFilter)imageLoader;
+            return imageLoader.FetchLocalFile(urlHelper.Content(HttpUtility.UrlDecode(imageField.Media.PublicUrl)));
         }
     }
 }
