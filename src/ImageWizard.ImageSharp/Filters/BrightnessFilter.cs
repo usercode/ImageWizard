@@ -11,14 +11,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp.Filters
+namespace ImageWizard.ImageSharp.Filters;
+
+public class BrightnessFilter : ImageSharpFilter
 {
-    public class BrightnessFilter : ImageSharpFilter
+    [Filter]
+    public void Brightness(float value)
     {
-        [Filter]
-        public void Brightness(float value)
-        {
-            Context.Image.Mutate(m => m.Brightness(value));
-        }
+        Context.Image.Mutate(m => m.Brightness(value));
     }
 }

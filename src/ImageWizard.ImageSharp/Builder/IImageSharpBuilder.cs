@@ -8,10 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public interface IImageSharpBuilder : IPipelineBuilder
 {
-    public interface IImageSharpBuilder : IPipelineBuilder
-    {
-        
-    }
+    
 }

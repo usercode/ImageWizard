@@ -9,32 +9,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.PuppeteerSharp
+namespace ImageWizard.PuppeteerSharp;
+
+/// <summary>
+/// PuppeteerOptions
+/// </summary>
+public class PuppeteerOptions : LoaderOptions
 {
-    /// <summary>
-    /// PuppeteerOptions
-    /// </summary>
-    public class PuppeteerOptions : LoaderOptions
+    public PuppeteerOptions()
     {
-        public PuppeteerOptions()
-        {
-            RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
+        RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
 
-            ScreenshotWidth = 1400;
-            ScreenshotHeight = 900;
-            CacheControlMaxAge = TimeSpan.FromDays(7);
-        }
-
-        /// <summary>
-        /// ScreenshotWidth
-        /// </summary>
-        public int ScreenshotWidth { get; set; }
-
-        /// <summary>
-        /// ScreenshotHeight
-        /// </summary>
-        public int ScreenshotHeight { get; set; }
-
-       
+        ScreenshotWidth = 1400;
+        ScreenshotHeight = 900;
+        CacheControlMaxAge = TimeSpan.FromDays(7);
     }
+
+    /// <summary>
+    /// ScreenshotWidth
+    /// </summary>
+    public int ScreenshotWidth { get; set; }
+
+    /// <summary>
+    /// ScreenshotHeight
+    /// </summary>
+    public int ScreenshotHeight { get; set; }
+
+   
 }

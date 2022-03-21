@@ -8,17 +8,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.SkiaSharp.Filters
+namespace ImageWizard.SkiaSharp.Filters;
+
+/// <summary>
+/// DPRFilter
+/// </summary>
+public class DPRFilter : SkiaSharpFilter
 {
-    /// <summary>
-    /// DPRFilter
-    /// </summary>
-    public class DPRFilter : SkiaSharpFilter
+    [Filter]
+    public void DPR(double dpr)
     {
-        [Filter]
-        public void DPR(double dpr)
-        {
-            Context.ProcessingContext.ClientHints.DPR = dpr;
-        }
+        Context.ProcessingContext.ClientHints.DPR = dpr;
     }
 }

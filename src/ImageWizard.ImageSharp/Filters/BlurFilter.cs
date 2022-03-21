@@ -11,20 +11,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp.Filters
-{
-    public class BlurFilter : ImageSharpFilter
-    {
-        [Filter]
-        public void Blur()
-        {
-            Blur(10);
-        }
+namespace ImageWizard.ImageSharp.Filters;
 
-        [Filter]
-        public void Blur(int radius)
-        {
-            Context.Image.Mutate(m => m.BoxBlur(radius));
-        }
+public class BlurFilter : ImageSharpFilter
+{
+    [Filter]
+    public void Blur()
+    {
+        Blur(10);
+    }
+
+    [Filter]
+    public void Blur(int radius)
+    {
+        Context.Image.Mutate(m => m.BoxBlur(radius));
     }
 }

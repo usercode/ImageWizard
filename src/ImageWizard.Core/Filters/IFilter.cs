@@ -7,9 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public interface IFilter
 {
-    public interface IFilter
-    {
-    }
 }

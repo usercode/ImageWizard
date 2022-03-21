@@ -7,10 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Client
+namespace ImageWizard.Client;
+
+public interface ILoader : IUrlBuilder
 {
-    public interface ILoader : IUrlBuilder
-    {
-        IFilter LoadData(string loaderType, string loaderSource);
-    }
+    IFilter LoadData(string loaderType, string loaderSource);
 }

@@ -8,22 +8,21 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using ImageWizard.Loaders;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public static class FileLoaderExtensions
 {
-    public static class FileLoaderExtensions
+    public static IImageWizardBuilder AddFileLoader(this IImageWizardBuilder wizardConfiguration)
     {
-        public static IImageWizardBuilder AddFileLoader(this IImageWizardBuilder wizardConfiguration)
-        {
-            return AddFileLoader(wizardConfiguration, setup => { });
-        }
+        return AddFileLoader(wizardConfiguration, setup => { });
+    }
 
-        public static IImageWizardBuilder AddFileLoader(this IImageWizardBuilder wizardConfiguration, Action<FileLoaderOptions> setup)
-        {
-            wizardConfiguration.Services.Configure(setup);
-            wizardConfiguration.Services.AddSingleton<FileLoader>();
-            wizardConfiguration.LoaderManager.Register<FileLoader>("file");
+    public static IImageWizardBuilder AddFileLoader(this IImageWizardBuilder wizardConfiguration, Action<FileLoaderOptions> setup)
+    {
+        wizardConfiguration.Services.Configure(setup);
+        wizardConfiguration.Services.AddSingleton<FileLoader>();
+        wizardConfiguration.LoaderManager.Register<FileLoader>("file");
 
-            return wizardConfiguration;
-        }
+        return wizardConfiguration;
     }
 }

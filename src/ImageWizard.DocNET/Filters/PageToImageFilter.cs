@@ -17,31 +17,30 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.DocNET.Filters
+namespace ImageWizard.DocNET.Filters;
+
+public class PageToImageFilter : DocNETFilter
 {
-    public class PageToImageFilter : DocNETFilter
+    [Filter]
+    public void PageToImage(int pageIndex)
     {
-        [Filter]
-        public void PageToImage(int pageIndex)
-        {
-            PageToImage(pageIndex, 1080, 1920);
-        }
+        PageToImage(pageIndex, 1080, 1920);
+    }
 
-        [Filter]
-        public void PageToImage(int pageIndex, int width, int height)
-        {
-            IDocReader docReader = DocLib.Instance.GetDocReader(Context.Document.ToByteArray(), new PageDimensions(width, height));
-            IPageReader pageReader = docReader.GetPageReader(pageIndex);
+    [Filter]
+    public void PageToImage(int pageIndex, int width, int height)
+    {
+        IDocReader docReader = DocLib.Instance.GetDocReader(Context.Document.ToByteArray(), new PageDimensions(width, height));
+        IPageReader pageReader = docReader.GetPageReader(pageIndex);
 
-            Stream mem = Context.ProcessingContext.StreamPool.GetStream();
+        Stream mem = Context.ProcessingContext.StreamPool.GetStream();
 
-            Image<Bgra32> image = Image.LoadPixelData<Bgra32>(pageReader.GetImage(), pageReader.GetPageWidth(), pageReader.GetPageHeight());
+        Image<Bgra32> image = Image.LoadPixelData<Bgra32>(pageReader.GetImage(), pageReader.GetPageWidth(), pageReader.GetPageHeight());
 
-            image.SaveAsPng(mem);
+        image.SaveAsPng(mem);
 
-            mem.Seek(0, SeekOrigin.Begin);
+        mem.Seek(0, SeekOrigin.Begin);
 
-            Context.Result = new DataResult(mem, MimeTypes.Png);
-        }
+        Context.Result = new DataResult(mem, MimeTypes.Png);
     }
 }

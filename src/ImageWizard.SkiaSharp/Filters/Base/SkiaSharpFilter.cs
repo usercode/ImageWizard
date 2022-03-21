@@ -6,10 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.SkiaSharp.Filters.Base
+namespace ImageWizard.SkiaSharp.Filters.Base;
+
+public class SkiaSharpFilter : Filter<SkiaSharpFilterContext>
 {
-    public class SkiaSharpFilter : Filter<SkiaSharpFilterContext>
-    {
-        public override string Namespace => "skiasharp";
-    }
+    public override string Namespace => "skiasharp";
 }

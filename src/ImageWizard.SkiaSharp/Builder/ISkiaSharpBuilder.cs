@@ -8,11 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.SkiaSharp.Builder
-{
-    public interface ISkiaSharpBuilder : IPipelineBuilder
-    {      
+namespace ImageWizard.SkiaSharp.Builder;
+
+public interface ISkiaSharpBuilder : IPipelineBuilder
+{      
 
 
-    }
 }

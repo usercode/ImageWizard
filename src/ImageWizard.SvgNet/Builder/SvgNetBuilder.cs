@@ -10,13 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.SvgNet.Builder
+namespace ImageWizard.SvgNet.Builder;
+
+class SvgNetBuilder : PipelineBuilder, ISvgNetBuilder
 {
-    class SvgNetBuilder : PipelineBuilder, ISvgNetBuilder
+    public SvgNetBuilder(IServiceCollection service)
+        : base(service)
     {
-        public SvgNetBuilder(IServiceCollection service)
-            : base(service)
-        {
-        }      
-    }
+    }      
 }

@@ -11,14 +11,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp.Filters
+namespace ImageWizard.ImageSharp.Filters;
+
+public class AutoOrientFilter : ImageSharpFilter
 {
-    public class AutoOrientFilter : ImageSharpFilter
+    [Filter]
+    public void AutoOrient()
     {
-        [Filter]
-        public void AutoOrient()
-        {
-            Context.Image.Mutate(m => m.AutoOrient());
-        }
+        Context.Image.Mutate(m => m.AutoOrient());
     }
 }

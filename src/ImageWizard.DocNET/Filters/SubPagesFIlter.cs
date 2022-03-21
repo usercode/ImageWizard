@@ -11,16 +11,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace ImageWizard.DocNET.Filters
-{
-    public class SubPagesFilter : DocNETFilter
-    {
-        [Filter]
-        public void SubPages(int pageFromIndex, int pageToIndex)
-        {
-            byte[] buffer = DocLib.Instance.Split(Context.Document.ToByteArray(), pageFromIndex, pageToIndex);
+namespace ImageWizard.DocNET.Filters;
 
-            Context.Result = new DataResult(new MemoryStream(buffer), MimeTypes.Pdf);
-        }
+public class SubPagesFilter : DocNETFilter
+{
+    [Filter]
+    public void SubPages(int pageFromIndex, int pageToIndex)
+    {
+        byte[] buffer = DocLib.Instance.Split(Context.Document.ToByteArray(), pageFromIndex, pageToIndex);
+
+        Context.Result = new DataResult(new MemoryStream(buffer), MimeTypes.Pdf);
     }
 }

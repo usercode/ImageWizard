@@ -10,32 +10,31 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// FilterExtensions
+/// </summary>
+public static class ImageWizardBuilderExtensions
 {
-    /// <summary>
-    /// FilterExtensions
-    /// </summary>
-    public static class ImageWizardBuilderExtensions
+    public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder)
     {
-        public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder)
-        {
-            return AddDocNET(builder, x => x.WithMimeTypes(MimeTypes.Pdf));
-        }
+        return AddDocNET(builder, x => x.WithMimeTypes(MimeTypes.Pdf));
+    }
 
-        public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder, Action<IDocNETBuilder> options)
-        {
-            DocNETBuilder pipelineBuilder = new DocNETBuilder(builder.Services);
+    public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder, Action<IDocNETBuilder> options)
+    {
+        DocNETBuilder pipelineBuilder = new DocNETBuilder(builder.Services);
 
-            pipelineBuilder.WithFilter<PageToImageFilter>();
-            pipelineBuilder.WithFilter<SubPagesFilter>();
+        pipelineBuilder.WithFilter<PageToImageFilter>();
+        pipelineBuilder.WithFilter<SubPagesFilter>();
 
-            pipelineBuilder.WithMimeTypes(MimeTypes.Pdf);
+        pipelineBuilder.WithMimeTypes(MimeTypes.Pdf);
 
-            options(pipelineBuilder);
+        options(pipelineBuilder);
 
-            builder.AddPipeline<DocNETPipeline>(pipelineBuilder.MimeTypes);
+        builder.AddPipeline<DocNETPipeline>(pipelineBuilder.MimeTypes);
 
-            return builder;
-        }
+        return builder;
     }
 }

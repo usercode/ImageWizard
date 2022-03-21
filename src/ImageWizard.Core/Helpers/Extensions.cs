@@ -9,50 +9,49 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// Extensions
+/// </summary>
+public static class Extensions
 {
-    /// <summary>
-    /// Extensions
-    /// </summary>
-    public static class Extensions
+    public static async Task<byte[]> ToByteArrayAsync(this Stream stream)
     {
-        public static async Task<byte[]> ToByteArrayAsync(this Stream stream)
-        {
-            MemoryStream mem = new MemoryStream();
+        MemoryStream mem = new MemoryStream();
 
-            await stream.CopyToAsync(mem);
+        await stream.CopyToAsync(mem);
 
-            return mem.ToArray();
-        }
+        return mem.ToArray();
+    }
 
-        public static byte[] ToByteArray(this Stream stream)
-        {
-            MemoryStream mem = new MemoryStream();
+    public static byte[] ToByteArray(this Stream stream)
+    {
+        MemoryStream mem = new MemoryStream();
 
-            stream.CopyTo(mem);
+        stream.CopyTo(mem);
 
-            return mem.ToArray();
-        }
+        return mem.ToArray();
+    }
 
-        public static MemoryStream ToMemoryStream(this Stream stream)
-        {
-            MemoryStream mem = new MemoryStream();
+    public static MemoryStream ToMemoryStream(this Stream stream)
+    {
+        MemoryStream mem = new MemoryStream();
 
-            stream.CopyTo(mem);
+        stream.CopyTo(mem);
 
-            mem.Seek(0, SeekOrigin.Begin);
+        mem.Seek(0, SeekOrigin.Begin);
 
-            return mem;
-        }
+        return mem;
+    }
 
-        public static string GetTagUnquoted(this EntityTagHeaderValue value)
-        {
-            return value.Tag.GetTagUnquoted();
-        }
+    public static string GetTagUnquoted(this EntityTagHeaderValue value)
+    {
+        return value.Tag.GetTagUnquoted();
+    }
 
-        public static string GetTagUnquoted(this string value)
-        {
-            return value[1..^1];
-        }
+    public static string GetTagUnquoted(this string value)
+    {
+        return value[1..^1];
     }
 }

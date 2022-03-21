@@ -8,44 +8,43 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// OriginalData
+/// </summary>
+public class OriginalData : IDisposable
 {
-    /// <summary>
-    /// OriginalData
-    /// </summary>
-    public class OriginalData : IDisposable
+    public OriginalData(string mimeType, Stream data)
+        : this(mimeType, data, new CacheSettings())
     {
-        public OriginalData(string mimeType, Stream data)
-            : this(mimeType, data, new CacheSettings())
-        {
-        }
+    }
 
-        public OriginalData(string mimeType, Stream data, CacheSettings cacheSettings)
-        {
-            MimeType = mimeType;
-            Data = data;
+    public OriginalData(string mimeType, Stream data, CacheSettings cacheSettings)
+    {
+        MimeType = mimeType;
+        Data = data;
 
-            Cache = cacheSettings ?? throw new ArgumentNullException(nameof(cacheSettings));
-        }
+        Cache = cacheSettings ?? throw new ArgumentNullException(nameof(cacheSettings));
+    }
 
-        /// <summary>
-        /// MimeType
-        /// </summary>
-        public string MimeType { get; }
+    /// <summary>
+    /// MimeType
+    /// </summary>
+    public string MimeType { get; }
 
-        /// <summary>
-        /// Data
-        /// </summary>
-        public Stream Data { get; }
+    /// <summary>
+    /// Data
+    /// </summary>
+    public Stream Data { get; }
 
-        /// <summary>
-        /// Cache
-        /// </summary>
-        public CacheSettings Cache { get; }
+    /// <summary>
+    /// Cache
+    /// </summary>
+    public CacheSettings Cache { get; }
 
-        public virtual void Dispose()
-        {
-            Data.Dispose();
-        }
+    public virtual void Dispose()
+    {
+        Data.Dispose();
     }
 }

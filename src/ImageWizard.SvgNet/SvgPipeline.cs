@@ -17,30 +17,29 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ImageWizard.SvgNet.Filters
+namespace ImageWizard.SvgNet.Filters;
+
+/// <summary>
+/// ImageSharpPipeline
+/// </summary>
+public class SvgPipeline : Pipeline<SvgFilter, SvgFilterContext>
 {
-    /// <summary>
-    /// ImageSharpPipeline
-    /// </summary>
-    public class SvgPipeline : Pipeline<SvgFilter, SvgFilterContext>
+    public SvgPipeline(
+        IServiceProvider serviceProvider,
+        ILogger<SvgPipeline> logger, 
+        IEnumerable<PipelineAction<SvgPipeline>> actions)
+        : base(serviceProvider, logger)
     {
-        public SvgPipeline(
-            IServiceProvider serviceProvider,
-            ILogger<SvgPipeline> logger, 
-            IEnumerable<PipelineAction<SvgPipeline>> actions)
-            : base(serviceProvider, logger)
-        {
-            actions.Foreach(x => x(this));
-        }
+        actions.Foreach(x => x(this));
+    }
 
-        protected override async Task<SvgFilterContext> CreateFilterContext(PipelineContext context)
-        {
-            //load image
-            SvgDocument svg = SvgDocument.Open<SvgDocument>(context.Result.Data);
+    protected override async Task<SvgFilterContext> CreateFilterContext(PipelineContext context)
+    {
+        //load image
+        SvgDocument svg = SvgDocument.Open<SvgDocument>(context.Result.Data);
 
-            svg.Transforms = new SvgTransformCollection();
+        svg.Transforms = new SvgTransformCollection();
 
-            return new SvgFilterContext(context, svg);
-        }
+        return new SvgFilterContext(context, svg);
     }
 }

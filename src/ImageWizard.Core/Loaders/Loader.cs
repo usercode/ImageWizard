@@ -8,27 +8,26 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Loaders
+namespace ImageWizard.Loaders;
+
+/// <summary>
+/// Loader
+/// </summary>
+/// <typeparam name="TOptions"></typeparam>
+public abstract class Loader<TOptions> : ILoader
+    where TOptions : LoaderOptions
 {
-    /// <summary>
-    /// Loader
-    /// </summary>
-    /// <typeparam name="TOptions"></typeparam>
-    public abstract class Loader<TOptions> : ILoader
-        where TOptions : LoaderOptions
+    public Loader(IOptions<TOptions> options)
     {
-        public Loader(IOptions<TOptions> options)
-        {
-            Options = options;
-        }
-
-        /// <summary>
-        /// Options
-        /// </summary>
-        public IOptions<TOptions> Options { get; }
-
-        IOptions<LoaderOptions> ILoader.Options => Options;
-
-        public abstract Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData);
+        Options = options;
     }
+
+    /// <summary>
+    /// Options
+    /// </summary>
+    public IOptions<TOptions> Options { get; }
+
+    IOptions<LoaderOptions> ILoader.Options => Options;
+
+    public abstract Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData);
 }

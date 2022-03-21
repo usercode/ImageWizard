@@ -8,22 +8,21 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// CacheSettings
+/// </summary>
+public class CacheSettings
 {
-    /// <summary>
-    /// CacheSettings
-    /// </summary>
-    public class CacheSettings
+    public CacheSettings()
     {
-        public CacheSettings()
-        {
-
-        }
-
-        public bool NoCache { get; set; }
-        public bool NoStore { get; set; }
-        public string? ETag { get; set; }
-        public DateTime? Expires { get; set; }
 
     }
+
+    public bool NoCache { get; set; }
+    public bool NoStore { get; set; }
+    public string? ETag { get; set; }
+    public DateTime? Expires { get; set; }
+
 }

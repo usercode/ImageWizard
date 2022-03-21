@@ -11,14 +11,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp.Filters
+namespace ImageWizard.ImageSharp.Filters;
+
+public class BlackWhiteFilter : ImageSharpFilter
 {
-    public class BlackWhiteFilter : ImageSharpFilter
+    [Filter]
+    public void BlackWhite()
     {
-        [Filter]
-        public void BlackWhite()
-        {
-            Context.Image.Mutate(m => m.BlackWhite());
-        }
+        Context.Image.Mutate(m => m.BlackWhite());
     }
 }

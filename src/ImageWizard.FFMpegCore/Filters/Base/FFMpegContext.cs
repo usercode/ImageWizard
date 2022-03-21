@@ -9,20 +9,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.FFMpegCore.Filters.Base
+namespace ImageWizard.FFMpegCore.Filters.Base;
+
+public class FFMpegContext : FilterContext
 {
-    public class FFMpegContext : FilterContext
+
+    public FFMpegContext(PipelineContext processingContext)
+        : base(processingContext)
     {
 
-        public FFMpegContext(PipelineContext processingContext)
-            : base(processingContext)
-        {
+    }
 
-        }
-
-        public override Task<DataResult> BuildResultAsync()
-        {
-            throw new NotImplementedException();
-        }
+    public override Task<DataResult> BuildResultAsync()
+    {
+        throw new NotImplementedException();
     }
 }

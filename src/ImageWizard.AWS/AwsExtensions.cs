@@ -6,23 +6,22 @@ using ImageWizard.AWS;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public static class AwsExtensions
 {
-    public static class AwsExtensions
+    public static IImageWizardBuilder AddAWSLoader(this IImageWizardBuilder wizardConfiguration)
     {
-        public static IImageWizardBuilder AddAWSLoader(this IImageWizardBuilder wizardConfiguration)
-        {
-            return AddAWSLoader(wizardConfiguration, x => { });
-        }
+        return AddAWSLoader(wizardConfiguration, x => { });
+    }
 
-        public static IImageWizardBuilder AddAWSLoader(this IImageWizardBuilder wizardConfiguration, Action<AwsOptions> setup)
-        {
-            wizardConfiguration.Services.Configure(setup);
+    public static IImageWizardBuilder AddAWSLoader(this IImageWizardBuilder wizardConfiguration, Action<AwsOptions> setup)
+    {
+        wizardConfiguration.Services.Configure(setup);
 
-            wizardConfiguration.Services.AddSingleton<AwsLoader>();
-            wizardConfiguration.LoaderManager.Register<AwsLoader>("aws");
+        wizardConfiguration.Services.AddSingleton<AwsLoader>();
+        wizardConfiguration.LoaderManager.Register<AwsLoader>("aws");
 
-            return wizardConfiguration;
-        }
+        return wizardConfiguration;
     }
 }

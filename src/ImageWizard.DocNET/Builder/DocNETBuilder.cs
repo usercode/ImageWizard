@@ -12,13 +12,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.DocNET.Builder
+namespace ImageWizard.DocNET.Builder;
+
+class DocNETBuilder : PipelineBuilder, IDocNETBuilder
 {
-    class DocNETBuilder : PipelineBuilder, IDocNETBuilder
+    public DocNETBuilder(IServiceCollection services)
+        : base(services)
     {
-        public DocNETBuilder(IServiceCollection services)
-            : base(services)
-        {
-        }
     }
 }

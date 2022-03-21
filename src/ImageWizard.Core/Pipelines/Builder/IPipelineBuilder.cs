@@ -10,12 +10,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Core.Processing.Builder
-{
-    public interface IPipelineBuilder
-    {
-        IServiceCollection Services { get; }
+namespace ImageWizard.Core.Processing.Builder;
 
-        IList<string> MimeTypes { get; }
-    }
+public interface IPipelineBuilder
+{
+    IServiceCollection Services { get; }
+
+    IList<string> MimeTypes { get; }
 }

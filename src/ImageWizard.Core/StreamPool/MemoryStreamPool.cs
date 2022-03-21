@@ -9,13 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public class MemoryStreamPool : IStreamPool
 {
-    public class MemoryStreamPool : IStreamPool
+    public Stream GetStream()
     {
-        public Stream GetStream()
-        {
-            return new MemoryStream();
-        }
+        return new MemoryStream();
     }
 }

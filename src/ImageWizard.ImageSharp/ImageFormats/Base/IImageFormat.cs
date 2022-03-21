@@ -10,12 +10,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp
-{
-    public interface IImageFormat
-    {
-        string MimeType { get; }
+namespace ImageWizard.ImageSharp;
 
-        Task SaveImageAsync(Image image, Stream stream);
-    }
+public interface IImageFormat
+{
+    string MimeType { get; }
+
+    Task SaveImageAsync(Image image, Stream stream);
 }

@@ -7,21 +7,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace ImageWizard.Caches
-{
-    /// <summary>
-    /// FileCacheSettings
-    /// </summary>
-    public class FileCacheSettings
-    {
-        public FileCacheSettings()
-        {
-            Folder = "FileCache";
-        }
+namespace ImageWizard.Caches;
 
-        /// <summary>
-        /// RootFolder
-        /// </summary>
-        public string Folder { get; set; }
+/// <summary>
+/// FileCacheSettings
+/// </summary>
+public class FileCacheSettings
+{
+    public FileCacheSettings()
+    {
+        Folder = "FileCache";
     }
+
+    /// <summary>
+    /// RootFolder
+    /// </summary>
+    public string Folder { get; set; }
 }

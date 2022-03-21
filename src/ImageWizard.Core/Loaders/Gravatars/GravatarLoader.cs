@@ -12,21 +12,20 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Loaders
-{
-    /// <summary>
-    /// GravatarLoader
-    /// </summary>
-    public class GravatarLoader : HttpLoaderBase<GravatarOptions>
-    {
-        public GravatarLoader(HttpClient client, IOptions<GravatarOptions> options)
-            : base(client, options)
-        {
-        }
+namespace ImageWizard.Loaders;
 
-        protected override Task<Uri> CreateRequestUrl(string source)
-        {
-            return Task.FromResult(new Uri($"https://www.gravatar.com/avatar/{source}?size=512"));
-        }
+/// <summary>
+/// GravatarLoader
+/// </summary>
+public class GravatarLoader : HttpLoaderBase<GravatarOptions>
+{
+    public GravatarLoader(HttpClient client, IOptions<GravatarOptions> options)
+        : base(client, options)
+    {
+    }
+
+    protected override Task<Uri> CreateRequestUrl(string source)
+    {
+        return Task.FromResult(new Uri($"https://www.gravatar.com/avatar/{source}?size=512"));
     }
 }

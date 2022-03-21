@@ -9,9 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.SvgNet.Builder
+namespace ImageWizard.SvgNet.Builder;
+
+public interface ISvgNetBuilder : IPipelineBuilder
 {
-    public interface ISvgNetBuilder : IPipelineBuilder
-    {
-    }
 }

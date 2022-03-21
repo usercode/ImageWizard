@@ -10,28 +10,27 @@ using System.Threading.Tasks;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 
-namespace ImageWizard.ImageSharp
+namespace ImageWizard.ImageSharp;
+
+public class JpegFormat : IImageFormat
 {
-    public class JpegFormat : IImageFormat
+    public JpegFormat()
     {
-        public JpegFormat()
-        {
-            Quality = 80;
-        }
+        Quality = 80;
+    }
 
-        /// <summary>
-        /// Quality
-        /// </summary>
-        public int Quality { get; set; }
+    /// <summary>
+    /// Quality
+    /// </summary>
+    public int Quality { get; set; }
 
-        /// <summary>
-        /// MimeType
-        /// </summary>
-        public string MimeType => MimeTypes.Jpeg;
+    /// <summary>
+    /// MimeType
+    /// </summary>
+    public string MimeType => MimeTypes.Jpeg;
 
-        public async Task SaveImageAsync(Image image, Stream stream)
-        {
-            await image.SaveAsJpegAsync(stream, new JpegEncoder() { Quality = Quality });
-        }
+    public async Task SaveImageAsync(Image image, Stream stream)
+    {
+        await image.SaveAsJpegAsync(stream, new JpegEncoder() { Quality = Quality });
     }
 }

@@ -8,16 +8,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ImageWizard.Filters
+namespace ImageWizard.Filters;
+
+public abstract class SvgFilter : Filter<SvgFilterContext>
 {
-    public abstract class SvgFilter : Filter<SvgFilterContext>
+    public SvgFilter()
     {
-        public SvgFilter()
-        {
-
-        }
-
-        public override string Namespace => "svgnet";
 
     }
+
+    public override string Namespace => "svgnet";
+
 }

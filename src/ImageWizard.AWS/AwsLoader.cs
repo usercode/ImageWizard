@@ -13,50 +13,49 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.AWS
+namespace ImageWizard.AWS;
+
+/// <summary>
+/// AwsLoader
+/// </summary>
+public class AwsLoader : Loader<AwsOptions>
 {
-    /// <summary>
-    /// AwsLoader
-    /// </summary>
-    public class AwsLoader : Loader<AwsOptions>
+    public AwsLoader(IOptions<AwsOptions> options)
+        : base(options)
     {
-        public AwsLoader(IOptions<AwsOptions> options)
-            : base(options)
+        Client = new AmazonS3Client(Options.Value.AccessKeyId, Options.Value.SecretAccessKey);
+    }
+
+    /// <summary>
+    /// Client
+    /// </summary>
+    public IAmazonS3 Client { get; }
+
+    public override async Task<OriginalData> GetAsync(string source, ICachedData existingCachedImage)
+    {
+        GetObjectRequest request = new GetObjectRequest()
         {
-            Client = new AmazonS3Client(Options.Value.AccessKeyId, Options.Value.SecretAccessKey);
+            BucketName = Options.Value.BucketName,
+            Key = source
+        };
+
+        if (existingCachedImage != null)
+        {
+            request.EtagToNotMatch = $"\"{existingCachedImage.Metadata.Cache.ETag}\"";
         }
 
-        /// <summary>
-        /// Client
-        /// </summary>
-        public IAmazonS3 Client { get; }
+        GetObjectResponse result = await Client.GetObjectAsync(request);
 
-        public override async Task<OriginalData> GetAsync(string source, ICachedData existingCachedImage)
+        if (result.HttpStatusCode == System.Net.HttpStatusCode.NotModified)
         {
-            GetObjectRequest request = new GetObjectRequest()
-            {
-                BucketName = Options.Value.BucketName,
-                Key = source
-            };
+            result.Dispose();
 
-            if (existingCachedImage != null)
-            {
-                request.EtagToNotMatch = $"\"{existingCachedImage.Metadata.Cache.ETag}\"";
-            }
-
-            GetObjectResponse result = await Client.GetObjectAsync(request);
-
-            if (result.HttpStatusCode == System.Net.HttpStatusCode.NotModified)
-            {
-                result.Dispose();
-
-                return null;
-            }
-
-            return new OriginalData(
-                        result.Headers.ContentType,
-                        result.ResponseStream,
-                        new CacheSettings() { ETag = result.ETag.GetTagUnquoted() });
+            return null;
         }
+
+        return new OriginalData(
+                    result.Headers.ContentType,
+                    result.ResponseStream,
+                    new CacheSettings() { ETag = result.ETag.GetTagUnquoted() });
     }
 }

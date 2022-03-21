@@ -6,23 +6,22 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// IMetadata
+/// </summary>
+public interface IMetadata
 {
-    /// <summary>
-    /// IMetadata
-    /// </summary>
-    public interface IMetadata
-    {
-        DateTime Created { get; set; }
-        string Key { get; set; }
-        string Hash { get; set; }
-        string MimeType { get; set; }        
-        IEnumerable<string> Filters { get; set; }
-        string? LoaderSource { get; set; }
-        string? LoaderType { get; set; }
-        int? Width { get; set; }
-        int? Height { get; set; }
-        long FileLength { get; set; }
-        CacheSettings Cache { get; }
-    }
+    DateTime Created { get; set; }
+    string Key { get; set; }
+    string Hash { get; set; }
+    string MimeType { get; set; }        
+    IEnumerable<string> Filters { get; set; }
+    string? LoaderSource { get; set; }
+    string? LoaderType { get; set; }
+    int? Width { get; set; }
+    int? Height { get; set; }
+    long FileLength { get; set; }
+    CacheSettings Cache { get; }
 }

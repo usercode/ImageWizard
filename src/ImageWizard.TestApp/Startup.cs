@@ -32,147 +32,146 @@ using ImageWizard.ImageSharp;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using ImageWizard.Loaders;
 
-namespace ImageWizard.TestApp
+namespace ImageWizard.TestApp;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; }
+
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
+    {
+        //generate random key
+        byte[] keyBuffer = RandomNumberGenerator.GetBytes(64);
+
+        string key = WebEncoders.Base64UrlEncode(keyBuffer);
+
+        services.AddImageWizard(x =>
         {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            //generate random key
-            byte[] keyBuffer = RandomNumberGenerator.GetBytes(64);
-
-            string key = WebEncoders.Base64UrlEncode(keyBuffer);
-
-            services.AddImageWizard(x =>
-            {
 #if DEBUG
-                x.AllowUnsafeUrl = true;
+            x.AllowUnsafeUrl = true;
 #endif
-                x.UseAcceptHeader = true;
-                x.UseClientHints = false;
-                x.UseETag = true;
-                x.Key = key;
+            x.UseAcceptHeader = true;
+            x.UseClientHints = false;
+            x.UseETag = true;
+            x.Key = key;
+        })
+            .AddImageSharp(c => c
+                .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
+                .WithOptions(x =>
+                            {
+                                x.ImageMaxHeight = 4000;
+                                x.ImageMaxWidth = 4000;
+                            })
+                .WithFilter<ResizeFilter>()
+                .WithPreProcessing(x =>
+                {
+                    x.Image.Mutate(m => m.AutoOrient());
+                })
+                .WithPostProcessing(x =>
+                {
+                    //override target format
+                    if (x.ImageFormat is ImageSharp.JpegFormat or ImageSharp.PngFormat)
+                    {
+                        x.ImageFormat = new ImageSharp.WebPFormat();
+                    }
+
+                    //override metadata
+                    x.Image.Metadata.ExifProfile = new ExifProfile();
+                    x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
+                }))
+            //.AddSkiaSharp(c => c                    
+            //    .WithOptions(x =>
+            //                {
+            //                    x.ImageMaxHeight = 4000;
+            //                    x.ImageMaxWidth = 4000;
+            //                })
+            //    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>())
+            .AddSvgNet()
+            //.SetFileCache()
+            //.SetMongoDBCache()
+            .AddHttpLoader(x =>
+            {
+                x.RefreshMode = LoaderRefreshMode.None;
+
+                x.SetHeader("Api", "XYZ");
+
+                x.AllowedHosts = new[] { "upload.wikimedia.org" };
+                x.AllowAbsoluteUrls = true;
             })
-                .AddImageSharp(c => c
-                    .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
-                    .WithOptions(x =>
-                                {
-                                    x.ImageMaxHeight = 4000;
-                                    x.ImageMaxWidth = 4000;
-                                })
-                    .WithFilter<ResizeFilter>()
-                    .WithPreProcessing(x =>
-                    {
-                        x.Image.Mutate(m => m.AutoOrient());
-                    })
-                    .WithPostProcessing(x =>
-                    {
-                        //override target format
-                        if (x.ImageFormat is ImageSharp.JpegFormat or ImageSharp.PngFormat)
-                        {
-                            x.ImageFormat = new ImageSharp.WebPFormat();
-                        }
-
-                        //override metadata
-                        x.Image.Metadata.ExifProfile = new ExifProfile();
-                        x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
-                    }))
-                //.AddSkiaSharp(c => c                    
-                //    .WithOptions(x =>
-                //                {
-                //                    x.ImageMaxHeight = 4000;
-                //                    x.ImageMaxWidth = 4000;
-                //                })
-                //    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>())
-                .AddSvgNet()
-                //.SetFileCache()
-                //.SetMongoDBCache()
-                .AddHttpLoader(x =>
-                {
-                    x.RefreshMode = LoaderRefreshMode.None;
-
-                    x.SetHeader("Api", "XYZ");
-
-                    x.AllowedHosts = new[] { "upload.wikimedia.org" };
-                    x.AllowAbsoluteUrls = true;
-                })
-                .AddFileLoader()
-                .AddYoutubeLoader(x => x.RefreshMode = LoaderRefreshMode.None)
-                .AddGravatarLoader(x => x.RefreshMode = LoaderRefreshMode.None)
-                .AddPuppeteerLoader(x => x.RefreshMode = LoaderRefreshMode.None)
-                .AddFFMpegCore()
-                .AddDocNET()
-                .AddOpenCvSharp()
-                .AddOpenGraphLoader()
-                .AddAnalytics()
-                .AddAzureLoader(x =>
-                {
-                    x.ConnectionString = "";
-                    x.ContainerName = "MyContainer";
-                })
-                .AddAWSLoader(x =>
-                {
-                    x.AccessKeyId = "";
-                    x.SecretAccessKey = "";
-                    x.BucketName = "MyBucket";
-                })
-                //.SetDistributedCache()
-                .SetFileCache()
-                .SetFileCacheV2();
-                ;
-
-            services.AddImageWizardClient(x =>
+            .AddFileLoader()
+            .AddYoutubeLoader(x => x.RefreshMode = LoaderRefreshMode.None)
+            .AddGravatarLoader(x => x.RefreshMode = LoaderRefreshMode.None)
+            .AddPuppeteerLoader(x => x.RefreshMode = LoaderRefreshMode.None)
+            .AddFFMpegCore()
+            .AddDocNET()
+            .AddOpenCvSharp()
+            .AddOpenGraphLoader()
+            .AddAnalytics()
+            .AddAzureLoader(x =>
             {
-#if DEBUG
-                x.UseUnsafeUrl = false;
-#endif
-                x.Key = key;
-            });
-
-            services.AddRazorPages();
-
-            services.Configure<ForwardedHeadersOptions>(options =>
+                x.ConnectionString = "";
+                x.ContainerName = "MyContainer";
+            })
+            .AddAWSLoader(x =>
             {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
-                options.KnownNetworks.Clear();
-                options.KnownProxies.Clear();
-            });
+                x.AccessKeyId = "";
+                x.SecretAccessKey = "";
+                x.BucketName = "MyBucket";
+            })
+            //.SetDistributedCache()
+            .SetFileCache()
+            .SetFileCacheV2();
+            ;
 
-            services.AddHttpsRedirection(x => x.HttpsPort = 443);
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        services.AddImageWizardClient(x =>
         {
-            app.UseForwardedHeaders();
+#if DEBUG
+            x.UseUnsafeUrl = false;
+#endif
+            x.Key = key;
+        });
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseImageWizard(x => x.MapAnalytics());
-            app.UseRouting();
-            app.UseEndpoints(x =>
-            {
-                x.MapRazorPages();
-            });
+        services.AddRazorPages();
+
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+
+        services.AddHttpsRedirection(x => x.HttpsPort = 443);
+    }
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        app.UseForwardedHeaders();
+
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
         }
+        else
+        {
+            app.UseExceptionHandler("/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
+        }
+        
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+        app.UseImageWizard(x => x.MapAnalytics());
+        app.UseRouting();
+        app.UseEndpoints(x =>
+        {
+            x.MapRazorPages();
+        });
     }
 }

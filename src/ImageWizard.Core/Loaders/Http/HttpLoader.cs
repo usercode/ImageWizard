@@ -14,71 +14,70 @@ using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Loaders
+namespace ImageWizard.Loaders;
+
+/// <summary>
+/// HttpLoader
+/// </summary>
+public class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
 {
-    /// <summary>
-    /// HttpLoader
-    /// </summary>
-    public class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
+    private static readonly Regex AbsoluteUrlRegex = new Regex("^https?://", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    public HttpLoader(
+                HttpClient client,
+                IOptions<HttpLoaderOptions> options,
+                IHttpContextAccessor httpContextAccessor)
+        : base(client, options)
     {
-        private static readonly Regex AbsoluteUrlRegex = new Regex("^https?://", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        HttpContextAccessor = httpContextAccessor;
 
-        public HttpLoader(
-                    HttpClient client,
-                    IOptions<HttpLoaderOptions> options,
-                    IHttpContextAccessor httpContextAccessor)
-            : base(client, options)
+        foreach (HttpHeaderItem header in options.Value.Headers)
         {
-            HttpContextAccessor = httpContextAccessor;
+            client.DefaultRequestHeaders.Add(header.Name, header.Value);
+        }
+    }
 
-            foreach (HttpHeaderItem header in options.Value.Headers)
+    /// <summary>
+    /// HttpContextAccessor
+    /// </summary>
+    private IHttpContextAccessor HttpContextAccessor { get; }
+
+    protected override Task<Uri> CreateRequestUrl(string source)
+    {
+        Uri sourceUri;
+
+        //is relative url?
+        if (AbsoluteUrlRegex.Match(source).Success == false)
+        {
+            if (string.IsNullOrWhiteSpace(Options.Value.DefaultBaseUrl) == false)
             {
-                client.DefaultRequestHeaders.Add(header.Name, header.Value);
+                sourceUri = new Uri($"{Options.Value.DefaultBaseUrl.TrimEnd('/')}/{source}");
+            }
+            else
+            {
+                //create absolute url
+                sourceUri = new Uri($"{HttpContextAccessor.HttpContext!.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{source}");
+            }
+        }
+        else //absolute url
+        {
+            sourceUri = new Uri(source);
+
+            if (Options.Value.AllowAbsoluteUrls == false)
+            {
+                throw new Exception("Absolute urls are not allowed.");
+            }
+
+            //check allowed hosts
+            if (Options.Value.AllowedHosts.Any())
+            {
+                if (Options.Value.AllowedHosts.Any(x => string.Equals(x, sourceUri.Host, StringComparison.OrdinalIgnoreCase)) == false)
+                {
+                    throw new Exception($"Not allowed hosts is used: {sourceUri.Host}");
+                }
             }
         }
 
-        /// <summary>
-        /// HttpContextAccessor
-        /// </summary>
-        private IHttpContextAccessor HttpContextAccessor { get; }
-
-        protected override Task<Uri> CreateRequestUrl(string source)
-        {
-            Uri sourceUri;
-
-            //is relative url?
-            if (AbsoluteUrlRegex.Match(source).Success == false)
-            {
-                if (string.IsNullOrWhiteSpace(Options.Value.DefaultBaseUrl) == false)
-                {
-                    sourceUri = new Uri($"{Options.Value.DefaultBaseUrl.TrimEnd('/')}/{source}");
-                }
-                else
-                {
-                    //create absolute url
-                    sourceUri = new Uri($"{HttpContextAccessor.HttpContext!.Request.Scheme}://{HttpContextAccessor.HttpContext.Request.Host}/{source}");
-                }
-            }
-            else //absolute url
-            {
-                sourceUri = new Uri(source);
-
-                if (Options.Value.AllowAbsoluteUrls == false)
-                {
-                    throw new Exception("Absolute urls are not allowed.");
-                }
-
-                //check allowed hosts
-                if (Options.Value.AllowedHosts.Any())
-                {
-                    if (Options.Value.AllowedHosts.Any(x => string.Equals(x, sourceUri.Host, StringComparison.OrdinalIgnoreCase)) == false)
-                    {
-                        throw new Exception($"Not allowed hosts is used: {sourceUri.Host}");
-                    }
-                }
-            }
-
-            return Task.FromResult(sourceUri);
-        }
+        return Task.FromResult(sourceUri);
     }
 }

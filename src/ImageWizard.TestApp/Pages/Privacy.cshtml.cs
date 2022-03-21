@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ImageWizard.TestApp.Pages
+namespace ImageWizard.TestApp.Pages;
+
+public class PrivacyModel : PageModel
 {
-    public class PrivacyModel : PageModel
+    public void OnGet()
     {
-        public void OnGet()
-        {
-        }
     }
 }

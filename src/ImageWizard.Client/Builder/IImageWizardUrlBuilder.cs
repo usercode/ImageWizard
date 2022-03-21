@@ -8,9 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Client
+namespace ImageWizard.Client;
+
+public interface IImageWizardUrlBuilder : ILoader
 {
-    public interface IImageWizardUrlBuilder : ILoader
-    {
-    }
 }

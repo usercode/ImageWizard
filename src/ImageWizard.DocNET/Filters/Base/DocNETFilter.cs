@@ -8,16 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.DocNET.Filters.Base
+namespace ImageWizard.DocNET.Filters.Base;
+
+public abstract class DocNETFilter : Filter<DocNETFilterContext>
 {
-    public abstract class DocNETFilter : Filter<DocNETFilterContext>
+    public DocNETFilter()
     {
-        public DocNETFilter()
-        {
-
-        }
-
-        public override string Namespace => "docnet";
 
     }
+
+    public override string Namespace => "docnet";
+
 }

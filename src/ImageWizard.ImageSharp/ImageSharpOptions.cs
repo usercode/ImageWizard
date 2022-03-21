@@ -6,27 +6,26 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.ImageSharp
+namespace ImageWizard.ImageSharp;
+
+/// <summary>
+/// ImageSharpOptions
+/// </summary>
+public class ImageSharpOptions
 {
-    /// <summary>
-    /// ImageSharpOptions
-    /// </summary>
-    public class ImageSharpOptions
+    public ImageSharpOptions()
     {
-        public ImageSharpOptions()
-        {
-            ImageMaxWidth = 4000;
-            ImageMaxHeight = 4000;
-        }
-
-        /// <summary>
-        /// ImageMaxWidth
-        /// </summary>
-        public int? ImageMaxWidth { get; set; }
-
-        /// <summary>
-        /// ImageMaxHeight
-        /// </summary>
-        public int? ImageMaxHeight { get; set; }
+        ImageMaxWidth = 4000;
+        ImageMaxHeight = 4000;
     }
+
+    /// <summary>
+    /// ImageMaxWidth
+    /// </summary>
+    public int? ImageMaxWidth { get; set; }
+
+    /// <summary>
+    /// ImageMaxHeight
+    /// </summary>
+    public int? ImageMaxHeight { get; set; }
 }

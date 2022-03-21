@@ -12,24 +12,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public static class FFMpegBuilderExtensions
 {
-    public static class FFMpegBuilderExtensions
+    public static IFFMpegBuilder WithFilter<TFilter>(this IFFMpegBuilder builder) 
+        where TFilter : FFMpegFilter
     {
-        public static IFFMpegBuilder WithFilter<TFilter>(this IFFMpegBuilder builder) 
-            where TFilter : FFMpegFilter
-        {
-            builder.Services.AddTransient<TFilter>();
-            builder.Services.AddSingleton(new PipelineAction<FFMpegPipeline>(x => x.AddFilter<TFilter>()));
+        builder.Services.AddTransient<TFilter>();
+        builder.Services.AddSingleton(new PipelineAction<FFMpegPipeline>(x => x.AddFilter<TFilter>()));
 
-            return builder;
-        }
+        return builder;
+    }
 
-        public static IFFMpegBuilder WithOptions(this IFFMpegBuilder builder, Action<FFMpegOptions> action)
-        {
-            builder.Services.Configure(action);
+    public static IFFMpegBuilder WithOptions(this IFFMpegBuilder builder, Action<FFMpegOptions> action)
+    {
+        builder.Services.Configure(action);
 
-            return builder;
-        }
+        return builder;
     }
 }

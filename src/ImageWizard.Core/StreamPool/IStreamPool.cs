@@ -9,10 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public interface IStreamPool
 {
-    public interface IStreamPool
-    {
-        Stream GetStream();
-    }
+    Stream GetStream();
 }

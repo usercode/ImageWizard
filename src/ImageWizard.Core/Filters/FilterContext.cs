@@ -9,44 +9,43 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// FilterContext
+/// </summary>
+public abstract class FilterContext : IDisposable
 {
-    /// <summary>
-    /// FilterContext
-    /// </summary>
-    public abstract class FilterContext : IDisposable
+    public FilterContext(PipelineContext context)
     {
-        public FilterContext(PipelineContext context)
-        {
-            ProcessingContext = context;
-        }
-
-        /// <summary>
-        /// ProcessingContext
-        /// </summary>
-        public PipelineContext ProcessingContext { get; }
-
-        private DataResult? _result;
-
-        /// <summary>
-        /// Result
-        /// </summary>
-        public DataResult? Result 
-        {
-            get => _result;
-            set
-            {
-                _result?.Dispose();
-
-                _result = value;
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            //Result?.Dispose();
-        }
-
-        public abstract Task<DataResult> BuildResultAsync();
+        ProcessingContext = context;
     }
+
+    /// <summary>
+    /// ProcessingContext
+    /// </summary>
+    public PipelineContext ProcessingContext { get; }
+
+    private DataResult? _result;
+
+    /// <summary>
+    /// Result
+    /// </summary>
+    public DataResult? Result 
+    {
+        get => _result;
+        set
+        {
+            _result?.Dispose();
+
+            _result = value;
+        }
+    }
+
+    public virtual void Dispose()
+    {
+        //Result?.Dispose();
+    }
+
+    public abstract Task<DataResult> BuildResultAsync();
 }

@@ -8,16 +8,15 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ImageWizard.Client
+namespace ImageWizard.Client;
+
+/// <summary>
+/// PuppeteerExtensions
+/// </summary>
+public static class PuppeteerExtensions
 {
-    /// <summary>
-    /// PuppeteerExtensions
-    /// </summary>
-    public static class PuppeteerExtensions
+    public static Image Screenshot(this ILoader imageUrlBuilder, string source)
     {
-        public static Image Screenshot(this ILoader imageUrlBuilder, string source)
-        {
-            return new Image(imageUrlBuilder.LoadData("screenshot", source));
-        }
+        return new Image(imageUrlBuilder.LoadData("screenshot", source));
     }
 }

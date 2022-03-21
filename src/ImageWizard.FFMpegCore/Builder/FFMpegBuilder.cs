@@ -10,13 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.FFMpegCore.Builder
+namespace ImageWizard.FFMpegCore.Builder;
+
+class FFMpegBuilder : PipelineBuilder, IFFMpegBuilder
 {
-    class FFMpegBuilder : PipelineBuilder, IFFMpegBuilder
+    public FFMpegBuilder(IServiceCollection services)
+        : base(services)
     {
-        public FFMpegBuilder(IServiceCollection services)
-            : base(services)
-        {
-        }
     }
 }

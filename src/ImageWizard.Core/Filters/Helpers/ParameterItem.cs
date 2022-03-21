@@ -6,11 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Helpers
+namespace ImageWizard.Helpers;
+
+class ParameterItem
 {
-    class ParameterItem
-    {
-        public string? Name { get; set; }
-        public string? Pattern { get; set; }
-    }
+    public string? Name { get; set; }
+    public string? Pattern { get; set; }
 }

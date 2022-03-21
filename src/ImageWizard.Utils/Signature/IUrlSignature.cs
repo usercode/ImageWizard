@@ -8,19 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Utils
+namespace ImageWizard.Utils;
+
+/// <summary>
+/// IUrlSignature
+/// </summary>
+public interface IUrlSignature
 {
     /// <summary>
-    /// IUrlSignature
+    /// Encrypt
     /// </summary>
-    public interface IUrlSignature
-    {
-        /// <summary>
-        /// Encrypt
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        string Encrypt(byte[] key, ImageWizardRequest request);
-    }
+    /// <param name="key"></param>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    string Encrypt(byte[] key, ImageWizardRequest request);
 }

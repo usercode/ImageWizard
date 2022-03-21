@@ -11,34 +11,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp.Filters
+namespace ImageWizard.ImageSharp.Filters;
+
+public class RotateFilter : ImageSharpFilter
 {
-    public class RotateFilter : ImageSharpFilter
+    [Filter]
+    public void Rotate(float angle)
     {
-        [Filter]
-        public void Rotate(float angle)
+        RotateMode rotateMode;
+
+        switch (angle)
         {
-            RotateMode rotateMode;
+            case 90:
+                rotateMode = RotateMode.Rotate90;
+                break;
 
-            switch (angle)
-            {
-                case 90:
-                    rotateMode = RotateMode.Rotate90;
-                    break;
+            case 180:
+                rotateMode = RotateMode.Rotate180;
+                break;
 
-                case 180:
-                    rotateMode = RotateMode.Rotate180;
-                    break;
+            case 270:
+                rotateMode = RotateMode.Rotate270;
+                break;
 
-                case 270:
-                    rotateMode = RotateMode.Rotate270;
-                    break;
-
-                default:
-                    throw new Exception("angle is not supported: " + angle);
-            }
-
-            Context.Image.Mutate(m => m.Rotate(rotateMode));
+            default:
+                throw new Exception("angle is not supported: " + angle);
         }
+
+        Context.Image.Mutate(m => m.Rotate(rotateMode));
     }
 }

@@ -8,23 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public static class AzureBlobExtensions
 {
-    public static class AzureBlobExtensions
+    public static IImageWizardBuilder AddAzureLoader(this IImageWizardBuilder wizardConfiguration)
     {
-        public static IImageWizardBuilder AddAzureLoader(this IImageWizardBuilder wizardConfiguration)
-        {
-            return AddAzureLoader(wizardConfiguration, x => { });
-        }
-        
-        public static IImageWizardBuilder AddAzureLoader(this IImageWizardBuilder wizardConfiguration, Action<AzureBlobOptions> setup)
-        {
-            wizardConfiguration.Services.Configure(setup);
+        return AddAzureLoader(wizardConfiguration, x => { });
+    }
+    
+    public static IImageWizardBuilder AddAzureLoader(this IImageWizardBuilder wizardConfiguration, Action<AzureBlobOptions> setup)
+    {
+        wizardConfiguration.Services.Configure(setup);
 
-            wizardConfiguration.Services.AddSingleton<AzureBlobLoader>();
-            wizardConfiguration.LoaderManager.Register<AzureBlobLoader>("azure");
+        wizardConfiguration.Services.AddSingleton<AzureBlobLoader>();
+        wizardConfiguration.LoaderManager.Register<AzureBlobLoader>("azure");
 
-            return wizardConfiguration;
-        }
+        return wizardConfiguration;
     }
 }

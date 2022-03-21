@@ -11,40 +11,39 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.OpenCvSharp.Filters
+namespace ImageWizard.OpenCvSharp.Filters;
+
+/// <summary>
+/// FilterContext
+/// </summary>
+public class OpenCvSharpFilterContext : FilterContext
 {
-    /// <summary>
-    /// FilterContext
-    /// </summary>
-    public class OpenCvSharpFilterContext : FilterContext
+    public OpenCvSharpFilterContext(PipelineContext processingContext)
+        : base(processingContext)
     {
-        public OpenCvSharpFilterContext(PipelineContext processingContext)
-            : base(processingContext)
-        {
 
-        }
+    }
 
 
 
-        public override void Dispose()
-        {
+    public override void Dispose()
+    {
 
-        }
+    }
 
-        public override async Task<DataResult> BuildResultAsync()
-        {
-            //using var haarCascade = new CascadeClassifier(TextPath.HaarCascade);
-            //using Mat src = new Mat("lenna.png", ImreadModes.Unchanged);
+    public override async Task<DataResult> BuildResultAsync()
+    {
+        //using var haarCascade = new CascadeClassifier(TextPath.HaarCascade);
+        //using Mat src = new Mat("lenna.png", ImreadModes.Unchanged);
 
-            //Stream mem = ProcessingContext.StreamPool.GetStream();
+        //Stream mem = ProcessingContext.StreamPool.GetStream();
 
-            //src.WriteToStream(mem);
+        //src.WriteToStream(mem);
 
-            //mem.Seek(0, SeekOrigin.Begin);
+        //mem.Seek(0, SeekOrigin.Begin);
 
-            //return new DataResult(mem, MimeTypes.Png);
+        //return new DataResult(mem, MimeTypes.Png);
 
-            throw new Exception();
-        }
+        throw new Exception();
     }
 }

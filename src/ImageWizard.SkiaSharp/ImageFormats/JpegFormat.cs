@@ -9,25 +9,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using SkiaSharp;
 
-namespace ImageWizard.SkiaSharp
+namespace ImageWizard.SkiaSharp;
+
+public class JpegFormat : IImageFormat
 {
-    public class JpegFormat : IImageFormat
+    public JpegFormat()
     {
-        public JpegFormat()
-        {
-            Quality = 85;
-        }
+        Quality = 85;
+    }
 
-        /// <summary>
-        /// Quality
-        /// </summary>
-        public int Quality { get; set; }
+    /// <summary>
+    /// Quality
+    /// </summary>
+    public int Quality { get; set; }
 
-        public string MimeType => MimeTypes.Jpeg;
+    public string MimeType => MimeTypes.Jpeg;
 
-        public void SaveImage(SKBitmap image, Stream stream)
-        {
-            image.Encode(stream, SKEncodedImageFormat.Jpeg, Quality);
-        }
+    public void SaveImage(SKBitmap image, Stream stream)
+    {
+        image.Encode(stream, SKEncodedImageFormat.Jpeg, Quality);
     }
 }

@@ -8,9 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.FFMpegCore.Builder
+namespace ImageWizard.FFMpegCore.Builder;
+
+public interface IFFMpegBuilder : IPipelineBuilder
 {
-    public interface IFFMpegBuilder : IPipelineBuilder
-    {
-    }
 }

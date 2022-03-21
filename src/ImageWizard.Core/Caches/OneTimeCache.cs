@@ -9,47 +9,46 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Caches
+namespace ImageWizard.Caches;
+
+/// <summary>
+/// OneTimeCache
+/// </summary>
+class OneTimeCache : ICache
 {
-    /// <summary>
-    /// OneTimeCache
-    /// </summary>
-    class OneTimeCache : ICache
+    public OneTimeCache()
     {
-        public OneTimeCache()
+        _data = Array.Empty<byte>();
+    }
+
+    private string? _key;
+    private IMetadata? _metadata;
+    private byte[] _data;
+
+    public async Task<ICachedData?> ReadAsync(string key)
+    {
+        if (_key == null)
         {
-            _data = Array.Empty<byte>();
+            return null;
         }
 
-        private string? _key;
-        private IMetadata? _metadata;
-        private byte[] _data;
-
-        public async Task<ICachedData?> ReadAsync(string key)
+        if (_key != key)
         {
-            if (_key == null)
-            {
-                return null;
-            }
-
-            if (_key != key)
-            {
-                throw new Exception("Internal cache error.");
-            }
-
-            return new CachedData(_metadata, () => Task.FromResult<Stream>(new MemoryStream(_data)));
+            throw new Exception("Internal cache error.");
         }
 
-        public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
-        {
-            _key = key;
-            _metadata = metadata;
+        return new CachedData(_metadata, () => Task.FromResult<Stream>(new MemoryStream(_data)));
+    }
 
-            MemoryStream mem = new MemoryStream();
+    public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
+    {
+        _key = key;
+        _metadata = metadata;
 
-            await stream.CopyToAsync(mem);
+        MemoryStream mem = new MemoryStream();
 
-            _data = mem.ToArray();
-        }
+        await stream.CopyToAsync(mem);
+
+        _data = mem.ToArray();
     }
 }

@@ -13,31 +13,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace ImageWizard.FFMpegCore.Filters
+namespace ImageWizard.FFMpegCore.Filters;
+
+public class FrameFilter : FFMpegFilter
 {
-    public class FrameFilter : FFMpegFilter
+    [Filter]
+    public void Frame()
     {
-        [Filter]
-        public void Frame()
-        {
-            //var bitmap = FFMpeg.Snapshot(inputPath, new Size(200, 400), TimeSpan.FromMinutes(1));
+        //var bitmap = FFMpeg.Snapshot(inputPath, new Size(200, 400), TimeSpan.FromMinutes(1));
 
-            MemoryStream input = Context.ProcessingContext.Result.Data.ToMemoryStream();
+        MemoryStream input = Context.ProcessingContext.Result.Data.ToMemoryStream();
 
-            MemoryStream mem = new MemoryStream();
+        MemoryStream mem = new MemoryStream();
 
-            FFMpegArguments
-                .FromPipeInput(new StreamPipeSource(input))
-                .OutputToPipe(new StreamPipeSink(mem),
-                            options => options
-                                .ForceFormat("rawvideo")
-                                .WithVideoCodec(VideoCodec.Png)
-                                .WithFrameOutputCount(1))
-                .ProcessSynchronously();
+        FFMpegArguments
+            .FromPipeInput(new StreamPipeSource(input))
+            .OutputToPipe(new StreamPipeSink(mem),
+                        options => options
+                            .ForceFormat("rawvideo")
+                            .WithVideoCodec(VideoCodec.Png)
+                            .WithFrameOutputCount(1))
+            .ProcessSynchronously();
 
-            mem.Seek(0, SeekOrigin.Begin);
+        mem.Seek(0, SeekOrigin.Begin);
 
-            Context.Result = new DataResult(mem, MimeTypes.Png);
-        }
+        Context.Result = new DataResult(mem, MimeTypes.Png);
     }
 }

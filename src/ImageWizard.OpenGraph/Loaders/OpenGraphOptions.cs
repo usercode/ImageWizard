@@ -7,13 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Loaders
+namespace ImageWizard.Loaders;
+
+public class OpenGraphOptions : LoaderOptions
 {
-    public class OpenGraphOptions : LoaderOptions
+    public OpenGraphOptions()
     {
-        public OpenGraphOptions()
-        {
-            RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
-        }
+        RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
     }
 }

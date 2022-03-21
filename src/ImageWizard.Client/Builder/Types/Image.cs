@@ -8,14 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Client
-{
-    public class Image : File
-    {
-        public Image(IFilter filter)
-            : base(filter)
-        {
+namespace ImageWizard.Client;
 
-        }
+public class Image : File
+{
+    public Image(IFilter filter)
+        : base(filter)
+    {
+
     }
 }

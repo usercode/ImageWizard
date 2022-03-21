@@ -8,18 +8,17 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Processing
+namespace ImageWizard.Processing;
+
+/// <summary>
+/// IPipeline
+/// </summary>
+public interface IPipeline
 {
     /// <summary>
-    /// IPipeline
+    /// StartAsync
     /// </summary>
-    public interface IPipeline
-    {
-        /// <summary>
-        /// StartAsync
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        Task<DataResult> StartAsync(PipelineContext context);
-    }
+    /// <param name="context"></param>
+    /// <returns></returns>
+    Task<DataResult> StartAsync(PipelineContext context);
 }

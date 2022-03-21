@@ -9,43 +9,42 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace ImageWizard.Client
+namespace ImageWizard.Client;
+
+/// <summary>
+/// Extensions
+/// </summary>
+public static class Extensions
 {
-    /// <summary>
-    /// Extensions
-    /// </summary>
-    public static class Extensions
+    public static IServiceCollection AddImageWizardClient(this IServiceCollection services)
     {
-        public static IServiceCollection AddImageWizardClient(this IServiceCollection services)
+        return AddImageWizardClient(services, x => { });
+    }
+
+    public static IServiceCollection AddImageWizardClient(this IServiceCollection services, Action<ImageWizardClientSettings> setup)
+    {
+        services.Configure(setup);
+
+        services.AddHttpContextAccessor();
+        services.AddTransient<IImageWizardUrlBuilder, UrlBuilder>();
+        
+        services.AddSingleton<IUrlSignature, HMACSHA256UrlSignature>();
+
+        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+        services.AddScoped<IUrlHelper>(x =>
         {
-            return AddImageWizardClient(services, x => { });
-        }
+            var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+            var factory = x.GetRequiredService<IUrlHelperFactory>();
+            return factory.GetUrlHelper(actionContext);
+        });
 
-        public static IServiceCollection AddImageWizardClient(this IServiceCollection services, Action<ImageWizardClientSettings> setup)
-        {
-            services.Configure(setup);
+        return services;
+    }
 
-            services.AddHttpContextAccessor();
-            services.AddTransient<IImageWizardUrlBuilder, UrlBuilder>();
-            
-            services.AddSingleton<IUrlSignature, HMACSHA256UrlSignature>();
+    public static IImageWizardUrlBuilder ImageWizard(this IUrlHelper urlHelper)
+    {
+        IImageWizardUrlBuilder imageWizard = urlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<IImageWizardUrlBuilder>();
 
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddScoped<IUrlHelper>(x =>
-            {
-                var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
-                var factory = x.GetRequiredService<IUrlHelperFactory>();
-                return factory.GetUrlHelper(actionContext);
-            });
-
-            return services;
-        }
-
-        public static IImageWizardUrlBuilder ImageWizard(this IUrlHelper urlHelper)
-        {
-            IImageWizardUrlBuilder imageWizard = urlHelper.ActionContext.HttpContext.RequestServices.GetRequiredService<IImageWizardUrlBuilder>();
-
-            return imageWizard;
-        }
+        return imageWizard;
     }
 }

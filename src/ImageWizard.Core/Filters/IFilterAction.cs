@@ -6,12 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// IFilterAction
+/// </summary>
+public interface IFilterAction
 {
-    /// <summary>
-    /// IFilterAction
-    /// </summary>
-    public interface IFilterAction
-    {
-    }
 }

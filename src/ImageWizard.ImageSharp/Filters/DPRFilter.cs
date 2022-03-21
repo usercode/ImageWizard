@@ -7,17 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.ImageSharp.Filters
+namespace ImageWizard.ImageSharp.Filters;
+
+/// <summary>
+/// DPRFilter
+/// </summary>
+public class DPRFilter : ImageSharpFilter
 {
-    /// <summary>
-    /// DPRFilter
-    /// </summary>
-    public class DPRFilter : ImageSharpFilter
+    [Filter]
+    public void DPR(double dpr)
     {
-        [Filter]
-        public void DPR(double dpr)
-        {
-            Context.ProcessingContext.ClientHints.DPR = dpr;
-        }
+        Context.ProcessingContext.ClientHints.DPR = dpr;
     }
 }

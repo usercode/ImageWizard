@@ -6,16 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core
+namespace ImageWizard.Core;
+
+public static class LinqExtenions
 {
-    public static class LinqExtenions
+    public static void Foreach<T>(this IEnumerable<T> items, Action<T> action)
     {
-        public static void Foreach<T>(this IEnumerable<T> items, Action<T> action)
+        foreach(T item in items)
         {
-            foreach(T item in items)
-            {
-                action(item);
-            }
+            action(item);
         }
     }
 }

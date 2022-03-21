@@ -7,36 +7,35 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Client
+namespace ImageWizard.Client;
+
+/// <summary>
+/// UrlBuilder
+/// </summary>
+class UrlBuilder : IImageWizardUrlBuilder, ILoader
 {
     /// <summary>
-    /// UrlBuilder
+    /// Settings
     /// </summary>
-    class UrlBuilder : IImageWizardUrlBuilder, ILoader
+    public ImageWizardClientSettings Settings { get; }
+
+    /// <summary>
+    /// ServiceProvider
+    /// </summary>
+    public IServiceProvider ServiceProvider { get; }
+
+    public UrlBuilder(
+        IOptions<ImageWizardClientSettings> settings,
+        IServiceProvider serviceProvider)
     {
-        /// <summary>
-        /// Settings
-        /// </summary>
-        public ImageWizardClientSettings Settings { get; }
+        Settings = settings.Value;
+        ServiceProvider = serviceProvider;
+    }
 
-        /// <summary>
-        /// ServiceProvider
-        /// </summary>
-        public IServiceProvider ServiceProvider { get; }
-
-        public UrlBuilder(
-            IOptions<ImageWizardClientSettings> settings,
-            IServiceProvider serviceProvider)
-        {
-            Settings = settings.Value;
-            ServiceProvider = serviceProvider;
-        }
-
-        IFilter ILoader.LoadData(string loaderType, string loaderSource)
-        {
-            UrlBuilderContext context = new UrlBuilderContext(this);
-            
-            return context.LoadData(loaderType, loaderSource);
-        }
+    IFilter ILoader.LoadData(string loaderType, string loaderSource)
+    {
+        UrlBuilderContext context = new UrlBuilderContext(this);
+        
+        return context.LoadData(loaderType, loaderSource);
     }
 }

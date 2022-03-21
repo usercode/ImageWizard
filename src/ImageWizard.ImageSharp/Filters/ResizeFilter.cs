@@ -10,72 +10,71 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp.Filters
+namespace ImageWizard.ImageSharp.Filters;
+
+public class ResizeFilter : ImageSharpFilter
 {
-    public class ResizeFilter : ImageSharpFilter
+    [Filter]
+    public void Resize([DPR]int size)
     {
-        [Filter]
-        public void Resize([DPR]int size)
+        Resize(size, size);
+    }
+
+    [Filter]
+    public void Resize([DPR]int width, [DPR]int height)
+    {
+        Resize(width, height, Utils.ResizeMode.Max);
+    }
+
+    [Filter]
+    public void Resize([DPR]int width, [DPR]int height, Utils.ResizeMode mode)
+    {
+        Resize(width, height, mode, Utils.AnchorPositionMode.Center);
+    }
+
+    [Filter]
+    public void Resize([DPR]int width, [DPR]int height, Utils.ResizeMode mode, Utils.AnchorPositionMode position)
+    {
+        ResizeMode mode2 = mode switch
         {
-            Resize(size, size);
+            Utils.ResizeMode.Max => ResizeMode.Max,
+            Utils.ResizeMode.Min => ResizeMode.Min,
+            Utils.ResizeMode.Stretch => ResizeMode.Stretch,
+            Utils.ResizeMode.Pad => ResizeMode.Pad,
+            Utils.ResizeMode.Crop => ResizeMode.Crop,
+            _ => throw new Exception(),
+        };
+
+        AnchorPositionMode anchorPositionMode = position switch
+        {
+            Utils.AnchorPositionMode.Bottom => AnchorPositionMode.Bottom,
+            Utils.AnchorPositionMode.BottomLeft => AnchorPositionMode.BottomLeft,
+            Utils.AnchorPositionMode.BottomRight => AnchorPositionMode.BottomRight,
+            Utils.AnchorPositionMode.Center => AnchorPositionMode.Center,
+            Utils.AnchorPositionMode.Left => AnchorPositionMode.Left,
+            Utils.AnchorPositionMode.Right => AnchorPositionMode.Right,
+            Utils.AnchorPositionMode.Top => AnchorPositionMode.Top,
+            Utils.AnchorPositionMode.TopLeft => AnchorPositionMode.TopLeft,
+            Utils.AnchorPositionMode.TopRight => AnchorPositionMode.TopRight,
+            _ => throw new Exception(),
+        };
+
+        //prevent upscaling
+        if (width > Context.Image.Width)
+        {
+            width = Context.Image.Width;
         }
 
-        [Filter]
-        public void Resize([DPR]int width, [DPR]int height)
+        if (height > Context.Image.Height)
         {
-            Resize(width, height, Utils.ResizeMode.Max);
+            height = Context.Image.Height;
         }
 
-        [Filter]
-        public void Resize([DPR]int width, [DPR]int height, Utils.ResizeMode mode)
+        Context.Image.Mutate(m => m.Resize(new ResizeOptions()
         {
-            Resize(width, height, mode, Utils.AnchorPositionMode.Center);
-        }
-
-        [Filter]
-        public void Resize([DPR]int width, [DPR]int height, Utils.ResizeMode mode, Utils.AnchorPositionMode position)
-        {
-            ResizeMode mode2 = mode switch
-            {
-                Utils.ResizeMode.Max => ResizeMode.Max,
-                Utils.ResizeMode.Min => ResizeMode.Min,
-                Utils.ResizeMode.Stretch => ResizeMode.Stretch,
-                Utils.ResizeMode.Pad => ResizeMode.Pad,
-                Utils.ResizeMode.Crop => ResizeMode.Crop,
-                _ => throw new Exception(),
-            };
-
-            AnchorPositionMode anchorPositionMode = position switch
-            {
-                Utils.AnchorPositionMode.Bottom => AnchorPositionMode.Bottom,
-                Utils.AnchorPositionMode.BottomLeft => AnchorPositionMode.BottomLeft,
-                Utils.AnchorPositionMode.BottomRight => AnchorPositionMode.BottomRight,
-                Utils.AnchorPositionMode.Center => AnchorPositionMode.Center,
-                Utils.AnchorPositionMode.Left => AnchorPositionMode.Left,
-                Utils.AnchorPositionMode.Right => AnchorPositionMode.Right,
-                Utils.AnchorPositionMode.Top => AnchorPositionMode.Top,
-                Utils.AnchorPositionMode.TopLeft => AnchorPositionMode.TopLeft,
-                Utils.AnchorPositionMode.TopRight => AnchorPositionMode.TopRight,
-                _ => throw new Exception(),
-            };
-
-            //prevent upscaling
-            if (width > Context.Image.Width)
-            {
-                width = Context.Image.Width;
-            }
-
-            if (height > Context.Image.Height)
-            {
-                height = Context.Image.Height;
-            }
-
-            Context.Image.Mutate(m => m.Resize(new ResizeOptions()
-            {
-                Position = anchorPositionMode,
-                Mode = mode2,
-                Size = new Size(width, height)
-            }));
-        }
+            Position = anchorPositionMode,
+            Mode = mode2,
+            Size = new Size(width, height)
+        }));
     }
 }

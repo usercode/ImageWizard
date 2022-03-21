@@ -6,26 +6,25 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Loaders
+namespace ImageWizard.Loaders;
+
+/// <summary>
+/// LoaderOptions
+/// </summary>
+public class LoaderOptions
 {
-    /// <summary>
-    /// LoaderOptions
-    /// </summary>
-    public class LoaderOptions
+    public LoaderOptions()
     {
-        public LoaderOptions()
-        {
-            RefreshMode = LoaderRefreshMode.None;
-        }
-
-        /// <summary>
-        /// RefreshMode
-        /// </summary>
-        public LoaderRefreshMode RefreshMode { get; set; }
-
-        /// <summary>
-        /// CacheControl
-        /// </summary>
-        public TimeSpan? CacheControlMaxAge { get; set; }
+        RefreshMode = LoaderRefreshMode.None;
     }
+
+    /// <summary>
+    /// RefreshMode
+    /// </summary>
+    public LoaderRefreshMode RefreshMode { get; set; }
+
+    /// <summary>
+    /// CacheControl
+    /// </summary>
+    public TimeSpan? CacheControlMaxAge { get; set; }
 }

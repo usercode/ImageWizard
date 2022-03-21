@@ -10,35 +10,34 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Loaders
+namespace ImageWizard.Loaders;
+
+/// <summary>
+/// OpenGraphLoader
+/// </summary>
+public class OpenGraphLoader : HttpLoaderBase<OpenGraphOptions>
 {
-    /// <summary>
-    /// OpenGraphLoader
-    /// </summary>
-    public class OpenGraphLoader : HttpLoaderBase<OpenGraphOptions>
+    public OpenGraphLoader(HttpClient client, IOptions<OpenGraphOptions> options)
+        : base(client, options)
     {
-        public OpenGraphLoader(HttpClient client, IOptions<OpenGraphOptions> options)
-            : base(client, options)
+    }
+
+    protected override async Task<Uri> CreateRequestUrl(string source)
+    {
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, source);
+        request.SetUserAgentHeader();
+
+        HttpResponseMessage response = await Client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode == false)
         {
+            throw new Exception($"Could not load page: {source}");
         }
 
-        protected override async Task<Uri> CreateRequestUrl(string source)
-        {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, source);
-            request.SetUserAgentHeader();
+        string html = await response.Content.ReadAsStringAsync();
 
-            HttpResponseMessage response = await Client.SendAsync(request);
+        OpenGraph result = OpenGraph.ParseHtml(html);
 
-            if (response.IsSuccessStatusCode == false)
-            {
-                throw new Exception($"Could not load page: {source}");
-            }
-
-            string html = await response.Content.ReadAsStringAsync();
-
-            OpenGraph result = OpenGraph.ParseHtml(html);
-
-            return result.Image;
-        }
-    }    
-}
+        return result.Image;
+    }
+}    

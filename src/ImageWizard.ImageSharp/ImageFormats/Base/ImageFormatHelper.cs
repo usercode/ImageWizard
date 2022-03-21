@@ -8,37 +8,36 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp
+namespace ImageWizard.ImageSharp;
+
+public class ImageFormatHelper
 {
-    public class ImageFormatHelper
+    public static IImageFormat FirstOrDefault(string mimeType)
     {
-        public static IImageFormat FirstOrDefault(string mimeType)
-        {
-            return FirstOrDefault(new[] { mimeType });
-        }
+        return FirstOrDefault(new[] { mimeType });
+    }
 
-        public static IImageFormat FirstOrDefault(IEnumerable<string> mimeTypes)
+    public static IImageFormat FirstOrDefault(IEnumerable<string> mimeTypes)
+    {
+        foreach (string mimeType in mimeTypes)
         {
-            foreach (string mimeType in mimeTypes)
+            IImageFormat imageFormat = mimeType switch
             {
-                IImageFormat imageFormat = mimeType switch
-                {
-                    MimeTypes.WebP => new WebPFormat(),
-                    MimeTypes.Jpeg => new JpegFormat(),
-                    MimeTypes.Png => new PngFormat(),
-                    MimeTypes.Gif => new GifFormat(),                    
-                    MimeTypes.Tga => new TgaFormat(),
-                    MimeTypes.Bmp => new BmpFormat(),
-                    _ => null,
-                };
+                MimeTypes.WebP => new WebPFormat(),
+                MimeTypes.Jpeg => new JpegFormat(),
+                MimeTypes.Png => new PngFormat(),
+                MimeTypes.Gif => new GifFormat(),                    
+                MimeTypes.Tga => new TgaFormat(),
+                MimeTypes.Bmp => new BmpFormat(),
+                _ => null,
+            };
 
-                if (imageFormat != null)
-                {
-                    return imageFormat;
-                }
+            if (imageFormat != null)
+            {
+                return imageFormat;
             }
-
-            return null;
         }
+
+        return null;
     }
 }

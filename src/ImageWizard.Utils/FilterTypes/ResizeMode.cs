@@ -6,14 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Utils
+namespace ImageWizard.Utils;
+
+public enum ResizeMode
 {
-    public enum ResizeMode
-    {
-        Min,
-        Max,
-        Stretch,
-        Pad,
-        Crop
-    }
+    Min,
+    Max,
+    Stretch,
+    Pad,
+    Crop
 }

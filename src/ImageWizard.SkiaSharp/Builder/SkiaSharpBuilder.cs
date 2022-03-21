@@ -10,13 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.SkiaSharp.Builder
+namespace ImageWizard.SkiaSharp.Builder;
+
+class SkiaSharpBuilder : PipelineBuilder, ISkiaSharpBuilder
 {
-    class SkiaSharpBuilder : PipelineBuilder, ISkiaSharpBuilder
+    public SkiaSharpBuilder(IServiceCollection services)
+        :base(services)
     {
-        public SkiaSharpBuilder(IServiceCollection services)
-            :base(services)
-        {
-        }
     }
 }

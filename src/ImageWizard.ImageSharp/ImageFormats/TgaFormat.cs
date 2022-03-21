@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace ImageWizard.ImageSharp
-{
-    public class TgaFormat : IImageFormat
-    {
-        public string MimeType => MimeTypes.Tga;
+namespace ImageWizard.ImageSharp;
 
-        public async Task SaveImageAsync(Image image, Stream stream)
-        {
-            await image.SaveAsTgaAsync(stream);
-        }
+public class TgaFormat : IImageFormat
+{
+    public string MimeType => MimeTypes.Tga;
+
+    public async Task SaveImageAsync(Image image, Stream stream)
+    {
+        await image.SaveAsTgaAsync(stream);
     }
 }

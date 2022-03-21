@@ -16,25 +16,24 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ImageWizard.DocNET
-{
-    /// <summary>
-    /// DocNETPipeline
-    /// </summary>
-    public class DocNETPipeline : Pipeline<DocNETFilter, DocNETFilterContext>
-    {
-        public DocNETPipeline(
-            IServiceProvider service, 
-            ILogger<DocNETPipeline> logger, 
-            IEnumerable<PipelineAction<DocNETPipeline>> actions)
-            : base(service, logger)
-        {
-            actions.Foreach(x => x(this));
-        }
+namespace ImageWizard.DocNET;
 
-        protected override Task<DocNETFilterContext> CreateFilterContext(PipelineContext context)
-        {
-            return Task.FromResult(new DocNETFilterContext(context, context.Result.Data));
-        }
+/// <summary>
+/// DocNETPipeline
+/// </summary>
+public class DocNETPipeline : Pipeline<DocNETFilter, DocNETFilterContext>
+{
+    public DocNETPipeline(
+        IServiceProvider service, 
+        ILogger<DocNETPipeline> logger, 
+        IEnumerable<PipelineAction<DocNETPipeline>> actions)
+        : base(service, logger)
+    {
+        actions.Foreach(x => x(this));
+    }
+
+    protected override Task<DocNETFilterContext> CreateFilterContext(PipelineContext context)
+    {
+        return Task.FromResult(new DocNETFilterContext(context, context.Result.Data));
     }
 }

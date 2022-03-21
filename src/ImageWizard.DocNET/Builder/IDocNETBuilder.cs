@@ -9,10 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.DocNET.Builder
-{
-    public interface IDocNETBuilder : IPipelineBuilder
-    {
+namespace ImageWizard.DocNET.Builder;
 
-    }
+public interface IDocNETBuilder : IPipelineBuilder
+{
+
 }

@@ -9,10 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
-{
-    public interface IImageWizardEndpointBuilder : IEndpointRouteBuilder
-    {
+namespace ImageWizard;
 
-    }
+public interface IImageWizardEndpointBuilder : IEndpointRouteBuilder
+{
+
 }

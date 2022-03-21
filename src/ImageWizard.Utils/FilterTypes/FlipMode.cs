@@ -6,11 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Utils
+namespace ImageWizard.Utils;
+
+public enum FlipMode
 {
-    public enum FlipMode
-    {
-        Horizontal,
-        Vertical
-    }
+    Horizontal,
+    Vertical
 }

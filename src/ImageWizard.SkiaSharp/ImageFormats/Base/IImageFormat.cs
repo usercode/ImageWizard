@@ -9,12 +9,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.SkiaSharp
-{
-    public interface IImageFormat
-    {
-        string MimeType { get; }
+namespace ImageWizard.SkiaSharp;
 
-        void SaveImage(SKBitmap image, Stream stream);
-    }
+public interface IImageFormat
+{
+    string MimeType { get; }
+
+    void SaveImage(SKBitmap image, Stream stream);
 }

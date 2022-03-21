@@ -9,13 +9,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+class ImageSharpBuilder : PipelineBuilder, IImageSharpBuilder
 {
-    class ImageSharpBuilder : PipelineBuilder, IImageSharpBuilder
+    public ImageSharpBuilder(IServiceCollection services)
+        : base(services)
     {
-        public ImageSharpBuilder(IServiceCollection services)
-            : base(services)
-        {
-        }
     }
 }

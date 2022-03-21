@@ -11,55 +11,54 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Loaders
+namespace ImageWizard.Loaders;
+
+/// <summary>
+/// FileLoader
+/// </summary>
+public class FileLoader : Loader<FileLoaderOptions>
 {
-    /// <summary>
-    /// FileLoader
-    /// </summary>
-    public class FileLoader : Loader<FileLoaderOptions>
+    public FileLoader(IOptions<FileLoaderOptions> options, IWebHostEnvironment hostingEnvironment)
+        : base(options)
     {
-        public FileLoader(IOptions<FileLoaderOptions> options, IWebHostEnvironment hostingEnvironment)
-            : base(options)
-        {
-            HostingEnvironment = hostingEnvironment;
+        HostingEnvironment = hostingEnvironment;
 
-            FileProvider = new PhysicalFileProvider(Path.Join(HostingEnvironment.ContentRootPath, options.Value.Folder));
+        FileProvider = new PhysicalFileProvider(Path.Join(HostingEnvironment.ContentRootPath, options.Value.Folder));
+    }
+
+    /// <summary>
+    /// FileProvider
+    /// </summary>
+    private IFileProvider FileProvider { get; }
+
+    /// <summary>
+    /// HostingEnvironment
+    /// </summary>
+    private IWebHostEnvironment HostingEnvironment { get; }
+
+    public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedImage)
+    {
+        IFileInfo fileInfo = FileProvider.GetFileInfo(source);
+
+        if (fileInfo.Exists == false)
+        {
+            throw new Exception($"file not found: {source}");
         }
 
-        /// <summary>
-        /// FileProvider
-        /// </summary>
-        private IFileProvider FileProvider { get; }
+        string etag = (fileInfo.Length ^ fileInfo.LastModified.UtcTicks).ToString();
 
-        /// <summary>
-        /// HostingEnvironment
-        /// </summary>
-        private IWebHostEnvironment HostingEnvironment { get; }
-
-        public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedImage)
+        if (existingCachedImage != null)
         {
-            IFileInfo fileInfo = FileProvider.GetFileInfo(source);
-
-            if (fileInfo.Exists == false)
+            if (existingCachedImage.Metadata.Cache.ETag == etag)
             {
-                throw new Exception($"file not found: {source}");
+                return null;
             }
-
-            string etag = (fileInfo.Length ^ fileInfo.LastModified.UtcTicks).ToString();
-
-            if (existingCachedImage != null)
-            {
-                if (existingCachedImage.Metadata.Cache.ETag == etag)
-                {
-                    return null;
-                }
-            }
-
-            Stream stream = fileInfo.CreateReadStream();
-            
-            string mimeType = MimeTypes.GetByExtension(fileInfo.Name);
-
-            return new OriginalData(mimeType, stream, new CacheSettings() { ETag = etag });
         }
+
+        Stream stream = fileInfo.CreateReadStream();
+        
+        string mimeType = MimeTypes.GetByExtension(fileInfo.Name);
+
+        return new OriginalData(mimeType, stream, new CacheSettings() { ETag = etag });
     }
 }

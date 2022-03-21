@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace ImageWizard.ImageSharp
-{
-    public class PngFormat : IImageFormat
-    {
-        public string MimeType => MimeTypes.Png;
+namespace ImageWizard.ImageSharp;
 
-        public async Task SaveImageAsync(Image image, Stream stream)
-        {
-            await image.SaveAsPngAsync(stream);
-        }
+public class PngFormat : IImageFormat
+{
+    public string MimeType => MimeTypes.Png;
+
+    public async Task SaveImageAsync(Image image, Stream stream)
+    {
+        await image.SaveAsPngAsync(stream);
     }
 }

@@ -8,22 +8,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public static class GravatarExtensions
 {
-    public static class GravatarExtensions
+    public static IImageWizardBuilder AddGravatarLoader(this IImageWizardBuilder wizardConfiguration)
     {
-        public static IImageWizardBuilder AddGravatarLoader(this IImageWizardBuilder wizardConfiguration)
-        {
-            return AddGravatarLoader(wizardConfiguration, x => { });
-        }
+        return AddGravatarLoader(wizardConfiguration, x => { });
+    }
 
-        public static IImageWizardBuilder AddGravatarLoader(this IImageWizardBuilder wizardConfiguration, Action<GravatarOptions> options)
-        {
-            wizardConfiguration.Services.Configure(options);
-            wizardConfiguration.Services.AddHttpClient<GravatarLoader>();
-            wizardConfiguration.LoaderManager.Register<GravatarLoader>("gravatar");
+    public static IImageWizardBuilder AddGravatarLoader(this IImageWizardBuilder wizardConfiguration, Action<GravatarOptions> options)
+    {
+        wizardConfiguration.Services.Configure(options);
+        wizardConfiguration.Services.AddHttpClient<GravatarLoader>();
+        wizardConfiguration.LoaderManager.Register<GravatarLoader>("gravatar");
 
-            return wizardConfiguration;
-        }
+        return wizardConfiguration;
     }
 }

@@ -10,21 +10,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public class ImageWizardEndpointBuilder : IImageWizardEndpointBuilder
 {
-    public class ImageWizardEndpointBuilder : IImageWizardEndpointBuilder
+    public ImageWizardEndpointBuilder(IEndpointRouteBuilder innerBuilder)
     {
-        public ImageWizardEndpointBuilder(IEndpointRouteBuilder innerBuilder)
-        {
-            InnerEndpoints = innerBuilder;
-        }
-
-        private IEndpointRouteBuilder InnerEndpoints { get; }
-
-        IServiceProvider IEndpointRouteBuilder.ServiceProvider => InnerEndpoints.ServiceProvider;
-
-        ICollection<EndpointDataSource> IEndpointRouteBuilder.DataSources => InnerEndpoints.DataSources;
-
-        IApplicationBuilder IEndpointRouteBuilder.CreateApplicationBuilder() => InnerEndpoints.CreateApplicationBuilder();
+        InnerEndpoints = innerBuilder;
     }
+
+    private IEndpointRouteBuilder InnerEndpoints { get; }
+
+    IServiceProvider IEndpointRouteBuilder.ServiceProvider => InnerEndpoints.ServiceProvider;
+
+    ICollection<EndpointDataSource> IEndpointRouteBuilder.DataSources => InnerEndpoints.DataSources;
+
+    IApplicationBuilder IEndpointRouteBuilder.CreateApplicationBuilder() => InnerEndpoints.CreateApplicationBuilder();
 }

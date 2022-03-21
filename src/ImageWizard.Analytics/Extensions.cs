@@ -9,23 +9,22 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Text.Json;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public static class Extensions
 {
-    public static class Extensions
+    private static JsonSerializerOptions JsonOptions = new JsonSerializerOptions() { WriteIndented = true };
+
+    public static IImageWizardBuilder AddAnalytics(this IImageWizardBuilder builder)
     {
-        private static JsonSerializerOptions JsonOptions = new JsonSerializerOptions() { WriteIndented = true };
+        builder.Services.AddSingleton<AnalyticsData>();
+        builder.Services.AddSingleton<IImageWizardInterceptor, ImageRequestAnalytics>();
 
-        public static IImageWizardBuilder AddAnalytics(this IImageWizardBuilder builder)
-        {
-            builder.Services.AddSingleton<AnalyticsData>();
-            builder.Services.AddSingleton<IImageWizardInterceptor, ImageRequestAnalytics>();
+        return builder;
+    }
 
-            return builder;
-        }
-
-        public static void MapAnalytics(this IImageWizardEndpointBuilder endpoints)
-        {
-            endpoints.MapGet("analytics", (AnalyticsData data) => Results.Json(data, JsonOptions));
-        }
+    public static void MapAnalytics(this IImageWizardEndpointBuilder endpoints)
+    {
+        endpoints.MapGet("analytics", (AnalyticsData data) => Results.Json(data, JsonOptions));
     }
 }

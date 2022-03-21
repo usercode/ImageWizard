@@ -8,28 +8,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// IImageWizardBuilder
+/// </summary>
+public interface IImageWizardBuilder
 {
     /// <summary>
-    /// IImageWizardBuilder
+    /// Services
     /// </summary>
-    public interface IImageWizardBuilder
-    {
-        /// <summary>
-        /// Services
-        /// </summary>
-        IServiceCollection Services { get; }
+    IServiceCollection Services { get; }
 
-        /// <summary>
-        /// LoaderManager
-        /// </summary>
-        TypeManager LoaderManager { get; }
+    /// <summary>
+    /// LoaderManager
+    /// </summary>
+    TypeManager LoaderManager { get; }
 
-        /// <summary>
-        /// PipelineManager
-        /// </summary>
-        TypeManager PipelineManager { get; }
+    /// <summary>
+    /// PipelineManager
+    /// </summary>
+    TypeManager PipelineManager { get; }
 
-        void AddPipeline<T>(IEnumerable<string> mimeTypes) where T : class, IPipeline;
-    }
+    void AddPipeline<T>(IEnumerable<string> mimeTypes) where T : class, IPipeline;
 }

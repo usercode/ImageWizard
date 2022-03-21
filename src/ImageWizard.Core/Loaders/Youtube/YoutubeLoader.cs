@@ -11,21 +11,20 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Loaders
-{
-    /// <summary>
-    /// YouTubeLoader
-    /// </summary>
-    public class YouTubeLoader : HttpLoaderBase<YouTubeOptions>
-    {
-        public YouTubeLoader(HttpClient client, IOptions<YouTubeOptions> options)
-            : base(client, options)
-        {
-        }
+namespace ImageWizard.Loaders;
 
-        protected override Task<Uri> CreateRequestUrl(string source)
-        {
-            return Task.FromResult(new Uri($"https://i.ytimg.com/vi/{source}/maxresdefault.jpg"));
-        }
-    }    
-}
+/// <summary>
+/// YouTubeLoader
+/// </summary>
+public class YouTubeLoader : HttpLoaderBase<YouTubeOptions>
+{
+    public YouTubeLoader(HttpClient client, IOptions<YouTubeOptions> options)
+        : base(client, options)
+    {
+    }
+
+    protected override Task<Uri> CreateRequestUrl(string source)
+    {
+        return Task.FromResult(new Uri($"https://i.ytimg.com/vi/{source}/maxresdefault.jpg"));
+    }
+}    

@@ -10,99 +10,98 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Caches
+namespace ImageWizard.Caches;
+
+/// <summary>
+/// FileCache
+/// </summary>
+public class FileCache : ICache
 {
-    /// <summary>
-    /// FileCache
-    /// </summary>
-    public class FileCache : ICache
+    protected static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
+
+    public FileCache(IOptions<FileCacheSettings> settings, IWebHostEnvironment hostingEnvironment)
     {
-        protected static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
+        Settings = settings;
 
-        public FileCache(IOptions<FileCacheSettings> settings, IWebHostEnvironment hostingEnvironment)
+        if (Path.IsPathFullyQualified(settings.Value.Folder))
         {
-            Settings = settings;
+            Folder = new DirectoryInfo(settings.Value.Folder);
+        }
+        else
+        {
+            Folder = new DirectoryInfo(Path.Join(hostingEnvironment.ContentRootPath, settings.Value.Folder));
+        }
+    }
 
-            if (Path.IsPathFullyQualified(settings.Value.Folder))
-            {
-                Folder = new DirectoryInfo(settings.Value.Folder);
-            }
-            else
-            {
-                Folder = new DirectoryInfo(Path.Join(hostingEnvironment.ContentRootPath, settings.Value.Folder));
-            }
+    /// <summary>
+    /// Settings
+    /// </summary>
+    public IOptions<FileCacheSettings> Settings { get; }
+
+    /// <summary>
+    /// Folder
+    /// </summary>
+    public DirectoryInfo Folder { get; }
+
+    protected (FileInfo metafile, FileInfo blobfile) GetFileCacheLocations(string key)
+    {
+        string folders = Path.Join(
+                                key.AsSpan(0, 2),
+                                key.AsSpan(2, 2),
+                                key.AsSpan(4, 2),
+                                key.AsSpan(6, 2));
+
+        ReadOnlySpan<char> filename = key.AsSpan(8);
+
+        string basePath = Path.Join(Folder.FullName, folders, filename);
+
+        return (new FileInfo($"{basePath}.meta"), new FileInfo($"{basePath}.blob"));
+    }
+
+    public async Task<ICachedData?> ReadAsync(string key)
+    {
+        var locations = GetFileCacheLocations(key);
+
+        if (locations.metafile.Exists == false || locations.blobfile.Exists == false)
+        {
+            return null;
         }
 
-        /// <summary>
-        /// Settings
-        /// </summary>
-        public IOptions<FileCacheSettings> Settings { get; }
+        using Stream metadataStream = locations.metafile.OpenRead();
 
-        /// <summary>
-        /// Folder
-        /// </summary>
-        public DirectoryInfo Folder { get; }
+        Metadata? metadata = await JsonSerializer.DeserializeAsync<Metadata>(metadataStream);
 
-        protected (FileInfo metafile, FileInfo blobfile) GetFileCacheLocations(string key)
+        if (metadata == null)
         {
-            string folders = Path.Join(
-                                    key.AsSpan(0, 2),
-                                    key.AsSpan(2, 2),
-                                    key.AsSpan(4, 2),
-                                    key.AsSpan(6, 2));
-
-            ReadOnlySpan<char> filename = key.AsSpan(8);
-
-            string basePath = Path.Join(Folder.FullName, folders, filename);
-
-            return (new FileInfo($"{basePath}.meta"), new FileInfo($"{basePath}.blob"));
+            throw new ArgumentNullException(nameof(metadata));
         }
 
-        public async Task<ICachedData?> ReadAsync(string key)
+        return new CachedData(metadata, () => Task.FromResult<Stream>(locations.blobfile.OpenRead()));
+    }
+
+    public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
+    {
+        var locations = GetFileCacheLocations(key);
+
+        if (locations.metafile.Directory != null)
         {
-            var locations = GetFileCacheLocations(key);
-
-            if (locations.metafile.Exists == false || locations.blobfile.Exists == false)
-            {
-                return null;
-            }
-
-            using Stream metadataStream = locations.metafile.OpenRead();
-
-            Metadata? metadata = await JsonSerializer.DeserializeAsync<Metadata>(metadataStream);
-
-            if (metadata == null)
-            {
-                throw new ArgumentNullException(nameof(metadata));
-            }
-
-            return new CachedData(metadata, () => Task.FromResult<Stream>(locations.blobfile.OpenRead()));
+            //create folder structure for meta and blob file
+            locations.metafile.Directory.Create();
         }
 
-        public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
-        {
-            var locations = GetFileCacheLocations(key);
+        using Stream metadataStream = locations.metafile.OpenWrite();
 
-            if (locations.metafile.Directory != null)
-            {
-                //create folder structure for meta and blob file
-                locations.metafile.Directory.Create();
-            }
+        //delete existing data
+        metadataStream.SetLength(0);
 
-            using Stream metadataStream = locations.metafile.OpenWrite();
+        await JsonSerializer.SerializeAsync(metadataStream, metadata, JsonSerializerOptions);
 
-            //delete existing data
-            metadataStream.SetLength(0);
+        //write data
+        using Stream blobStream = locations.blobfile.OpenWrite();
 
-            await JsonSerializer.SerializeAsync(metadataStream, metadata, JsonSerializerOptions);
+        //delete existing data
+        blobStream.SetLength(0);
 
-            //write data
-            using Stream blobStream = locations.blobfile.OpenWrite();
-
-            //delete existing data
-            blobStream.SetLength(0);
-
-            await stream.CopyToAsync(blobStream);
-        }
+        await stream.CopyToAsync(blobStream);
     }
 }

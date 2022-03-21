@@ -8,23 +8,22 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// ICachedData
+/// </summary>
+public interface ICachedData
 {
     /// <summary>
-    /// ICachedData
+    /// Metadata
     /// </summary>
-    public interface ICachedData
-    {
-        /// <summary>
-        /// Metadata
-        /// </summary>
-        /// <returns></returns>
-        IMetadata Metadata { get; }
+    /// <returns></returns>
+    IMetadata Metadata { get; }
 
-        /// <summary>
-        /// OpenReadAsync
-        /// </summary>
-        /// <returns></returns>
-        Task<Stream> OpenReadAsync();
-    }
+    /// <summary>
+    /// OpenReadAsync
+    /// </summary>
+    /// <returns></returns>
+    Task<Stream> OpenReadAsync();
 }

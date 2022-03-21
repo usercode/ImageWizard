@@ -6,14 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Loaders
+namespace ImageWizard.Loaders;
+
+public class GravatarOptions : LoaderOptions
 {
-    public class GravatarOptions : LoaderOptions
+    public GravatarOptions()
     {
-        public GravatarOptions()
-        {
-            RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
-            CacheControlMaxAge = TimeSpan.FromDays(7);
-        }
+        RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
+        CacheControlMaxAge = TimeSpan.FromDays(7);
     }
 }

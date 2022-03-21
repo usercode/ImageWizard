@@ -9,15 +9,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using SkiaSharp;
 
-namespace ImageWizard.SkiaSharp
-{
-    public class BmpFormat : IImageFormat
-    {
-        public string MimeType => MimeTypes.Bmp;
+namespace ImageWizard.SkiaSharp;
 
-        public void SaveImage(SKBitmap image, Stream stream)
-        {
-            image.Encode(stream, SKEncodedImageFormat.Bmp, 85);
-        }
+public class BmpFormat : IImageFormat
+{
+    public string MimeType => MimeTypes.Bmp;
+
+    public void SaveImage(SKBitmap image, Stream stream)
+    {
+        image.Encode(stream, SKEncodedImageFormat.Bmp, 85);
     }
 }

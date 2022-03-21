@@ -6,14 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Loaders
+namespace ImageWizard.Loaders;
+
+public class YouTubeOptions : LoaderOptions
 {
-    public class YouTubeOptions : LoaderOptions
+    public YouTubeOptions()
     {
-        public YouTubeOptions()
-        {
-            RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
-            CacheControlMaxAge = TimeSpan.FromDays(7);
-        }
+        RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
+        CacheControlMaxAge = TimeSpan.FromDays(7);
     }
 }

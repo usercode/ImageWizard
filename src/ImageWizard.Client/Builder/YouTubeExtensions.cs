@@ -8,16 +8,15 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ImageWizard.Client
+namespace ImageWizard.Client;
+
+/// <summary>
+/// ImageBuilderYouTubeExtensions
+/// </summary>
+public static class YouTubeExtensions
 {
-    /// <summary>
-    /// ImageBuilderYouTubeExtensions
-    /// </summary>
-    public static class YouTubeExtensions
+    public static Image Youtube(this ILoader imageUrlBuilder, string id)
     {
-        public static Image Youtube(this ILoader imageUrlBuilder, string id)
-        {
-            return new Image(imageUrlBuilder.LoadData("youtube", id));
-        }
+        return new Image(imageUrlBuilder.LoadData("youtube", id));
     }
 }

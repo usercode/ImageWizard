@@ -8,15 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp.Filters
+namespace ImageWizard.ImageSharp.Filters;
+
+public abstract class ImageSharpFilter : Filter<ImageSharpFilterContext>
 {
-    public abstract class ImageSharpFilter : Filter<ImageSharpFilterContext>
+    public ImageSharpFilter()
     {
-        public ImageSharpFilter()
-        {
 
-        }
-
-        public override string Namespace => "imagesharp";
     }
+
+    public override string Namespace => "imagesharp";
 }

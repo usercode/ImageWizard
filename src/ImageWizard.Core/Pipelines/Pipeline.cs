@@ -16,201 +16,200 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Processing
+namespace ImageWizard.Processing;
+
+/// <summary>
+/// Processing pipeline
+/// </summary>
+public abstract class Pipeline<TFilterBase, TFilterContext> : IPipeline
+    where TFilterBase : IFilter<TFilterContext>
+    where TFilterContext : FilterContext
 {
-    /// <summary>
-    /// Processing pipeline
-    /// </summary>
-    public abstract class Pipeline<TFilterBase, TFilterContext> : IPipeline
-        where TFilterBase : IFilter<TFilterContext>
-        where TFilterContext : FilterContext
+    public delegate void PreProcessing(TFilterContext context);
+    public delegate void PostProcessing(TFilterContext context);
+
+    public Pipeline(IServiceProvider serviceProvider, ILogger<Pipeline<TFilterBase, TFilterContext>> logger)
     {
-        public delegate void PreProcessing(TFilterContext context);
-        public delegate void PostProcessing(TFilterContext context);
+        ServiceProvider = serviceProvider;
+        Logger = logger;
 
-        public Pipeline(IServiceProvider serviceProvider, ILogger<Pipeline<TFilterBase, TFilterContext>> logger)
+        FilterActions = new List<IFilterAction<TFilterContext>>();
+    }
+
+    /// <summary>
+    /// ServiceProvider
+    /// </summary>
+    protected IServiceProvider ServiceProvider { get; }
+
+    /// <summary>
+    /// Logger
+    /// </summary>
+    protected ILogger<Pipeline<TFilterBase, TFilterContext>> Logger { get; }
+
+    /// <summary>
+    /// FilterActions
+    /// </summary>
+    protected IList<IFilterAction<TFilterContext>> FilterActions { get; }
+
+    /// <summary>
+    /// Adds filter to pipeline.
+    /// </summary>
+    /// <typeparam name="TFilterBase"></typeparam>
+    public void AddFilter<TFilter>()
+        where TFilter : TFilterBase
+    {
+        MethodInfo[] methods = typeof(TFilter)
+                                    .GetMethods()
+                                    .Where(x => x.IsPublic)
+                                    .Where(x=> x.GetCustomAttribute<FilterAttribute>() != null)
+                                    .ToArray();
+
+        foreach (MethodInfo method in methods)
         {
-            ServiceProvider = serviceProvider;
-            Logger = logger;
+            ParameterInfo[] parameters = method.GetParameters();
 
-            FilterActions = new List<IFilterAction<TFilterContext>>();
-        }
+            Type[] integerTypes = new Type[] { typeof(byte), typeof(short), typeof(int), typeof(long) };
+            Type[] floatingNumberTypes = new Type[] { typeof(float), typeof(double), typeof(decimal) };
 
-        /// <summary>
-        /// ServiceProvider
-        /// </summary>
-        protected IServiceProvider ServiceProvider { get; }
-
-        /// <summary>
-        /// Logger
-        /// </summary>
-        protected ILogger<Pipeline<TFilterBase, TFilterContext>> Logger { get; }
-
-        /// <summary>
-        /// FilterActions
-        /// </summary>
-        protected IList<IFilterAction<TFilterContext>> FilterActions { get; }
-
-        /// <summary>
-        /// Adds filter to pipeline.
-        /// </summary>
-        /// <typeparam name="TFilterBase"></typeparam>
-        public void AddFilter<TFilter>()
-            where TFilter : TFilterBase
-        {
-            MethodInfo[] methods = typeof(TFilter)
-                                        .GetMethods()
-                                        .Where(x => x.IsPublic)
-                                        .Where(x=> x.GetCustomAttribute<FilterAttribute>() != null)
-                                        .ToArray();
-
-            foreach (MethodInfo method in methods)
+            ParameterItem CreateParameter(ParameterInfo pi, string pattern)
             {
-                ParameterInfo[] parameters = method.GetParameters();
+                return new ParameterItem() { Name = pi.Name, Pattern = $@"(?<{pi.Name}>{pattern})" };
+            }
 
-                Type[] integerTypes = new Type[] { typeof(byte), typeof(short), typeof(int), typeof(long) };
-                Type[] floatingNumberTypes = new Type[] { typeof(float), typeof(double), typeof(decimal) };
+            List<ParameterItem> pp = new List<ParameterItem>();
 
-                ParameterItem CreateParameter(ParameterInfo pi, string pattern)
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                ParameterInfo currentParameter = parameters[i];
+
+                if (integerTypes.Any(x => x == currentParameter.ParameterType))
                 {
-                    return new ParameterItem() { Name = pi.Name, Pattern = $@"(?<{pi.Name}>{pattern})" };
+                    pp.Add(CreateParameter(currentParameter, @"-?\d+"));
                 }
-
-                List<ParameterItem> pp = new List<ParameterItem>();
-
-                for (int i = 0; i < parameters.Length; i++)
+                else if (floatingNumberTypes.Any(x => x == currentParameter.ParameterType))
                 {
-                    ParameterInfo currentParameter = parameters[i];
-
-                    if (integerTypes.Any(x => x == currentParameter.ParameterType))
-                    {
-                        pp.Add(CreateParameter(currentParameter, @"-?\d+"));
-                    }
-                    else if (floatingNumberTypes.Any(x => x == currentParameter.ParameterType))
-                    {
-                        pp.Add(CreateParameter(currentParameter, @"-?\d+\.\d+"));
-                    }
-                    else if (currentParameter.ParameterType == typeof(bool))
-                    {
-                        pp.Add(CreateParameter(parameters[i], "True|False"));
-                    }
-                    else if (currentParameter.ParameterType == typeof(string))
-                    {
-                        //find string as Base64Url or surrounded with ''
-                        ParameterItem p = CreateParameter(parameters[i], @"(('[^']*')|([A-Za-z0-9-_\s]+))");
-
-                        pp.Add(p);
-                    }
-                    else if (currentParameter.ParameterType.IsEnum)
-                    {
-                        //@"[a-z]{1}[a-z0-9]*"
-
-                        string[] enumValues = Enum.GetNames(parameters[i].ParameterType)
-                                                  .Select(x => x.ToLower())
-                                                  .ToArray();
-
-                        pp.Add(CreateParameter(parameters[i], string.Join("|", enumValues)));
-                    }
-                    else
-                    {
-                        throw new Exception("parameter type is not supported: " + parameters[i].ParameterType.Name);
-                    }
+                    pp.Add(CreateParameter(currentParameter, @"-?\d+\.\d+"));
                 }
-
-                StringBuilder builder = new StringBuilder("^");
-
-                //function begin
-                builder.Append($@"{method.Name.ToLowerInvariant()}\(");
-
-                bool optionalParmeterCall = parameters.All(x => (x.DefaultValue is DBNull) == false);
-
-                if (optionalParmeterCall)
+                else if (currentParameter.ParameterType == typeof(bool))
                 {
-                    //add optional parameters
-                    builder.Append($"(,|{string.Join("|", pp.Select(x => $"({x.Name}={x.Pattern})").ToArray())})*");
+                    pp.Add(CreateParameter(parameters[i], "True|False"));
+                }
+                else if (currentParameter.ParameterType == typeof(string))
+                {
+                    //find string as Base64Url or surrounded with ''
+                    ParameterItem p = CreateParameter(parameters[i], @"(('[^']*')|([A-Za-z0-9-_\s]+))");
+
+                    pp.Add(p);
+                }
+                else if (currentParameter.ParameterType.IsEnum)
+                {
+                    //@"[a-z]{1}[a-z0-9]*"
+
+                    string[] enumValues = Enum.GetNames(parameters[i].ParameterType)
+                                              .Select(x => x.ToLower())
+                                              .ToArray();
+
+                    pp.Add(CreateParameter(parameters[i], string.Join("|", enumValues)));
                 }
                 else
                 {
-                    //add all parameters
-                    builder.Append(string.Join(",", pp.Select(x => x.Pattern).ToArray()));
+                    throw new Exception("parameter type is not supported: " + parameters[i].ParameterType.Name);
                 }
-
-                //function end
-                builder.Append(@"\)$");
-
-                IFilterAction<TFilterContext> filterAction = CreateFilterAction<TFilter>(new Regex(builder.ToString(), RegexOptions.Compiled), method);
-
-                FilterActions.Add(filterAction);
             }
-        }
 
-        /// <summary>
-        /// CreateFilterAction
-        /// </summary>
-        /// <typeparam name="TFilter"></typeparam>
-        /// <param name="regex"></param>
-        /// <param name="methodInfo"></param>
-        /// <returns></returns>
-        protected virtual IFilterAction<TFilterContext> CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo) 
-            where TFilter : TFilterBase
-        {
-            return new FilterAction<TFilter, TFilterContext>(ServiceProvider, regex, methodInfo);
-        }
+            StringBuilder builder = new StringBuilder("^");
 
-        /// <summary>
-        /// Creates filter context.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Task<TFilterContext> CreateFilterContext(PipelineContext context);
+            //function begin
+            builder.Append($@"{method.Name.ToLowerInvariant()}\(");
 
-        /// <summary>
-        /// Starts processing pipeline.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public async Task<DataResult> StartAsync(PipelineContext context)
-        {
-            using TFilterContext filterContext = await CreateFilterContext(context);
+            bool optionalParmeterCall = parameters.All(x => (x.DefaultValue is DBNull) == false);
 
-            //execute preprocessing
-            PreProcessing? preProcessing = ServiceProvider.GetService<PreProcessing>();
-            preProcessing?.Invoke(filterContext);
-
-            //execute filters
-            while (context.UrlFilters.Count > 0)
+            if (optionalParmeterCall)
             {
-                string filter = context.UrlFilters.Peek();
-
-                //find and execute filter
-                IFilterAction? foundFilter = FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
-
-                if (foundFilter != null)
-                {
-                    Logger.LogTrace("Filter executed: " + filter);
-
-                    filterContext.ProcessingContext.UrlFilters.Dequeue();
-                }
-                else
-                {
-                    Logger.LogTrace($"filter was not found: {filter}");
-
-                    throw new Exception($"Filter was not found: {filter}");
-
-                    //return false;
-                }
-
-                //stop processing?
-                if (filterContext.Result != null)
-                {
-                    return filterContext.Result;
-                }
+                //add optional parameters
+                builder.Append($"(,|{string.Join("|", pp.Select(x => $"({x.Name}={x.Pattern})").ToArray())})*");
+            }
+            else
+            {
+                //add all parameters
+                builder.Append(string.Join(",", pp.Select(x => x.Pattern).ToArray()));
             }
 
-            //execute postprocessing
-            PostProcessing? postProcessing = ServiceProvider.GetService<PostProcessing>();
-            postProcessing?.Invoke(filterContext);
+            //function end
+            builder.Append(@"\)$");
 
-            return await filterContext.BuildResultAsync();
+            IFilterAction<TFilterContext> filterAction = CreateFilterAction<TFilter>(new Regex(builder.ToString(), RegexOptions.Compiled), method);
+
+            FilterActions.Add(filterAction);
         }
+    }
+
+    /// <summary>
+    /// CreateFilterAction
+    /// </summary>
+    /// <typeparam name="TFilter"></typeparam>
+    /// <param name="regex"></param>
+    /// <param name="methodInfo"></param>
+    /// <returns></returns>
+    protected virtual IFilterAction<TFilterContext> CreateFilterAction<TFilter>(Regex regex, MethodInfo methodInfo) 
+        where TFilter : TFilterBase
+    {
+        return new FilterAction<TFilter, TFilterContext>(ServiceProvider, regex, methodInfo);
+    }
+
+    /// <summary>
+    /// Creates filter context.
+    /// </summary>
+    /// <returns></returns>
+    protected abstract Task<TFilterContext> CreateFilterContext(PipelineContext context);
+
+    /// <summary>
+    /// Starts processing pipeline.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public async Task<DataResult> StartAsync(PipelineContext context)
+    {
+        using TFilterContext filterContext = await CreateFilterContext(context);
+
+        //execute preprocessing
+        PreProcessing? preProcessing = ServiceProvider.GetService<PreProcessing>();
+        preProcessing?.Invoke(filterContext);
+
+        //execute filters
+        while (context.UrlFilters.Count > 0)
+        {
+            string filter = context.UrlFilters.Peek();
+
+            //find and execute filter
+            IFilterAction? foundFilter = FilterActions.FirstOrDefault(x => x.TryExecute(filter, filterContext));
+
+            if (foundFilter != null)
+            {
+                Logger.LogTrace("Filter executed: " + filter);
+
+                filterContext.ProcessingContext.UrlFilters.Dequeue();
+            }
+            else
+            {
+                Logger.LogTrace($"filter was not found: {filter}");
+
+                throw new Exception($"Filter was not found: {filter}");
+
+                //return false;
+            }
+
+            //stop processing?
+            if (filterContext.Result != null)
+            {
+                return filterContext.Result;
+            }
+        }
+
+        //execute postprocessing
+        PostProcessing? postProcessing = ServiceProvider.GetService<PostProcessing>();
+        postProcessing?.Invoke(filterContext);
+
+        return await filterContext.BuildResultAsync();
     }
 }

@@ -9,19 +9,18 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Caches
+namespace ImageWizard.Caches;
+
+public class SHA256CacheKey : ICacheKey
 {
-    public class SHA256CacheKey : ICacheKey
+    public string Create(string input)
     {
-        public string Create(string input)
-        {
-            Span<byte> keyBufferSpan = stackalloc byte[32];
+        Span<byte> keyBufferSpan = stackalloc byte[32];
 
-            SHA256.HashData(Encoding.UTF8.GetBytes(input), keyBufferSpan);
+        SHA256.HashData(Encoding.UTF8.GetBytes(input), keyBufferSpan);
 
-            string key = Convert.ToHexString(keyBufferSpan);
+        string key = Convert.ToHexString(keyBufferSpan);
 
-            return key;
-        }
+        return key;
     }
 }

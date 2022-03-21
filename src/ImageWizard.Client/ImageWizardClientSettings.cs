@@ -7,24 +7,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public class ImageWizardClientSettings : ImageWizardBaseOptions
 {
-    public class ImageWizardClientSettings : ImageWizardBaseOptions
+    public ImageWizardClientSettings()
     {
-        public ImageWizardClientSettings()
-        {
-            UseUnsafeUrl = false;
-            Enabled = true;
-            BaseUrl = ImageWizardDefaults.BasePath;
-        }
-
-        public bool Enabled { get; set; }
-
-        public bool UseUnsafeUrl { get; set; }
-
-        public string BaseUrl { get; set; }
-
-        public string Host { get; set; }
-        
+        UseUnsafeUrl = false;
+        Enabled = true;
+        BaseUrl = ImageWizardDefaults.BasePath;
     }
+
+    public bool Enabled { get; set; }
+
+    public bool UseUnsafeUrl { get; set; }
+
+    public string BaseUrl { get; set; }
+
+    public string Host { get; set; }
+    
 }

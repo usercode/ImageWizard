@@ -9,23 +9,22 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ImageWizard.Caches;
 
-namespace ImageWizard.MongoDB
+namespace ImageWizard.MongoDB;
+
+public static class MongoDBCacheExtensions
 {
-    public static class MongoDBCacheExtensions
+    public static IImageWizardBuilder SetMongoDBCache(this IImageWizardBuilder wizardConfiguration)
     {
-        public static IImageWizardBuilder SetMongoDBCache(this IImageWizardBuilder wizardConfiguration)
-        {
-            return SetMongoDBCache(wizardConfiguration, options => { });
-        }
+        return SetMongoDBCache(wizardConfiguration, options => { });
+    }
 
-        public static IImageWizardBuilder SetMongoDBCache(this IImageWizardBuilder wizardConfiguration, Action<MongoDBCacheOptions> cacheSettingsSetup)
-        {
-            wizardConfiguration.Services.Configure(cacheSettingsSetup);
+    public static IImageWizardBuilder SetMongoDBCache(this IImageWizardBuilder wizardConfiguration, Action<MongoDBCacheOptions> cacheSettingsSetup)
+    {
+        wizardConfiguration.Services.Configure(cacheSettingsSetup);
 
-            wizardConfiguration.Services.RemoveAll<ICache>();
-            wizardConfiguration.Services.AddSingleton<ICache, MongoDBCache>();
+        wizardConfiguration.Services.RemoveAll<ICache>();
+        wizardConfiguration.Services.AddSingleton<ICache, MongoDBCache>();
 
-            return wizardConfiguration;
-        }
+        return wizardConfiguration;
     }
 }

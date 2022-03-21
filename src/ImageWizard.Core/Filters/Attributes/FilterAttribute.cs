@@ -6,13 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Attributes
+namespace ImageWizard.Attributes;
+
+/// <summary>
+/// FilterAttribute
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class FilterAttribute : Attribute
 {
-    /// <summary>
-    /// FilterAttribute
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class FilterAttribute : Attribute
-    {
-    }
 }

@@ -10,54 +10,53 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public delegate void PipelineAction<T>(T pipeline);
+
+/// <summary>
+/// ImageWizardBuilder
+/// </summary>
+public class ImageWizardBuilder : IImageWizardBuilder
 {
-    public delegate void PipelineAction<T>(T pipeline);
+    public ImageWizardBuilder(IServiceCollection services)
+    {
+        Services = services;
+
+        LoaderManager = new TypeManager();
+        PipelineManager = new TypeManager();
+    }
 
     /// <summary>
-    /// ImageWizardBuilder
+    /// Service
     /// </summary>
-    public class ImageWizardBuilder : IImageWizardBuilder
+    public IServiceCollection Services { get; }
+
+    /// <summary>
+    /// LoaderManager
+    /// </summary>
+    public TypeManager LoaderManager { get; }
+
+    /// <summary>
+    /// PipelineManager
+    /// </summary>
+    public TypeManager PipelineManager { get; }
+
+    public void AddPipeline<T>(IEnumerable<string> mimeTypes) 
+        where T : class, IPipeline
     {
-        public ImageWizardBuilder(IServiceCollection services)
+        Services.AddSingleton<T>();
+
+        foreach(string mimeType in mimeTypes)
         {
-            Services = services;
-
-            LoaderManager = new TypeManager();
-            PipelineManager = new TypeManager();
+            PipelineManager.Register<T>(mimeType);
         }
+    }
 
-        /// <summary>
-        /// Service
-        /// </summary>
-        public IServiceCollection Services { get; }
+    public Type GetPipeline(string key)
+    {
+        Type type = PipelineManager.Get(key);
 
-        /// <summary>
-        /// LoaderManager
-        /// </summary>
-        public TypeManager LoaderManager { get; }
-
-        /// <summary>
-        /// PipelineManager
-        /// </summary>
-        public TypeManager PipelineManager { get; }
-
-        public void AddPipeline<T>(IEnumerable<string> mimeTypes) 
-            where T : class, IPipeline
-        {
-            Services.AddSingleton<T>();
-
-            foreach(string mimeType in mimeTypes)
-            {
-                PipelineManager.Register<T>(mimeType);
-            }
-        }
-
-        public Type GetPipeline(string key)
-        {
-            Type type = PipelineManager.Get(key);
-
-            return type;
-        }
+        return type;
     }
 }

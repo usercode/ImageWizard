@@ -7,19 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public interface IImageWizardInterceptor
 {
-    public interface IImageWizardInterceptor
-    {
-        void OnCachedDataSending(HttpResponse response, ICachedData cachedData, bool notModified);
+    void OnCachedDataSending(HttpResponse response, ICachedData cachedData, bool notModified);
 
-        void OnCachedDataCreated(ICachedData cachedData);
+    void OnCachedDataCreated(ICachedData cachedData);
 
-        void OnUnsafeSignature();
+    void OnUnsafeSignature();
 
-        void OnValidSignature();
+    void OnValidSignature();
 
-        void OnInvalidSignature();
+    void OnInvalidSignature();
 
-    }
 }

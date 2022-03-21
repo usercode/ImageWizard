@@ -12,23 +12,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public static class SkiaSharpBuilderExtensions
 {
-    public static class SkiaSharpBuilderExtensions
+    public static ISkiaSharpBuilder WithFilter<TFilter>(this ISkiaSharpBuilder builder) where TFilter : SkiaSharpFilter, new()
     {
-        public static ISkiaSharpBuilder WithFilter<TFilter>(this ISkiaSharpBuilder builder) where TFilter : SkiaSharpFilter, new()
-        {
-            builder.Services.AddTransient<TFilter>();
-            builder.Services.AddSingleton(new PipelineAction<SkiaSharpPipeline>(x => x.AddFilter<TFilter>()));
+        builder.Services.AddTransient<TFilter>();
+        builder.Services.AddSingleton(new PipelineAction<SkiaSharpPipeline>(x => x.AddFilter<TFilter>()));
 
-            return builder;
-        }
+        return builder;
+    }
 
-        public static ISkiaSharpBuilder WithOptions(this ISkiaSharpBuilder builder, Action<SkiaSharpOptions> action)
-        {
-            builder.Services.Configure(action);
+    public static ISkiaSharpBuilder WithOptions(this ISkiaSharpBuilder builder, Action<SkiaSharpOptions> action)
+    {
+        builder.Services.Configure(action);
 
-            return builder;
-        }
+        return builder;
     }
 }

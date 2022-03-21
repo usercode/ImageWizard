@@ -6,27 +6,26 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Analytics
+namespace ImageWizard.Analytics;
+
+/// <summary>
+/// AnalyticsData
+/// </summary>
+public class AnalyticsData
 {
-    /// <summary>
-    /// AnalyticsData
-    /// </summary>
-    public class AnalyticsData
+    public AnalyticsData()
     {
-        public AnalyticsData()
-        {
-            Total = new AnalyticsDataItem();
-            ByMimeType = new Dictionary<string, AnalyticsDataItem>();
-        }
-
-        /// <summary>
-        /// Total
-        /// </summary>
-        public AnalyticsDataItem Total { get; set; }
-
-        /// <summary>
-        /// ByMimeType
-        /// </summary>
-        public IDictionary<string, AnalyticsDataItem> ByMimeType { get; }
+        Total = new AnalyticsDataItem();
+        ByMimeType = new Dictionary<string, AnalyticsDataItem>();
     }
+
+    /// <summary>
+    /// Total
+    /// </summary>
+    public AnalyticsDataItem Total { get; set; }
+
+    /// <summary>
+    /// ByMimeType
+    /// </summary>
+    public IDictionary<string, AnalyticsDataItem> ByMimeType { get; }
 }

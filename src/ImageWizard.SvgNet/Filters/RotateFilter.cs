@@ -11,15 +11,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.SvgNet.Filters
-{
-    public class RotateFilter : ImageWizard.Filters.SvgFilter
-    {
-        [Filter]
-        public void Rotate(float angle)
-        {
-            Context.Image.Transforms.Add(new SvgRotate(angle));
-        }
+namespace ImageWizard.SvgNet.Filters;
 
+public class RotateFilter : ImageWizard.Filters.SvgFilter
+{
+    [Filter]
+    public void Rotate(float angle)
+    {
+        Context.Image.Transforms.Add(new SvgRotate(angle));
     }
+
 }

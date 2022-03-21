@@ -7,94 +7,93 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Analytics
+namespace ImageWizard.Analytics;
+
+/// <summary>
+/// ImageRequestAnalytics
+/// </summary>
+class ImageRequestAnalytics : IImageWizardInterceptor
 {
-    /// <summary>
-    /// ImageRequestAnalytics
-    /// </summary>
-    class ImageRequestAnalytics : IImageWizardInterceptor
+    public ImageRequestAnalytics(AnalyticsData analyticsData)
     {
-        public ImageRequestAnalytics(AnalyticsData analyticsData)
+        AnalyticsData = analyticsData;
+    }
+
+    /// <summary>
+    /// AnalyticsData
+    /// </summary>
+    private AnalyticsData AnalyticsData { get; }
+
+    private readonly object _lock = new object();
+
+    private void SetData(string? mimeType, Action<AnalyticsDataItem> action)
+    {
+        lock (_lock)
         {
-            AnalyticsData = analyticsData;
-        }
+            //total stats
+            action(AnalyticsData.Total);
 
-        /// <summary>
-        /// AnalyticsData
-        /// </summary>
-        private AnalyticsData AnalyticsData { get; }
+            //stats by mime type
+            mimeType ??= string.Empty;
 
-        private readonly object _lock = new object();
-
-        private void SetData(string? mimeType, Action<AnalyticsDataItem> action)
-        {
-            lock (_lock)
+            if (AnalyticsData.ByMimeType.TryGetValue(mimeType, out AnalyticsDataItem? value) == false)
             {
-                //total stats
-                action(AnalyticsData.Total);
+                value = new AnalyticsDataItem();
 
-                //stats by mime type
-                mimeType ??= string.Empty;
-
-                if (AnalyticsData.ByMimeType.TryGetValue(mimeType, out AnalyticsDataItem? value) == false)
-                {
-                    value = new AnalyticsDataItem();
-
-                    AnalyticsData.ByMimeType.Add(mimeType, value);
-                }
-
-                action(value);
+                AnalyticsData.ByMimeType.Add(mimeType, value);
             }
-        }
 
-        public void OnCachedDataSending(HttpResponse response, ICachedData cachedData, bool notModified)
-        {
-            SetData(cachedData.Metadata.MimeType, x =>
-            {
-                if (notModified)
-                {
-                    x.CachedDataSendNotModified++;
-                    x.CachedDataSendNotModifiedInBytes += cachedData.Metadata.FileLength;
-                }
-                else
-                {
-                    x.CachedDataSend++;
-                    x.CachedDataSendInBytes += cachedData.Metadata.FileLength;
-                }
-            });
+            action(value);
         }
+    }
 
-        public void OnCachedDataCreated(ICachedData cachedData)
+    public void OnCachedDataSending(HttpResponse response, ICachedData cachedData, bool notModified)
+    {
+        SetData(cachedData.Metadata.MimeType, x =>
         {
-            SetData(cachedData.Metadata.MimeType, x =>
+            if (notModified)
             {
-                x.CachedDataCreated++;
-                x.CachedDataCreatedInBytes += cachedData.Metadata.FileLength;
-            });
-        }
+                x.CachedDataSendNotModified++;
+                x.CachedDataSendNotModifiedInBytes += cachedData.Metadata.FileLength;
+            }
+            else
+            {
+                x.CachedDataSend++;
+                x.CachedDataSendInBytes += cachedData.Metadata.FileLength;
+            }
+        });
+    }
 
-        public void OnUnsafeSignature()
+    public void OnCachedDataCreated(ICachedData cachedData)
+    {
+        SetData(cachedData.Metadata.MimeType, x =>
         {
-            SetData(null, x =>
-            {
-                x.UnsafeSignature++;
-            });
-        }
+            x.CachedDataCreated++;
+            x.CachedDataCreatedInBytes += cachedData.Metadata.FileLength;
+        });
+    }
 
-        public void OnValidSignature()
+    public void OnUnsafeSignature()
+    {
+        SetData(null, x =>
         {
-            SetData(null, x =>
-            {
-                x.ValidSignature++;
-            });
-        }
+            x.UnsafeSignature++;
+        });
+    }
 
-        public void OnInvalidSignature()
+    public void OnValidSignature()
+    {
+        SetData(null, x =>
         {
-            SetData(null, x =>
-            {
-                x.InvalidSignature++;
-            });
-        }
+            x.ValidSignature++;
+        });
+    }
+
+    public void OnInvalidSignature()
+    {
+        SetData(null, x =>
+        {
+            x.InvalidSignature++;
+        });
     }
 }

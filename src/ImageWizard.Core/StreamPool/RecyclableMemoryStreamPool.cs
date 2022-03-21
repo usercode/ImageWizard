@@ -10,20 +10,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public class RecyclableMemoryStreamPool : IStreamPool
 {
-    public class RecyclableMemoryStreamPool : IStreamPool
+    private static readonly RecyclableMemoryStreamManager manager = new RecyclableMemoryStreamManager();
+
+    public RecyclableMemoryStreamPool()
     {
-        private static readonly RecyclableMemoryStreamManager manager = new RecyclableMemoryStreamManager();
 
-        public RecyclableMemoryStreamPool()
-        {
+    }
 
-        }
-
-        public Stream GetStream()
-        {            
-            return manager.GetStream();
-        }
+    public Stream GetStream()
+    {            
+        return manager.GetStream();
     }
 }

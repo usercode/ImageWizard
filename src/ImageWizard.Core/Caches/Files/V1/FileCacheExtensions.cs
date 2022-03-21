@@ -9,44 +9,43 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ImageWizard.Caches;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+public static class FileCacheExtensions
 {
-    public static class FileCacheExtensions
+    public static IImageWizardBuilder SetDistributedCache(this IImageWizardBuilder wizardBuilder)
     {
-        public static IImageWizardBuilder SetDistributedCache(this IImageWizardBuilder wizardBuilder)
-        {
-            wizardBuilder.Services.RemoveAll<ICache>();
-            wizardBuilder.Services.AddSingleton<ICache, DistributedCache>();
+        wizardBuilder.Services.RemoveAll<ICache>();
+        wizardBuilder.Services.AddSingleton<ICache, DistributedCache>();
 
-            return wizardBuilder;
-        }
+        return wizardBuilder;
+    }
 
-        /// <summary>
-        /// Adds file cache (<see cref="FileCache"/>):<br/>
-        /// Meta and blob file path based on cache id.
-        /// </summary>
-        /// <param name="wizardBuilder"></param>
-        /// <returns></returns>
-        public static IImageWizardBuilder SetFileCache(this IImageWizardBuilder wizardBuilder)
-        {
-            return SetFileCache(wizardBuilder, options => { });
-        }
+    /// <summary>
+    /// Adds file cache (<see cref="FileCache"/>):<br/>
+    /// Meta and blob file path based on cache id.
+    /// </summary>
+    /// <param name="wizardBuilder"></param>
+    /// <returns></returns>
+    public static IImageWizardBuilder SetFileCache(this IImageWizardBuilder wizardBuilder)
+    {
+        return SetFileCache(wizardBuilder, options => { });
+    }
 
-        /// <summary>
-        /// Adds file cache (<see cref="FileCache">):<br/>
-        /// Meta and blob file path based on cache id.
-        /// </summary>
-        /// <param name="wizardBuilder"></param>
-        /// <param name="fileCacheSettingsSetup"></param>
-        /// <returns></returns>
-        public static IImageWizardBuilder SetFileCache(this IImageWizardBuilder wizardBuilder, Action<FileCacheSettings> fileCacheSettingsSetup)
-        {
-            wizardBuilder.Services.Configure(fileCacheSettingsSetup);
+    /// <summary>
+    /// Adds file cache (<see cref="FileCache">):<br/>
+    /// Meta and blob file path based on cache id.
+    /// </summary>
+    /// <param name="wizardBuilder"></param>
+    /// <param name="fileCacheSettingsSetup"></param>
+    /// <returns></returns>
+    public static IImageWizardBuilder SetFileCache(this IImageWizardBuilder wizardBuilder, Action<FileCacheSettings> fileCacheSettingsSetup)
+    {
+        wizardBuilder.Services.Configure(fileCacheSettingsSetup);
 
-            wizardBuilder.Services.RemoveAll<ICache>();
-            wizardBuilder.Services.AddSingleton<ICache, FileCache>();
+        wizardBuilder.Services.RemoveAll<ICache>();
+        wizardBuilder.Services.AddSingleton<ICache, FileCache>();
 
-            return wizardBuilder;
-        }
+        return wizardBuilder;
     }
 }

@@ -11,41 +11,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.ImageSharp.Filters
+namespace ImageWizard.ImageSharp.Filters;
+
+public class MetadataFilter : ImageSharpFilter
 {
-    public class MetadataFilter : ImageSharpFilter
+    [Filter]
+    public void RemoveExif()
     {
-        [Filter]
-        public void RemoveExif()
-        {
-            Context.Image.Metadata.ExifProfile = null;
-        }
+        Context.Image.Metadata.ExifProfile = null;
+    }
 
-        [Filter]
-        public void RemoveIcc()
-        {
-            Context.Image.Metadata.IccProfile = null;
-        }
+    [Filter]
+    public void RemoveIcc()
+    {
+        Context.Image.Metadata.IccProfile = null;
+    }
 
-        [Filter]
-        public void RemoveIptc()
-        {
-            Context.Image.Metadata.IptcProfile = null;
-        }
+    [Filter]
+    public void RemoveIptc()
+    {
+        Context.Image.Metadata.IptcProfile = null;
+    }
 
-        [Filter]
-        public void RemoveXmp()
-        {
-            Context.Image.Metadata.XmpProfile = null;
-        }
+    [Filter]
+    public void RemoveXmp()
+    {
+        Context.Image.Metadata.XmpProfile = null;
+    }
 
-        [Filter]
-        public void RemoveMetadata()
-        {
-            RemoveExif();
-            RemoveIcc();
-            RemoveIptc();
-            RemoveXmp();
-        }
+    [Filter]
+    public void RemoveMetadata()
+    {
+        RemoveExif();
+        RemoveIcc();
+        RemoveIptc();
+        RemoveXmp();
     }
 }

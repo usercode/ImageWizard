@@ -11,32 +11,31 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Piranha
+namespace ImageWizard.Piranha;
+
+public static class StartupExtensions
 {
-    public static class StartupExtensions
+    public static IServiceCollection AddImageWizardModule(this IServiceCollection services)
     {
-        public static IServiceCollection AddImageWizardModule(this IServiceCollection services)
-        {
-            App.Modules.Register<PiranhaModule>();
+        App.Modules.Register<PiranhaModule>();
 
-            return services;
-        }
+        return services;
+    }
 
-        public static IApplicationBuilder UseImageWizardModule(this IApplicationBuilder builder)
-        {
-            //// Manager resources
-            //App.Modules.Manager().Scripts
-            //   .Add("~/manager/simplemodule/js/header-block.js");
+    public static IApplicationBuilder UseImageWizardModule(this IApplicationBuilder builder)
+    {
+        //// Manager resources
+        //App.Modules.Manager().Scripts
+        //   .Add("~/manager/simplemodule/js/header-block.js");
 
-            //// Add the embedded resources
-            //builder.UseStaticFiles(new StaticFileOptions
-            //{
-            //    FileProvider = new EmbeddedFileProvider(typeof(StartupExtensions).Assembly,
-            //        "ImageWizard.Piranha.assets.dist"),
-            //    RequestPath = "/manager/imagewizard"
-            //});
+        //// Add the embedded resources
+        //builder.UseStaticFiles(new StaticFileOptions
+        //{
+        //    FileProvider = new EmbeddedFileProvider(typeof(StartupExtensions).Assembly,
+        //        "ImageWizard.Piranha.assets.dist"),
+        //    RequestPath = "/manager/imagewizard"
+        //});
 
-            return builder;
-        }
+        return builder;
     }
 }

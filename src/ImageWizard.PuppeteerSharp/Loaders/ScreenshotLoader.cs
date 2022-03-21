@@ -10,51 +10,50 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace ImageWizard.PuppeteerSharp
+namespace ImageWizard.PuppeteerSharp;
+
+/// <summary>
+/// ScreenshotLoader
+/// </summary>
+public class ScreenshotLoader : Loader<PuppeteerOptions>
 {
-    /// <summary>
-    /// ScreenshotLoader
-    /// </summary>
-    public class ScreenshotLoader : Loader<PuppeteerOptions>
+    public ScreenshotLoader(ILogger<ScreenshotLoader> logger, IOptions<PuppeteerOptions> options)
+        : base(options)
     {
-        public ScreenshotLoader(ILogger<ScreenshotLoader> logger, IOptions<PuppeteerOptions> options)
-            : base(options)
-        {
-            Logger = logger;
-        }
+        Logger = logger;
+    }
 
-        /// <summary>
-        /// Logger
-        /// </summary>
-        public ILogger<ScreenshotLoader> Logger { get; }
+    /// <summary>
+    /// Logger
+    /// </summary>
+    public ILogger<ScreenshotLoader> Logger { get; }
 
-        public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData)
-        {
-            using BrowserFetcher browserFetcher = new BrowserFetcher();
-            await browserFetcher.DownloadAsync();
+    public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData)
+    {
+        using BrowserFetcher browserFetcher = new BrowserFetcher();
+        await browserFetcher.DownloadAsync();
 
-            await using Browser browser = await Puppeteer.LaunchAsync(
-                                                                        new LaunchOptions()
-                                                                        { 
-                                                                            Headless = true,
-                                                                            Args = new[] { "--no-sandbox" }
-                                                                        });
+        await using Browser browser = await Puppeteer.LaunchAsync(
+                                                                    new LaunchOptions()
+                                                                    { 
+                                                                        Headless = true,
+                                                                        Args = new[] { "--no-sandbox" }
+                                                                    });
 
-            Logger.LogInformation($"Chrome version: {await browser.GetVersionAsync()}");
+        Logger.LogInformation($"Chrome version: {await browser.GetVersionAsync()}");
 
-            await using Page page = await browser.NewPageAsync();
+        await using Page page = await browser.NewPageAsync();
 
-            await page.SetViewportAsync(new ViewPortOptions() 
-                                        { 
-                                            Width = Options.Value.ScreenshotWidth, 
-                                            Height = Options.Value.ScreenshotHeight 
-                                        });
+        await page.SetViewportAsync(new ViewPortOptions() 
+                                    { 
+                                        Width = Options.Value.ScreenshotWidth, 
+                                        Height = Options.Value.ScreenshotHeight 
+                                    });
 
-            await page.GoToAsync(source);
+        await page.GoToAsync(source);
 
-            byte[] buffer = await page.ScreenshotDataAsync(new ScreenshotOptions() { Type = ScreenshotType.Png });
+        byte[] buffer = await page.ScreenshotDataAsync(new ScreenshotOptions() { Type = ScreenshotType.Png });
 
-            return new OriginalData(MimeTypes.Png, new MemoryStream(buffer), new CacheSettings().ApplyLoaderOptions(Options.Value));
-        }
+        return new OriginalData(MimeTypes.Png, new MemoryStream(buffer), new CacheSettings().ApplyLoaderOptions(Options.Value));
     }
 }

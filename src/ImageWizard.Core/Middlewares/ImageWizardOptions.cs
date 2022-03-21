@@ -9,66 +9,65 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace ImageWizard
+namespace ImageWizard;
+
+/// <summary>
+/// ImageWizardOptions
+/// </summary>
+public class ImageWizardOptions : ImageWizardBaseOptions
 {
-    /// <summary>
-    /// ImageWizardOptions
-    /// </summary>
-    public class ImageWizardOptions : ImageWizardBaseOptions
+    public ImageWizardOptions()
     {
-        public ImageWizardOptions()
-        {
-            UseETag = true;
-            UseClientHints = false;
-            AllowUnsafeUrl = false;
-            UseAcceptHeader = false;
-            Key = string.Empty;
+        UseETag = true;
+        UseClientHints = false;
+        AllowUnsafeUrl = false;
+        UseAcceptHeader = false;
+        Key = string.Empty;
 
-            AllowedDPR = ImageWizardDefaults.AllowedDPR;
+        AllowedDPR = ImageWizardDefaults.AllowedDPR;
 
-            CacheControl = new CacheControl();
-        }
+        CacheControl = new CacheControl();
+    }
 
-        /// <summary>
-        /// CacheControl
-        /// </summary>
-        public CacheControl CacheControl { get; }
+    /// <summary>
+    /// CacheControl
+    /// </summary>
+    public CacheControl CacheControl { get; }
 
-        /// <summary>
-        /// Allows unsafe url.
-        /// </summary>
-        public bool AllowUnsafeUrl { get; set; }
+    /// <summary>
+    /// Allows unsafe url.
+    /// </summary>
+    public bool AllowUnsafeUrl { get; set; }
 
-        /// <summary>
-        /// Selects automatically the compatible mime type by request header. (Default: false)
-        /// </summary>
-        public bool UseAcceptHeader { get; set; }
+    /// <summary>
+    /// Selects automatically the compatible mime type by request header. (Default: false)
+    /// </summary>
+    public bool UseAcceptHeader { get; set; }
 
-        /// <summary>
-        /// Use ETag. (Default: true)
-        /// </summary>
-        public bool UseETag { get; set; }
+    /// <summary>
+    /// Use ETag. (Default: true)
+    /// </summary>
+    public bool UseETag { get; set; }
 
-        /// <summary>
-        /// Use client hints. (Default: false)
-        /// </summary>
-        public bool UseClientHints { get; set; }        
+    /// <summary>
+    /// Use client hints. (Default: false)
+    /// </summary>
+    public bool UseClientHints { get; set; }        
 
-        /// <summary>
-        /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0)
-        /// </summary>
-        public double[] AllowedDPR { get; set; }
-      
-        /// <summary>
-        /// Generates random 64 byte key.
-        /// </summary>
-        public void GenerateRandomKey()
-        {
-            //generate random key
-            byte[] keyBuffer = new byte[64];
-            RandomNumberGenerator.Create().GetBytes(keyBuffer);
+    /// <summary>
+    /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0)
+    /// </summary>
+    public double[] AllowedDPR { get; set; }
+  
+    /// <summary>
+    /// Generates random 64 byte key.
+    /// </summary>
+    public void GenerateRandomKey()
+    {
+        //generate random key
+        byte[] keyBuffer = new byte[64];
+        RandomNumberGenerator.Create().GetBytes(keyBuffer);
 
-            Key = WebEncoders.Base64UrlEncode(keyBuffer);
-        }
+        Key = WebEncoders.Base64UrlEncode(keyBuffer);
     }
 }

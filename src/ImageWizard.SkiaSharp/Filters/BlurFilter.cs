@@ -11,34 +11,33 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ImageWizard.SkiaSharp.Filters
+namespace ImageWizard.SkiaSharp.Filters;
+
+public class BlurFilter : SkiaSharpFilter
 {
-    public class BlurFilter : SkiaSharpFilter
+    [Filter]
+    public void Blur()
     {
-        [Filter]
-        public void Blur()
+        Blur(10);
+    }
+
+    [Filter]
+    public void Blur(int radius)
+    {
+        using (var surface = SKSurface.Create(new SKImageInfo(Context.Image.Width, Context.Image.Height)))
+        using (var canvas = surface.Canvas)
+        using (var paint = new SKPaint())
         {
-            Blur(10);
-        }
+            paint.ImageFilter = SKImageFilter.CreateBlur(radius, radius);
 
-        [Filter]
-        public void Blur(int radius)
-        {
-            using (var surface = SKSurface.Create(new SKImageInfo(Context.Image.Width, Context.Image.Height)))
-            using (var canvas = surface.Canvas)
-            using (var paint = new SKPaint())
-            {
-                paint.ImageFilter = SKImageFilter.CreateBlur(radius, radius);
+            SKRect rect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
+            rect.Inflate(10, 10); //removes black border
 
-                SKRect rect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
-                rect.Inflate(10, 10); //removes black border
+            canvas.DrawBitmap(Context.Image, rect, paint);
+            canvas.Flush();
 
-                canvas.DrawBitmap(Context.Image, rect, paint);
-                canvas.Flush();
-
-                // save
-                Context.Image = SKBitmap.FromImage(surface.Snapshot());
-            }
+            // save
+            Context.Image = SKBitmap.FromImage(surface.Snapshot());
         }
     }
 }

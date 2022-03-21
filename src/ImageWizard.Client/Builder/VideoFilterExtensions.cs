@@ -11,19 +11,18 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ImageWizard.Client
-{
-    /// <summary>
-    /// VideoFilterExtensions
-    /// </summary>
-    public static class VideoFilterExtensions
-    {
-        public static Video GetFrame(this Video video)
-        {
-            video.Filter($"frame()");
+namespace ImageWizard.Client;
 
-            return video;
-        }
-       
+/// <summary>
+/// VideoFilterExtensions
+/// </summary>
+public static class VideoFilterExtensions
+{
+    public static Video GetFrame(this Video video)
+    {
+        video.Filter($"frame()");
+
+        return video;
     }
+   
 }

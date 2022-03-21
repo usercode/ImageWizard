@@ -12,12 +12,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Client
-{
-    public interface IUrlBuilder
-    {
-        public ImageWizardClientSettings Settings { get; }
+namespace ImageWizard.Client;
 
-        public IServiceProvider ServiceProvider { get; }
-    }
+public interface IUrlBuilder
+{
+    public ImageWizardClientSettings Settings { get; }
+
+    public IServiceProvider ServiceProvider { get; }
 }

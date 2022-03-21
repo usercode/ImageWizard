@@ -10,17 +10,16 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Caches
+namespace ImageWizard.Caches;
+
+public class SHA256CacheHash : ICacheHash
 {
-    public class SHA256CacheHash : ICacheHash
+    public async Task<string> CreateAsync(Stream stream)
     {
-        public async Task<string> CreateAsync(Stream stream)
-        {
-            using SHA256 sha256 = SHA256.Create();
+        using SHA256 sha256 = SHA256.Create();
 
-            byte[] hash = await sha256.ComputeHashAsync(stream);
+        byte[] hash = await sha256.ComputeHashAsync(stream);
 
-            return Convert.ToHexString(hash);
-        }
+        return Convert.ToHexString(hash);
     }
 }

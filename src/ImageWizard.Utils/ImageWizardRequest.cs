@@ -9,24 +9,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.Utils
+namespace ImageWizard.Utils;
+
+public class ImageWizardRequest
 {
-    public class ImageWizardRequest
+    public ImageWizardRequest(ImageWizardUrl url, HostString host)
     {
-        public ImageWizardRequest(ImageWizardUrl url, HostString host)
-        {
-            Url = url;
-            Host = host;
-        }
-
-        /// <summary>
-        /// Url
-        /// </summary>
-        public ImageWizardUrl Url { get; }
-
-        /// <summary>
-        /// Host
-        /// </summary>
-        public HostString Host { get; }
+        Url = url;
+        Host = host;
     }
+
+    /// <summary>
+    /// Url
+    /// </summary>
+    public ImageWizardUrl Url { get; }
+
+    /// <summary>
+    /// Host
+    /// </summary>
+    public HostString Host { get; }
 }

@@ -12,23 +12,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageWizard.DocNET.Filters.Base
+namespace ImageWizard.DocNET.Filters.Base;
+
+public class DocNETFilterContext : FilterContext
 {
-    public class DocNETFilterContext : FilterContext
+    public DocNETFilterContext(PipelineContext processingContext, Stream document)
+        : base(processingContext)
     {
-        public DocNETFilterContext(PipelineContext processingContext, Stream document)
-            : base(processingContext)
-        {
-            Document = document;
-        }
+        Document = document;
+    }
 
-        public Stream Document { get; }
+    public Stream Document { get; }
 
-        public override async Task<DataResult> BuildResultAsync()
-        {
+    public override async Task<DataResult> BuildResultAsync()
+    {
 
 
-            return new DataResult(Document, MimeTypes.Pdf);
-        }
+        return new DataResult(Document, MimeTypes.Pdf);
     }
 }
