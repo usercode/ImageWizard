@@ -144,22 +144,25 @@ public class AsyncLock : IDisposable
 
     internal void Release(bool writer, bool sendReleasedEvent = true, bool skipWaitingWriters = false)
     {
-        try
+        lock (_syncObj)
         {
-            if (writer == true)
+            try
             {
-                WriterRelease(skipWaitingWriters);
+                if (writer == true)
+                {
+                    WriterRelease(skipWaitingWriters);
+                }
+                else
+                {
+                    ReaderRelease();
+                }
             }
-            else
+            finally
             {
-                ReaderRelease();
-            }
-        }
-        finally
-        {
-            if (sendReleasedEvent)
-            {
-                Released?.Invoke(this);
+                if (sendReleasedEvent)
+                {
+                    Released?.Invoke(this);
+                }
             }
         }
     }

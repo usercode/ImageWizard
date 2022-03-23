@@ -63,7 +63,7 @@ public class AsyncLock<TKey>
                         {
                             _locks.Remove(key);
                         }
-                    }             
+                    }
                 };
 
                 _locks.Add(key, asyncLock);
