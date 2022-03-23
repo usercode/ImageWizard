@@ -11,37 +11,65 @@ using System.Threading.Tasks;
 namespace ImageWizard.Core.Locking;
 
 /// <summary>
-/// KeybasedAsyncLock
+/// AsyncLockKey
 /// </summary>
-public class AsyncLockKey
+public class AsyncLock<TKey>
+    where TKey : notnull
 {
-    public AsyncLockKey()
+    public AsyncLock()
     {
-        _locks = new Dictionary<string, AsyncLock>();
+        _locks = new Dictionary<TKey, AsyncLock>();
     }
 
-    private readonly IDictionary<string, AsyncLock> _locks;
+    private readonly IDictionary<TKey, AsyncLock> _locks;
 
-    public AsyncLock GetLock(string key)
+    /// <summary>
+    /// ReaderLockAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public Task<AsyncLockReleaser> ReaderLockAsync(TKey key)
     {
         lock (_locks)
         {
             if (_locks.TryGetValue(key, out AsyncLock? asyncLock) == false)
             {
-                asyncLock = new AsyncLock();
+                asyncLock = new AsyncLock(_locks);
 
                 _locks.Add(key, asyncLock);
             }
 
-            return asyncLock;
+            return asyncLock.ReaderLockAsync();
         }
     }
 
-    public void ReleaseLock(AsyncLock asyncLock)
+    /// <summary>
+    /// WriterLockAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public Task<AsyncLockReleaser> WriterLockAsync(TKey key)
     {
         lock (_locks)
         {
-            _locks.Remove("");
+            if (_locks.TryGetValue(key, out AsyncLock? asyncLock) == false)
+            {
+                asyncLock = new AsyncLock(_locks);
+                asyncLock.Released += x => 
+                {
+                    lock (_locks)
+                    {
+                        if (x.IsIdle)
+                        {
+                            _locks.Remove(key);
+                        }
+                    }             
+                };
+
+                _locks.Add(key, asyncLock);
+            }
+
+            return asyncLock.WriterLockAsync();
         }
     }
 }

@@ -4,6 +4,7 @@
 
 using ImageWizard.Caches;
 using ImageWizard.Core;
+using ImageWizard.Core.Locking;
 using ImageWizard.Loaders;
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
@@ -31,6 +32,8 @@ namespace ImageWizard;
 /// </summary>
 public class ImageWizardApi
 {
+    private AsyncLock<string> asyncLock = new AsyncLock<string>();
+
     /// <summary>
     /// ExecuteAsync
     /// </summary>
@@ -133,9 +136,6 @@ public class ImageWizardApi
             }
         }
 
-        //generate data key
-        string key = cacheKey.Create(pathBuilder.ToString());
-
         //get data loader
         Type loaderType = builder.LoaderManager.Get(url.LoaderType);
         ILoader? loader = (ILoader?)context.RequestServices.GetService(loaderType);
@@ -145,195 +145,208 @@ public class ImageWizardApi
             return Results.Problem(detail: $"Data loader not found: {url.LoaderType}", statusCode: StatusCodes.Status500InternalServerError);
         }
 
-        //read cached data
-        ICachedData? cachedData = await cache.ReadAsync(key);
+        //generate data key
+        string key = cacheKey.Create(pathBuilder.ToString());
 
+        ICachedData? cachedData = null;
         bool createCachedData = true;
 
-        //cached data found?
-        if (cachedData != null)
+        //reader lock
+        using (AsyncLockState lockState = await asyncLock.ReaderLockAsync(key))
         {
-            createCachedData = loader.Options.Value.RefreshMode switch
+            //read cached data
+            cachedData = await cache.ReadAsync(key);
+
+            //cached data found?
+            if (cachedData != null)
             {
-                LoaderRefreshMode.None => false,
-                LoaderRefreshMode.EveryTime => true,
-                LoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
-                                                                || cachedData.Metadata.Cache.NoCache == true
-                                                                || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
-                _ => throw new Exception($"Unknown refresh mode: {loader.Options.Value.RefreshMode}")
-            };
-        }
-
-        //create cached data
-        if (createCachedData == true)
-        {
-            logger.LogTrace("Create cached data");
-
-            //get original image
-            using OriginalData? originalData = await loader.GetAsync(url.LoaderSource, cachedData);
-
-            if (originalData != null) //is there a new version of original image?
-            {
-                using PipelineContext processingContext = new PipelineContext(
-                                                                 context.RequestServices,
-                                                                 context.RequestServices.GetRequiredService<IStreamPool>(),
-                                                                 new DataResult(originalData.Data, originalData.MimeType),
-                                                                 clientHints,
-                                                                 options.Value,
-                                                                 acceptMimeTypes,
-                                                                 url.Filters);
-
-                do
+                createCachedData = loader.Options.Value.RefreshMode switch
                 {
-                    //find processing pipeline by mime type
-                    Type processingPipelineType = builder.GetPipeline(processingContext.Result.MimeType);
-                    IPipeline? processingPipeline = (IPipeline?)context.RequestServices.GetService(processingPipelineType);
+                    LoaderRefreshMode.None => false,
+                    LoaderRefreshMode.EveryTime => true,
+                    LoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
+                                                                    || cachedData.Metadata.Cache.NoCache == true
+                                                                    || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
+                    _ => throw new Exception($"Unknown refresh mode: {loader.Options.Value.RefreshMode}")
+                };
+            }
 
-                    if (processingPipeline == null)
+
+            //create cached data
+            if (createCachedData == true)
+            {
+                logger.LogTrace("Create cached data");
+
+                await lockState.UpgradeToWriteLockAsync();
+                
+                //get original image
+                using OriginalData? originalData = await loader.GetAsync(url.LoaderSource, cachedData);
+
+                if (originalData != null) //is there a new version of original image?
+                {
+                    using PipelineContext processingContext = new PipelineContext(
+                                                                     context.RequestServices,
+                                                                     context.RequestServices.GetRequiredService<IStreamPool>(),
+                                                                     new DataResult(originalData.Data, originalData.MimeType),
+                                                                     clientHints,
+                                                                     options.Value,
+                                                                     acceptMimeTypes,
+                                                                     url.Filters);
+
+                    do
                     {
-                        return Results.Problem(detail: $"Processing pipeline was not found: {processingContext.Result.MimeType}", statusCode: StatusCodes.Status500InternalServerError);
+                        //find processing pipeline by mime type
+                        Type processingPipelineType = builder.GetPipeline(processingContext.Result.MimeType);
+                        IPipeline? processingPipeline = (IPipeline?)context.RequestServices.GetService(processingPipelineType);
+
+                        if (processingPipeline == null)
+                        {
+                            return Results.Problem(detail: $"Processing pipeline was not found: {processingContext.Result.MimeType}", statusCode: StatusCodes.Status500InternalServerError);
+                        }
+
+                        logger.LogTrace($"Start pipline: {processingPipelineType.Name}");
+
+                        //start processing
+                        processingContext.Result = await processingPipeline.StartAsync(processingContext);
+
+                    } while (processingContext.UrlFilters.Count > 0);
+
+                    logger.LogTrace("Save new cached data");
+
+                    processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
+
+                    //create hash of cached image
+                    string hash = await cacheHash.CreateAsync(processingContext.Result.Data);
+
+                    //create metadata
+                    Metadata metadata = new Metadata()
+                    {
+                        Cache = originalData.Cache,
+                        Created = DateTime.UtcNow,
+                        Key = key,
+                        Hash = hash,
+                        Filters = url.Filters,
+                        LoaderSource = url.LoaderSource,
+                        LoaderType = url.LoaderType,
+                        MimeType = processingContext.Result.MimeType,
+                        FileLength = processingContext.Result.Data.Length
+                    };
+
+                    //image result?
+                    if (processingContext.Result is ImageResult imageResult)
+                    {
+                        metadata.Width = imageResult.Width;
+                        metadata.Height = imageResult.Height;
                     }
 
-                    logger.LogTrace($"Start pipline: {processingPipelineType.Name}");
+                    processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
 
-                    //start processing
-                    processingContext.Result = await processingPipeline.StartAsync(processingContext);
+                    //write cached data
+                    await cache.WriteAsync(key, metadata, processingContext.Result.Data);
 
-                } while (processingContext.UrlFilters.Count > 0);
+                    //read cached data
+                    cachedData = await cache.ReadAsync(key);
 
-                logger.LogTrace("Save new cached data");
-
-                processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
-
-                //create hash of cached image
-                string hash = await cacheHash.CreateAsync(processingContext.Result.Data);
-
-                //create metadata
-                Metadata metadata = new Metadata()
-                {
-                    Cache = originalData.Cache,
-                    Created = DateTime.UtcNow,
-                    Key = key,
-                    Hash = hash,
-                    Filters = url.Filters,
-                    LoaderSource = url.LoaderSource,
-                    LoaderType = url.LoaderType,                        
-                    MimeType = processingContext.Result.MimeType,
-                    FileLength = processingContext.Result.Data.Length
-                };
-
-                //image result?
-                if (processingContext.Result is ImageResult imageResult)
-                {
-                    metadata.Width = imageResult.Width;
-                    metadata.Height = imageResult.Height;
+                    if (cachedData != null)
+                    {
+                        interceptors.Foreach(x => x.OnCachedDataCreated(cachedData));
+                    }
                 }
 
-                processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
-
-                //write cached data
-                await cache.WriteAsync(key, metadata, processingContext.Result.Data);
-                
-                //read cached data
-                cachedData = await cache.ReadAsync(key);
-
-                if (cachedData != null)
-                {
-                    interceptors.Foreach(x => x.OnCachedDataCreated(cachedData));
-                }
+                await lockState.DowngradeToReadLockAsync(true);
             }
-        }
 
-        if (cachedData == null)
-        {
-            return Results.StatusCode(StatusCodes.Status500InternalServerError);
-        }
-
-        EntityTagHeaderValue etag = new EntityTagHeaderValue($"\"{cachedData.Metadata.Hash}\"");
-
-        //send "304-NotModified" if etag is valid
-        if (options.Value.UseETag)
-        {
-            bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == etag.Tag);
-
-            if (isValid == true)
+            if (cachedData == null)
             {
-                logger.LogTrace("Operation completed: 304 Not modified");
-
-                interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, true));
-
-                return Results.StatusCode(StatusCodes.Status304NotModified);
+                return Results.StatusCode(StatusCodes.Status500InternalServerError);
             }
-        }
 
-        ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
+            EntityTagHeaderValue etag = new EntityTagHeaderValue($"\"{cachedData.Metadata.Hash}\"");
 
-        //use accept header
-        if (options.Value.UseAcceptHeader)
-        {
-            responseHeaders.Append(HeaderNames.Vary, HeaderNames.Accept);
-        }
+            //send "304-NotModified" if etag is valid
+            if (options.Value.UseETag)
+            {
+                bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == etag.Tag);
 
-        //use client hints
-        if (options.Value.UseClientHints)
-        {
-            responseHeaders.AppendList(
-                                        HeaderNames.Vary,
-                                        new[] {
+                if (isValid == true)
+                {
+                    logger.LogTrace("Operation completed: 304 Not modified");
+
+                    interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, true));
+
+                    return Results.StatusCode(StatusCodes.Status304NotModified);
+                }
+            }
+
+            ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
+
+            //use accept header
+            if (options.Value.UseAcceptHeader)
+            {
+                responseHeaders.Append(HeaderNames.Vary, HeaderNames.Accept);
+            }
+
+            //use client hints
+            if (options.Value.UseClientHints)
+            {
+                responseHeaders.AppendList(
+                                            HeaderNames.Vary,
+                                            new[] {
                                             ClientHints.DPRHeader,
                                             ClientHints.WidthHeader,
                                             ClientHints.ViewportWidthHeader
-                                        });
+                                            });
 
-            //is image?
-            if (cachedData.Metadata.Width != null)
-            {
-                double? dpr = clientHints.DPR;
-
-                if (clientHints.DPR != null && clientHints.Width != null)
+                //is image?
+                if (cachedData.Metadata.Width != null)
                 {
-                    dpr = (double)cachedData.Metadata.Width.Value / clientHints.Width.Value / clientHints.DPR.Value;
-                }       
+                    double? dpr = clientHints.DPR;
 
-                if (dpr != null)
-                {
-                    responseHeaders.Append("Content-DPR", dpr.Value.ToString(CultureInfo.InvariantCulture));
+                    if (clientHints.DPR != null && clientHints.Width != null)
+                    {
+                        dpr = (double)cachedData.Metadata.Width.Value / clientHints.Width.Value / clientHints.DPR.Value;
+                    }
+
+                    if (dpr != null)
+                    {
+                        responseHeaders.Append("Content-DPR", dpr.Value.ToString(CultureInfo.InvariantCulture));
+                    }
                 }
             }
-        }
 
-        //set cache control header
-        if (options.Value.CacheControl.IsEnabled)
-        {
-            responseHeaders.CacheControl = new CacheControlHeaderValue()
+            //set cache control header
+            if (options.Value.CacheControl.IsEnabled)
             {
-                Public = options.Value.CacheControl.Public,
-                MustRevalidate = options.Value.CacheControl.MustRevalidate,
-                MaxAge = options.Value.CacheControl.MaxAge,
-                NoCache = options.Value.CacheControl.NoCache,
-                NoStore = options.Value.CacheControl.NoStore
-            };
+                responseHeaders.CacheControl = new CacheControlHeaderValue()
+                {
+                    Public = options.Value.CacheControl.Public,
+                    MustRevalidate = options.Value.CacheControl.MustRevalidate,
+                    MaxAge = options.Value.CacheControl.MaxAge,
+                    NoCache = options.Value.CacheControl.NoCache,
+                    NoStore = options.Value.CacheControl.NoStore
+                };
+            }
+
+            //set ETag header
+            if (options.Value.UseETag)
+            {
+                responseHeaders.ETag = etag;
+            }
+
+            //is HEAD request?
+            bool isHeadRequst = HttpMethods.IsHead(context.Request.Method);
+
+            if (isHeadRequst == true)
+            {
+                return Results.Ok();
+            }
+
+            interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, false));
+
+            //send response stream
+            Stream stream = await cachedData.OpenReadAsync();
+
+            return Results.File(stream, cachedData.Metadata.MimeType, enableRangeProcessing: true);
         }
-
-        //set ETag header
-        if (options.Value.UseETag)
-        {
-            responseHeaders.ETag = etag;
-        }
-
-        //is HEAD request?
-        bool isHeadRequst = HttpMethods.IsHead(context.Request.Method);
-
-        if (isHeadRequst == true)
-        {
-            return Results.Ok();
-        }
-
-        interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, false));
-
-        //send response stream
-        Stream stream = await cachedData.OpenReadAsync();
-
-        return Results.File(stream, cachedData.Metadata.MimeType, enableRangeProcessing: true);
     }
 }
