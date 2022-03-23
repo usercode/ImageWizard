@@ -24,6 +24,33 @@ public class AsyncLock<TKey>
     private readonly IDictionary<TKey, AsyncLock> _locks;
 
     /// <summary>
+    /// GetLockAsync
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    private AsyncLock GetAsyncLock(TKey key)
+    {
+        if (_locks.TryGetValue(key, out AsyncLock? asyncLock) == false)
+        {
+            asyncLock = new AsyncLock(_locks);
+            asyncLock.Released += x =>
+            {
+                lock (_locks)
+                {
+                    if (x.IsIdle)
+                    {
+                        _locks.Remove(key);
+                    }
+                }
+            };
+
+            _locks.Add(key, asyncLock);
+        }
+
+        return asyncLock;
+    }
+
+    /// <summary>
     /// ReaderLockAsync
     /// </summary>
     /// <param name="key"></param>
@@ -32,14 +59,7 @@ public class AsyncLock<TKey>
     {
         lock (_locks)
         {
-            if (_locks.TryGetValue(key, out AsyncLock? asyncLock) == false)
-            {
-                asyncLock = new AsyncLock(_locks);
-
-                _locks.Add(key, asyncLock);
-            }
-
-            return asyncLock.ReaderLockAsync();
+            return GetAsyncLock(key).ReaderLockAsync();
         }
     }
 
@@ -52,24 +72,7 @@ public class AsyncLock<TKey>
     {
         lock (_locks)
         {
-            if (_locks.TryGetValue(key, out AsyncLock? asyncLock) == false)
-            {
-                asyncLock = new AsyncLock(_locks);
-                asyncLock.Released += x => 
-                {
-                    lock (_locks)
-                    {
-                        if (x.IsIdle)
-                        {
-                            _locks.Remove(key);
-                        }
-                    }
-                };
-
-                _locks.Add(key, asyncLock);
-            }
-
-            return asyncLock.WriterLockAsync();
+            return GetAsyncLock(key).WriterLockAsync();
         }
     }
 }
