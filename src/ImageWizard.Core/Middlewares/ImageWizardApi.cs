@@ -171,13 +171,12 @@ public class ImageWizardApi
                 };
             }
 
-
             //create cached data
             if (createCachedData == true)
             {
                 logger.LogTrace("Create cached data");
 
-                await lockState.UpgradeToWriteLockAsync();
+                await lockState.UpgradeToWriterLockAsync();
                 
                 //get original image
                 using OriginalData? originalData = await loader.GetAsync(url.LoaderSource, cachedData);
@@ -253,7 +252,7 @@ public class ImageWizardApi
                     }
                 }
 
-                await lockState.DowngradeToReadLockAsync(true);
+                await lockState.DowngradeToReaderLockAsync();
             }
 
             if (cachedData == null)

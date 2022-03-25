@@ -13,7 +13,7 @@ namespace ImageWizard.Core.Locking;
 /// <summary>
 /// AsyncLockReleaser
 /// </summary>
-public struct AsyncLockReleaser : IDisposable
+public readonly struct AsyncLockReleaser : IDisposable
 {
     private readonly AsyncLock _asyncLock;
     private readonly bool _writer;

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ImageWizard.Core.Locking;
@@ -24,7 +25,7 @@ public class AsyncLock<TKey>
     private readonly IDictionary<TKey, AsyncLock> _locks;
 
     /// <summary>
-    /// GetLockAsync
+    /// GetAsyncLock
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
@@ -35,12 +36,9 @@ public class AsyncLock<TKey>
             asyncLock = new AsyncLock(_locks);
             asyncLock.Released += x =>
             {
-                lock (_locks)
+                if (x.IsIdle)
                 {
-                    if (x.IsIdle)
-                    {
-                        _locks.Remove(key);
-                    }
+                    _locks.Remove(key);
                 }
             };
 
@@ -55,11 +53,11 @@ public class AsyncLock<TKey>
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    public Task<AsyncLockReleaser> ReaderLockAsync(TKey key)
+    public Task<AsyncLockReleaser> ReaderLockAsync(TKey key, CancellationToken cancellation = default)
     {
         lock (_locks)
         {
-            return GetAsyncLock(key).ReaderLockAsync();
+            return GetAsyncLock(key).ReaderLockAsync(cancellation);
         }
     }
 
@@ -68,11 +66,11 @@ public class AsyncLock<TKey>
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    public Task<AsyncLockReleaser> WriterLockAsync(TKey key)
+    public Task<AsyncLockReleaser> WriterLockAsync(TKey key, CancellationToken cancellation = default)
     {
         lock (_locks)
         {
-            return GetAsyncLock(key).WriterLockAsync();
+            return GetAsyncLock(key).WriterLockAsync(cancellation);
         }
     }
 }

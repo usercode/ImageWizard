@@ -130,9 +130,27 @@ public class AsyncLockTest
         using var r2 = lockEntity.ReaderLockAsync();
         using var r3 = lockEntity.ReaderLockAsync();
 
+        Assert.Equal(0, lockEntity.CountRunningReaders);
+
         //release writer lock, starts reader locks
         w1.Dispose();
 
         Assert.Equal(3, lockEntity.CountRunningReaders);
+    }
+
+    [Fact]
+    public async Task CancelWriterLock()
+    {
+        AsyncLock lockEntity = new AsyncLock();
+
+        CancellationTokenSource source = new CancellationTokenSource(TimeSpan.FromSeconds(1));
+
+        using var w1 = await lockEntity.WriterLockAsync();
+
+        await Assert.ThrowsAsync<TaskCanceledException>(async () =>
+        {
+            var w2 = await lockEntity.WriterLockAsync(source.Token);
+
+        });
     }
 }

@@ -20,8 +20,8 @@ public class AsyncLock : IDisposable
     {
         _syncObj = _waitingWriters;
 
-        m_readerReleaser = Task.FromResult(new AsyncLockReleaser(this, false));
-        m_writerReleaser = Task.FromResult(new AsyncLockReleaser(this, true));
+        _readerReleaser = Task.FromResult(new AsyncLockReleaser(this, false));
+        _writerReleaser = Task.FromResult(new AsyncLockReleaser(this, true));
     }
 
     internal AsyncLock(object syncObject)
@@ -30,21 +30,19 @@ public class AsyncLock : IDisposable
         _syncObj = syncObject;
     }
 
-    private readonly Task<AsyncLockReleaser> m_readerReleaser;
-    private readonly Task<AsyncLockReleaser> m_writerReleaser;
+    private readonly object _syncObj;
 
-    public event Action<AsyncLock>? Released;
+    private readonly Task<AsyncLockReleaser> _readerReleaser;
+    private readonly Task<AsyncLockReleaser> _writerReleaser;
 
+    private readonly Queue<TaskCompletionSource<AsyncLockReleaser>> _waitingReaders = new Queue<TaskCompletionSource<AsyncLockReleaser>>();
     private readonly Queue<TaskCompletionSource<AsyncLockReleaser>> _waitingWriters = new Queue<TaskCompletionSource<AsyncLockReleaser>>();
-
-    private TaskCompletionSource<AsyncLockReleaser> _waitingReader = new TaskCompletionSource<AsyncLockReleaser>();
     
-    private int _readersWaiting;
     private int _readersRunning;
 
     private bool _isWriterRunning = false;
 
-    private readonly object _syncObj;
+    public event Action<AsyncLock>? Released;
 
     /// <summary>
     /// CountRunningReaders
@@ -54,7 +52,7 @@ public class AsyncLock : IDisposable
     /// <summary>
     /// CountWaitingReaders
     /// </summary>
-    public int CountWaitingReaders => _readersWaiting;
+    public int CountWaitingReaders => _waitingReaders.Count;
 
     /// <summary>
     /// IsWriterRunning
@@ -71,38 +69,48 @@ public class AsyncLock : IDisposable
     /// </summary>
     public bool IsIdle => CountRunningReaders == 0 && CountWaitingReaders == 0 && IsWriterRunning == false && CountWaitingWriters == 0;
 
-    public Task<AsyncLockReleaser> ReaderLockAsync()
+    public Task<AsyncLockReleaser> ReaderLockAsync(CancellationToken cancellation = default)
     {
+        if (cancellation.IsCancellationRequested)
+        {
+            return Task.FromCanceled<AsyncLockReleaser>(cancellation);
+        }
+
         lock (_syncObj)
         {
-            //no active or waiting write lock?
+            //no running or waiting write lock?
             if (_isWriterRunning == false && _waitingWriters.Count == 0)
             {
                 _readersRunning++;
-                return m_readerReleaser;
+                return _readerReleaser;
             }
             else
             {
-                //return waiting reader state
-                _readersWaiting++;
-                return _waitingReader.Task;
+                //create waiting reader
+                TaskCompletionSource<AsyncLockReleaser> waiter = _waitingReaders.Enqueue(cancellation);
+                return waiter.Task;
             }
         }
     }
 
-    public Task<AsyncLockReleaser> WriterLockAsync()
+    public Task<AsyncLockReleaser> WriterLockAsync(CancellationToken cancellation = default)
     {
+        if (cancellation.IsCancellationRequested)
+        {
+            return Task.FromCanceled<AsyncLockReleaser>(cancellation);
+        }
+
         lock (_syncObj)
         {
             if (_isWriterRunning == false && _readersRunning == 0)
             {
                 _isWriterRunning = true;
-                return m_writerReleaser;
+                return _writerReleaser;
             }
             else
             {
-                var waiter = new TaskCompletionSource<AsyncLockReleaser>();
-                _waitingWriters.Enqueue(waiter);
+                //create waiting writer
+                TaskCompletionSource<AsyncLockReleaser> waiter = _waitingWriters.Enqueue(cancellation);
                 return waiter.Task;
             }
         }
@@ -117,15 +125,13 @@ public class AsyncLock : IDisposable
                 throw new Exception("There is already a writer lock.");
             }
 
-            Task<AsyncLockReleaser> writerTask = WriterLockAsync();
+            Release(releaser.Writer, false);
 
-            Release(releaser.Writer, false, false);
-
-            return writerTask;
+            return WriterLockAsync();
         }
     }
 
-    internal Task<AsyncLockReleaser> DowngradeToReaderLockAsync(AsyncLockReleaser releaser, bool skipWaitingWriters = false)
+    internal Task<AsyncLockReleaser> DowngradeToReaderLockAsync(AsyncLockReleaser releaser)
     {
         lock (_syncObj)
         {
@@ -134,15 +140,13 @@ public class AsyncLock : IDisposable
                 throw new Exception("There is already a reader lock.");
             }
 
-            Task<AsyncLockReleaser> readerTask = ReaderLockAsync();
+            Release(releaser.Writer, false);
 
-            Release(releaser.Writer, false, skipWaitingWriters);
-
-            return readerTask;
+            return ReaderLockAsync();
         }
     }
 
-    internal void Release(bool writer, bool sendReleasedEvent = true, bool skipWaitingWriters = false)
+    internal void Release(bool writer, bool sendReleasedEvent = true)
     {
         lock (_syncObj)
         {
@@ -150,7 +154,7 @@ public class AsyncLock : IDisposable
             {
                 if (writer == true)
                 {
-                    WriterRelease(skipWaitingWriters);
+                    WriterRelease();
                 }
                 else
                 {
@@ -169,57 +173,56 @@ public class AsyncLock : IDisposable
 
     private void ReaderRelease()
     {
-        TaskCompletionSource<AsyncLockReleaser>? toWake = null;
+        _readersRunning--;
 
-        lock (_syncObj)
+        //start next waiting writer lock
+        if (_readersRunning == 0)
         {
-            _readersRunning--;
-
-            //start next waiting write lock
-            if (_readersRunning == 0 && _waitingWriters.Count > 0)
-            {
-                _isWriterRunning = true;
-                toWake = _waitingWriters.Dequeue();
-            }
-        }
-
-        if (toWake != null)
-        {
-            toWake.SetResult(new AsyncLockReleaser(this, true));
+            StartNextWaitingWriter();
         }
     }
 
-    private void WriterRelease(bool skipWaitingWriters = false)
+    private void WriterRelease()
     {
-        TaskCompletionSource<AsyncLockReleaser>? toWake = null;
-        bool toWakeIsWriter = false;
+        //start next writer lock?
+        StartNextWaitingWriter();
 
-        lock (_syncObj)
+        //no running writer lock?
+        if (_isWriterRunning == false)
         {
-            //use next write lock?
-            if (skipWaitingWriters == false && _waitingWriters.Count > 0)
+            while (_waitingReaders.Count > 0)
             {
-                toWake = _waitingWriters.Dequeue();
-                toWakeIsWriter = true;
-            }//use next read lock
-            else if (_readersWaiting > 0)
+                var taskSource = _waitingReaders.Dequeue();
+
+                bool result = taskSource.TrySetResult(new AsyncLockReleaser(this, false));
+
+                if (result)
+                {
+                    _readersRunning++;
+                }
+            }
+        }
+    }
+
+    private void StartNextWaitingWriter()
+    {
+        while (_waitingWriters.Count > 0)
+        {
+            var taskSource = _waitingWriters.Dequeue();
+
+            bool result = taskSource.TrySetResult(new AsyncLockReleaser(this, true));
+
+            if (result == true)
             {
-                toWake = _waitingReader;
-                _readersRunning = _readersWaiting;
-                _readersWaiting = 0;
-                _isWriterRunning = false;
-                _waitingReader = new TaskCompletionSource<AsyncLockReleaser>();
-            }//reset state
-            else
-            {
-                _isWriterRunning = false;
+                _isWriterRunning = true;
+
+                return;
             }
         }
 
-        if (toWake != null)
-        {
-            toWake.SetResult(new AsyncLockReleaser(this, toWakeIsWriter));
-        }
+        _isWriterRunning = false;
+
+        return;
     }
 
     public void Dispose()

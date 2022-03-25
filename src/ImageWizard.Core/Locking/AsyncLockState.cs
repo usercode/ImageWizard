@@ -22,9 +22,9 @@ public class AsyncLockState : IDisposable
     }
 
     private AsyncLockReleaser? _releaser;
-    private AsyncLock _asyncLock;
-
-    public async Task UpgradeToWriteLockAsync()
+    private readonly AsyncLock _asyncLock;
+    
+    public async Task UpgradeToWriterLockAsync()
     {
         if (_releaser != null)
         {
@@ -36,11 +36,11 @@ public class AsyncLockState : IDisposable
         }
     }
 
-    public async Task DowngradeToReadLockAsync(bool skipWaitingWriters = false)
+    public async Task DowngradeToReaderLockAsync()
     {
         if (_releaser != null)
         {
-            _releaser = await _asyncLock.DowngradeToReaderLockAsync(_releaser.Value, skipWaitingWriters);
+            _releaser = await _asyncLock.DowngradeToReaderLockAsync(_releaser.Value);
         }
         else
         {
@@ -53,6 +53,7 @@ public class AsyncLockState : IDisposable
         if (_releaser != null)
         {
             _releaser.Value.Dispose();
+            _releaser = null;
         }
 
         GC.SuppressFinalize(this);
