@@ -32,7 +32,7 @@ namespace ImageWizard;
 /// </summary>
 public class ImageWizardApi
 {
-    private AsyncLock<string> asyncLock = new AsyncLock<string>();
+    private readonly AsyncLock<string> asyncLock = new AsyncLock<string>();
 
     /// <summary>
     /// ExecuteAsync
@@ -174,7 +174,7 @@ public class ImageWizardApi
             //create cached data
             if (createCachedData == true)
             {
-                logger.LogTrace("Create cached data");
+                logger.LogTrace("Create cached data: {key}", key);
 
                 await lockState.UpgradeToWriterLockAsync();
                 
@@ -203,14 +203,14 @@ public class ImageWizardApi
                             return Results.Problem(detail: $"Processing pipeline was not found: {processingContext.Result.MimeType}", statusCode: StatusCodes.Status500InternalServerError);
                         }
 
-                        logger.LogTrace($"Start pipline: {processingPipelineType.Name}");
+                        logger.LogTrace("Start pipline: {pipeline}", processingPipelineType.Name);
 
                         //start processing
                         processingContext.Result = await processingPipeline.StartAsync(processingContext);
 
                     } while (processingContext.UrlFilters.Count > 0);
 
-                    logger.LogTrace("Save new cached data");
+                    logger.LogTrace("Save new cached data: {key}", key);
 
                     processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
 
@@ -341,6 +341,8 @@ public class ImageWizardApi
             }
 
             interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, false));
+
+            logger.LogTrace("Sending cached data.");
 
             //send response stream
             Stream stream = await cachedData.OpenReadAsync();

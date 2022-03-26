@@ -14,7 +14,7 @@ namespace ImageWizard.Core.Locking;
 /// <summary>
 /// AsyncLock
 /// </summary>
-public class AsyncLock : IDisposable
+public class AsyncLock
 {
     public AsyncLock()
     {
@@ -47,27 +47,27 @@ public class AsyncLock : IDisposable
     /// <summary>
     /// CountRunningReaders
     /// </summary>
-    public int CountRunningReaders => _readersRunning;
+    internal int CountRunningReaders => _readersRunning;
 
     /// <summary>
     /// CountWaitingReaders
     /// </summary>
-    public int CountWaitingReaders => _waitingReaders.Count;
+    internal int CountWaitingReaders => _waitingReaders.Count;
 
     /// <summary>
     /// IsWriterRunning
     /// </summary>
-    public bool IsWriterRunning => _isWriterRunning;
+    internal bool IsWriterRunning => _isWriterRunning;
 
     /// <summary>
     /// CountWaitingWriters
     /// </summary>
-    public int CountWaitingWriters => _waitingWriters.Count;
+    internal int CountWaitingWriters => _waitingWriters.Count;
 
     /// <summary>
     /// Are there any waiting or running locks?
     /// </summary>
-    public bool IsIdle => CountRunningReaders == 0 && CountWaitingReaders == 0 && IsWriterRunning == false && CountWaitingWriters == 0;
+    internal bool IsIdle => CountRunningReaders == 0 && CountWaitingReaders == 0 && IsWriterRunning == false && CountWaitingWriters == 0;
 
     public Task<AsyncLockReleaser> ReaderLockAsync(CancellationToken cancellation = default)
     {
@@ -223,10 +223,5 @@ public class AsyncLock : IDisposable
         _isWriterRunning = false;
 
         return;
-    }
-
-    public void Dispose()
-    {
-
     }
 }

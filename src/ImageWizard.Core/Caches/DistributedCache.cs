@@ -29,12 +29,12 @@ public class DistributedCache : ICache
 
     private const string KeyPrefix = "ImageWizard";
 
-    private string GetBlobKey(string key)
+    private static string GetBlobKey(string key)
     {
         return $"{KeyPrefix}_{key}_blob";
     }
 
-    private string GetMetaKey(string key)
+    private static string GetMetaKey(string key)
     {
         return $"{KeyPrefix}_{key}_meta";
     }

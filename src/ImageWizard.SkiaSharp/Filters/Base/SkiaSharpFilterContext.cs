@@ -46,9 +46,20 @@ public class SkiaSharpFilterContext : FilterContext
     /// </summary>
     public IImageFormat ImageFormat { get; set; }
 
+    private bool _disposed;
+
     public override void Dispose()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         Image.Dispose();
+
+        _disposed = true;
+
+        GC.SuppressFinalize(this);
     }
 
     public override async Task<DataResult> BuildResultAsync()

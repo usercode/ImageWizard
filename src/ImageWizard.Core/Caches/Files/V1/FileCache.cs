@@ -17,7 +17,7 @@ namespace ImageWizard.Caches;
 /// </summary>
 public class FileCache : ICache
 {
-    protected static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
 
     public FileCache(IOptions<FileCacheSettings> settings, IWebHostEnvironment hostingEnvironment)
     {
@@ -60,14 +60,14 @@ public class FileCache : ICache
 
     public async Task<ICachedData?> ReadAsync(string key)
     {
-        var locations = GetFileCacheLocations(key);
+        var (metafile, blobfile) = GetFileCacheLocations(key);
 
-        if (locations.metafile.Exists == false || locations.blobfile.Exists == false)
+        if (metafile.Exists == false || blobfile.Exists == false)
         {
             return null;
         }
 
-        using Stream metadataStream = locations.metafile.OpenRead();
+        using Stream metadataStream = metafile.OpenRead();
 
         Metadata? metadata = await JsonSerializer.DeserializeAsync<Metadata>(metadataStream);
 
@@ -76,20 +76,20 @@ public class FileCache : ICache
             throw new ArgumentNullException(nameof(metadata));
         }
 
-        return new CachedData(metadata, () => Task.FromResult<Stream>(locations.blobfile.OpenRead()));
+        return new CachedData(metadata, () => Task.FromResult<Stream>(blobfile.OpenRead()));
     }
 
     public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
     {
-        var locations = GetFileCacheLocations(key);
+        var (metafile, blobfile) = GetFileCacheLocations(key);
 
-        if (locations.metafile.Directory != null)
+        if (metafile.Directory != null)
         {
             //create folder structure for meta and blob file
-            locations.metafile.Directory.Create();
+            metafile.Directory.Create();
         }
 
-        using Stream metadataStream = locations.metafile.OpenWrite();
+        using Stream metadataStream = metafile.OpenWrite();
 
         //delete existing data
         metadataStream.SetLength(0);
@@ -97,7 +97,7 @@ public class FileCache : ICache
         await JsonSerializer.SerializeAsync(metadataStream, metadata, JsonSerializerOptions);
 
         //write data
-        using Stream blobStream = locations.blobfile.OpenWrite();
+        using Stream blobStream = blobfile.OpenWrite();
 
         //delete existing data
         blobStream.SetLength(0);

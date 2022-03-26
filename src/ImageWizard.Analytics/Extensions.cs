@@ -13,7 +13,7 @@ namespace ImageWizard;
 
 public static class Extensions
 {
-    private static JsonSerializerOptions JsonOptions = new JsonSerializerOptions() { WriteIndented = true };
+    private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions() { WriteIndented = true };
 
     public static IImageWizardBuilder AddAnalytics(this IImageWizardBuilder builder)
     {

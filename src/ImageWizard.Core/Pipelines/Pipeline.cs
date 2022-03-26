@@ -71,7 +71,7 @@ public abstract class Pipeline<TFilterBase, TFilterContext> : IPipeline
             Type[] integerTypes = new Type[] { typeof(byte), typeof(short), typeof(int), typeof(long) };
             Type[] floatingNumberTypes = new Type[] { typeof(float), typeof(double), typeof(decimal) };
 
-            ParameterItem CreateParameter(ParameterInfo pi, string pattern)
+            static ParameterItem CreateParameter(ParameterInfo pi, string pattern)
             {
                 return new ParameterItem() { Name = pi.Name, Pattern = $@"(?<{pi.Name}>{pattern})" };
             }
@@ -186,13 +186,13 @@ public abstract class Pipeline<TFilterBase, TFilterContext> : IPipeline
 
             if (foundFilter != null)
             {
-                Logger.LogTrace("Filter executed: " + filter);
+                Logger.LogTrace("Filter executed: {filter}", filter);
 
                 filterContext.ProcessingContext.UrlFilters.Dequeue();
             }
             else
             {
-                Logger.LogTrace($"filter was not found: {filter}");
+                Logger.LogTrace("filter was not found: {filter}", filter);
 
                 throw new Exception($"Filter was not found: {filter}");
 

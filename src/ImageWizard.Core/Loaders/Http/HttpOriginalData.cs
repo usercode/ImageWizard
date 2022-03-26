@@ -28,10 +28,21 @@ public class HttpOriginalData : OriginalData
     /// </summary>
     private HttpResponseMessage Response { get; }
 
+    private bool _disposed;
+
     public override void Dispose()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         base.Dispose();
 
         Response.Dispose();
+
+        _disposed = true;
+
+        GC.SuppressFinalize(this);
     }
 }

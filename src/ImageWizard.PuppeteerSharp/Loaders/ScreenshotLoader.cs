@@ -40,7 +40,7 @@ public class ScreenshotLoader : Loader<PuppeteerOptions>
                                                                         Args = new[] { "--no-sandbox" }
                                                                     });
 
-        Logger.LogInformation($"Chrome version: {await browser.GetVersionAsync()}");
+        Logger.LogInformation("Chrome version: {version}", await browser.GetVersionAsync());
 
         await using Page page = await browser.NewPageAsync();
 

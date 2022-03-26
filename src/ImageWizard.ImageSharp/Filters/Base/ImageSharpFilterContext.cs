@@ -49,9 +49,20 @@ public class ImageSharpFilterContext : FilterContext
     /// </summary>
     public IOptions<ImageSharpOptions> Options { get; }
 
+    private bool _disposed;
+
     public override void Dispose()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         Image.Dispose();
+
+        _disposed = true;
+
+        GC.SuppressFinalize(this);
     }
 
     public override async Task<DataResult> BuildResultAsync()

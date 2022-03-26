@@ -17,12 +17,7 @@ namespace ImageWizard.Core.Locking;
 public class AsyncLock<TKey>
     where TKey : notnull
 {
-    public AsyncLock()
-    {
-        _locks = new Dictionary<TKey, AsyncLock>();
-    }
-
-    private readonly IDictionary<TKey, AsyncLock> _locks;
+    private readonly IDictionary<TKey, AsyncLock> _locks = new Dictionary<TKey, AsyncLock>();
 
     /// <summary>
     /// GetAsyncLock
