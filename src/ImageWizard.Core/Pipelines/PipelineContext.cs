@@ -79,8 +79,18 @@ public class PipelineContext : IDisposable
     /// </summary>
     public Queue<string> UrlFilters { get; }
 
+    private bool _disposed;
+
     public void Dispose()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         Result.Dispose();
+        _disposed = true;
+
+        GC.SuppressFinalize(this);
     }
 }

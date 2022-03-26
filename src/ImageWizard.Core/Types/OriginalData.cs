@@ -43,8 +43,18 @@ public class OriginalData : IDisposable
     /// </summary>
     public CacheSettings Cache { get; }
 
+    private bool disposed;
+
     public virtual void Dispose()
     {
+        if (disposed)
+        {
+            return;
+        }
+
         Data.Dispose();
+        disposed = true;
+
+        GC.SuppressFinalize(this);
     }
 }

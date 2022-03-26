@@ -31,8 +31,18 @@ public class DataResult : IDisposable
     /// </summary>
     public Stream Data { get; }
 
+    private bool _disposed;
+
     public virtual void Dispose()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         Data.Dispose();
+        _disposed = true;
+
+        GC.SuppressFinalize(this);
     }
 }
