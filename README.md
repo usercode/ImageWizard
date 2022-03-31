@@ -173,6 +173,11 @@ app.UseImageWizard(x =>
 		});
 ```
 
+## Internal services
+- ICacheKey (Create key for cached data)
+- ICacheHash (Create hash for cached data)
+- IUrlSignature (Create url signature for cached data)
+
 ## Create custom filter
 
 - add a public method which is marked with the filter attribute
