@@ -11,22 +11,17 @@ using System.Threading.Tasks;
 namespace ImageWizard.Core.Locking;
 
 /// <summary>
-/// AsyncLockState
+/// AsyncLockType
 /// </summary>
-public enum AsyncLockState
+public enum AsyncLockType
 {
     /// <summary>
-    /// There are currently no running locks.
+    /// Read
     /// </summary>
-    Idle = 0,
+    Read,
 
     /// <summary>
-    /// There are waiting or running readers.
+    /// Write
     /// </summary>
-    Reader = 1,
-
-    /// <summary>
-    /// There is a waiting or running writer.
-    /// </summary>
-    Writer = 2
+    Write
 }

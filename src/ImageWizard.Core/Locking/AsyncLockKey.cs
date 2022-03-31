@@ -31,9 +31,12 @@ public class AsyncLock<TKey>
             asyncLock = new AsyncLock(_locks);
             asyncLock.Released += x =>
             {
-                if (x.IsIdle)
+                lock (_locks)
                 {
-                    _locks.Remove(key);
+                    if (x.State == AsyncLockState.Idle)
+                    {
+                        _locks.Remove(key);
+                    }
                 }
             };
 

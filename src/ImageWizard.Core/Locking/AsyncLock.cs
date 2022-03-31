@@ -20,8 +20,8 @@ public class AsyncLock
     {
         _syncObj = _waitingWriters;
 
-        _readerReleaser = Task.FromResult(new AsyncLockReleaser(this, false));
-        _writerReleaser = Task.FromResult(new AsyncLockReleaser(this, true));
+        _readerReleaser = Task.FromResult(new AsyncLockReleaser(this, AsyncLockType.Read));
+        _writerReleaser = Task.FromResult(new AsyncLockReleaser(this, AsyncLockType.Write));
     }
 
     internal AsyncLock(object syncObject)
@@ -37,7 +37,7 @@ public class AsyncLock
 
     private readonly Queue<TaskCompletionSource<AsyncLockReleaser>> _waitingReaders = new Queue<TaskCompletionSource<AsyncLockReleaser>>();
     private readonly Queue<TaskCompletionSource<AsyncLockReleaser>> _waitingWriters = new Queue<TaskCompletionSource<AsyncLockReleaser>>();
-    
+
     private int _readersRunning;
 
     private bool _isWriterRunning = false;
@@ -65,9 +65,20 @@ public class AsyncLock
     internal int CountWaitingWriters => _waitingWriters.Count;
 
     /// <summary>
-    /// Are there any waiting or running locks?
+    /// State
     /// </summary>
-    internal bool IsIdle => CountRunningReaders == 0 && CountWaitingReaders == 0 && IsWriterRunning == false && CountWaitingWriters == 0;
+    public AsyncLockState State
+    {
+        get
+        {
+            if (IsWriterRunning)
+                return AsyncLockState.Writer;
+            else if (CountRunningReaders > 0)
+                return AsyncLockState.Reader;
+            else
+                return AsyncLockState.Idle;
+        }
+    }
 
     public Task<AsyncLockReleaser> ReaderLockAsync(CancellationToken cancellation = default)
     {
@@ -116,45 +127,65 @@ public class AsyncLock
         }
     }
 
-    internal Task<AsyncLockReleaser> UpgradeToWriterLockAsync(AsyncLockReleaser releaser)
+    internal Task<AsyncLockReleaser> SwitchToWriterLockAsync(AsyncLockReleaser releaser, CancellationToken cancellation = default)
     {
+        if (cancellation.IsCancellationRequested)
+        {
+            return Task.FromCanceled<AsyncLockReleaser>(cancellation);
+        }
+
         lock (_syncObj)
         {
-            if (releaser.Writer == true)
+            if (releaser.Type == AsyncLockType.Write)
             {
                 throw new Exception("There is already a writer lock.");
             }
 
-            Release(releaser.Writer, false);
+            var taskWriter = WriterLockAsync(cancellation);
 
-            return WriterLockAsync();
+            if (releaser.Type != null)
+            {
+                Release(releaser.Type.Value, sendReleasedEvent: false);
+            }
+
+            return taskWriter;
         }
     }
 
-    internal Task<AsyncLockReleaser> DowngradeToReaderLockAsync(AsyncLockReleaser releaser)
+    internal Task<AsyncLockReleaser> SwitchToReaderLockAsync(AsyncLockReleaser releaser, bool skipWaitingWriters = false, CancellationToken cancellation = default)
     {
+        if (cancellation.IsCancellationRequested)
+        {
+            return Task.FromCanceled<AsyncLockReleaser>(cancellation);
+        }
+
         lock (_syncObj)
         {
-            if (releaser.Writer == false)
+            if (releaser.Type == AsyncLockType.Read)
             {
                 throw new Exception("There is already a reader lock.");
             }
 
-            Release(releaser.Writer, false);
+            var taskReader = ReaderLockAsync(cancellation);
 
-            return ReaderLockAsync();
+            if (releaser.Type != null)
+            {
+                Release(releaser.Type.Value, skipWaitingWriters: skipWaitingWriters, sendReleasedEvent: false);
+            }
+
+            return taskReader;
         }
     }
 
-    internal void Release(bool writer, bool sendReleasedEvent = true)
+    internal void Release(AsyncLockType type, bool skipWaitingWriters = false, bool sendReleasedEvent = true)
     {
         lock (_syncObj)
         {
             try
             {
-                if (writer == true)
+                if (type == AsyncLockType.Write)
                 {
-                    WriterRelease();
+                    WriterRelease(skipWaitingWriters);
                 }
                 else
                 {
@@ -182,10 +213,15 @@ public class AsyncLock
         }
     }
 
-    private void WriterRelease()
+    private void WriterRelease(bool skipWaitingWriters)
     {
+        _isWriterRunning = false;
+
         //start next writer lock?
-        StartNextWaitingWriter();
+        if (skipWaitingWriters == false)
+        {
+            StartNextWaitingWriter();
+        }
 
         //no running writer lock?
         if (_isWriterRunning == false)
@@ -194,7 +230,7 @@ public class AsyncLock
             {
                 var taskSource = _waitingReaders.Dequeue();
 
-                bool result = taskSource.TrySetResult(new AsyncLockReleaser(this, false));
+                bool result = taskSource.TrySetResult(new AsyncLockReleaser(this, AsyncLockType.Read));
 
                 if (result)
                 {
@@ -210,7 +246,7 @@ public class AsyncLock
         {
             var taskSource = _waitingWriters.Dequeue();
 
-            bool result = taskSource.TrySetResult(new AsyncLockReleaser(this, true));
+            bool result = taskSource.TrySetResult(new AsyncLockReleaser(this, AsyncLockType.Write));
 
             if (result == true)
             {

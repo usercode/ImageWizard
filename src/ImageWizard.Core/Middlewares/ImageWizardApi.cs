@@ -148,36 +148,41 @@ public class ImageWizardApi
         //generate data key
         string key = cacheKey.Create(pathBuilder.ToString());
 
-        ICachedData? cachedData = null;
+        //reader lock
+        using AsyncLockContext lockState = await asyncLock.ReaderLockAsync(key);
+
+        //read cached data
+        ICachedData? cachedData = await cache.ReadAsync(key);
+
         bool createCachedData = true;
 
-        //reader lock
-        using (AsyncLockState lockState = await asyncLock.ReaderLockAsync(key))
+        //cached data found?
+        if (cachedData != null)
         {
-            //read cached data
-            cachedData = await cache.ReadAsync(key);
-
-            //cached data found?
-            if (cachedData != null)
+            createCachedData = loader.Options.Value.RefreshMode switch
             {
-                createCachedData = loader.Options.Value.RefreshMode switch
-                {
-                    LoaderRefreshMode.None => false,
-                    LoaderRefreshMode.EveryTime => true,
-                    LoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
-                                                                    || cachedData.Metadata.Cache.NoCache == true
-                                                                    || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
-                    _ => throw new Exception($"Unknown refresh mode: {loader.Options.Value.RefreshMode}")
-                };
-            }
+                LoaderRefreshMode.None => false,
+                LoaderRefreshMode.EveryTime => true,
+                LoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
+                                                                || cachedData.Metadata.Cache.NoCache == true
+                                                                || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
+                _ => throw new Exception($"Unknown refresh mode: {loader.Options.Value.RefreshMode}")
+            };
+        }
 
-            //create cached data
-            if (createCachedData == true)
+        //create cached data
+        if (createCachedData == true)
+        {
+            logger.LogTrace("Create cached data: {key}", key);
+
+            await lockState.SwitchToWriterLockAsync();
+
+            //read cached data again
+            ICachedData? cachedDataAfterWriteLock = await cache.ReadAsync(key);
+
+            //no new cached data after writer lock?
+            if (cachedData?.Metadata.Hash == cachedDataAfterWriteLock?.Metadata.Hash)
             {
-                logger.LogTrace("Create cached data: {key}", key);
-
-                await lockState.UpgradeToWriterLockAsync();
-                
                 //get original image
                 using OriginalData? originalData = await loader.GetAsync(url.LoaderSource, cachedData);
 
@@ -251,103 +256,103 @@ public class ImageWizardApi
                         interceptors.Foreach(x => x.OnCachedDataCreated(cachedData));
                     }
                 }
-
-                await lockState.DowngradeToReaderLockAsync();
             }
 
-            if (cachedData == null)
+            await lockState.SwitchToReaderLockAsync(true);
+        }
+
+        if (cachedData == null)
+        {
+            return Results.StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        EntityTagHeaderValue etag = new EntityTagHeaderValue($"\"{cachedData.Metadata.Hash}\"");
+
+        //send "304-NotModified" if etag is valid
+        if (options.Value.UseETag)
+        {
+            bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == etag.Tag);
+
+            if (isValid == true)
             {
-                return Results.StatusCode(StatusCodes.Status500InternalServerError);
+                logger.LogTrace("Operation completed: 304 Not modified");
+
+                interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, true));
+
+                return Results.StatusCode(StatusCodes.Status304NotModified);
             }
+        }
 
-            EntityTagHeaderValue etag = new EntityTagHeaderValue($"\"{cachedData.Metadata.Hash}\"");
+        ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
 
-            //send "304-NotModified" if etag is valid
-            if (options.Value.UseETag)
-            {
-                bool? isValid = context.Request.GetTypedHeaders().IfNoneMatch?.Any(x => x.Tag == etag.Tag);
+        //use accept header
+        if (options.Value.UseAcceptHeader)
+        {
+            responseHeaders.Append(HeaderNames.Vary, HeaderNames.Accept);
+        }
 
-                if (isValid == true)
-                {
-                    logger.LogTrace("Operation completed: 304 Not modified");
-
-                    interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, true));
-
-                    return Results.StatusCode(StatusCodes.Status304NotModified);
-                }
-            }
-
-            ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
-
-            //use accept header
-            if (options.Value.UseAcceptHeader)
-            {
-                responseHeaders.Append(HeaderNames.Vary, HeaderNames.Accept);
-            }
-
-            //use client hints
-            if (options.Value.UseClientHints)
-            {
-                responseHeaders.AppendList(
-                                            HeaderNames.Vary,
-                                            new[] {
+        //use client hints
+        if (options.Value.UseClientHints)
+        {
+            responseHeaders.AppendList(
+                                        HeaderNames.Vary,
+                                        new[] {
                                             ClientHints.DPRHeader,
                                             ClientHints.WidthHeader,
                                             ClientHints.ViewportWidthHeader
-                                            });
+                                        });
 
-                //is image?
-                if (cachedData.Metadata.Width != null)
+            //is image?
+            if (cachedData.Metadata.Width != null)
+            {
+                double? dpr = clientHints.DPR;
+
+                if (clientHints.DPR != null && clientHints.Width != null)
                 {
-                    double? dpr = clientHints.DPR;
+                    dpr = (double)cachedData.Metadata.Width.Value / clientHints.Width.Value / clientHints.DPR.Value;
+                }
 
-                    if (clientHints.DPR != null && clientHints.Width != null)
-                    {
-                        dpr = (double)cachedData.Metadata.Width.Value / clientHints.Width.Value / clientHints.DPR.Value;
-                    }
-
-                    if (dpr != null)
-                    {
-                        responseHeaders.Append("Content-DPR", dpr.Value.ToString(CultureInfo.InvariantCulture));
-                    }
+                if (dpr != null)
+                {
+                    responseHeaders.Append("Content-DPR", dpr.Value.ToString(CultureInfo.InvariantCulture));
                 }
             }
-
-            //set cache control header
-            if (options.Value.CacheControl.IsEnabled)
-            {
-                responseHeaders.CacheControl = new CacheControlHeaderValue()
-                {
-                    Public = options.Value.CacheControl.Public,
-                    MustRevalidate = options.Value.CacheControl.MustRevalidate,
-                    MaxAge = options.Value.CacheControl.MaxAge,
-                    NoCache = options.Value.CacheControl.NoCache,
-                    NoStore = options.Value.CacheControl.NoStore
-                };
-            }
-
-            //set ETag header
-            if (options.Value.UseETag)
-            {
-                responseHeaders.ETag = etag;
-            }
-
-            //is HEAD request?
-            bool isHeadRequst = HttpMethods.IsHead(context.Request.Method);
-
-            if (isHeadRequst == true)
-            {
-                return Results.Ok();
-            }
-
-            interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, false));
-
-            logger.LogTrace("Sending cached data.");
-
-            //send response stream
-            Stream stream = await cachedData.OpenReadAsync();
-
-            return Results.File(stream, cachedData.Metadata.MimeType, enableRangeProcessing: true);
         }
+
+        //set cache control header
+        if (options.Value.CacheControl.IsEnabled)
+        {
+            responseHeaders.CacheControl = new CacheControlHeaderValue()
+            {
+                Public = options.Value.CacheControl.Public,
+                MustRevalidate = options.Value.CacheControl.MustRevalidate,
+                MaxAge = options.Value.CacheControl.MaxAge,
+                NoCache = options.Value.CacheControl.NoCache,
+                NoStore = options.Value.CacheControl.NoStore
+            };
+        }
+
+        //set ETag header
+        if (options.Value.UseETag)
+        {
+            responseHeaders.ETag = etag;
+        }
+
+        //is HEAD request?
+        bool isHeadRequst = HttpMethods.IsHead(context.Request.Method);
+
+        if (isHeadRequst == true)
+        {
+            return Results.Ok();
+        }
+
+        interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, false));
+
+        logger.LogTrace("Sending cached data.");
+
+        //send response stream
+        Stream stream = await cachedData.OpenReadAsync();
+
+        return Results.File(stream, cachedData.Metadata.MimeType, enableRangeProcessing: true);
     }
 }
