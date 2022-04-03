@@ -45,7 +45,7 @@ public class ImageWizardApi
                                             ICache cache,
                                             ICacheKey cacheKey,
                                             ICacheHash cacheHash,
-                                            IEnumerable<IImageWizardInterceptor> interceptors,
+                                            InterceptorInvoker interceptor,
                                             ImageWizardBuilder builder,
                                             string signature,
                                             string path)
@@ -68,7 +68,7 @@ public class ImageWizardApi
             {
                 logger.LogTrace("Unsafe request");
 
-                interceptors.Foreach(x => x.OnUnsafeSignature());
+                interceptor.OnUnsafeSignature();
             }
             else
             {
@@ -84,11 +84,11 @@ public class ImageWizardApi
             {
                 logger.LogTrace("Signature is valid");
 
-                interceptors.Foreach(x => x.OnValidSignature());
+                interceptor.OnValidSignature();
             }
             else
             {
-                interceptors.Foreach(x => x.OnInvalidSignature());
+                interceptor.OnInvalidSignature();
 
                 return Results.Problem(detail: "Signature is not valid!", statusCode: StatusCodes.Status403Forbidden);
             }
@@ -148,7 +148,7 @@ public class ImageWizardApi
         //generate data key
         string key = cacheKey.Create(pathBuilder.ToString());
 
-        //reader lock
+        //create reader lock
         using AsyncLockContext lockState = await asyncLock.ReaderLockAsync(key);
 
         //read cached data
@@ -180,7 +180,7 @@ public class ImageWizardApi
             //read cached data again
             ICachedData? cachedDataAfterWriteLock = await cache.ReadAsync(key);
 
-            //no new cached data after writer lock?
+            //cached data hasn't changed after writer lock?
             if (cachedData?.Metadata.Hash == cachedDataAfterWriteLock?.Metadata.Hash)
             {
                 //get original image
@@ -222,11 +222,14 @@ public class ImageWizardApi
                     //create hash of cached image
                     string hash = await cacheHash.CreateAsync(processingContext.Result.Data);
 
+                    DateTime now = DateTime.UtcNow;
+
                     //create metadata
                     Metadata metadata = new Metadata()
                     {
                         Cache = originalData.Cache,
-                        Created = DateTime.UtcNow,
+                        Created = now,
+                        LastAccess = now,
                         Key = key,
                         Hash = hash,
                         Filters = url.Filters,
@@ -253,7 +256,7 @@ public class ImageWizardApi
 
                     if (cachedData != null)
                     {
-                        interceptors.Foreach(x => x.OnCachedDataCreated(cachedData));
+                        interceptor.OnCachedDataCreated(cachedData);
                     }
                 }
             }
@@ -264,6 +267,26 @@ public class ImageWizardApi
         if (cachedData == null)
         {
             return Results.StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        //refresh last-access time
+        if (options.Value.RefreshLastAccessInterval != null)
+        {
+            if (cache is ILastAccessCache lastAccessCache)
+            {
+                if (cachedData.Metadata.LastAccess.Add(options.Value.RefreshLastAccessInterval.Value) < DateTime.UtcNow)
+                {
+                    await lockState.SwitchToWriterLockAsync();
+
+                    await lastAccessCache.SetLastAccessAsync(key, DateTime.UtcNow);
+
+                    await lockState.SwitchToReaderLockAsync();
+                }
+            }
+            else
+            {
+                logger.LogWarning("Cache doesn't support last-access refresh.");
+            }
         }
 
         EntityTagHeaderValue etag = new EntityTagHeaderValue($"\"{cachedData.Metadata.Hash}\"");
@@ -277,7 +300,7 @@ public class ImageWizardApi
             {
                 logger.LogTrace("Operation completed: 304 Not modified");
 
-                interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, true));
+                interceptor.OnCachedDataSending(context.Response, cachedData, true);
 
                 return Results.StatusCode(StatusCodes.Status304NotModified);
             }
@@ -346,7 +369,7 @@ public class ImageWizardApi
             return Results.Ok();
         }
 
-        interceptors.Foreach(x => x.OnCachedDataSending(context.Response, cachedData, false));
+        interceptor.OnCachedDataSending(context.Response, cachedData, false);
 
         logger.LogTrace("Sending cached data.");
 

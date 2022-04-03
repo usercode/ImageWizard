@@ -2,11 +2,10 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Cleanup;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ImageWizard.Caches;
@@ -27,7 +26,7 @@ class OneTimeCache : ICache
 
     public async Task<ICachedData?> ReadAsync(string key)
     {
-        if (_key == null)
+        if (_key == null || _metadata == null)
         {
             return null;
         }

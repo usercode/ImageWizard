@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ImageWizard.Core;
+namespace ImageWizard;
 
 public static class LinqExtenions
 {

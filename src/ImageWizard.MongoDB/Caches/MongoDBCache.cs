@@ -13,37 +13,44 @@ using MongoDB.Driver.GridFS;
 using ImageWizard.MongoDB.Models;
 using System.IO;
 using ImageWizard.Caches;
+using System.Collections.Generic;
+using ImageWizard.Cleanup;
+using System.Threading;
 
 namespace ImageWizard.MongoDB;
 
 /// <summary>
 /// MongoDBCache
 /// </summary>
-public class MongoDBCache : ICache
+public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
 {
     public MongoDBCache(IOptions<MongoDBCacheOptions> settings)
     {
-        var mongoSetttings = new Mongo.MongoClientSettings() { Server = new Mongo.MongoServerAddress(settings.Value.Hostname) };
-        
-        if(settings.Value.Username != null)
+        var mongoSetttings = new MongoClientSettings() { Server = new MongoServerAddress(settings.Value.Hostname) };
+
+        if (string.IsNullOrEmpty(settings.Value.Username) == false)
         {
-            mongoSetttings.Credential = MongoCredential.CreateCredential(settings.Value.Database, settings.Value.Username, settings.Value.Password);
+            mongoSetttings.Credential = MongoCredential.CreateCredential("admin", settings.Value.Username, settings.Value.Password);
         }
 
-        Client = new Mongo.MongoClient(mongoSetttings);
+        Client = new MongoClient(mongoSetttings);
 
         Database = Client.GetDatabase(settings.Value.Database);
 
-        ImageMetadatas = Database.GetCollection<ImageMetadataModel>("ImageMetadata");
-        ImageBuffer = new GridFSBucket(Database, new GridFSBucketOptions() { BucketName = "ImageBuffer" });
+        Metadata = Database.GetCollection<MetadataModel>("Metadata");
+        Blob = new GridFSBucket(Database, new GridFSBucketOptions() { BucketName = "Data" });
 
         //create index
-        ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Key)));
-        ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Created)));
-        ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.MimeType)));
-        ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.DPR)));
-        ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Width)));
-        ImageMetadatas.Indexes.CreateOne(new CreateIndexModel<ImageMetadataModel>(new IndexKeysDefinitionBuilder<ImageMetadataModel>().Ascending(x => x.Height)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.Key)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.Hash)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.Created)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.LastAccess)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.MimeType)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.LoaderType)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.LoaderSource)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.FileLength)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.Width)));
+        Metadata.Indexes.CreateOne(new CreateIndexModel<MetadataModel>(Builders<MetadataModel>.IndexKeys.Ascending(x => x.Height)));
 
     }
 
@@ -58,36 +65,83 @@ public class MongoDBCache : ICache
     public IMongoDatabase Database { get; }
 
     /// <summary>
-    /// ImageMetadatas
+    /// Metadata
     /// </summary>
-    public IMongoCollection<ImageMetadataModel> ImageMetadatas { get; set; }
+    public IMongoCollection<MetadataModel> Metadata { get; set; }
 
     /// <summary>
-    /// ImageDatas
+    /// Blob
     /// </summary>
-    public IGridFSBucket ImageBuffer { get; }
+    public IGridFSBucket Blob { get; }
 
-    public async Task<ICachedData> ReadAsync(string key)
+    public async Task CleanupAsync(IEnumerable<CleanupReason> reasons, CancellationToken cancellationToken = default)
     {
-        ImageMetadataModel foundMetadata = await ImageMetadatas
+        foreach (CleanupReason reason in reasons)
+        {
+            while (true)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                var items = await Metadata.AsQueryable()
+                                                        .Where(reason.GetExpression<MetadataModel>())
+                                                        .Take(100)
+                                                        .ToListAsync();
+
+                if (items.Count == 0)
+                {
+                    break;
+                }
+
+                foreach (MetadataModel item in items)
+                {
+                    //delete meta
+                    await Metadata.DeleteOneAsync(Builders<MetadataModel>.Filter.Eq(x => x.Key, item.Key));
+
+                    //delete blob
+                    var blobCursor = await Blob.FindAsync(Builders<GridFSFileInfo>.Filter.Eq(x => x.Filename, item.Key));
+
+                    GridFSFileInfo blob = await blobCursor.FirstAsync();
+
+                    await Blob.DeleteAsync(blob.Id);
+                }
+
+                await Task.Delay(TimeSpan.FromMilliseconds(80));
+            }           
+        }
+    }
+
+    public async Task<ICachedData?> ReadAsync(string key)
+    {
+        MetadataModel foundMetadata = await Metadata
                                                         .AsQueryable()
                                                         .FirstOrDefaultAsync(x => x.Key == key);
 
-        if(foundMetadata == null)
+        if (foundMetadata == null)
         {
             return null;
         }
 
-        CachedData cachedImage = new CachedData(foundMetadata, async () => await ImageBuffer.OpenDownloadStreamByNameAsync(key));
+        CachedData cachedImage = new CachedData(foundMetadata, async () => await Blob.OpenDownloadStreamByNameAsync(key));
 
         return cachedImage;
     }
 
+    public async Task SetLastAccessAsync(string key, DateTime dateTime)
+    {
+        await Metadata.UpdateOneAsync(
+                                Builders<MetadataModel>.Filter.Eq(x => x.Key, key),
+                                Builders<MetadataModel>.Update.Set(x => x.LastAccess, dateTime));
+    }
+
     public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
     {
-        ImageMetadataModel model = new ImageMetadataModel()
+        MetadataModel model = new MetadataModel()
         {
             Created = metadata.Created,
+            LastAccess = metadata.LastAccess,
             Cache = metadata.Cache,
             Hash = metadata.Hash,
             Key = metadata.Key,
@@ -100,10 +154,10 @@ public class MongoDBCache : ICache
             FileLength = metadata.FileLength
         };
 
-        //upload image metadata
-        await ImageMetadatas.ReplaceOneAsync(Builders<ImageMetadataModel>.Filter.Where(x => x.Key == key), model, new ReplaceOptions() { IsUpsert = true });
+        //upload metadata
+        await Metadata.ReplaceOneAsync(Builders<MetadataModel>.Filter.Eq(x => x.Key, key), model, new ReplaceOptions() { IsUpsert = true });
 
-        //upload transformed image
-        await ImageBuffer.UploadFromStreamAsync(key, stream);
+        //upload cached data
+        await Blob.UploadFromStreamAsync(key, stream);
     }
 }

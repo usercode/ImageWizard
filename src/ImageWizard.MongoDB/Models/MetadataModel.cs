@@ -11,9 +11,9 @@ using System.Text;
 namespace ImageWizard.MongoDB.Models;
 
 [BsonIgnoreExtraElements]
-public class ImageMetadataModel : IMetadata
+public class MetadataModel : IMetadata
 {
-    public ImageMetadataModel()
+    public MetadataModel()
     {
         Id = ObjectId.GenerateNewId();
         Cache = new CacheSettings();
@@ -21,12 +21,12 @@ public class ImageMetadataModel : IMetadata
 
     public ObjectId Id { get; set; }
     public DateTime Created { get; set; }
+    public DateTime LastAccess { get; set; }
     public string Key { get; set; }
     public string Hash { get; set; }
     public string MimeType { get; set; }
     public int? Width { get; set; }
     public int? Height { get; set; }
-    public double? DPR { get; set; }
     public long FileLength { get; set; }
     public CacheSettings Cache { get; set; }
     public IEnumerable<string> Filters { get; set; }

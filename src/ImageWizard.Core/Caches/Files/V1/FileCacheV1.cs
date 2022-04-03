@@ -8,26 +8,21 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ImageWizard.Caches;
 
 /// <summary>
-/// FileCache with data deduplication
+/// FileCacheV1
 /// </summary>
-public class FileCacheV2 : FileCacheBase<FileCacheV2Options>
+public class FileCacheV1 : FileCacheBase<FileCacheOptionsBase>
 {
-    public FileCacheV2(IOptions<FileCacheV2Options> options, IWebHostEnvironment hostingEnvironment)
+    public FileCacheV1(IOptions<FileCacheV1Options> options, IWebHostEnvironment hostingEnvironment)
         : base(options, hostingEnvironment)
     {
+
     }
 
-    protected override DirectoryInfo GetMetaFolder() => new DirectoryInfo(Path.Join(Folder.FullName, FileType.Meta.ToTypeString()));
-
-    protected override string GetBlobField(IMetadata metadata) => metadata.Hash;
+    protected override string GetBlobField(IMetadata metadata) => metadata.Key;
 
     protected override FileInfo GetFile(FileType type, string key)
     {
@@ -41,7 +36,7 @@ public class FileCacheV2 : FileCacheBase<FileCacheV2Options>
 
         ReadOnlySpan<char> filename = key.AsSpan(8);
 
-        string file = Path.Join(Folder.FullName, typeString, folders, $"{filename}.{typeString}");
+        string file = Path.Join(Folder.FullName, folders, $"{filename}.{typeString}");
 
         return new FileInfo(file);
     }

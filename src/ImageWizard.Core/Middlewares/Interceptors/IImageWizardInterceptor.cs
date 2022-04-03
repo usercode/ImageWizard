@@ -15,6 +15,8 @@ public interface IImageWizardInterceptor
 
     void OnCachedDataCreated(ICachedData cachedData);
 
+    void OnCachedDataDeleted(ICachedData cachedData);
+
     void OnUnsafeSignature();
 
     void OnValidSignature();

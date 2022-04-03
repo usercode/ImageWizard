@@ -17,17 +17,24 @@ public class Metadata : IMetadata
     public Metadata()
     {
         Key = string.Empty;
-        Hash = string.Empty;
-        Cache = new CacheSettings();
+        Hash = string.Empty;        
         Filters = Array.Empty<string>();
-
+        LoaderType = string.Empty;
+        LoaderSource = string.Empty;
         MimeType = MimeTypes.Object;
+
+        Cache = new CacheSettings();
     }
 
     /// <summary>
     /// CreatedAt
     /// </summary>
     public DateTime Created { get; set; }
+
+    /// <summary>
+    /// LastAccess
+    /// </summary>
+    public DateTime LastAccess { get; set; }
 
     /// <summary>
     /// Signature
@@ -72,10 +79,10 @@ public class Metadata : IMetadata
     /// <summary>
     /// LoaderType
     /// </summary>
-    public string? LoaderType { get; set; }
+    public string LoaderType { get; set; }
 
     /// <summary>
     /// LoaderSource
     /// </summary>
-    public string? LoaderSource { get; set; }
+    public string LoaderSource { get; set; }
 }

@@ -10,17 +10,8 @@ using System.Text;
 namespace ImageWizard.Caches;
 
 /// <summary>
-/// FileCacheSettings
+/// FileCacheV1Options
 /// </summary>
-public class FileCacheSettings
+public class FileCacheV1Options : FileCacheOptionsBase
 {
-    public FileCacheSettings()
-    {
-        Folder = "FileCache";
-    }
-
-    /// <summary>
-    /// RootFolder
-    /// </summary>
-    public string Folder { get; set; }
 }

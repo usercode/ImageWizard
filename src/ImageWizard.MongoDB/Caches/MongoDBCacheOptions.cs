@@ -17,6 +17,8 @@ public class MongoDBCacheOptions
     {
         Hostname = "localhost";
         Database = "ImageWizard";
+        Username = string.Empty;
+        Password = string.Empty;
     }
 
     /// <summary>

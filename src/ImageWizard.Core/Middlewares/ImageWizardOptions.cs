@@ -22,6 +22,8 @@ public class ImageWizardOptions : ImageWizardBaseOptions
         UseClientHints = false;
         AllowUnsafeUrl = false;
         UseAcceptHeader = false;
+        RefreshLastAccessInterval = TimeSpan.FromDays(1);
+
         Key = string.Empty;
 
         AllowedDPR = ImageWizardDefaults.AllowedDPR;
@@ -45,9 +47,14 @@ public class ImageWizardOptions : ImageWizardBaseOptions
     public bool UseAcceptHeader { get; set; }
 
     /// <summary>
-    /// Use ETag. (Default: true)
+    /// Uses ETag. (Default: true)
     /// </summary>
     public bool UseETag { get; set; }
+
+    /// <summary>
+    /// Duration when the last-access time (metadata) should be refreshed.
+    /// </summary>
+    public TimeSpan? RefreshLastAccessInterval { get; set; }
 
     /// <summary>
     /// Use client hints. (Default: false)

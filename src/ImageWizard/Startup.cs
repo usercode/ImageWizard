@@ -42,7 +42,7 @@ public class Startup
     {
         services.Configure<ImageWizardOptions>(Configuration.GetSection("General"));
         services.Configure<HttpLoaderOptions>(Configuration.GetSection("HttpLoader"));
-        services.Configure<FileCacheV2Settings>(Configuration.GetSection("FileCache"));
+        services.Configure<FileCacheV2Options>(Configuration.GetSection("FileCache"));
         services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
         services.Configure<AzureBlobOptions>(Configuration.GetSection("Azure"));
         services.Configure<ImageWizardAppOptions>(Configuration.GetSection("App"));
@@ -88,6 +88,7 @@ public class Startup
         {
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
         });
+        services.AddHttpsRedirection(x => x.HttpsPort = 443);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

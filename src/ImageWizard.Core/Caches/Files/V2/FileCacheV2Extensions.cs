@@ -33,7 +33,7 @@ public static class FileCacheV2Extensions
     /// <param name="wizardBuilder"></param>
     /// <param name="fileCacheSettingsSetup"></param>
     /// <returns></returns>
-    public static IImageWizardBuilder SetFileCacheV2(this IImageWizardBuilder wizardBuilder, Action<FileCacheV2Settings> fileCacheSettingsSetup)
+    public static IImageWizardBuilder SetFileCacheV2(this IImageWizardBuilder wizardBuilder, Action<FileCacheV2Options> fileCacheSettingsSetup)
     {
         wizardBuilder.Services.Configure(fileCacheSettingsSetup);
 

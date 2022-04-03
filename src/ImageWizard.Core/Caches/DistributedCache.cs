@@ -2,12 +2,14 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Cleanup;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ImageWizard.Caches;
@@ -52,7 +54,7 @@ public class DistributedCache : ICache
 
         if (metadata == null)
         {
-            throw new Exception("Metadata is not available.");
+            return null;
         }
 
         return new CachedData(metadata, async () =>

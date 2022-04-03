@@ -22,24 +22,17 @@ public class HMACSHA256UrlSignature : IUrlSignature
     public HMACSHA256UrlSignature()
     {
         IncludeHost = false;
-        IsCaseInsensitive = false;
     }
 
-    public HMACSHA256UrlSignature(bool includeHost, bool isCaseInsensitive)
+    public HMACSHA256UrlSignature(bool includeHost)
     {
         IncludeHost = includeHost;
-        IsCaseInsensitive = isCaseInsensitive;
     }
 
     /// <summary>
     /// Signature depend on remote hostname? (Default: false)
     /// </summary>
     public virtual bool IncludeHost { get; }
-
-    /// <summary>
-    /// Use CaseSensitive url (Default: false)
-    /// </summary>
-    public virtual bool IsCaseInsensitive { get; }
 
     /// <summary>
     /// Selects part of the url.
@@ -78,11 +71,6 @@ public class HMACSHA256UrlSignature : IUrlSignature
         else
         {
             data = GetUrlValue(request.Url);
-        }
-
-        if (IsCaseInsensitive == true)
-        {
-            data = data.ToLowerInvariant();
         }
 
         byte[] inputBuffer = Encoding.UTF8.GetBytes(data);

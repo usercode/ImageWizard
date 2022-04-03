@@ -2,35 +2,23 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ImageWizard.Analytics;
-using ImageWizard.Azure;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.WebUtilities;
 using ImageWizard.ImageSharp.Filters;
-using ImageWizard.AWS;
-using ImageWizard.SkiaSharp;
-using Microsoft.Extensions.Options;
-using ImageWizard.FFMpegCore;
-using System.Text;
-using ImageWizard.DocNET;
 using Microsoft.AspNetCore.HttpOverrides;
 using ImageWizard.Client;
 using ImageWizard.OpenCvSharp;
-using ImageWizard.Caches;
 using SixLabors.ImageSharp.Processing;
-using ImageWizard.Core.Processing.Builder;
-using ImageWizard.ImageSharp;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using ImageWizard.Loaders;
+using ImageWizard.Cleanup;
+using System;
+using ImageWizard.MongoDB;
 
 namespace ImageWizard.TestApp;
 
@@ -60,6 +48,7 @@ public class Startup
             x.UseClientHints = false;
             x.UseETag = true;
             x.Key = key;
+            x.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
         })
             .AddImageSharp(c => c
                 .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
@@ -93,8 +82,6 @@ public class Startup
             //                })
             //    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>())
             .AddSvgNet()
-            //.SetFileCache()
-            //.SetMongoDBCache()
             .AddHttpLoader(x =>
             {
                 x.RefreshMode = LoaderRefreshMode.None;
@@ -124,10 +111,18 @@ public class Startup
                 x.SecretAccessKey = "";
                 x.BucketName = "MyBucket";
             })
+            .SetMongoDBCache()
             //.SetDistributedCache()
-            .SetFileCache()
-            .SetFileCacheV2();
-            ;
+            //.SetFileCacheV1()
+            .SetFileCacheV2()
+            .AddCleanupService(x =>
+                                    {
+                                        x.Interval = TimeSpan.FromMinutes(1);
+
+                                        x.Created(TimeSpan.FromMinutes(2));
+                                        x.LastAccess(TimeSpan.FromMinutes(2));
+                                    })
+        ;
 
         services.AddImageWizardClient(x =>
         {

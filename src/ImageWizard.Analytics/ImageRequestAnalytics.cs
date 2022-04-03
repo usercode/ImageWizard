@@ -96,4 +96,12 @@ class ImageRequestAnalytics : IImageWizardInterceptor
             x.InvalidSignature++;
         });
     }
+
+    public void OnCachedDataDeleted(ICachedData cachedData)
+    {
+        SetData(cachedData.Metadata.MimeType, x =>
+        {
+            x.CachedDataDeleted++;
+        });
+    }
 }
