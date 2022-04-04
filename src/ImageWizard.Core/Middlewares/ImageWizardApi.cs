@@ -249,7 +249,7 @@ public class ImageWizardApi
                     processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
 
                     //write cached data
-                    await cache.WriteAsync(key, metadata, processingContext.Result.Data);
+                    await cache.WriteAsync(metadata, processingContext.Result.Data);
 
                     //read cached data
                     cachedData = await cache.ReadAsync(key);

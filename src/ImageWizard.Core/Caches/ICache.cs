@@ -29,5 +29,5 @@ public interface ICache
     /// <param name="metadata"></param>
     /// <param name="stream"></param>
     /// <returns></returns>
-    Task WriteAsync(string key, IMetadata metadata, Stream stream);
+    Task WriteAsync(IMetadata metadata, Stream stream);
 }

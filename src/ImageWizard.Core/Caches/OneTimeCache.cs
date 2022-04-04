@@ -20,18 +20,17 @@ class OneTimeCache : ICache
         _data = Array.Empty<byte>();
     }
 
-    private string? _key;
     private IMetadata? _metadata;
     private byte[] _data;
 
     public async Task<ICachedData?> ReadAsync(string key)
     {
-        if (_key == null || _metadata == null)
+        if (_metadata == null)
         {
             return null;
         }
 
-        if (_key != key)
+        if (_metadata.Key != key)
         {
             throw new Exception("Internal cache error.");
         }
@@ -39,9 +38,8 @@ class OneTimeCache : ICache
         return new CachedData(_metadata, () => Task.FromResult<Stream>(new MemoryStream(_data)));
     }
 
-    public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
+    public async Task WriteAsync(IMetadata metadata, Stream stream)
     {
-        _key = key;
         _metadata = metadata;
 
         MemoryStream mem = new MemoryStream();

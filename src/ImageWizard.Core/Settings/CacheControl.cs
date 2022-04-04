@@ -8,6 +8,9 @@ using System.Text;
 
 namespace ImageWizard;
 
+/// <summary>
+/// CacheControl
+/// </summary>
 public class CacheControl
 {
     public CacheControl()
@@ -36,7 +39,7 @@ public class CacheControl
     public TimeSpan? MaxAge { get; set; }
 
     /// <summary>
-    /// CacheControlMustRevalidate
+    /// MustRevalidate
     /// </summary>
     public bool MustRevalidate { get; set; }
 

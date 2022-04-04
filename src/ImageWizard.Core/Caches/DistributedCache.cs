@@ -65,16 +65,16 @@ public class DistributedCache : ICache
         });
     }
 
-    public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
+    public async Task WriteAsync(IMetadata metadata, Stream stream)
     {
         byte[] json = JsonSerializer.SerializeToUtf8Bytes(metadata);
 
-        await Cache.SetAsync(GetMetaKey(key), json);
+        await Cache.SetAsync(GetMetaKey(metadata.Key), json);
 
         using MemoryStream mem = new MemoryStream();
 
         await stream.CopyToAsync(mem);
 
-        await Cache.SetAsync(GetBlobKey(key), mem.ToArray());
+        await Cache.SetAsync(GetBlobKey(metadata.Key), mem.ToArray());
     }
 }

@@ -7,7 +7,6 @@ using MongoDB.Driver;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
-using Mongo=MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver.GridFS;
 using ImageWizard.MongoDB.Models;
@@ -136,7 +135,7 @@ public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
                                 Builders<MetadataModel>.Update.Set(x => x.LastAccess, dateTime));
     }
 
-    public async Task WriteAsync(string key, IMetadata metadata, Stream stream)
+    public async Task WriteAsync(IMetadata metadata, Stream stream)
     {
         MetadataModel model = new MetadataModel()
         {
@@ -155,9 +154,9 @@ public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
         };
 
         //upload metadata
-        await Metadata.ReplaceOneAsync(Builders<MetadataModel>.Filter.Eq(x => x.Key, key), model, new ReplaceOptions() { IsUpsert = true });
+        await Metadata.ReplaceOneAsync(Builders<MetadataModel>.Filter.Eq(x => x.Key, metadata.Key), model, new ReplaceOptions() { IsUpsert = true });
 
         //upload cached data
-        await Blob.UploadFromStreamAsync(key, stream);
+        await Blob.UploadFromStreamAsync(metadata.Key, stream);
     }
 }

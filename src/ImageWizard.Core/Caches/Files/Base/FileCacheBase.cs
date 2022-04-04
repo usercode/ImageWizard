@@ -72,7 +72,7 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
         return new CachedData(metadata, () => Task.FromResult<Stream>(blobFile.OpenRead()));
     }
 
-    public virtual async Task WriteAsync(string key, IMetadata metadata, Stream stream)
+    public virtual async Task WriteAsync(IMetadata metadata, Stream stream)
     {
         await WriteMetadataAsync(metadata);
 
