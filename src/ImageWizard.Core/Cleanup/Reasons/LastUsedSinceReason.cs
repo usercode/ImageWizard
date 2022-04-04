@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Cleanup;
 
-public class LastAccess : CleanupReason
+public class LastUsedSinceReason : CleanupReason
 {
-    public LastAccess(TimeSpan duration)
+    public LastUsedSinceReason(TimeSpan duration)
     {
         Duration = duration;
     }

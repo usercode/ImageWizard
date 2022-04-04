@@ -114,13 +114,13 @@ public class Startup
             .SetMongoDBCache()
             //.SetDistributedCache()
             //.SetFileCacheV1()
-            .SetFileCacheV2()
+            //.SetFileCacheV2()
             .AddCleanupService(x =>
                                     {
                                         x.Interval = TimeSpan.FromMinutes(1);
 
-                                        x.Created(TimeSpan.FromMinutes(2));
-                                        x.LastAccess(TimeSpan.FromMinutes(2));
+                                        x.OlderThan(TimeSpan.FromMinutes(2));
+                                        x.LastUsedSince(TimeSpan.FromMinutes(2));
                                     })
         ;
 

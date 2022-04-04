@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Cleanup;
 
-public class Created : CleanupReason
+public class OlderThanReason : CleanupReason
 {
-    public Created(TimeSpan duration)
+    public OlderThanReason(TimeSpan duration)
     {
         Duration = duration;
     }

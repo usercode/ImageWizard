@@ -71,7 +71,7 @@ public class CleanupBackgroundService : BackgroundService
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex.Message);
+                Logger.LogError(ex, "Cleanup job is failed");
             }
             finally
             {
