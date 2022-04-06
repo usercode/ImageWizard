@@ -115,12 +115,22 @@ public class Startup
             //.SetDistributedCache()
             //.SetFileCacheV1()
             //.SetFileCacheV2()
+
+            //Adds a background service which removes cached data based on defined CleanupReason.
+            //The cache needs to implements <see cref="ICleanupCache"/>.
             .AddCleanupService(x =>
                                     {
+                                        //Duration between the cleanup actions. (Default: 1 day)
                                         x.Interval = TimeSpan.FromMinutes(1);
 
+                                        //Removes cached data which are older than defined duration. (see IMetadata.Created)
                                         x.OlderThan(TimeSpan.FromMinutes(2));
+
+                                        //Removes cached data which are last used since defined duration. (see IMetadata.LastAccess)
                                         x.LastUsedSince(TimeSpan.FromMinutes(2));
+
+                                        //Removes cached data which are expired (based on the loader result).
+                                        x.Expired();
                                     })
         ;
 

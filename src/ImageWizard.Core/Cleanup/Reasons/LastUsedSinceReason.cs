@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace ImageWizard.Cleanup;
 
+/// <summary>
+/// Removes cached data which are last used since defined duration.
+/// </summary>
 public class LastUsedSinceReason : CleanupReason
 {
     public LastUsedSinceReason(TimeSpan duration)

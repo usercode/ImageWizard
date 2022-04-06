@@ -12,24 +12,16 @@ using System.Threading.Tasks;
 namespace ImageWizard.Cleanup;
 
 /// <summary>
-/// Removes cached data which are older than defined duration.
+/// Removes cached data which are expired.
 /// </summary>
-public class OlderThanReason : CleanupReason
+public class ExpiredReason : CleanupReason
 {
-    public OlderThanReason(TimeSpan duration)
+    public ExpiredReason()
     {
-        Duration = duration;
     }
-
-    /// <summary>
-    /// Duration
-    /// </summary>
-    public TimeSpan Duration { get; }
-
-    private DateTime MinDate => DateTime.UtcNow - Duration;
 
     public override Expression<Func<T, bool>> GetExpression<T>()
     {
-        return x => x.Created < MinDate;
+        return x => x.Cache.Expires < DateTime.UtcNow;
     }
 }
