@@ -62,26 +62,30 @@ public class HMACSHA256UrlSignature : IUrlSignature
     public string Encrypt(byte[] key, ImageWizardRequest request)
     {
         //build data string
-        string data;
+        string input;
 
         if (IncludeHost == true)
         {
-            data = $"{GetHostValue(request.Host)}/{GetUrlValue(request.Url)}";
+            input = $"{GetHostValue(request.Host)}/{GetUrlValue(request.Url)}";
         }
         else
         {
-            data = GetUrlValue(request.Url);
+            input = GetUrlValue(request.Url);
         }
 
-        byte[] inputBuffer = Encoding.UTF8.GetBytes(data);
+        int inputLength = Encoding.UTF8.GetByteCount(input);
+
+        Span<byte> inputBuffer = inputLength <= 128 ? stackalloc byte[inputLength] : new byte[inputLength];
+
+        Encoding.UTF8.GetBytes(input, inputBuffer);
 
         //HMACSHA256 => 256 / 8 = 32
-        Span<byte> hashBufferSpan = stackalloc byte[32];
+        Span<byte> hashBuffer = stackalloc byte[32];
 
         //create hash
-        HMACSHA256.HashData(key, inputBuffer, hashBufferSpan);
+        HMACSHA256.HashData(key, inputBuffer, hashBuffer);
 
         //convert to Base64Url
-        return WebEncoders.Base64UrlEncode(hashBufferSpan);
+        return WebEncoders.Base64UrlEncode(hashBuffer);
     }
 }

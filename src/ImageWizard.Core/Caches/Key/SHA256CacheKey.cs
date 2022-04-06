@@ -15,11 +15,17 @@ public class SHA256CacheKey : ICacheKey
 {
     public string Create(string input)
     {
-        Span<byte> keyBufferSpan = stackalloc byte[32];
+        int inputLength = Encoding.UTF8.GetByteCount(input);
 
-        SHA256.HashData(Encoding.UTF8.GetBytes(input), keyBufferSpan);
+        Span<byte> inputBuffer = inputLength <= 128 ? stackalloc byte[inputLength] : new byte[inputLength];
 
-        string key = Convert.ToHexString(keyBufferSpan);
+        Encoding.UTF8.GetBytes(input, inputBuffer);
+
+        Span<byte> hashBuffer = stackalloc byte[32];
+
+        SHA256.HashData(inputBuffer, hashBuffer);
+
+        string key = Convert.ToHexString(hashBuffer);
 
         return key;
     }
