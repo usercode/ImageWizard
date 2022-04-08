@@ -141,24 +141,24 @@ services.AddImageWizard(options =>
            //adds some loaders
            .AddFileLoader(options => options.Folder = "FileStorage")
            .AddHttpLoader(options => 
-          {
-                                   //checks every time for a new version of the original image.
-                                   options.RefreshMode = LoaderRefreshMode.EveryTime;
-                                   
-                                   //set base url for relative urls
-                                   options.DefaultBaseUrl = "https://mydomain";
-                                   
-                                   //allow only relative urls 
-                                   //(use base url from request or DefaultBaseUrl from options)
-                                   options.AllowAbsoluteUrls = false;
-                                   
-                                   //allow only specified hosts
-                                   options.AllowedHosts = new [] { "mydomain" };
-                                   
-                                   //adds custom http header like apikey to prevent 
-                                   //that user can download the original image
-                                   options.SetHeader("ApiKey", "123456");
-     })
+          	{
+		   //checks every time for a new version of the original image.
+		   options.RefreshMode = LoaderRefreshMode.EveryTime;
+
+		   //set base url for relative urls
+		   options.DefaultBaseUrl = "https://mydomain";
+
+		   //allow only relative urls 
+		   //(use base url from request or DefaultBaseUrl from options)
+		   options.AllowAbsoluteUrls = false;
+
+		   //allow only specified hosts
+		   options.AllowedHosts = new [] { "mydomain" };
+
+		   //adds custom http header like apikey to prevent 
+		   //that user can download the original image
+		   options.SetHeader("ApiKey", "123456");
+     		})
            .AddYoutubeLoader()
            .AddGravatarLoader()
 	   .AddOpenGraphLoader()
@@ -166,19 +166,19 @@ services.AddImageWizard(options =>
 	    //Adds a background service which removes cached data based on defined CleanupReason.
             //The cache needs to implements ICleanupCache.
             .AddCleanupService(x =>
-                                    {
-                                        //Duration between the cleanup actions. (Default: 1 day)
-                                        x.Interval = TimeSpan.FromMinutes(1);
+		    {
+			//Duration between the cleanup actions. (Default: 1 day)
+			x.Interval = TimeSpan.FromMinutes(1);
 
-                                        //Removes cached data which are older than defined duration. (see IMetadata.Created)
-                                        x.OlderThan(TimeSpan.FromMinutes(2));
+			//Removes cached data which are older than defined duration. 
+			x.OlderThan(TimeSpan.FromMinutes(2));
 
-                                        //Removes cached data which are last used since defined duration. (see IMetadata.LastAccess)
-                                        x.LastUsedSince(TimeSpan.FromMinutes(2));
+			//Removes cached data which are last used since defined duration. 
+			x.LastUsedSince(TimeSpan.FromMinutes(2));
 
-                                        //Removes cached data which are expired (based on the loader result).
-                                        x.Expired();
-                                    })
+			//Removes cached data which are expired (based on the loader result).
+			x.Expired();
+		    })
            ;
 ```
 
