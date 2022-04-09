@@ -59,6 +59,6 @@ public class FileLoader : Loader<FileLoaderOptions>
         
         string mimeType = MimeTypes.GetByExtension(fileInfo.Name);
 
-        return new OriginalData(mimeType, stream, new CacheSettings() { ETag = etag });
+        return new OriginalData(mimeType, stream, new CacheSettings() { ETag = etag }.ApplyLoaderOptions(Options.Value));
     }
 }

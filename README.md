@@ -192,9 +192,11 @@ app.UseImageWizard(x =>
 ```
 
 ## Internal services
-- ICacheKey (Create key for cached data)
-- ICacheHash (Create hash for cached data)
-- IUrlSignature (Create url signature for cached data)
+- ICacheKey
+- ICacheHash
+- ICacheLock
+- IUrlSignature
+- IStreamPool
 
 ## Create custom filter
 

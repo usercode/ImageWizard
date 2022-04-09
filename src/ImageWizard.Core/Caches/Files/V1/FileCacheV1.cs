@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Cleanup;
+using ImageWizard.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using System;
@@ -16,8 +17,8 @@ namespace ImageWizard.Caches;
 /// </summary>
 public class FileCacheV1 : FileCacheBase<FileCacheOptionsBase>
 {
-    public FileCacheV1(IOptions<FileCacheV1Options> options, IWebHostEnvironment hostingEnvironment)
-        : base(options, hostingEnvironment)
+    public FileCacheV1(IOptions<FileCacheV1Options> options, IWebHostEnvironment hostingEnvironment, ICacheLock cacheLock)
+        : base(options, hostingEnvironment, cacheLock)
     {
 
     }

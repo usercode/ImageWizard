@@ -23,9 +23,10 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
 {
     protected static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
 
-    public FileCacheBase(IOptions<TOptions> settings, IWebHostEnvironment hostingEnvironment)
+    public FileCacheBase(IOptions<TOptions> settings, IWebHostEnvironment hostingEnvironment, ICacheLock cacheLock)
     {
         Settings = settings;
+        CacheLock = cacheLock;
 
         if (Path.IsPathFullyQualified(settings.Value.Folder))
         {
@@ -46,6 +47,11 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
     /// Folder
     /// </summary>
     public DirectoryInfo Folder { get; }
+
+    /// <summary>
+    /// CacheLock
+    /// </summary>
+    private ICacheLock CacheLock { get; }
 
     protected virtual DirectoryInfo GetMetaFolder() => new DirectoryInfo(Folder.FullName);
 
@@ -176,6 +182,8 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
 
     public virtual async Task CleanupAsync(IEnumerable<CleanupReason> reasons, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         DirectoryInfo metaFolder = GetMetaFolder();
 
         if (metaFolder.Exists == false)
@@ -191,14 +199,23 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
                 {
                     foreach (DirectoryInfo level4 in level3.GetDirectories())
                     {
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
+                        cancellationToken.ThrowIfCancellationRequested();
 
                         foreach (FileInfo metaFile in level4.GetFiles($"*.{FileType.Meta.ToTypeString()}"))
                         {
-                            IMetadata? metadata = await ReadMetadataAsync(metaFile);
+                            string key = Path.GetFileNameWithoutExtension(metaFile.Name);
+
+                            //set lock
+                            using var w = CacheLock.WriterLockAsync(key);
+
+                            //file already there?
+                            if (metaFile.Exists == false)
+                            {
+                                continue;
+                            }
+
+                            //read metadata
+                            IMetadata? metadata = await ReadMetadataAsync(key);
 
                             if (metadata != null)
                             {

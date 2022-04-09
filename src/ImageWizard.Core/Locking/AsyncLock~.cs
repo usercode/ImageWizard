@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ImageWizard.Core.Locking;
 
 /// <summary>
-/// AsyncLockKey
+/// AsyncLock
 /// </summary>
 public class AsyncLock<TKey>
     where TKey : notnull

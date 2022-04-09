@@ -58,10 +58,7 @@ public class CleanupBackgroundService : BackgroundService
 
         while (true)
         {
-            if (stoppingToken.IsCancellationRequested)
-            {
-                break;
-            }
+            stoppingToken.ThrowIfCancellationRequested();
 
             try
             {

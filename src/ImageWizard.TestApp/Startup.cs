@@ -113,7 +113,7 @@ public class Startup
             })
             .SetMongoDBCache()
             //.SetDistributedCache()
-            //.SetFileCacheV1()
+            .SetFileCache()
             //.SetFileCacheV2()
 
             //Adds a background service which removes cached data based on defined CleanupReason.
@@ -121,7 +121,7 @@ public class Startup
             .AddCleanupService(x =>
                                     {
                                         //Duration between the cleanup actions. (Default: 1 day)
-                                        x.Interval = TimeSpan.FromMinutes(1);
+                                        x.Interval = TimeSpan.FromMinutes(10);
 
                                         //Removes cached data which are older than defined duration. (see IMetadata.Created)
                                         x.OlderThan(TimeSpan.FromMinutes(2));

@@ -22,16 +22,11 @@ public static class ImageWizardExtensions
     /// <param name="endpoints"></param>
     /// <param name="path"></param>
     /// <returns></returns>
-    public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
+    private static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
     {
         return endpoints
                     .MapMethods("{signature}/{*path}", new[] { HttpMethods.Get, HttpMethods.Head }, new ImageWizardApi().ExecuteAsync)
                     .WithName("ImageWizard");
-    }
-
-    public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder)
-    {
-        return UseImageWizard(builder, ImageWizardDefaults.BasePath);
     }
 
     public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
@@ -56,43 +51,31 @@ public static class ImageWizardExtensions
     }
 
     /// <summary>
-    /// Adds ImageWizard services.
-    /// <br /><br />
-    /// Default services:<br/>
-    /// <see cref="ICache"/> -> <see cref="OneTimeCache"/><br/>
-    /// <see cref="ICacheKey"/> -> <see cref="SHA256CacheKey"/><br/>
-    /// <see cref="ICacheHash"/> -> <see cref="SHA256CacheHash"/><br/>
-    /// <see cref="IUrlSignature"/> -> <see cref="HMACSHA256UrlSignature"/><br/>
-    /// <see cref="IStreamPool"/> -> <see cref="RecyclableMemoryStreamPool"/><br/>
-    /// </summary>
-    /// <param name="services"></param>
-    /// <returns></returns>
-    public static IImageWizardBuilder AddImageWizard(this IServiceCollection services)
-    {
-        return AddImageWizard(services, options => { });
-    }
-
-    /// <summary>
     /// Adds ImageWizard services with custom options.
     /// <br /><br />
     /// Default services:<br/>
     /// <see cref="ICache"/> -> <see cref="OneTimeCache"/><br/>
     /// <see cref="ICacheKey"/> -> <see cref="SHA256CacheKey"/><br/>
     /// <see cref="ICacheHash"/> -> <see cref="SHA256CacheHash"/><br/>
+    /// <see cref="ICacheLock"/> -> <see cref="LocalCacheLock"/><br/>
     /// <see cref="IUrlSignature"/> -> <see cref="HMACSHA256UrlSignature"/><br/>
     /// <see cref="IStreamPool"/> -> <see cref="RecyclableMemoryStreamPool"/><br/>
     /// </summary>
     /// <param name="services"></param>
     /// <param name="options"></param>
     /// <returns></returns>
-    public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardOptions> options)
+    public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardOptions>? options = null)
     {
-        services.Configure(options);
+        if (options != null)
+        {
+            services.Configure(options);
+        }
 
         services.AddHttpContextAccessor();
 
         //services.AddSingleton<IStreamPool, MemoryStreamPool>();
         services.AddSingleton<IStreamPool, RecyclableMemoryStreamPool>();
+        services.AddSingleton<ICacheLock, LocalCacheLock>();
 
         services.AddTransient<ICache, OneTimeCache>();
         services.AddTransient<ICacheKey, SHA256CacheKey>();

@@ -19,9 +19,6 @@ public class AsyncLock
     public AsyncLock()
     {
         _syncObj = _waitingWriters;
-
-        _readerReleaser = Task.FromResult(new AsyncLockReleaser(this, AsyncLockType.Read));
-        _writerReleaser = Task.FromResult(new AsyncLockReleaser(this, AsyncLockType.Write));
     }
 
     internal AsyncLock(object syncObject)
@@ -31,9 +28,6 @@ public class AsyncLock
     }
 
     private readonly object _syncObj;
-
-    private readonly Task<AsyncLockReleaser> _readerReleaser;
-    private readonly Task<AsyncLockReleaser> _writerReleaser;
 
     private readonly Queue<TaskCompletionSource<AsyncLockReleaser>> _waitingReaders = new Queue<TaskCompletionSource<AsyncLockReleaser>>();
     private readonly Queue<TaskCompletionSource<AsyncLockReleaser>> _waitingWriters = new Queue<TaskCompletionSource<AsyncLockReleaser>>();
@@ -93,7 +87,7 @@ public class AsyncLock
             if (_isWriterRunning == false && _waitingWriters.Count == 0)
             {
                 _readersRunning++;
-                return _readerReleaser;
+                return Task.FromResult(new AsyncLockReleaser(this, AsyncLockType.Read));
             }
             else
             {
@@ -116,7 +110,7 @@ public class AsyncLock
             if (_isWriterRunning == false && _readersRunning == 0)
             {
                 _isWriterRunning = true;
-                return _writerReleaser;
+                return Task.FromResult(new AsyncLockReleaser(this, AsyncLockType.Write));
             }
             else
             {

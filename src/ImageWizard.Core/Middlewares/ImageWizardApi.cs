@@ -32,8 +32,6 @@ namespace ImageWizard;
 /// </summary>
 public class ImageWizardApi
 {
-    private readonly AsyncLock<string> asyncLock = new AsyncLock<string>();
-
     /// <summary>
     /// ExecuteAsync
     /// </summary>
@@ -45,6 +43,7 @@ public class ImageWizardApi
                                             ICache cache,
                                             ICacheKey cacheKey,
                                             ICacheHash cacheHash,
+                                            ICacheLock cacheLock,
                                             InterceptorInvoker interceptor,
                                             ImageWizardBuilder builder,
                                             string signature,
@@ -148,26 +147,28 @@ public class ImageWizardApi
         //generate data key
         string key = cacheKey.Create(pathBuilder.ToString());
 
-        //create reader lock
-        using AsyncLockContext lockState = await asyncLock.ReaderLockAsync(key);
-
-        //read cached data
-        ICachedData? cachedData = await cache.ReadAsync(key);
-
         bool createCachedData = true;
+        ICachedData? cachedData;
 
-        //cached data found?
-        if (cachedData != null)
+        //create reader lock
+        using (await cacheLock.ReaderLockAsync(key))
         {
-            createCachedData = loader.Options.Value.RefreshMode switch
+            //read cached data
+            cachedData = await cache.ReadAsync(key);
+
+            //cached data found?
+            if (cachedData != null)
             {
-                LoaderRefreshMode.None => false,
-                LoaderRefreshMode.EveryTime => true,
-                LoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
-                                                                || cachedData.Metadata.Cache.NoCache == true
-                                                                || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
-                _ => throw new Exception($"Unknown refresh mode: {loader.Options.Value.RefreshMode}")
-            };
+                createCachedData = loader.Options.Value.RefreshMode switch
+                {
+                    LoaderRefreshMode.None => false,
+                    LoaderRefreshMode.EveryTime => true,
+                    LoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
+                                                                    || cachedData.Metadata.Cache.NoCache == true
+                                                                    || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
+                    _ => throw new Exception($"Unknown refresh mode: {loader.Options.Value.RefreshMode}")
+                };
+            }
         }
 
         //create cached data
@@ -175,7 +176,7 @@ public class ImageWizardApi
         {
             logger.LogTrace("Create cached data: {key}", key);
 
-            await lockState.SwitchToWriterLockAsync();
+            using var w = await cacheLock.WriterLockAsync(key);
 
             //read cached data again
             ICachedData? cachedDataAfterWriteLock = await cache.ReadAsync(key);
@@ -260,8 +261,6 @@ public class ImageWizardApi
                     }
                 }
             }
-
-            await lockState.SwitchToReaderLockAsync(true);
         }
 
         if (cachedData == null)
@@ -276,11 +275,9 @@ public class ImageWizardApi
             {
                 if (cachedData.Metadata.LastAccess.Add(options.Value.RefreshLastAccessInterval.Value) < DateTime.UtcNow)
                 {
-                    await lockState.SwitchToWriterLockAsync();
+                    using var r1 = await cacheLock.WriterLockAsync(key);
 
                     await lastAccessCache.SetLastAccessAsync(key, DateTime.UtcNow);
-
-                    await lockState.SwitchToReaderLockAsync();
                 }
             }
             else
@@ -288,6 +285,8 @@ public class ImageWizardApi
                 logger.LogWarning("Cache doesn't support last-access refresh.");
             }
         }
+
+        using var r2 = await cacheLock.ReaderLockAsync(key);
 
         EntityTagHeaderValue etag = new EntityTagHeaderValue($"\"{cachedData.Metadata.Hash}\"");
 

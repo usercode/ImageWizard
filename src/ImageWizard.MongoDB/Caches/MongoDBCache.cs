@@ -15,6 +15,7 @@ using ImageWizard.Caches;
 using System.Collections.Generic;
 using ImageWizard.Cleanup;
 using System.Threading;
+using ImageWizard.Core;
 
 namespace ImageWizard.MongoDB;
 
@@ -23,7 +24,7 @@ namespace ImageWizard.MongoDB;
 /// </summary>
 public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
 {
-    public MongoDBCache(IOptions<MongoDBCacheOptions> settings)
+    public MongoDBCache(IOptions<MongoDBCacheOptions> settings, ICacheLock cacheLock)
     {
         var mongoSetttings = new MongoClientSettings() { Server = new MongoServerAddress(settings.Value.Hostname) };
 
@@ -31,6 +32,8 @@ public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
         {
             mongoSetttings.Credential = MongoCredential.CreateCredential("admin", settings.Value.Username, settings.Value.Password);
         }
+
+        CacheLock = cacheLock;
 
         Client = new MongoClient(mongoSetttings);
 
@@ -73,16 +76,18 @@ public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
     /// </summary>
     public IGridFSBucket Blob { get; }
 
+    /// <summary>
+    /// CacheLock
+    /// </summary>
+    private ICacheLock CacheLock { get; }
+
     public async Task CleanupAsync(IEnumerable<CleanupReason> reasons, CancellationToken cancellationToken = default)
     {
         foreach (CleanupReason reason in reasons)
         {
             while (true)
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
+                cancellationToken.ThrowIfCancellationRequested();
 
                 var items = await Metadata.AsQueryable()
                                                         .Where(reason.GetExpression<MetadataModel>())
@@ -96,6 +101,9 @@ public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
 
                 foreach (MetadataModel item in items)
                 {
+                    //set writer lock
+                    using var w = CacheLock.WriterLockAsync(item.Key);
+
                     //delete meta
                     await Metadata.DeleteOneAsync(Builders<MetadataModel>.Filter.Eq(x => x.Key, item.Key));
 
