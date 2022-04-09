@@ -27,6 +27,7 @@ Demo: [imagewizard.net](https://imagewizard.net)
 - support for cache control and ETag
 - enable range processing by http request
 - use RecyclableMemoryStream for smarter memory management (IStreamPool)
+- cleanup service
 
 ## Example
 <p align="center">
