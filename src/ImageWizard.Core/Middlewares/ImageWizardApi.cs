@@ -35,19 +35,19 @@ public class ImageWizardApi
     /// <summary>
     /// ExecuteAsync
     /// </summary>
-    public async Task<IResult> ExecuteAsync(
-                                            HttpContext context,
-                                            IOptions<ImageWizardOptions> options,
-                                            ILogger<ImageWizardApi> logger,
-                                            IUrlSignature signatureService,
-                                            ICache cache,
-                                            ICacheKey cacheKey,
-                                            ICacheHash cacheHash,
-                                            ICacheLock cacheLock,
-                                            InterceptorInvoker interceptor,
-                                            ImageWizardBuilder builder,
-                                            string signature,
-                                            string path)
+    public async Task ExecuteAsync(
+                                    HttpContext context,
+                                    IOptions<ImageWizardOptions> options,
+                                    ILogger<ImageWizardApi> logger,
+                                    IUrlSignature signatureService,
+                                    ICache cache,
+                                    ICacheKey cacheKey,
+                                    ICacheHash cacheHash,
+                                    ICacheLock cacheLock,
+                                    InterceptorInvoker interceptor,
+                                    ImageWizardBuilder builder,
+                                    string signature,
+                                    string path)
     {
         if (context.Request.QueryString.HasValue)
         {
@@ -57,7 +57,10 @@ public class ImageWizardApi
         //parse url
         if (ImageWizardUrl.TryParse(path, out ImageWizardUrl url) == false)
         {
-            return Results.Problem(detail: "Url is invalid.", statusCode: StatusCodes.Status400BadRequest);
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsync("The url is invalid.");
+
+            return;
         }
 
         //unsafe url?
@@ -71,7 +74,10 @@ public class ImageWizardApi
             }
             else
             {
-                Results.Problem(detail: "Unsafe url is not allowed!", statusCode: StatusCodes.Status403Forbidden);
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                await context.Response.WriteAsync("Unsafe url is not allowed!");
+
+                return;
             }
         }
         else
@@ -89,7 +95,10 @@ public class ImageWizardApi
             {
                 interceptor.OnInvalidSignature();
 
-                return Results.Problem(detail: "Signature is not valid!", statusCode: StatusCodes.Status403Forbidden);
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                await context.Response.WriteAsync("Signature is not valid!");
+
+                return;
             }
         }
 
@@ -141,7 +150,10 @@ public class ImageWizardApi
 
         if (loader == null)
         {
-            return Results.Problem(detail: $"Data loader not found: {url.LoaderType}", statusCode: StatusCodes.Status500InternalServerError);
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await context.Response.WriteAsync($"Data loader not found: {url.LoaderType}");
+
+            return;
         }
 
         //generate data key
@@ -206,7 +218,10 @@ public class ImageWizardApi
 
                         if (processingPipeline == null)
                         {
-                            return Results.Problem(detail: $"Processing pipeline was not found: {processingContext.Result.MimeType}", statusCode: StatusCodes.Status500InternalServerError);
+                            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                            await context.Response.WriteAsync($"Processing pipeline was not found: {processingContext.Result.MimeType}");
+                            
+                            return;
                         }
 
                         logger.LogTrace("Start pipline: {pipeline}", processingPipelineType.Name);
@@ -265,7 +280,9 @@ public class ImageWizardApi
 
         if (cachedData == null)
         {
-            return Results.StatusCode(StatusCodes.Status500InternalServerError);
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+            return;
         }
 
         //refresh last-access time
@@ -286,6 +303,7 @@ public class ImageWizardApi
             }
         }
 
+        //set reader lock
         using var r2 = await cacheLock.ReaderLockAsync(key);
 
         EntityTagHeaderValue etag = new EntityTagHeaderValue($"\"{cachedData.Metadata.Hash}\"");
@@ -299,13 +317,17 @@ public class ImageWizardApi
             {
                 logger.LogTrace("Operation completed: 304 Not modified");
 
-                interceptor.OnCachedDataSending(context.Response, cachedData, true);
+                interceptor.OnCachedDataSent(context.Response, cachedData, true);
 
-                return Results.StatusCode(StatusCodes.Status304NotModified);
+                context.Response.StatusCode = StatusCodes.Status304NotModified;
+
+                return;
             }
         }
 
         ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
+        responseHeaders.ContentType = new MediaTypeHeaderValue(cachedData.Metadata.MimeType);
+        responseHeaders.ContentLength = cachedData.Metadata.FileLength;
 
         //use accept header
         if (options.Value.UseAcceptHeader)
@@ -361,20 +383,21 @@ public class ImageWizardApi
         }
 
         //is HEAD request?
-        bool isHeadRequst = HttpMethods.IsHead(context.Request.Method);
-
-        if (isHeadRequst == true)
+        if (HttpMethods.IsHead(context.Request.Method))
         {
-            return Results.Ok();
+            return;
         }
-
-        interceptor.OnCachedDataSending(context.Response, cachedData, false);
 
         logger.LogTrace("Sending cached data.");
 
         //send response stream
-        Stream stream = await cachedData.OpenReadAsync();
+        using (Stream stream = await cachedData.OpenReadAsync())
+        {
+            await stream.CopyToAsync(context.Response.Body);
+        }
 
-        return Results.File(stream, cachedData.Metadata.MimeType, enableRangeProcessing: true);
+        interceptor.OnCachedDataSent(context.Response, cachedData, false);
+
+        logger.LogTrace("Operation completed");
     }
 }

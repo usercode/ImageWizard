@@ -25,7 +25,6 @@ public interface ICache
     /// <summary>
     /// WriteAsync
     /// </summary>
-    /// <param name="key"></param>
     /// <param name="metadata"></param>
     /// <param name="stream"></param>
     /// <returns></returns>

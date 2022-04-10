@@ -47,7 +47,7 @@ class ImageRequestAnalytics : IImageWizardInterceptor
         }
     }
 
-    public void OnCachedDataSending(HttpResponse response, ICachedData cachedData, bool notModified)
+    public void OnCachedDataSent(HttpResponse response, ICachedData cachedData, bool notModified)
     {
         SetData(cachedData.Metadata.MimeType, x =>
         {

@@ -36,9 +36,9 @@ public class InterceptorInvoker : IImageWizardInterceptor
         Items.Foreach(x => x.OnCachedDataDeleted(cachedData));
     }
 
-    public void OnCachedDataSending(HttpResponse response, ICachedData cachedData, bool notModified)
+    public void OnCachedDataSent(HttpResponse response, ICachedData cachedData, bool notModified)
     {
-        Items.Foreach(x => x.OnCachedDataSending(response, cachedData, notModified));
+        Items.Foreach(x => x.OnCachedDataSent(response, cachedData, notModified));
     }
 
     public void OnInvalidSignature()

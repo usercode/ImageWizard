@@ -43,7 +43,7 @@ public static class CleanupExtensions
     /// <summary>
     /// Removes cached data which are last used since defined duration.
     /// <br /><br />
-    /// This feature works only correctly if the cache implements <see cref="ILastAccessCache"/>.
+    /// This feature works only if the cache implements <see cref="ILastAccessCache"/>.
     /// </summary>
     /// <param name="options"></param>
     /// <param name="duration"></param>

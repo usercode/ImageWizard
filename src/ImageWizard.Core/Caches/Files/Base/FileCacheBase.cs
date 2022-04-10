@@ -99,13 +99,10 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
         await stream.CopyToAsync(blobStream);
     }
 
-    private Task<Metadata?> ReadMetadataAsync(string key)
+    private async Task<Metadata?> ReadMetadataAsync(string key)
     {
-        return ReadMetadataAsync(GetFile(FileType.Meta, key));
-    }
+        FileInfo metaFile = GetFile(FileType.Meta, key);
 
-    private async Task<Metadata?> ReadMetadataAsync(FileInfo metaFile)
-    {
         if (metaFile.Exists == false)
         {
             return null;
@@ -203,16 +200,16 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
 
                         foreach (FileInfo metaFile in level4.GetFiles($"*.{FileType.Meta.ToTypeString()}"))
                         {
-                            string key = Path.GetFileNameWithoutExtension($"{level1.Name}{level2.Name}{level3.Name}{level4.Name}{metaFile.Name}");                            
+                            string key = Path.GetFileNameWithoutExtension($"{level1.Name}{level2.Name}{level3.Name}{level4.Name}{metaFile.Name}");
+
+                            //set lock
+                            using var w = await CacheLock.WriterLockAsync(key);
 
                             //file already there?
                             if (metaFile.Exists == false)
                             {
                                 continue;
                             }
-
-                            //set lock
-                            using var w = await CacheLock.WriterLockAsync(key);
 
                             //read metadata
                             IMetadata? metadata = await ReadMetadataAsync(key);
