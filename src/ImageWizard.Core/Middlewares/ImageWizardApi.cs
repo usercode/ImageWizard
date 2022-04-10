@@ -182,7 +182,7 @@ public class ImageWizardApi
             ICachedData? cachedDataAfterWriteLock = await cache.ReadAsync(key);
 
             //cached data hasn't changed after writer lock?
-            if (cachedData?.Metadata.Hash == cachedDataAfterWriteLock?.Metadata.Hash)
+            if (cachedDataAfterWriteLock == null || cachedData?.Metadata.Hash == cachedDataAfterWriteLock.Metadata.Hash)
             {
                 //get original image
                 using OriginalData? originalData = await loader.GetAsync(url.LoaderSource, cachedData);

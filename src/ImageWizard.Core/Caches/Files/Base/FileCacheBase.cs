@@ -180,7 +180,7 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
         }
     }
 
-    public virtual async Task CleanupAsync(IEnumerable<CleanupReason> reasons, CancellationToken cancellationToken = default)
+    public virtual async Task CleanupAsync(CleanupReason reason, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -203,10 +203,7 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
 
                         foreach (FileInfo metaFile in level4.GetFiles($"*.{FileType.Meta.ToTypeString()}"))
                         {
-                            string key = Path.GetFileNameWithoutExtension(metaFile.Name);
-
-                            //set lock
-                            using var w = CacheLock.WriterLockAsync(key);
+                            string key = Path.GetFileNameWithoutExtension($"{level1.Name}{level2.Name}{level3.Name}{level4.Name}{metaFile.Name}");                            
 
                             //file already there?
                             if (metaFile.Exists == false)
@@ -214,12 +211,15 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
                                 continue;
                             }
 
+                            //set lock
+                            using var w = await CacheLock.WriterLockAsync(key);
+
                             //read metadata
                             IMetadata? metadata = await ReadMetadataAsync(key);
 
                             if (metadata != null)
                             {
-                                bool invalid = reasons.Any(r => r.IsValid(metadata) == true);
+                                bool invalid = reason.IsValid(metadata) == true;
 
                                 if (invalid)
                                 {

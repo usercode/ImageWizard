@@ -51,7 +51,7 @@ public class CleanupBackgroundService : BackgroundService
 
         if (Cache is not ICleanupCache cleanupCache)
         {
-            Logger.LogWarning("Cache does not support cleanup mode.");
+            Logger.LogWarning("Cache doesn't support cleanup mode.");
 
             return;
         }
@@ -64,7 +64,17 @@ public class CleanupBackgroundService : BackgroundService
             {
                 Logger.LogInformation("Starting cleanup service.");
 
-                await cleanupCache.CleanupAsync(Options.Reasons, stoppingToken);
+                foreach (CleanupReason reason in Options.Reasons)
+                {
+                    if (reason.CanUse(Cache) == false)
+                    {
+                        Logger.LogWarning("Cleanup reason isn't supported by cache: {reason}", reason.Name);
+
+                        continue;
+                    }
+
+                    await cleanupCache.CleanupAsync(reason, stoppingToken);
+                }
             }
             catch (Exception ex)
             {

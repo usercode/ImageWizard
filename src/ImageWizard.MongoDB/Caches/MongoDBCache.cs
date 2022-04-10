@@ -81,43 +81,40 @@ public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
     /// </summary>
     private ICacheLock CacheLock { get; }
 
-    public async Task CleanupAsync(IEnumerable<CleanupReason> reasons, CancellationToken cancellationToken = default)
+    public async Task CleanupAsync(CleanupReason reason, CancellationToken cancellationToken = default)
     {
-        foreach (CleanupReason reason in reasons)
+        while (true)
         {
-            while (true)
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var items = await Metadata.AsQueryable()
+                                                    .Where(reason.GetExpression<MetadataModel>())
+                                                    .Take(100)
+                                                    .ToListAsync();
+
+            if (items.Count == 0)
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                break;
+            }
 
-                var items = await Metadata.AsQueryable()
-                                                        .Where(reason.GetExpression<MetadataModel>())
-                                                        .Take(100)
-                                                        .ToListAsync();
+            foreach (MetadataModel item in items)
+            {
+                //set writer lock
+                using var w = CacheLock.WriterLockAsync(item.Key);
 
-                if (items.Count == 0)
-                {
-                    break;
-                }
+                //delete meta
+                await Metadata.DeleteOneAsync(Builders<MetadataModel>.Filter.Eq(x => x.Key, item.Key));
 
-                foreach (MetadataModel item in items)
-                {
-                    //set writer lock
-                    using var w = CacheLock.WriterLockAsync(item.Key);
+                //delete blob
+                var blobCursor = await Blob.FindAsync(Builders<GridFSFileInfo>.Filter.Eq(x => x.Filename, item.Key));
 
-                    //delete meta
-                    await Metadata.DeleteOneAsync(Builders<MetadataModel>.Filter.Eq(x => x.Key, item.Key));
+                GridFSFileInfo blob = await blobCursor.FirstAsync();
 
-                    //delete blob
-                    var blobCursor = await Blob.FindAsync(Builders<GridFSFileInfo>.Filter.Eq(x => x.Filename, item.Key));
+                await Blob.DeleteAsync(blob.Id);
+            }
 
-                    GridFSFileInfo blob = await blobCursor.FirstAsync();
-
-                    await Blob.DeleteAsync(blob.Id);
-                }
-
-                await Task.Delay(TimeSpan.FromMilliseconds(80));
-            }           
-        }
+            await Task.Delay(TimeSpan.FromMilliseconds(80));
+        }        
     }
 
     public async Task<ICachedData?> ReadAsync(string key)

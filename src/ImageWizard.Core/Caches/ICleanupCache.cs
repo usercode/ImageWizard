@@ -18,10 +18,10 @@ namespace ImageWizard.Caches;
 public interface ICleanupCache : ICache
 {
     /// <summary>
-    /// CleanUpAsync
+    /// CleanupAsync
     /// </summary>
     /// <returns></returns>
-    Task CleanupAsync(IEnumerable<CleanupReason> reasons, CancellationToken cancellationToken = default);
+    Task CleanupAsync(CleanupReason reason, CancellationToken cancellationToken = default);
 
 
 }

@@ -82,7 +82,7 @@ public static class ImageWizardExtensions
         services.AddTransient<ICacheHash, SHA256CacheHash>();
         services.AddTransient<IUrlSignature, HMACSHA256UrlSignature>();
 
-        services.AddSingleton<InterceptorInvoker>();
+        services.AddTransient<InterceptorInvoker>();
 
         ImageWizardBuilder configuration = new ImageWizardBuilder(services);
         services.AddSingleton(configuration);

@@ -66,11 +66,17 @@ public class AsyncLock
         get
         {
             if (IsWriterRunning)
+            {
                 return AsyncLockState.Writer;
+            }
             else if (CountRunningReaders > 0)
+            {
                 return AsyncLockState.Reader;
+            }
             else
+            {
                 return AsyncLockState.Idle;
+            }
         }
     }
 

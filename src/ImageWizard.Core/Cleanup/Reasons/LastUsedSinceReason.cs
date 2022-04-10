@@ -2,6 +2,7 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Caches;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +23,21 @@ public class LastUsedSinceReason : CleanupReason
     }
 
     /// <summary>
+    /// Name
+    /// </summary>
+    public override string Name => $"Last used since {Duration}";
+
+    /// <summary>
     /// Duration
     /// </summary>
     public TimeSpan Duration { get; }
 
     private DateTime MinDate => DateTime.UtcNow - Duration;
+
+    public override bool CanUse(ICache cache)
+    {
+        return cache is ILastAccessCache;
+    }
 
     public override Expression<Func<T, bool>> GetExpression<T>()
     {

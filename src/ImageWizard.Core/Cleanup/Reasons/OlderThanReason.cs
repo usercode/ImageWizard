@@ -21,6 +21,8 @@ public class OlderThanReason : CleanupReason
         Duration = duration;
     }
 
+    public override string Name => $"Older than {Duration}";
+
     /// <summary>
     /// Duration
     /// </summary>

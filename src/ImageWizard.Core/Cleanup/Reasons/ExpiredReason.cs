@@ -20,6 +20,8 @@ public class ExpiredReason : CleanupReason
     {
     }
 
+    public override string Name => "Expired";
+
     public override Expression<Func<T, bool>> GetExpression<T>()
     {
         return x => x.Cache.Expires < DateTime.UtcNow;

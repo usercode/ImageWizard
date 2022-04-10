@@ -2,6 +2,7 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Caches;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,21 @@ public abstract class CleanupReason
     private IDictionary<Type, object> _cache = new Dictionary<Type, object>();
 
     /// <summary>
+    /// Name
+    /// </summary>
+    public abstract string Name { get; }    
+
+    /// <summary>
     /// GetExpression
     /// </summary>
     public abstract Expression<Func<T, bool>> GetExpression<T>() where T : IMetadata;
+
+    /// <summary>
+    /// CanUse
+    /// </summary>
+    /// <param name="cache"></param>
+    /// <returns></returns>
+    public virtual bool CanUse(ICache cache) => true;
 
     /// <summary>
     /// IsValid

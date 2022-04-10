@@ -121,7 +121,7 @@ public class Startup
             .AddCleanupService(x =>
                                     {
                                         //Duration between the cleanup actions. (Default: 1 day)
-                                        x.Interval = TimeSpan.FromMinutes(10);
+                                        x.Interval = TimeSpan.FromMinutes(1);
 
                                         //Removes cached data which are older than defined duration. (see IMetadata.Created)
                                         x.OlderThan(TimeSpan.FromMinutes(2));
