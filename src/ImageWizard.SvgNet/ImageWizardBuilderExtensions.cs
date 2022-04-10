@@ -15,12 +15,7 @@ namespace ImageWizard;
 /// </summary>
 public static class ImageWizardBuilderExtensions
 {
-    public static IImageWizardBuilder AddSvgNet(this IImageWizardBuilder builder)
-    {
-        return AddSvgNet(builder, x => x.WithMimeTypes(MimeTypes.Svg));
-    }
-
-    public static IImageWizardBuilder AddSvgNet(this IImageWizardBuilder builder, Action<ISvgNetBuilder> options)
+    public static IImageWizardBuilder AddSvgNet(this IImageWizardBuilder builder, Action<ISvgNetBuilder>? options = null)
     {
         SvgNetBuilder pipelineBuilder = new SvgNetBuilder(builder.Services);
 
@@ -34,7 +29,7 @@ public static class ImageWizardBuilderExtensions
 
         pipelineBuilder.WithMimeTypes(MimeTypes.Svg);
 
-        options(pipelineBuilder);
+        options?.Invoke(pipelineBuilder);
 
         builder.AddPipeline<SvgPipeline>(pipelineBuilder.MimeTypes);
 

@@ -10,14 +10,12 @@ namespace ImageWizard;
 
 public static class AwsExtensions
 {
-    public static IImageWizardBuilder AddAWSLoader(this IImageWizardBuilder wizardConfiguration)
+    public static IImageWizardBuilder AddAWSLoader(this IImageWizardBuilder wizardConfiguration, Action<AwsOptions>? options = null)
     {
-        return AddAWSLoader(wizardConfiguration, x => { });
-    }
-
-    public static IImageWizardBuilder AddAWSLoader(this IImageWizardBuilder wizardConfiguration, Action<AwsOptions> setup)
-    {
-        wizardConfiguration.Services.Configure(setup);
+        if (options != null)
+        {
+            wizardConfiguration.Services.Configure(options);
+        }
 
         wizardConfiguration.Services.AddSingleton<AwsLoader>();
         wizardConfiguration.LoaderManager.Register<AwsLoader>("aws");

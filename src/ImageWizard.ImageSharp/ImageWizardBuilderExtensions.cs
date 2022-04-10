@@ -15,36 +15,13 @@ namespace ImageWizard;
 /// </summary>
 public static class ImageWizardBuilderExtensions
 {
-    private readonly static string[] SupportedMimeTypes = new[] { MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Tga, MimeTypes.Bmp };
-
     /// <summary>
-    /// Adds the ImageSharp pipeline with default mime types (webp, jpg, gif, png, tga, bmp).
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <returns></returns>
-    public static IImageWizardBuilder AddImageSharp(this IImageWizardBuilder builder)
-    {
-        return AddImageSharp(builder, SupportedMimeTypes);
-    }
-
-    /// <summary>
-    /// Adds the ImageSharp pipeline for defined mime types.
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="mimeTypes"></param>
-    /// <returns></returns>
-    public static IImageWizardBuilder AddImageSharp(this IImageWizardBuilder builder, params string[] mimeTypes)
-    {
-        return AddImageSharp(builder, x => x.WithMimeTypes(mimeTypes));
-    }
-
-    /// <summary>
-    /// Adds the ImageSharp pipeline with custom actions.
+    /// Adds the ImageSharp pipeline with custom options.
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="options"></param>
     /// <returns></returns>
-    public static IImageWizardBuilder AddImageSharp(this IImageWizardBuilder builder, Action<IImageSharpBuilder> options)
+    public static IImageWizardBuilder AddImageSharp(this IImageWizardBuilder builder, Action<IImageSharpBuilder>? options = null)
     {
         ImageSharpBuilder pipelineBuilder = new ImageSharpBuilder(builder.Services);
 
@@ -66,9 +43,9 @@ public static class ImageWizardBuilderExtensions
         pipelineBuilder.WithFilter<ImageFormatFilter>();
         pipelineBuilder.WithFilter<TextFilter>();
 
-        pipelineBuilder.WithMimeTypes(SupportedMimeTypes);
+        pipelineBuilder.WithMimeTypes(new[] { MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Tga, MimeTypes.Bmp });
 
-        options(pipelineBuilder);
+        options?.Invoke(pipelineBuilder);
 
         builder.AddPipeline<ImageSharpPipeline>(pipelineBuilder.MimeTypes);
 

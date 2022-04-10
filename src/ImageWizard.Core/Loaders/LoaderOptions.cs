@@ -19,12 +19,12 @@ public class LoaderOptions
     }
 
     /// <summary>
-    /// RefreshMode
+    /// Refresh strategy for the original data.
     /// </summary>
     public LoaderRefreshMode RefreshMode { get; set; }
 
     /// <summary>
-    /// CacheControl
+    /// Overrides max-age value from original source.
     /// </summary>
     public TimeSpan? CacheControlMaxAge { get; set; }
 }

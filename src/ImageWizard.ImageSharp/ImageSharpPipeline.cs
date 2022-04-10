@@ -44,7 +44,7 @@ public class ImageSharpPipeline : Pipeline<ImageSharpFilter, ImageSharpFilterCon
     {
         Image image = await Image.LoadAsync(context.Result.Data);
 
-        IImageFormat targetFormat = null;
+        IImageFormat? targetFormat = null;
 
         if (context.ImageWizardOptions.UseAcceptHeader)
         {

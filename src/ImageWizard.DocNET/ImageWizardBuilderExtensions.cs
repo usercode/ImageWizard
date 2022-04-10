@@ -17,12 +17,7 @@ namespace ImageWizard;
 /// </summary>
 public static class ImageWizardBuilderExtensions
 {
-    public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder)
-    {
-        return AddDocNET(builder, x => x.WithMimeTypes(MimeTypes.Pdf));
-    }
-
-    public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder, Action<IDocNETBuilder> options)
+    public static IImageWizardBuilder AddDocNET(this IImageWizardBuilder builder, Action<IDocNETBuilder>? options = null)
     {
         DocNETBuilder pipelineBuilder = new DocNETBuilder(builder.Services);
 
@@ -31,7 +26,7 @@ public static class ImageWizardBuilderExtensions
 
         pipelineBuilder.WithMimeTypes(MimeTypes.Pdf);
 
-        options(pipelineBuilder);
+        options?.Invoke(pipelineBuilder);
 
         builder.AddPipeline<DocNETPipeline>(pipelineBuilder.MimeTypes);
 

@@ -13,14 +13,18 @@ namespace ImageWizard.MongoDB;
 
 public static class MongoDBCacheExtensions
 {
-    public static IImageWizardBuilder SetMongoDBCache(this IImageWizardBuilder wizardConfiguration)
+    /// <summary>
+    /// SetMongoDBCache
+    /// </summary>
+    /// <param name="wizardConfiguration"></param>
+    /// <param name="cacheSettingsSetup"></param>
+    /// <returns></returns>
+    public static IImageWizardBuilder SetMongoDBCache(this IImageWizardBuilder wizardConfiguration, Action<MongoDBCacheOptions>? cacheSettingsSetup = null)
     {
-        return SetMongoDBCache(wizardConfiguration, options => { });
-    }
-
-    public static IImageWizardBuilder SetMongoDBCache(this IImageWizardBuilder wizardConfiguration, Action<MongoDBCacheOptions> cacheSettingsSetup)
-    {
-        wizardConfiguration.Services.Configure(cacheSettingsSetup);
+        if (cacheSettingsSetup != null)
+        {
+            wizardConfiguration.Services.Configure(cacheSettingsSetup);
+        }
 
         wizardConfiguration.Services.RemoveAll<ICache>();
         wizardConfiguration.Services.AddSingleton<ICache, MongoDBCache>();

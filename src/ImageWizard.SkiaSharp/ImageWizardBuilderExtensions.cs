@@ -14,19 +14,7 @@ namespace ImageWizard;
 
 public static class ImageWizardBuilderExtensions
 {
-    private readonly static string[] SupportedMimeTypes = new[] { MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp };
-
-    public static IImageWizardBuilder AddSkiaSharp(this IImageWizardBuilder builder)
-    {
-        return AddSkiaSharp(builder, SupportedMimeTypes);
-    }
-
-    public static IImageWizardBuilder AddSkiaSharp(this IImageWizardBuilder builder, params string[] mimeTypes)
-    {
-        return AddSkiaSharp(builder, x => x.WithMimeTypes(mimeTypes));
-    }
-
-    public static IImageWizardBuilder AddSkiaSharp(this IImageWizardBuilder builder,Action<ISkiaSharpBuilder> options)
+    public static IImageWizardBuilder AddSkiaSharp(this IImageWizardBuilder builder, Action<ISkiaSharpBuilder>? options = null)
     {
         SkiaSharpBuilder pipelineBuilder = new SkiaSharpBuilder(builder.Services);
 
@@ -40,9 +28,9 @@ public static class ImageWizardBuilderExtensions
         pipelineBuilder.WithFilter<ImageFormatFilter>();
         pipelineBuilder.WithFilter<TextFilter>();
 
-        pipelineBuilder.WithMimeTypes(SupportedMimeTypes);
+        pipelineBuilder.WithMimeTypes(new[] { MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp });
 
-        options(pipelineBuilder);
+        options?.Invoke(pipelineBuilder);
 
         builder.AddPipeline<SkiaSharpPipeline>(pipelineBuilder.MimeTypes);
 

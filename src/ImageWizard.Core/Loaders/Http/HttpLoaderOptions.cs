@@ -22,22 +22,22 @@ public class HttpLoaderOptions : LoaderOptions
     }
 
     /// <summary>
-    /// Headers
+    /// Custom http header entries.
     /// </summary>
-    public ICollection<HttpHeaderItem> Headers { get; }
+    public IList<HttpHeaderItem> Headers { get; }
 
     /// <summary>
-    /// Used for relative urls.
+    /// Sets default base url for relative urls.
     /// </summary>
     public string? DefaultBaseUrl { get; set; }
 
     /// <summary>
-    /// AllowAbsoluteUrls
+    /// Allows only absolute urls? (Relative urls use base url from request or DefaultBaseUrl from options.)
     /// </summary>
     public bool AllowAbsoluteUrls { get; set; }
 
     /// <summary>
-    /// AllowedHosts
+    /// Allows only specified hosts.
     /// </summary>
     public string[] AllowedHosts { get; set; }
 

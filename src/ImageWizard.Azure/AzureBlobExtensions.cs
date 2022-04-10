@@ -11,15 +11,13 @@ using System.Text;
 namespace ImageWizard;
 
 public static class AzureBlobExtensions
-{
-    public static IImageWizardBuilder AddAzureLoader(this IImageWizardBuilder wizardConfiguration)
+{    
+    public static IImageWizardBuilder AddAzureLoader(this IImageWizardBuilder wizardConfiguration, Action<AzureBlobOptions>? options = null)
     {
-        return AddAzureLoader(wizardConfiguration, x => { });
-    }
-    
-    public static IImageWizardBuilder AddAzureLoader(this IImageWizardBuilder wizardConfiguration, Action<AzureBlobOptions> setup)
-    {
-        wizardConfiguration.Services.Configure(setup);
+        if (options != null)
+        {
+            wizardConfiguration.Services.Configure(options);
+        }
 
         wizardConfiguration.Services.AddSingleton<AzureBlobLoader>();
         wizardConfiguration.LoaderManager.Register<AzureBlobLoader>("azure");
