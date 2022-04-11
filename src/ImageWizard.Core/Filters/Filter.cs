@@ -13,5 +13,5 @@ public abstract class Filter<TContext> : IFilter<TContext>
 {
     public abstract string Namespace { get; }
 
-    public TContext? Context { get; set; }
+    public TContext Context { get; set; }
 }

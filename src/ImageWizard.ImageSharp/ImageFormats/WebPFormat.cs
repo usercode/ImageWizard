@@ -17,6 +17,7 @@ public class WebPFormat : IImageFormat
     public WebPFormat()
     {
         Quality = 80;
+        Lossless = false;
     }
 
     /// <summary>
@@ -25,12 +26,17 @@ public class WebPFormat : IImageFormat
     public int Quality { get; set; }
 
     /// <summary>
+    /// Lossless
+    /// </summary>
+    public bool Lossless { get; set; }
+
+    /// <summary>
     /// MimeType
     /// </summary>
     public string MimeType => MimeTypes.WebP;
 
     public async Task SaveImageAsync(Image image, Stream stream)
     {
-        await image.SaveAsWebpAsync(stream, new WebpEncoder { Quality = Quality });
+        await image.SaveAsWebpAsync(stream, new WebpEncoder { Quality = Quality, FileFormat = Lossless ? WebpFileFormatType.Lossless : WebpFileFormatType.Lossy });
     }
 }

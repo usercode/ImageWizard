@@ -49,6 +49,12 @@ public class ImageFormatFilter : ImageSharpFilter
     }
 
     [Filter]
+    public void WebP(int quality, bool lossless)
+    {
+        Context.ImageFormat = new WebPFormat() { Quality = quality, Lossless = lossless };
+    }
+
+    [Filter]
     public void Png()
     {
         Context.ImageFormat = new PngFormat();
