@@ -60,9 +60,13 @@ public class Startup
 
                                                             if (options.Value.UseWebP)
                                                             {
-                                                                if (x.ImageFormat is JpegFormat or PngFormat)
+                                                                if (x.ImageFormat is JpegFormat)
                                                                 {
-                                                                    x.ImageFormat = new WebPFormat();
+                                                                    x.ImageFormat = new WebPFormat() { Lossless = false };
+                                                                }
+                                                                else if(x.ImageFormat is PngFormat)
+                                                                {
+                                                                    x.ImageFormat = new WebPFormat() { Lossless = true };
                                                                 }
                                                             }
 
