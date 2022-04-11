@@ -216,9 +216,7 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
 
                             if (metadata != null)
                             {
-                                bool invalid = reason.IsValid(metadata) == true;
-
-                                if (invalid)
+                                if (reason.IsValid(metadata))
                                 {
                                     Delete(metadata);
                                 }

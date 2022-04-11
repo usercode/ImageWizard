@@ -11,7 +11,7 @@ namespace ImageWizard;
 
 public interface IImageWizardInterceptor
 {
-    void OnCachedDataSent(HttpResponse response, ICachedData cachedData, bool notModified);
+    void OnCachedDataSent(ICachedData cachedData, bool notModified);
 
     void OnCachedDataCreated(ICachedData cachedData);
 

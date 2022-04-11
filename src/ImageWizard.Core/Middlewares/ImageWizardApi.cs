@@ -317,7 +317,7 @@ public class ImageWizardApi
             {
                 logger.LogTrace("Operation completed: 304 Not modified");
 
-                interceptor.OnCachedDataSent(context.Response, cachedData, true);
+                interceptor.OnCachedDataSent(cachedData, true);
 
                 context.Response.StatusCode = StatusCodes.Status304NotModified;
 
@@ -396,7 +396,7 @@ public class ImageWizardApi
             await stream.CopyToAsync(context.Response.Body);
         }
 
-        interceptor.OnCachedDataSent(context.Response, cachedData, false);
+        interceptor.OnCachedDataSent(cachedData, false);
 
         logger.LogTrace("Operation completed");
     }
