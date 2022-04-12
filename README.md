@@ -121,7 +121,12 @@ services.AddImageWizard(options =>
                                 //override target format (Jpeg to WebP)
 				if (x.ImageFormat is JpegFormat)
 				{
-                                    x.ImageFormat = new WebPFormat();
+                                    x.ImageFormat = new WebPFormat() { Lossless = true };
+				}
+				//override target format (Png to WebP)
+				else if (x.ImageFormat is PngFormat)
+				{
+                                    x.ImageFormat = new WebPFormat() { Lossless = false };
 				}
 				
 				//override metadata
