@@ -85,7 +85,7 @@ public class Startup
                                                     .AddAzureLoader()
                                                     .AddOpenGraphLoader()
                                                     .AddAnalytics()
-                                                    .SetFileCacheV2()
+                                                    .SetFileCache()
                                                     ;
 
         services.Configure<ForwardedHeadersOptions>(options =>

@@ -20,6 +20,7 @@ public static class FileCacheV2Extensions
     /// </summary>
     /// <param name="wizardBuilder"></param>
     /// <returns></returns>
+    [Obsolete("Use FileCacheV1")]
     public static IImageWizardBuilder SetFileCacheV2(this IImageWizardBuilder wizardBuilder)
     {
         return SetFileCacheV2(wizardBuilder, options => { });
@@ -33,6 +34,7 @@ public static class FileCacheV2Extensions
     /// <param name="wizardBuilder"></param>
     /// <param name="fileCacheSettingsSetup"></param>
     /// <returns></returns>
+    [Obsolete("Use FileCacheV1")]
     public static IImageWizardBuilder SetFileCacheV2(this IImageWizardBuilder wizardBuilder, Action<FileCacheV2Options> fileCacheSettingsSetup)
     {
         wizardBuilder.Services.Configure(fileCacheSettingsSetup);
