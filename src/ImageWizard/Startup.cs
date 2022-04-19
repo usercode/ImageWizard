@@ -42,7 +42,7 @@ public class Startup
     {
         services.Configure<ImageWizardOptions>(Configuration.GetSection("General"));
         services.Configure<HttpLoaderOptions>(Configuration.GetSection("HttpLoader"));
-        services.Configure<FileCacheV1Options>(Configuration.GetSection("FileCache"));
+        services.Configure<FileCacheOptions>(Configuration.GetSection("FileCache"));
         services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
         services.Configure<AzureBlobOptions>(Configuration.GetSection("Azure"));
         services.Configure<ImageWizardAppOptions>(Configuration.GetSection("App"));

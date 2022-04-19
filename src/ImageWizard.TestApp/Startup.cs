@@ -114,7 +114,6 @@ public class Startup
             .SetMongoDBCache()
             //.SetDistributedCache()
             .SetFileCache()
-            //.SetFileCacheV2()
 
             //Adds a background service which removes cached data based on defined CleanupReason.
             //The cache needs to implements <see cref="ICleanupCache"/>.

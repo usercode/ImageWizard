@@ -11,7 +11,7 @@ using ImageWizard.Caches;
 
 namespace ImageWizard;
 
-public static class FileCacheV1Extensions
+public static class FileCacheExtensions
 {
     public static IImageWizardBuilder SetDistributedCache(this IImageWizardBuilder wizardBuilder)
     {
@@ -28,7 +28,7 @@ public static class FileCacheV1Extensions
     /// <param name="wizardBuilder"></param>
     /// <param name="fileCacheSettingsSetup"></param>
     /// <returns></returns>
-    public static IImageWizardBuilder SetFileCache(this IImageWizardBuilder wizardBuilder, Action<FileCacheV1Options>? fileCacheSettingsSetup = null)
+    public static IImageWizardBuilder SetFileCache(this IImageWizardBuilder wizardBuilder, Action<FileCacheOptions>? fileCacheSettingsSetup = null)
     {
         if (fileCacheSettingsSetup != null)
         {
@@ -36,7 +36,7 @@ public static class FileCacheV1Extensions
         }
 
         wizardBuilder.Services.RemoveAll<ICache>();
-        wizardBuilder.Services.AddSingleton<ICache, FileCacheV1>();
+        wizardBuilder.Services.AddSingleton<ICache, FileCache>();
 
         return wizardBuilder;
     }

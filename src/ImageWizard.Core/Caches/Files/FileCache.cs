@@ -16,32 +16,31 @@ using System.Threading.Tasks;
 namespace ImageWizard.Caches;
 
 /// <summary>
-/// FileCacheBase
+/// FileCache
 /// </summary>
-public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAccessCache
-    where TOptions : FileCacheOptionsBase
+public class FileCache : ICache, ICleanupCache, ILastAccessCache
 {
     protected static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
 
-    public FileCacheBase(IOptions<TOptions> settings, IWebHostEnvironment hostingEnvironment, ICacheLock cacheLock)
+    public FileCache(IOptions<FileCacheOptions> options, IWebHostEnvironment hostingEnvironment, ICacheLock cacheLock)
     {
-        Settings = settings;
+        Options = options;
         CacheLock = cacheLock;
 
-        if (Path.IsPathFullyQualified(settings.Value.Folder))
+        if (Path.IsPathFullyQualified(options.Value.Folder))
         {
-            Folder = new DirectoryInfo(settings.Value.Folder);
+            Folder = new DirectoryInfo(options.Value.Folder);
         }
         else
         {
-            Folder = new DirectoryInfo(Path.Join(hostingEnvironment.ContentRootPath, settings.Value.Folder));
+            Folder = new DirectoryInfo(Path.Join(hostingEnvironment.ContentRootPath, options.Value.Folder));
         }
     }
 
     /// <summary>
-    /// Settings
+    /// Options
     /// </summary>
-    public IOptions<TOptions> Settings { get; }
+    public IOptions<FileCacheOptions> Options { get; }
 
     /// <summary>
     /// Folder
@@ -53,11 +52,22 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
     /// </summary>
     private ICacheLock CacheLock { get; }
 
-    protected virtual DirectoryInfo GetMetaFolder() => new DirectoryInfo(Folder.FullName);
+    protected FileInfo GetFileInfo(FileType type, string key)
+    {
+        string typeString = type.ToTypeString();
 
-    protected abstract FileInfo GetFile(FileType type, string key);
+        string folders = Path.Join(
+                                key.AsSpan(0, 2),
+                                key.AsSpan(2, 2),
+                                key.AsSpan(4, 2),
+                                key.AsSpan(6, 2));
 
-    protected abstract string GetBlobField(IMetadata metadata);
+        ReadOnlySpan<char> filename = key.AsSpan(8);
+
+        string file = Path.Join(Folder.FullName, folders, $"{filename}.{typeString}");
+
+        return new FileInfo(file);
+    }
 
     public virtual async Task<ICachedData?> ReadAsync(string key)
     {
@@ -68,7 +78,7 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
             return null;
         }
 
-        FileInfo blobFile = GetFile(FileType.Blob, GetBlobField(metadata));
+        FileInfo blobFile = GetFileInfo(FileType.Blob, metadata.Key);
 
         if (blobFile.Exists == false)
         {
@@ -82,7 +92,7 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
     {
         await WriteMetadataAsync(metadata);
 
-        FileInfo blobFile = GetFile(FileType.Blob, GetBlobField(metadata));
+        FileInfo blobFile = GetFileInfo(FileType.Blob, metadata.Key);
 
         if (blobFile.Directory != null)
         {
@@ -97,11 +107,12 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
         blobStream.SetLength(0);
 
         await stream.CopyToAsync(blobStream);
+    
     }
 
     private async Task<Metadata?> ReadMetadataAsync(string key)
     {
-        FileInfo metaFile = GetFile(FileType.Meta, key);
+        FileInfo metaFile = GetFileInfo(FileType.Meta, key);
 
         if (metaFile.Exists == false)
         {
@@ -110,14 +121,14 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
 
         using Stream metadataStream = metaFile.OpenRead();
 
-        Metadata? metadata = await JsonSerializer.DeserializeAsync<Metadata>(metadataStream);
+        Metadata? metadata = await JsonSerializer.DeserializeAsync<Metadata>(metadataStream, JsonSerializerOptions);
 
         return metadata;
     }
 
     private async Task WriteMetadataAsync(IMetadata metadata)
     {
-        FileInfo metaFile = GetFile(FileType.Meta, metadata.Key);
+        FileInfo metaFile = GetFileInfo(FileType.Meta, metadata.Key);
 
         if (metaFile.Directory != null)
         {
@@ -135,8 +146,8 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
 
     private void Delete(IMetadata metadata)
     {
-        FileInfo metaFile = GetFile(FileType.Meta, metadata.Key);
-        FileInfo blobFile = GetFile(FileType.Blob, GetBlobField(metadata));
+        FileInfo metaFile = GetFileInfo(FileType.Meta, metadata.Key);
+        FileInfo blobFile = GetFileInfo(FileType.Blob, metadata.Key);
 
         if (metaFile.Exists)
         {
@@ -149,7 +160,7 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
         }
         
         DeleteEmptyFolder(metaFile.Directory);
-        DeleteEmptyFolder(blobFile.Directory);
+        //DeleteEmptyFolder(blobFile.Directory);
     }
 
     private void DeleteEmptyFolder(DirectoryInfo? folder, int level = 1)
@@ -181,14 +192,12 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        DirectoryInfo metaFolder = GetMetaFolder();
-
-        if (metaFolder.Exists == false)
+        if (Folder.Exists == false)
         {
             return;
         }
 
-        foreach (DirectoryInfo level1 in metaFolder.GetDirectories())
+        foreach (DirectoryInfo level1 in Folder.GetDirectories())
         {
             foreach (DirectoryInfo level2 in level1.GetDirectories())
             {
@@ -204,12 +213,6 @@ public abstract class FileCacheBase<TOptions> : ICache, ICleanupCache, ILastAcce
 
                             //set lock
                             using var w = await CacheLock.WriterLockAsync(key);
-
-                            //file already there?
-                            if (metaFile.Exists == false)
-                            {
-                                continue;
-                            }
 
                             //read metadata
                             IMetadata? metadata = await ReadMetadataAsync(key);
