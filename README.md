@@ -62,7 +62,6 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | Name                 | Description        | NuGet     |
 |----------------------|--------------------|-----------|
 |  File cache         |  Meta and blob file path based on cache id.  |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
-|  File cache (V2)    | With data deduplication support: <br />Meta file path based on cache id.<br /> Blob file path based on cache hash. |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
 |  Distributed cache   | MS SQL, Redis      |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Core.svg)](https://www.nuget.org/packages/ImageWizard.Core/)  |
 |  MongoDB cache       | Use GridFS |  [![NuGet](https://img.shields.io/nuget/v/ImageWizard.MongoDB.svg)](https://www.nuget.org/packages/ImageWizard.MongoDB/) |
 
@@ -138,8 +137,6 @@ services.AddImageWizard(options =>
 	   .AddDocNET()
            //uses file cache (relative or absolute path)
            .SetFileCache(options => options.Folder = "FileCache") 
-	   //or FileCache V2 with data deduplication
-	   .SetFileCacheV2()
            //or MongoDB cache
            .SetMongoDBCache(options => options.Hostname = "localhost")
            //or distributed cache
