@@ -41,9 +41,9 @@ public static class ImageWizardExtensions
             x.UseRouting();
             x.UseEndpoints(endpoints =>
             {
-                endpoints.MapImageWizard();
-
                 endpointsHandler?.Invoke(new ImageWizardEndpointBuilder(endpoints));
+
+                endpoints.MapImageWizard();              
             });
         });
 

@@ -19,6 +19,7 @@ using ImageWizard.Loaders;
 using ImageWizard.Cleanup;
 using System;
 using ImageWizard.MongoDB;
+using ImageWizard.ImageSharp;
 
 namespace ImageWizard.TestApp;
 
@@ -65,9 +66,13 @@ public class Startup
                 .WithPostProcessing(x =>
                 {
                     //override target format
-                    if (x.ImageFormat is ImageSharp.JpegFormat or ImageSharp.PngFormat)
+                    if (x.ImageFormat is JpegFormat)
                     {
-                        x.ImageFormat = new ImageSharp.WebPFormat();
+                        x.ImageFormat = new WebPFormat() { Lossless = false };
+                    }
+                    else if (x.ImageFormat is PngFormat)
+                    {
+                        x.ImageFormat = new WebPFormat() { Lossless = true };
                     }
 
                     //override metadata
@@ -99,6 +104,7 @@ public class Startup
             .AddDocNET()
             .AddOpenCvSharp()
             .AddOpenGraphLoader()
+            .AddOpenStreetMapLoader()
             .AddAnalytics()
             .AddAzureLoader(x =>
             {
@@ -171,7 +177,12 @@ public class Startup
         
         app.UseHttpsRedirection();
         app.UseStaticFiles();
-        app.UseImageWizard(x => x.MapAnalytics());
+        app.UseImageWizard(x =>
+        {
+            x.MapAnalytics();
+            x.MapOpenStreetMap();
+        }
+        );
         app.UseRouting();
         app.UseEndpoints(x =>
         {

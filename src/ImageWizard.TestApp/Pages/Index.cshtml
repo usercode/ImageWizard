@@ -41,6 +41,25 @@
        
     <img src="@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()" />       
 
+    <h2>OpenStreetMap</h2>
+    <p>Use as relay to openstreetmap server. </p>
+   
+   @* <img src="@Url.ImageWizard().OpenStreetMap(1,1,1).BuildUrl()" />*@
+
+    <div tabindex="650" id="map" style="height:600px"></div>
+     
+    <link rel="stylesheet" href="~/js/leaflet/leaflet.css" />
+    <script src="~/js/leaflet/leaflet.js" asp-append-version="true" ></script>
+    <script>
+        // Create the map
+        var map = L.map('map').setView([45, 10], 4);
+
+        // Set up the OSM layer
+        L.tileLayer(
+        'https://' + window.location.host + '/image/osm/{z}/{x}/{y}.png'
+        ).addTo(map);
+    </script>
+
     <h2>SVG transforming</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").BuildUrl()</p>
     <p>@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").BuildUrl()</p>

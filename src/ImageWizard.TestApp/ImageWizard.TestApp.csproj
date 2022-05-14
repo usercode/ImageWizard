@@ -24,9 +24,14 @@
     <ProjectReference Include="..\ImageWizard.MongoDB\ImageWizard.MongoDB.csproj" />
     <ProjectReference Include="..\ImageWizard.OpenCvSharp\ImageWizard.OpenCvSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.OpenGraph\ImageWizard.OpenGraph.csproj" />
+    <ProjectReference Include="..\ImageWizard.OpenStreetMap\ImageWizard.OpenStreetMap.csproj" />
     <ProjectReference Include="..\ImageWizard.PuppeteerSharp\ImageWizard.PuppeteerSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.SkiaSharp\ImageWizard.SkiaSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.SvgNet\ImageWizard.SvgNet.csproj" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="wwwroot\js\leaflet\" />
   </ItemGroup>
 
 </Project>
