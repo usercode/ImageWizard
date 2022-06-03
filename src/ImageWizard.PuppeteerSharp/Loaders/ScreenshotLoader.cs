@@ -28,7 +28,7 @@ public class ScreenshotLoader : Loader<PuppeteerOptions>
     /// </summary>
     public ILogger<ScreenshotLoader> Logger { get; }
 
-    public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData)
+    public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData)
     {
         using BrowserFetcher browserFetcher = new BrowserFetcher();
         await browserFetcher.DownloadAsync();
@@ -54,6 +54,6 @@ public class ScreenshotLoader : Loader<PuppeteerOptions>
 
         byte[] buffer = await page.ScreenshotDataAsync(new ScreenshotOptions() { Type = ScreenshotType.Png });
 
-        return new OriginalData(MimeTypes.Png, new MemoryStream(buffer), new CacheSettings().ApplyLoaderOptions(Options.Value));
+        return LoaderResult.Success(new OriginalData(MimeTypes.Png, new MemoryStream(buffer), new CacheSettings().ApplyLoaderOptions(Options.Value)));
     }
 }

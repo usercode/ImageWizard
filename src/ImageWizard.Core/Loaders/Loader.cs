@@ -29,5 +29,5 @@ public abstract class Loader<TOptions> : ILoader
 
     IOptions<LoaderOptions> ILoader.Options => Options;
 
-    public abstract Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData);
+    public abstract Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData);
 }

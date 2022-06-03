@@ -31,7 +31,7 @@ public class AwsLoader : Loader<AwsOptions>
     /// </summary>
     public IAmazonS3 Client { get; }
 
-    public override async Task<OriginalData> GetAsync(string source, ICachedData existingCachedImage)
+    public override async Task<LoaderResult> GetAsync(string source, ICachedData existingCachedImage)
     {
         GetObjectRequest request = new GetObjectRequest()
         {
@@ -50,12 +50,12 @@ public class AwsLoader : Loader<AwsOptions>
         {
             result.Dispose();
 
-            return null;
+            return LoaderResult.NotModified();
         }
 
-        return new OriginalData(
+        return LoaderResult.Success(new OriginalData(
                     result.Headers.ContentType,
                     result.ResponseStream,
-                    new CacheSettings() { ETag = result.ETag.GetTagUnquoted() });
+                    new CacheSettings() { ETag = result.ETag.GetTagUnquoted() }));
     }
 }

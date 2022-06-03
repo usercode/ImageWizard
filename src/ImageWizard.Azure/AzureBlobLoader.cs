@@ -29,7 +29,7 @@ public class AzureBlobLoader : Loader<AzureBlobOptions>
 
     private BlobContainerClient Client { get; }
 
-    public override async Task<OriginalData> GetAsync(string source, ICachedData existingCachedImage)
+    public override async Task<LoaderResult> GetAsync(string source, ICachedData existingCachedImage)
     {
         BlobClient blob = Client.GetBlobClient(source);
 
@@ -46,12 +46,12 @@ public class AzureBlobLoader : Loader<AzureBlobOptions>
         {
             response.Value.Dispose();
 
-            return null;
+            return LoaderResult.NotModified();
         }
 
-        return new OriginalData(
+        return LoaderResult.Success(new OriginalData(
                     response.Value.Details.ContentType,
                     response.Value.Content,
-                    new CacheSettings() { ETag = response.Value.Details.ETag.ToString().GetTagUnquoted() });
+                    new CacheSettings() { ETag = response.Value.Details.ETag.ToString().GetTagUnquoted() }));
     }
 }

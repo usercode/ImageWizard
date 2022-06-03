@@ -196,84 +196,147 @@ public class ImageWizardApi
             //cached data hasn't changed after writer lock?
             if (cachedDataAfterWriteLock == null || cachedData?.Metadata.Hash == cachedDataAfterWriteLock.Metadata.Hash)
             {
+                //use the latest cached data
+                cachedData = cachedDataAfterWriteLock;
+
                 //get original image
-                using OriginalData? originalData = await loader.GetAsync(url.LoaderSource, cachedData);
+                LoaderResult loaderResult = await loader.GetAsync(url.LoaderSource, cachedData);
 
-                if (originalData != null) //is there a new version of original image?
+                switch (loaderResult.State)
                 {
-                    using PipelineContext processingContext = new PipelineContext(
-                                                                     context.RequestServices,
-                                                                     context.RequestServices.GetRequiredService<IStreamPool>(),
-                                                                     new DataResult(originalData.Data, originalData.MimeType),
-                                                                     clientHints,
-                                                                     options.Value,
-                                                                     acceptMimeTypes,
-                                                                     url.Filters);
+                    case LoaderResultState.NotModified:
+                        //ignore
+                        break;
 
-                    do
-                    {
-                        //find processing pipeline by mime type
-                        Type processingPipelineType = builder.GetPipeline(processingContext.Result.MimeType);
-                        IPipeline? processingPipeline = (IPipeline?)context.RequestServices.GetService(processingPipelineType);
-
-                        if (processingPipeline == null)
+                    case LoaderResultState.Failed:
+                        switch (options.Value.FallbackMode)
                         {
-                            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                            await context.Response.WriteAsync($"Processing pipeline was not found: {processingContext.Result.MimeType}");
-                            
-                            return;
+                            case FailedLoaderFallbackMode.None:
+                                logger.LogError("Could not load original data.");
+
+                                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                                return;
+
+                            case FailedLoaderFallbackMode.UseExistingCachedData:
+                                if (cachedData == null)
+                                {
+                                    logger.LogError("Could not load original data and there is no existing cached data.");
+
+                                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                                    return;
+                                }
+                                break;
+
+                            case FailedLoaderFallbackMode.UseFallbackImage:
+                                FileInfo fallbackImage = new FileInfo(options.Value.FallbackImage);
+
+                                if (fallbackImage.Exists == false)
+                                {
+                                    logger.LogError("Fallback image doesn't exist: {fallbackImage}", fallbackImage.FullName);
+
+                                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+                                    return;
+                                }
+
+                                cachedData = new CachedData(
+                                                        new Metadata()
+                                                        {
+                                                            Created = fallbackImage.CreationTimeUtc,
+                                                            LastAccess = DateTime.UtcNow,
+                                                            MimeType = MimeTypes.GetByExtension(fallbackImage.Name),
+                                                            FileLength = fallbackImage.Length,
+                                                            Hash = fallbackImage.GetEtag()
+                                                        },
+                                                        () => Task.FromResult<Stream>(fallbackImage.OpenRead()));
+                                break;
+                        }                        
+                        break;
+
+                    case LoaderResultState.Success:
+                        {
+                            using OriginalData? originalData = loaderResult.Result;
+
+                            if (originalData == null)
+                            {
+                                throw new ArgumentNullException(nameof(originalData));
+                            }
+
+                            using PipelineContext processingContext = new PipelineContext(
+                                                                             context.RequestServices,
+                                                                             context.RequestServices.GetRequiredService<IStreamPool>(),
+                                                                             new DataResult(originalData.Data, originalData.MimeType),
+                                                                             clientHints,
+                                                                             options.Value,
+                                                                             acceptMimeTypes,
+                                                                             url.Filters);
+
+                            do
+                            {
+                                //find processing pipeline by mime type
+                                Type processingPipelineType = builder.GetPipeline(processingContext.Result.MimeType);
+                                IPipeline? processingPipeline = (IPipeline?)context.RequestServices.GetService(processingPipelineType);
+
+                                if (processingPipeline == null)
+                                {
+                                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                                    await context.Response.WriteAsync($"Processing pipeline was not found: {processingContext.Result.MimeType}");
+
+                                    return;
+                                }
+
+                                logger.LogTrace("Start pipline: {pipeline}", processingPipelineType.Name);
+
+                                //start processing
+                                processingContext.Result = await processingPipeline.StartAsync(processingContext);
+
+                            } while (processingContext.UrlFilters.Count > 0);
+
+                            logger.LogTrace("Save new cached data: {key}", key);
+
+                            processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
+
+                            //create hash of cached image
+                            string hash = await cacheHash.CreateAsync(processingContext.Result.Data);
+
+                            DateTime now = DateTime.UtcNow;
+
+                            //create metadata
+                            Metadata metadata = new Metadata()
+                            {
+                                Cache = originalData.Cache,
+                                Created = now,
+                                LastAccess = now,
+                                Key = key,
+                                Hash = hash,
+                                Filters = url.Filters,
+                                LoaderSource = url.LoaderSource,
+                                LoaderType = url.LoaderType,
+                                MimeType = processingContext.Result.MimeType,
+                                FileLength = processingContext.Result.Data.Length
+                            };
+
+                            //image result?
+                            if (processingContext.Result is ImageResult imageResult)
+                            {
+                                metadata.Width = imageResult.Width;
+                                metadata.Height = imageResult.Height;
+                            }
+
+                            processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
+
+                            //write cached data
+                            await cache.WriteAsync(metadata, processingContext.Result.Data);
+
+                            //read cached data
+                            cachedData = await cache.ReadAsync(key);
+
+                            if (cachedData != null)
+                            {
+                                interceptor.OnCachedDataCreated(cachedData);
+                            }
                         }
-
-                        logger.LogTrace("Start pipline: {pipeline}", processingPipelineType.Name);
-
-                        //start processing
-                        processingContext.Result = await processingPipeline.StartAsync(processingContext);
-
-                    } while (processingContext.UrlFilters.Count > 0);
-
-                    logger.LogTrace("Save new cached data: {key}", key);
-
-                    processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
-
-                    //create hash of cached image
-                    string hash = await cacheHash.CreateAsync(processingContext.Result.Data);
-
-                    DateTime now = DateTime.UtcNow;
-
-                    //create metadata
-                    Metadata metadata = new Metadata()
-                    {
-                        Cache = originalData.Cache,
-                        Created = now,
-                        LastAccess = now,
-                        Key = key,
-                        Hash = hash,
-                        Filters = url.Filters,
-                        LoaderSource = url.LoaderSource,
-                        LoaderType = url.LoaderType,
-                        MimeType = processingContext.Result.MimeType,
-                        FileLength = processingContext.Result.Data.Length
-                    };
-
-                    //image result?
-                    if (processingContext.Result is ImageResult imageResult)
-                    {
-                        metadata.Width = imageResult.Width;
-                        metadata.Height = imageResult.Height;
-                    }
-
-                    processingContext.Result.Data.Seek(0, SeekOrigin.Begin);
-
-                    //write cached data
-                    await cache.WriteAsync(metadata, processingContext.Result.Data);
-
-                    //read cached data
-                    cachedData = await cache.ReadAsync(key);
-
-                    if (cachedData != null)
-                    {
-                        interceptor.OnCachedDataCreated(cachedData);
-                    }
+                        break;
                 }
             }
         }

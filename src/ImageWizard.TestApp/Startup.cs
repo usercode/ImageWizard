@@ -50,6 +50,8 @@ public class Startup
             x.UseETag = true;
             x.Key = key;
             x.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
+            x.FallbackMode = FailedLoaderFallbackMode.UseFallbackImage;
+            x.FallbackImage = @"C:\Untitled.jpg";
         })
             .AddImageSharp(c => c
                 .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
@@ -123,20 +125,20 @@ public class Startup
 
             //Adds a background service which removes cached data based on defined CleanupReason.
             //The cache needs to implements <see cref="ICleanupCache"/>.
-            .AddCleanupService(x =>
-                                    {
-                                        //Duration between the cleanup actions. (Default: 1 day)
-                                        x.Interval = TimeSpan.FromMinutes(1);
+            //.AddCleanupService(x =>
+            //                        {
+            //                            //Duration between the cleanup actions. (Default: 1 day)
+            //                            x.Interval = TimeSpan.FromMinutes(1);
 
-                                        //Removes cached data which are older than defined duration. (see IMetadata.Created)
-                                        x.OlderThan(TimeSpan.FromMinutes(2));
+            //                            //Removes cached data which are older than defined duration. (see IMetadata.Created)
+            //                            x.OlderThan(TimeSpan.FromMinutes(2));
 
-                                        //Removes cached data which are last used since defined duration. (see IMetadata.LastAccess)
-                                        x.LastUsedSince(TimeSpan.FromMinutes(2));
+            //                            //Removes cached data which are last used since defined duration. (see IMetadata.LastAccess)
+            //                            x.LastUsedSince(TimeSpan.FromMinutes(2));
 
-                                        //Removes cached data which are expired (based on the loader result).
-                                        x.Expired();
-                                    })
+            //                            //Removes cached data which are expired (based on the loader result).
+            //                            x.Expired();
+            //                        })
         ;
 
         services.AddImageWizardClient(x =>

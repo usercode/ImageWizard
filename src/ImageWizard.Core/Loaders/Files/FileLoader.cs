@@ -36,22 +36,22 @@ public class FileLoader : Loader<FileLoaderOptions>
     /// </summary>
     private IWebHostEnvironment HostingEnvironment { get; }
 
-    public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedImage)
+    public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedImage)
     {
         IFileInfo fileInfo = FileProvider.GetFileInfo(source);
 
         if (fileInfo.Exists == false)
         {
-            throw new Exception($"file not found: {source}");
+            return LoaderResult.Failed();
         }
 
-        string etag = (fileInfo.Length ^ fileInfo.LastModified.UtcTicks).ToString();
+        string etag = fileInfo.GetEtag();
 
         if (existingCachedImage != null)
         {
             if (existingCachedImage.Metadata.Cache.ETag == etag)
             {
-                return null;
+                return LoaderResult.NotModified();
             }
         }
 
@@ -59,6 +59,6 @@ public class FileLoader : Loader<FileLoaderOptions>
         
         string mimeType = MimeTypes.GetByExtension(fileInfo.Name);
 
-        return new OriginalData(mimeType, stream, new CacheSettings() { ETag = etag }.ApplyLoaderOptions(Options.Value));
+        return LoaderResult.Success(new OriginalData(mimeType, stream, new CacheSettings() { ETag = etag }.ApplyLoaderOptions(Options.Value)));
     }
 }

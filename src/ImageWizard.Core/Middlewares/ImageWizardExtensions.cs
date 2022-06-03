@@ -43,7 +43,7 @@ public static class ImageWizardExtensions
             {
                 endpointsHandler?.Invoke(new ImageWizardEndpointBuilder(endpoints));
 
-                endpoints.MapImageWizard();              
+                endpoints.MapImageWizard();
             });
         });
 

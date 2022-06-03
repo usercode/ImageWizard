@@ -27,6 +27,7 @@ public class ImageWizardOptions : ImageWizardBaseOptions
         Key = string.Empty;
 
         AllowedDPR = ImageWizardDefaults.AllowedDPR;
+        FallbackMode = FailedLoaderFallbackMode.None;
 
         CacheControl = new CacheControl();
     }
@@ -65,7 +66,17 @@ public class ImageWizardOptions : ImageWizardBaseOptions
     /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0)
     /// </summary>
     public double[] AllowedDPR { get; set; }
-  
+
+    /// <summary>
+    /// Fallback, if original data could not be fetched.
+    /// </summary>
+    public FailedLoaderFallbackMode FallbackMode { get; set; }
+
+    /// <summary>
+    /// FallbackImage
+    /// </summary>
+    public string FallbackImage { get; set; }
+
     /// <summary>
     /// Generates random 64 byte key.
     /// </summary>

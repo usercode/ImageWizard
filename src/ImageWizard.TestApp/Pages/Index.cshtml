@@ -55,9 +55,7 @@
         var map = L.map('map').setView([45, 10], 4);
 
         // Set up the OSM layer
-        L.tileLayer(
-        'https://' + window.location.host + '/image/osm/{z}/{x}/{y}.png'
-        ).addTo(map);
+        L.tileLayer('https://' + window.location.host + '/image/osm/{z}/{x}/{y}.png').addTo(map);
     </script>
 
     <h2>SVG transforming</h2>

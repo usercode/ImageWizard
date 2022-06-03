@@ -42,7 +42,7 @@ public abstract class HttpLoaderBase<TOptions> : Loader<TOptions>
     /// <param name="source"></param>
     /// <param name="existingCachedData"></param>
     /// <returns></returns>
-    public override async Task<OriginalData?> GetAsync(string source, ICachedData? existingCachedData)
+    public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData)
     {
         Uri url = await CreateRequestUrl(source);
 
@@ -54,19 +54,24 @@ public abstract class HttpLoaderBase<TOptions> : Loader<TOptions>
 
         string? mimeType = response.Content.Headers.ContentType?.MediaType;
 
-        if (response.IsSuccessStatusCode == false
-                        || mimeType == null
-                        || response.StatusCode == HttpStatusCode.NotModified)
+        if (response.StatusCode == HttpStatusCode.NotModified)
         {
             response.Dispose();
 
-            return null;
+            return LoaderResult.NotModified();
+        }
+
+        if (response.IsSuccessStatusCode == false || mimeType == null)
+        {
+            response.Dispose();
+
+            return LoaderResult.Failed();
         }
 
         Stream data = await response.Content.ReadAsStreamAsync();
 
-        return new HttpOriginalData(response, mimeType, data, new CacheSettings()
-                                                                    .ApplyHttpResponse(response)
-                                                                    .ApplyLoaderOptions(Options.Value));
+        return LoaderResult.Success(new HttpOriginalData(response, mimeType, data, new CacheSettings()
+                                                                                    .ApplyHttpResponse(response)
+                                                                                    .ApplyLoaderOptions(Options.Value)));
     }
 }
