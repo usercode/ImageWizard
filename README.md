@@ -95,6 +95,25 @@ services.AddImageWizard(options =>
                            options.CacheControl.NoStore = false;
                            //select automatically the compatible mime type by request header
                            options.UseAcceptHeader = true;
+			   options.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
+			   options.FallbackHandler = (url, cachedData) =>
+			    {
+				//use the existing cached data if available?
+				if (cachedData != null)
+				{
+				    return cachedData;
+				}
+
+				//load fallback image
+				FileInfo fallbackImage = new FileInfo(@"Untitled.jpg");
+
+				if (fallbackImage.Exists == false)
+				{
+				    return null;
+				}
+
+				return fallbackImage.ToCachedData();
+			    };
                        })
             //registers ImageSharp pipeline for specified mime types
            .AddImageSharp(c => c
