@@ -35,7 +35,7 @@ public class SkiaSharpPipeline : Pipeline<SkiaSharpFilter, SkiaSharpFilterContex
 
     protected override async Task<SkiaSharpFilterContext> CreateFilterContext(PipelineContext context)
     {
-        IImageFormat targetFormat = null;
+        IImageFormat? targetFormat = null;
 
         if (context.ImageWizardOptions.UseAcceptHeader)
         {
@@ -49,9 +49,7 @@ public class SkiaSharpPipeline : Pipeline<SkiaSharpFilter, SkiaSharpFilterContex
             targetFormat = ImageFormatHelper.FirstOrDefault(context.Result.MimeType);
         }
 
-        //SkiaSharp don't support http streaming?!
-        using MemoryStream mem = context.Result.Data.ToMemoryStream();
-        SKBitmap bitmap = SKBitmap.Decode(mem);
+        SKBitmap bitmap = SKBitmap.Decode(context.Result.Data);
 
         if (bitmap == null)
         {

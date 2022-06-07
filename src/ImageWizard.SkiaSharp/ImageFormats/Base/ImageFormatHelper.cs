@@ -12,16 +12,16 @@ namespace ImageWizard.SkiaSharp;
 
 class ImageFormatHelper
 {
-    public static IImageFormat FirstOrDefault(string mimeType)
+    public static IImageFormat? FirstOrDefault(string mimeType)
     {
         return FirstOrDefault(new[] { mimeType });
     }
 
-    public static IImageFormat FirstOrDefault(IEnumerable<string> mimeTypes)
+    public static IImageFormat? FirstOrDefault(IEnumerable<string> mimeTypes)
     {
         foreach (string mimeType in mimeTypes)
         {
-            IImageFormat imageFormat = mimeType switch
+            IImageFormat? imageFormat = mimeType switch
             {
                 MimeTypes.Jpeg => new JpegFormat(),
                 MimeTypes.Png => new PngFormat(),

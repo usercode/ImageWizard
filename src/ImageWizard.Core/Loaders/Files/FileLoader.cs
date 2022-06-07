@@ -45,6 +45,11 @@ public class FileLoader : Loader<FileLoaderOptions>
             return LoaderResult.Failed();
         }
 
+        if (fileInfo.Length > Options.Value.MaxLoaderSourceLength)
+        {
+            return LoaderResult.Failed();
+        }
+
         string etag = fileInfo.GetEtag();
 
         if (existingCachedImage != null)

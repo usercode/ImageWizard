@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard;
 
-static class FileInfoExtensions
+public static class FileInfoExtensions
 {
     public static string GetEtag(this IFileInfo fileInfo)
     {
@@ -26,5 +26,19 @@ static class FileInfoExtensions
         string etag = (fileInfo.Length ^ fileInfo.LastWriteTimeUtc.Ticks).ToString();
 
         return etag;
-    }    
+    }
+
+    public static CachedData ToCachedData(this FileInfo fileInfo)
+    {
+        return new CachedData(
+                                new Metadata()
+                                {
+                                    Created = fileInfo.CreationTimeUtc,
+                                    LastAccess = DateTime.UtcNow,
+                                    MimeType = MimeTypes.GetByExtension(fileInfo.Name),
+                                    FileLength = fileInfo.Length,
+                                    Hash = fileInfo.GetEtag()
+                                },
+                                () => Task.FromResult<Stream>(fileInfo.OpenRead()));
+    }
 }

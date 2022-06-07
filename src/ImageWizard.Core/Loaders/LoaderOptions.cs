@@ -16,6 +16,7 @@ public class LoaderOptions
     public LoaderOptions()
     {
         RefreshMode = LoaderRefreshMode.None;
+        MaxLoaderSourceLength = 1024 * 1024 * 25; //25 MB
     }
 
     /// <summary>
@@ -27,4 +28,9 @@ public class LoaderOptions
     /// Overrides max-age value from original source.
     /// </summary>
     public TimeSpan? CacheControlMaxAge { get; set; }
+
+    /// <summary>
+    /// Maximum loader source content length (Default: 25 MB)
+    /// </summary>
+    public long MaxLoaderSourceLength { get; set; }
 }

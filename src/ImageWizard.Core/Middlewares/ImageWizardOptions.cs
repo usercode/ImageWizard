@@ -2,14 +2,18 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Loaders;
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace ImageWizard;
+
+public delegate ICachedData? FallbackHandler(ImageWizardUrl url, ICachedData? existingCachedData);
 
 /// <summary>
 /// ImageWizardOptions
@@ -27,7 +31,6 @@ public class ImageWizardOptions : ImageWizardBaseOptions
         Key = string.Empty;
 
         AllowedDPR = ImageWizardDefaults.AllowedDPR;
-        FallbackMode = FailedLoaderFallbackMode.None;
 
         CacheControl = new CacheControl();
     }
@@ -68,14 +71,9 @@ public class ImageWizardOptions : ImageWizardBaseOptions
     public double[] AllowedDPR { get; set; }
 
     /// <summary>
-    /// Fallback, if original data could not be fetched.
+    /// FallbackHandler
     /// </summary>
-    public FailedLoaderFallbackMode FallbackMode { get; set; }
-
-    /// <summary>
-    /// FallbackImage
-    /// </summary>
-    public string FallbackImage { get; set; }
+    public FallbackHandler? FallbackHandler { get; set; }
 
     /// <summary>
     /// Generates random 64 byte key.

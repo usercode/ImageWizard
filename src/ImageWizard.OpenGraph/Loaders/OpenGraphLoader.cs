@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Loaders;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenGraphNet;
 using System;
@@ -17,12 +18,16 @@ namespace ImageWizard.Loaders;
 /// </summary>
 public class OpenGraphLoader : HttpLoaderBase<OpenGraphOptions>
 {
-    public OpenGraphLoader(HttpClient client, IOptions<OpenGraphOptions> options)
-        : base(client, options)
+    public OpenGraphLoader(
+        HttpClient client, 
+        IStreamPool streamPool, 
+        ILogger<OpenGraphLoader> logger,
+        IOptions<OpenGraphOptions> options)
+        : base(client, streamPool, logger, options)
     {
     }
 
-    protected override async Task<Uri> CreateRequestUrl(string source)
+    protected override async Task<Uri?> CreateRequestUrl(string source)
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, source);
         request.SetUserAgentHeader();
@@ -31,7 +36,7 @@ public class OpenGraphLoader : HttpLoaderBase<OpenGraphOptions>
 
         if (response.IsSuccessStatusCode == false)
         {
-            throw new Exception($"Could not load page: {source}");
+            return null;
         }
 
         string html = await response.Content.ReadAsStringAsync();

@@ -20,6 +20,7 @@ using ImageWizard.Cleanup;
 using System;
 using ImageWizard.MongoDB;
 using ImageWizard.ImageSharp;
+using System.IO;
 
 namespace ImageWizard.TestApp;
 
@@ -50,8 +51,24 @@ public class Startup
             x.UseETag = true;
             x.Key = key;
             x.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
-            x.FallbackMode = FailedLoaderFallbackMode.UseFallbackImage;
-            x.FallbackImage = @"C:\Untitled.jpg";
+            x.FallbackHandler = (url, cachedData) =>
+            {
+                //use the existing cached data if available?
+                if (cachedData != null)
+                {
+                    return cachedData;
+                }
+
+                //load fallback image
+                FileInfo fallbackImage = new FileInfo(@"C:\Untitled.jpg");
+
+                if (fallbackImage.Exists == false)
+                {
+                    return null;
+                }
+
+                return fallbackImage.ToCachedData();
+            };
         })
             .AddImageSharp(c => c
                 .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)

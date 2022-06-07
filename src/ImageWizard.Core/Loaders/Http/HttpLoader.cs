@@ -3,6 +3,7 @@
 // MIT License
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -25,9 +26,11 @@ public class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
 
     public HttpLoader(
                 HttpClient client,
+                IStreamPool streamPool,
+                ILogger<HttpLoader> logger,
                 IOptions<HttpLoaderOptions> options,
                 IHttpContextAccessor httpContextAccessor)
-        : base(client, options)
+        : base(client, streamPool, logger, options)
     {
         HttpContextAccessor = httpContextAccessor;
 
@@ -42,7 +45,7 @@ public class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
     /// </summary>
     private IHttpContextAccessor HttpContextAccessor { get; }
 
-    protected override Task<Uri> CreateRequestUrl(string source)
+    protected override Task<Uri?> CreateRequestUrl(string source)
     {
         Uri sourceUri;
 
@@ -78,6 +81,6 @@ public class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
             }
         }
 
-        return Task.FromResult(sourceUri);
+        return Task.FromResult<Uri?>(sourceUri);
     }
 }

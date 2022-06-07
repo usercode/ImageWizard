@@ -74,6 +74,8 @@ public class ImageWizardApi
             }
             else
             {
+                logger.LogTrace("Unsafe url is not allowed!");
+
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 await context.Response.WriteAsync("Unsafe url is not allowed!");
 
@@ -87,12 +89,14 @@ public class ImageWizardApi
 
             if (signature == validSignature)
             {
-                logger.LogTrace("Signature is valid");
+                logger.LogTrace("Signature is valid.");
 
                 interceptor.OnValidSignature();
             }
             else
             {
+                logger.LogTrace("Signature is invalid.");
+
                 interceptor.OnInvalidSignature();
 
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
@@ -150,6 +154,8 @@ public class ImageWizardApi
 
         if (loader == null)
         {
+            logger.LogTrace("Data loader not found: {LoaderType}", url.LoaderType);
+
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await context.Response.WriteAsync($"Data loader not found: {url.LoaderType}");
 
@@ -208,49 +214,25 @@ public class ImageWizardApi
                         //ignore
                         break;
 
-                    case LoaderResultState.Failed:
-                        switch (options.Value.FallbackMode)
+                    case LoaderResultState.Failed:                     
+
+                        if (options.Value.FallbackHandler == null)
                         {
-                            case FailedLoaderFallbackMode.None:
-                                logger.LogError("Could not load original data.");
+                            logger.LogError("Could not load original data and there is no fallback handler registered.");
 
-                                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                                return;
+                            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                            return;
+                        }
 
-                            case FailedLoaderFallbackMode.UseExistingCachedData:
-                                if (cachedData == null)
-                                {
-                                    logger.LogError("Could not load original data and there is no existing cached data.");
+                        cachedData = options.Value.FallbackHandler(url, cachedData);
 
-                                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                                    return;
-                                }
-                                break;
+                        if (cachedData == null)
+                        {
+                            logger.LogError("Could not load original data and the fallback handler delivered no cached data.");
 
-                            case FailedLoaderFallbackMode.UseFallbackImage:
-                                FileInfo fallbackImage = new FileInfo(options.Value.FallbackImage);
-
-                                if (fallbackImage.Exists == false)
-                                {
-                                    logger.LogError("Fallback image doesn't exist: {fallbackImage}", fallbackImage.FullName);
-
-                                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-                                    return;
-                                }
-
-                                cachedData = new CachedData(
-                                                        new Metadata()
-                                                        {
-                                                            Created = fallbackImage.CreationTimeUtc,
-                                                            LastAccess = DateTime.UtcNow,
-                                                            MimeType = MimeTypes.GetByExtension(fallbackImage.Name),
-                                                            FileLength = fallbackImage.Length,
-                                                            Hash = fallbackImage.GetEtag()
-                                                        },
-                                                        () => Task.FromResult<Stream>(fallbackImage.OpenRead()));
-                                break;
-                        }                        
+                            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                            return;
+                        }
                         break;
 
                     case LoaderResultState.Success:

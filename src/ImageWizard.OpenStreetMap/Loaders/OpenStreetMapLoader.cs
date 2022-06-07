@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Loaders;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,17 @@ namespace ImageWizard.OpenStreetMap;
 
 class OpenStreetMapLoader : HttpLoaderBase<OpenStreetMapOptions>
 {
-    public OpenStreetMapLoader(HttpClient client, IOptions<OpenStreetMapOptions> options)
-        : base(client, options)
+    public OpenStreetMapLoader(
+        HttpClient client, 
+        IStreamPool streamPool, 
+        ILogger<OpenStreetMapLoader> logger,
+        IOptions<OpenStreetMapOptions> options)
+        : base(client, streamPool, logger, options)    
     {
     }
 
-    protected override Task<Uri> CreateRequestUrl(string source)
+    protected override Task<Uri?> CreateRequestUrl(string source)
     {
-        return Task.FromResult(new Uri($"{Options.Value.Path.TrimEnd('/')}/{source}.png"));
+        return Task.FromResult<Uri?>(new Uri($"{Options.Value.Path.TrimEnd('/')}/{source}.png"));
     }
 }
