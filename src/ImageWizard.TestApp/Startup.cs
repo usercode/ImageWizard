@@ -119,10 +119,10 @@ public class Startup
             .AddYoutubeLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddGravatarLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddPuppeteerLoader(x => x.RefreshMode = LoaderRefreshMode.None)
+            .AddOpenGraphLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddFFMpegCore()
             .AddDocNET()
             .AddOpenCvSharp()
-            .AddOpenGraphLoader()
             .AddOpenStreetMapLoader()
             .AddAnalytics()
             .AddAzureLoader(x =>
