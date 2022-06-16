@@ -51,7 +51,7 @@ public class Startup
             x.UseETag = true;
             x.Key = key;
             x.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
-            x.FallbackHandler = (url, cachedData) =>
+            x.FallbackHandler = (state, url, cachedData) =>
             {
                 //use the existing cached data if available?
                 if (cachedData != null)
@@ -60,7 +60,12 @@ public class Startup
                 }
 
                 //load fallback image
-                FileInfo fallbackImage = new FileInfo(@"C:\Untitled.jpg");
+                FileInfo fallbackImage = state switch
+                {
+                    LoaderResultState.NotFound => new FileInfo(@"C:\notfound.jpg"),
+                    LoaderResultState.Failed => new FileInfo(@"C:\failed.jpg"),
+                   _ => throw new Exception()
+                };
 
                 if (fallbackImage.Exists == false)
                 {

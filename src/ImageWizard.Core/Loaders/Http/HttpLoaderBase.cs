@@ -80,7 +80,16 @@ public abstract class HttpLoaderBase<TOptions> : Loader<TOptions>
 
         if (response.StatusCode == HttpStatusCode.NotModified)
         {
+            Logger.LogTrace("Content not modified. {Url}", url);
+
             return LoaderResult.NotModified();
+        }
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            Logger.LogError("Content not found. {Url}", url);
+
+            return LoaderResult.NotFound();
         }
 
         if (response.IsSuccessStatusCode == false || mimeType == null)

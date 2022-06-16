@@ -15,6 +15,8 @@ public readonly struct LoaderResult
 
     public static LoaderResult NotModified() => new LoaderResult(LoaderResultState.NotModified, null);
 
+    public static LoaderResult NotFound() => new LoaderResult(LoaderResultState.NotFound, null);
+
     public static LoaderResult Failed() => new LoaderResult(LoaderResultState.Failed, null);
 
     private LoaderResult(LoaderResultState state, OriginalData? result)

@@ -220,6 +220,7 @@ public class ImageWizardApi
                         //ignore
                         break;
 
+                    case LoaderResultState.NotFound:
                     case LoaderResultState.Failed:
 
                         if (options.Value.FallbackHandler == null)
@@ -230,7 +231,7 @@ public class ImageWizardApi
                             return;
                         }
 
-                        cachedData = options.Value.FallbackHandler(url, cachedData);
+                        cachedData = options.Value.FallbackHandler(loaderResult.State, url, cachedData);
 
                         if (cachedData == null)
                         {

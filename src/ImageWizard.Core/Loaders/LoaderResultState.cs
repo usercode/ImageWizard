@@ -14,5 +14,6 @@ public enum LoaderResultState
 {
     Success = 0,
     NotModified = 1,
-    Failed = 100
+    NotFound = 2,
+    Failed = 3
 }

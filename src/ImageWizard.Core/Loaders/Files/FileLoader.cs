@@ -42,7 +42,7 @@ public class FileLoader : Loader<FileLoaderOptions>
 
         if (fileInfo.Exists == false)
         {
-            return LoaderResult.Failed();
+            return LoaderResult.NotFound();
         }
 
         if (fileInfo.Length > Options.Value.MaxLoaderSourceLength)

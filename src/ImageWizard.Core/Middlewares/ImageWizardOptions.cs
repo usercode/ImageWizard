@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ImageWizard;
 
-public delegate ICachedData? FallbackHandler(ImageWizardUrl url, ICachedData? existingCachedData);
+public delegate ICachedData? FallbackHandler(LoaderResultState state, ImageWizardUrl url, ICachedData? existingCachedData);
 
 /// <summary>
 /// ImageWizardOptions
