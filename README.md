@@ -96,7 +96,7 @@ services.AddImageWizard(options =>
                            //select automatically the compatible mime type by request header
                            options.UseAcceptHeader = true;
 			   options.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
-			   options.FallbackHandler = (url, cachedData) =>
+			   x.FallbackHandler = (state, url, cachedData) =>
 			    {
 				//use the existing cached data if available?
 				if (cachedData != null)
@@ -105,7 +105,12 @@ services.AddImageWizard(options =>
 				}
 
 				//load fallback image
-				FileInfo fallbackImage = new FileInfo(@"Untitled.jpg");
+				FileInfo fallbackImage = state switch
+				{
+				    LoaderResultState.NotFound => new FileInfo(@"C:\notfound.jpg"),
+				    LoaderResultState.Failed => new FileInfo(@"C:\failed.jpg"),
+				   _ => throw new Exception()
+				};
 
 				if (fallbackImage.Exists == false)
 				{
