@@ -96,7 +96,7 @@ services.AddImageWizard(options =>
                            //select automatically the compatible mime type by request header
                            options.UseAcceptHeader = true;
 			   options.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
-			   x.FallbackHandler = (state, url, cachedData) =>
+			   options.FallbackHandler = (state, url, cachedData) =>
 			    {
 				//use the existing cached data if available?
 				if (cachedData != null)
