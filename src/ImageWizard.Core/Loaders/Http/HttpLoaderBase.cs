@@ -85,7 +85,7 @@ public abstract class HttpLoaderBase<TOptions> : Loader<TOptions>
 
         if (response.IsSuccessStatusCode == false || mimeType == null)
         {
-            Logger.LogError("Couldn't fetch content. (Status code: {StatusCode})", response.StatusCode);
+            Logger.LogError("Couldn't fetch content. (Status code: {StatusCode}) {Url}", response.StatusCode, url);
 
             return LoaderResult.Failed();
         }
@@ -96,7 +96,7 @@ public abstract class HttpLoaderBase<TOptions> : Loader<TOptions>
         //check content length by header
         if (contentLength > maxContentLength)
         {
-            Logger.LogError("Content is too large. (Based on HTTP header)");
+            Logger.LogError("Content is too large. (Based on HTTP header) {Url}", url);
 
             return LoaderResult.Failed();
         }
@@ -109,7 +109,7 @@ public abstract class HttpLoaderBase<TOptions> : Loader<TOptions>
         //check content length by download
         if (await sourceStream.TryCopyToAsync(mem, maxContentLength) == false)
         {
-            Logger.LogError("Content is too large. (Download was cancelled.)");
+            Logger.LogError("Content is too large. (Download was cancelled.) {Url}", url);
 
             mem.Dispose();
 

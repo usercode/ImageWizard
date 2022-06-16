@@ -57,6 +57,10 @@ public class ImageWizardApi
         //parse url
         if (ImageWizardUrl.TryParse(path, out ImageWizardUrl url) == false)
         {
+            logger.LogError("Invalid url: {Url}", path);
+
+            interceptor.OnInvalidUrl(path);
+
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync("The url is invalid.");
 
@@ -70,11 +74,13 @@ public class ImageWizardApi
             {
                 logger.LogTrace("Unsafe request");
 
-                interceptor.OnUnsafeSignature();
+                interceptor.OnValidSignature(url);
             }
             else
             {
-                logger.LogTrace("Unsafe url is not allowed!");
+                logger.LogError("Unsafe url is not allowed!");
+
+                interceptor.OnInvalidSignature(url);
 
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 await context.Response.WriteAsync("Unsafe url is not allowed!");
@@ -91,13 +97,13 @@ public class ImageWizardApi
             {
                 logger.LogTrace("Signature is valid.");
 
-                interceptor.OnValidSignature();
+                interceptor.OnValidSignature(url);
             }
             else
             {
-                logger.LogTrace("Signature is invalid.");
+                logger.LogError("Signature is invalid.");
 
-                interceptor.OnInvalidSignature();
+                interceptor.OnInvalidSignature(url);
 
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 await context.Response.WriteAsync("Signature is not valid!");
@@ -214,7 +220,7 @@ public class ImageWizardApi
                         //ignore
                         break;
 
-                    case LoaderResultState.Failed:                     
+                    case LoaderResultState.Failed:
 
                         if (options.Value.FallbackHandler == null)
                         {

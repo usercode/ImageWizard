@@ -17,10 +17,9 @@ public interface IImageWizardInterceptor
 
     void OnCachedDataDeleted(ICachedData cachedData);
 
-    void OnUnsafeSignature();
+    void OnValidSignature(ImageWizardUrl url);
 
-    void OnValidSignature();
+    void OnInvalidSignature(ImageWizardUrl url);
 
-    void OnInvalidSignature();
-
+    void OnInvalidUrl(string path);
 }

@@ -16,7 +16,7 @@ public class AnalyticsDataItem
     public long CachedDataSendInBytes { get; set; }    
     public long InvalidSignature { get; set; }
     public long ValidSignature { get; set; }
-    public long UnsafeSignature { get; set; }
+    public long InvalidUrl { get; set; }
     public long CachedDataCreated { get; set; }
     public long CachedDataCreatedInBytes { get; set; }
     public long CachedDataDeleted { get; set; }

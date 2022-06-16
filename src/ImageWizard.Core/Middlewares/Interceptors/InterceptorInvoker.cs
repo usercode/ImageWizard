@@ -41,18 +41,18 @@ public class InterceptorInvoker : IImageWizardInterceptor
         Items.Foreach(x => x.OnCachedDataSent(cachedData, notModified));
     }
 
-    public void OnInvalidSignature()
+    public void OnInvalidSignature(ImageWizardUrl url)
     {
-        Items.Foreach(x => x.OnInvalidSignature());
+        Items.Foreach(x => x.OnInvalidSignature(url));
     }
 
-    public void OnUnsafeSignature()
+    public void OnValidSignature(ImageWizardUrl url)
     {
-        Items.Foreach(x => x.OnUnsafeSignature());
+        Items.Foreach(x => x.OnValidSignature(url));
     }
 
-    public void OnValidSignature()
+    public void OnInvalidUrl(string path)
     {
-        Items.Foreach(x => x.OnValidSignature());
+        Items.Foreach(x => x.OnInvalidUrl(path));
     }
 }

@@ -106,8 +106,7 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
         //delete existing data
         blobStream.SetLength(0);
 
-        await stream.CopyToAsync(blobStream);
-    
+        await stream.CopyToAsync(blobStream);    
     }
 
     private async Task<Metadata?> ReadMetadataAsync(string key)

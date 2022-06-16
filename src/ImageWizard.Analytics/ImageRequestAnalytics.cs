@@ -73,15 +73,8 @@ class ImageRequestAnalytics : IImageWizardInterceptor
         });
     }
 
-    public void OnUnsafeSignature()
-    {
-        SetData(null, x =>
-        {
-            x.UnsafeSignature++;
-        });
-    }
 
-    public void OnValidSignature()
+    public void OnValidSignature(ImageWizardUrl url)
     {
         SetData(null, x =>
         {
@@ -89,7 +82,7 @@ class ImageRequestAnalytics : IImageWizardInterceptor
         });
     }
 
-    public void OnInvalidSignature()
+    public void OnInvalidSignature(ImageWizardUrl url)
     {
         SetData(null, x =>
         {
@@ -102,6 +95,14 @@ class ImageRequestAnalytics : IImageWizardInterceptor
         SetData(cachedData.Metadata.MimeType, x =>
         {
             x.CachedDataDeleted++;
+        });
+    }
+
+    public void OnInvalidUrl(string path)
+    {
+        SetData(null, x =>
+        {
+            x.InvalidUrl++;
         });
     }
 }
