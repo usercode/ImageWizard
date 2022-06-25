@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-	<Nullable>enable</Nullable>
+	  <Nullable>enable</Nullable>
     <Authors>usercode</Authors>
-    <Version>3.6.0</Version>
-     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
+    <Version>3.7.0</Version>
+    <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>usercode.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
