@@ -4,13 +4,13 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageWizard.Utils;
 
@@ -28,6 +28,8 @@ public class HMACSHA256UrlSignature : IUrlSignature
     {
         IncludeHost = includeHost;
     }
+
+    private IMemoryCache _cache = new MemoryCache(Options.Create(new MemoryCacheOptions() { SizeLimit = 10_000 }));
 
     /// <summary>
     /// Signature depend on remote hostname? (Default: false)
@@ -73,6 +75,15 @@ public class HMACSHA256UrlSignature : IUrlSignature
             input = GetUrlValue(request.Url);
         }
 
+        //signature already exists in cache?
+        if (_cache.TryGetValue(input, out string? cachedKey) == true)
+        {
+            if (cachedKey != null)
+            {
+                return cachedKey;
+            }
+        }
+
         int inputLength = Encoding.UTF8.GetByteCount(input);
 
         Span<byte> inputBuffer = inputLength <= 128 ? stackalloc byte[inputLength] : new byte[inputLength];
@@ -86,6 +97,15 @@ public class HMACSHA256UrlSignature : IUrlSignature
         HMACSHA256.HashData(key, inputBuffer, hashBuffer);
 
         //convert to Base64Url
-        return WebEncoders.Base64UrlEncode(hashBuffer);
+        string keyBase64Url = WebEncoders.Base64UrlEncode(hashBuffer);
+
+        //add signature to cache
+        _cache.Set(input, keyBase64Url, new MemoryCacheEntryOptions() 
+                                            { 
+                                                Size = 1,
+                                                SlidingExpiration = TimeSpan.FromHours(1)
+                                            });
+
+        return keyBase64Url;
     }
 }

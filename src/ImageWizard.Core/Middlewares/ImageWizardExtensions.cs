@@ -80,7 +80,8 @@ public static class ImageWizardExtensions
         services.AddTransient<ICache, OneTimeCache>();
         services.AddTransient<ICacheKey, SHA256CacheKey>();
         services.AddTransient<ICacheHash, SHA256CacheHash>();
-        services.AddTransient<IUrlSignature, HMACSHA256UrlSignature>();
+
+        services.AddSingleton<IUrlSignature, HMACSHA256UrlSignature>();
 
         services.AddTransient<InterceptorInvoker>();
 
