@@ -91,7 +91,7 @@ public class ImageWizardApi
         else
         {
             //check signature
-            string validSignature = signatureService.Encrypt(options.Value.KeyInBytes, new ImageWizardRequest(url, context.Request.Host));
+            string validSignature = signatureService.Encrypt(options.Value.Key, new ImageWizardRequest(url, context.Request.Host));
 
             if (signature == validSignature)
             {

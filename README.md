@@ -83,9 +83,9 @@ services.AddImageWizard();
 
 services.AddImageWizard(options => 
                        {
-                           options.AllowUnsafeUrl = true;             
-                           options.AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
-                           options.Key = "DEMO-KEY..."; //64 byte key encoded in Base64Url
+                           options.AllowUnsafeUrl = true;
+                           options.AllowedDPR = new double[] { 1.0, 1.5, 2.0, 3.0, 4.0 };
+                           options.Key = new byte[64] { .. };
                            options.UseETag = true;                                                
                            options.CacheControl.IsEnabled = true;
                            options.CacheControl.MaxAge = TimeSpan.FromDays(365);
@@ -507,7 +507,7 @@ static:
     volumes:
       - file_cache:/data
     environment:
-      - General__Key=DEMO-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---PLEASE-CHANGE-THIS-KEY---==
+      - General__Key=DEMO+KEY+++PLEASE+CHANGE+THIS+KEY+++PLEASE+CHANGE+THIS+KEY+++PLEASE+CHANGE+THIS+KEY+++==
       - General__AllowUnsafeUrl=false
       - General__UseAcceptHeader=false
       - General__UseETag=true

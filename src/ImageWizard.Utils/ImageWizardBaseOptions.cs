@@ -15,33 +15,11 @@ public abstract class ImageWizardBaseOptions
 {
     public ImageWizardBaseOptions()
     {
-        _key = string.Empty;
-        _keyDecoded = Array.Empty<byte>();
-    }
-
-    private string _key;
-    private byte[] _keyDecoded;
-
-    /// <summary>
-    /// Key encoded in Base64Url
-    /// </summary>
-    public string Key
-    {
-        get => _key;
-        set
-        {
-            if (_key != value)
-            {
-                _key = value;
-
-                _keyDecoded = WebEncoders.Base64UrlDecode(_key);
-            }
-        }
+        Key = Array.Empty<byte>();
     }
 
     /// <summary>
-    /// GetKeyInBytes
+    /// Key
     /// </summary>
-    /// <returns></returns>
-    public byte[] KeyInBytes => _keyDecoded;
+    public byte[] Key { get; set; }
 }

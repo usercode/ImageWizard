@@ -36,10 +36,10 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        //generate random key
-        byte[] keyBuffer = RandomNumberGenerator.GetBytes(64);
+        services.Configure<ImageWizardOptions>(Configuration.GetSection("General"));
 
-        string key = WebEncoders.Base64UrlEncode(keyBuffer);
+        //generate random key
+        byte[] key = RandomNumberGenerator.GetBytes(64);
 
         services.AddImageWizard(x =>
         {

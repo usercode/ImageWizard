@@ -28,8 +28,6 @@ public class ImageWizardOptions : ImageWizardBaseOptions
         UseAcceptHeader = false;
         RefreshLastAccessInterval = TimeSpan.FromDays(1);
 
-        Key = string.Empty;
-
         AllowedDPR = ImageWizardDefaults.AllowedDPR;
 
         CacheControl = new CacheControl();
@@ -74,16 +72,4 @@ public class ImageWizardOptions : ImageWizardBaseOptions
     /// FallbackHandler
     /// </summary>
     public FallbackHandler? FallbackHandler { get; set; }
-
-    /// <summary>
-    /// Generates random 64 byte key.
-    /// </summary>
-    public void GenerateRandomKey()
-    {
-        //generate random key
-        byte[] keyBuffer = new byte[64];
-        RandomNumberGenerator.Create().GetBytes(keyBuffer);
-
-        Key = WebEncoders.Base64UrlEncode(keyBuffer);
-    }
 }

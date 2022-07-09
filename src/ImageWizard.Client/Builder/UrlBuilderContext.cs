@@ -67,7 +67,7 @@ class UrlBuilderContext : ILoader, IFilter, IBuildUrl
 
         if (ImageUrlBuilder.Settings.UseUnsafeUrl == false)
         {
-            signature = signatureService.Encrypt(ImageUrlBuilder.Settings.KeyInBytes, new ImageWizardRequest(url, new HostString(ImageUrlBuilder.Settings.Host)));
+            signature = signatureService.Encrypt(ImageUrlBuilder.Settings.Key, new ImageWizardRequest(url, new HostString(ImageUrlBuilder.Settings.Host)));
         }
 
         return $"{ImageUrlBuilder.Settings.BaseUrl.TrimEnd('/')}/{signature}/{url.Path}";
