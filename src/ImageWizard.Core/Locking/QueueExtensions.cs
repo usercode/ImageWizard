@@ -15,7 +15,7 @@ public static class QueueExtensions
 {
     public static TaskCompletionSource<T> Enqueue<T>(this Queue<TaskCompletionSource<T>> queue, CancellationToken cancellationToken)
     {
-        TaskCompletionSource<T> item = new TaskCompletionSource<T>();
+        TaskCompletionSource<T> item = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         queue.Enqueue(item);
 

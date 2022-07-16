@@ -48,7 +48,9 @@ public class AsyncLockKeyTest
     {
         AsyncLock<string> lockEntity = new AsyncLock<string>();
 
-        using var w1 = await lockEntity.WriterLockAsync("2");
+        CancellationTokenSource s = new CancellationTokenSource();
+
+        using var w1 = await lockEntity.WriterLockAsync("2", s.Token);
 
         await Assert.ThrowsAsync<TimeoutException>(()=>  lockEntity.ReaderLockAsync("2").WaitAsync(TimeSpan.FromSeconds(1)));
     }

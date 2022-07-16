@@ -22,7 +22,6 @@ public class AsyncLock
     }
 
     internal AsyncLock(object syncObject)
-        : this()
     {
         _syncObj = syncObject;
     }

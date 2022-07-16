@@ -16,15 +16,15 @@ namespace ImageWizard.Core.Locking;
 public class AsyncLockReleaser : IDisposable
 {
     private readonly AsyncLock _asyncLock;
-    private readonly AsyncLockType? _type;
+    private readonly AsyncLockType _type;
 
-    internal AsyncLockReleaser(AsyncLock asyncLock, AsyncLockType? type)
+    internal AsyncLockReleaser(AsyncLock asyncLock, AsyncLockType type)
     {
         _asyncLock = asyncLock;
         _type = type;
     }
 
-    internal AsyncLockType? Type => _type;
+    internal AsyncLockType Type => _type;
 
     internal AsyncLock AsyncLock => _asyncLock;
 
@@ -37,11 +37,10 @@ public class AsyncLockReleaser : IDisposable
             return;
         }
 
-        if (_type != null)
-        {
-            _asyncLock.Release(_type.Value);
-        }
-
+        _asyncLock.Release(_type);
+        
         _disposed = true;
+
+        GC.SuppressFinalize(this);
     }
 }
