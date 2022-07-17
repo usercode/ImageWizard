@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
 	  <Nullable>enable</Nullable>
     <Authors>usercode</Authors>
-	  <Version>3.7.0</Version>
+	  <Version>3.7.1</Version>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>    
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>usercode.png</PackageIcon>
@@ -18,7 +18,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Svg" Version="3.4.2" />
+    <PackageReference Include="Svg" Version="3.4.3" />
   </ItemGroup>
 
   <ItemGroup>

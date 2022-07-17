@@ -4,7 +4,7 @@
 	  <TargetFramework>net6.0</TargetFramework>
 	  <Nullable>enable</Nullable>
 	  <Authors>usercode</Authors>
-	  <Version>3.7.0</Version>
+	  <Version>3.7.1</Version>
 	  <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
 	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
 	  <PackageIcon>usercode.png</PackageIcon>
@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PuppeteerSharp" Version="7.0.0" />
+		<PackageReference Include="PuppeteerSharp" Version="7.1.0" />
 	</ItemGroup>
 	
   <ItemGroup>
