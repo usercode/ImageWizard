@@ -1,14 +1,8 @@
 ﻿// Copyright (c) usercode
-// https://github.com/usercode/ImageWizard
+// https://github.com/usercode/AsyncLock
 // MIT License
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ImageWizard.Core.Locking;
+namespace AsyncLock;
 
 /// <summary>
 /// AsyncLockState

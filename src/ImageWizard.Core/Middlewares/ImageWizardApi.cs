@@ -3,8 +3,6 @@
 // MIT License
 
 using ImageWizard.Caches;
-using ImageWizard.Core;
-using ImageWizard.Core.Locking;
 using ImageWizard.Loaders;
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
@@ -16,14 +14,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageWizard;
 

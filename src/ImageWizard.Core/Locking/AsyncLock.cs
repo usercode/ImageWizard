@@ -1,15 +1,8 @@
 ﻿// Copyright (c) usercode
-// https://github.com/usercode/ImageWizard
+// https://github.com/usercode/AsyncLock
 // MIT License
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace ImageWizard.Core.Locking;
+namespace AsyncLock;
 
 /// <summary>
 /// AsyncLock
@@ -126,57 +119,7 @@ public class AsyncLock
         }
     }
 
-    internal Task<AsyncLockReleaser> SwitchToWriterLockAsync(AsyncLockReleaser releaser, CancellationToken cancellation = default)
-    {
-        if (cancellation.IsCancellationRequested)
-        {
-            return Task.FromCanceled<AsyncLockReleaser>(cancellation);
-        }
-
-        lock (_syncObj)
-        {
-            if (releaser.Type == AsyncLockType.Write)
-            {
-                throw new Exception("There is already a writer lock.");
-            }
-
-            var taskWriter = WriterLockAsync(cancellation);
-
-            if (releaser.Type != null)
-            {
-                Release(releaser.Type.Value, sendReleasedEvent: false);
-            }
-
-            return taskWriter;
-        }
-    }
-
-    internal Task<AsyncLockReleaser> SwitchToReaderLockAsync(AsyncLockReleaser releaser, bool skipWaitingWriters = false, CancellationToken cancellation = default)
-    {
-        if (cancellation.IsCancellationRequested)
-        {
-            return Task.FromCanceled<AsyncLockReleaser>(cancellation);
-        }
-
-        lock (_syncObj)
-        {
-            if (releaser.Type == AsyncLockType.Read)
-            {
-                throw new Exception("There is already a reader lock.");
-            }
-
-            var taskReader = ReaderLockAsync(cancellation);
-
-            if (releaser.Type != null)
-            {
-                Release(releaser.Type.Value, skipWaitingWriters: skipWaitingWriters, sendReleasedEvent: false);
-            }
-
-            return taskReader;
-        }
-    }
-
-    internal void Release(AsyncLockType type, bool skipWaitingWriters = false, bool sendReleasedEvent = true)
+    internal void Release(AsyncLockType type, bool sendReleasedEvent = true)
     {
         lock (_syncObj)
         {
@@ -184,7 +127,7 @@ public class AsyncLock
             {
                 if (type == AsyncLockType.Write)
                 {
-                    WriterRelease(skipWaitingWriters);
+                    WriterRelease();
                 }
                 else
                 {
@@ -212,15 +155,10 @@ public class AsyncLock
         }
     }
 
-    private void WriterRelease(bool skipWaitingWriters)
+    private void WriterRelease()
     {
-        _isWriterRunning = false;
-
         //start next writer lock?
-        if (skipWaitingWriters == false)
-        {
-            StartNextWaitingWriter();
-        }
+        StartNextWaitingWriter();
 
         //no running writer lock?
         if (_isWriterRunning == false)

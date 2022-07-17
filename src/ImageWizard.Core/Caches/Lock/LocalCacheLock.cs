@@ -2,13 +2,7 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using ImageWizard.Core.Locking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using AsyncLock;
 
 namespace ImageWizard.Caches;
 
