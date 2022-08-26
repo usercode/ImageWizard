@@ -18,8 +18,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.16.0" />
-    <PackageReference Include="MongoDB.Driver.GridFS" Version="2.16.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
+    <PackageReference Include="MongoDB.Driver.GridFS" Version="2.17.1" />
   </ItemGroup>
 
   <ItemGroup>
