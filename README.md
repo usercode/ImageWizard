@@ -74,7 +74,7 @@ https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 | SvgNet     | image/svg+xml | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.SvgNet.svg)](https://www.nuget.org/packages/ImageWizard.SvgNet/)
 | DocNET     | application/pdf | [![NuGet](https://img.shields.io/nuget/v/ImageWizard.DocNET.svg)](https://www.nuget.org/packages/ImageWizard.DocNET/)
 
-## Integrate into existing ASP.NET Core applications
+## How to use it
 
 ```csharp
 services.AddImageWizard();
@@ -138,21 +138,21 @@ services.AddImageWizard(options =>
 		//Executes custom action after the pipeline is finished.
                 .WithPostProcessing(x =>
                             {
-			    	//blur all images
+			    	//blurs all images
                                 x.Image.Mutate(m => m.Blur());
                               
-                                //override target format (Jpeg to WebP)
+                                //overrides target format (Jpeg to WebP)
 				if (x.ImageFormat is JpegFormat)
 				{
                                     x.ImageFormat = new WebPFormat() { Lossless = false };
 				}
-				//override target format (Png to WebP)
+				//overrides target format (Png to WebP)
 				else if (x.ImageFormat is PngFormat)
 				{
                                     x.ImageFormat = new WebPFormat() { Lossless = true };
 				}
 				
-				//override metadata
+				//overrides metadata
 				x.Image.Metadata.ExifProfile = new ExifProfile();
                         	x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
                             }))
@@ -172,14 +172,14 @@ services.AddImageWizard(options =>
 		   //checks every time for a new version of the original image.
 		   options.RefreshMode = LoaderRefreshMode.EveryTime;
 
-		   //set base url for relative urls
+		   //sets base url for relative urls
 		   options.DefaultBaseUrl = "https://mydomain";
 
-		   //allow only relative urls 
+		   //allows only relative urls 
 		   //(use base url from request or DefaultBaseUrl from options)
 		   options.AllowAbsoluteUrls = false;
 
-		   //allow only specified hosts
+		   //allows only specified hosts
 		   options.AllowedHosts = new [] { "mydomain" };
 
 		   //adds custom http header like apikey to prevent 
