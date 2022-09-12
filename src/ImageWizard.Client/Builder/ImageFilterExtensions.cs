@@ -186,20 +186,6 @@ public static class ImageFilterExtensions
         return image;
     }
 
-    public static Image PageToImage(this Image image, int pageIndex)
-    {
-        image.Filter($"pagetoimage({pageIndex})");
-
-        return image;
-    }
-
-    public static Image PageToImage(this Image image, int pageIndex, int width, int height)
-    {
-        image.Filter($"pagetoimage({pageIndex},{width},{height})");
-
-        return image;
-    }
-
     public static Image DrawText(this Image image, string text, int? size = null, double? x = null, double? y = null, bool useBase64Url = true)
     {
         List<string> builder = new List<string>();
