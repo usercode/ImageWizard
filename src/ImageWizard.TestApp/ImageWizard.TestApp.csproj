@@ -29,9 +29,5 @@
     <ProjectReference Include="..\ImageWizard.SkiaSharp\ImageWizard.SkiaSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.SvgNet\ImageWizard.SvgNet.csproj" />
   </ItemGroup>
-	
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\" />
-  </ItemGroup>
 
 </Project>

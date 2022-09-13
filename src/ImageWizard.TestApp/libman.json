@@ -6,5 +6,11 @@
       "library": "bootstrap@5.2.1",
       "destination": "wwwroot/lib/bootstrap/"
     }
-  ]
+  ,
+{
+  "provider": "cdnjs",
+  "library": "leaflet@1.8.0",
+  "destination": "wwwroot/lib/leaflet/"
+}
+]
 }
