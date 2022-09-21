@@ -4,7 +4,6 @@
 	  <TargetFramework>net6.0</TargetFramework>
 	  <Nullable>enable</Nullable>
 	  <Authors>usercode</Authors>
-	  <Version>3.7.1</Version>
 	  <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
 	  <Description>Image processing middleware based on ASP.NET and ImageSharp / SkiaSharp / SvgNet.</Description>
 	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -13,6 +12,7 @@
 	  <PackageTags>image processing</PackageTags>
 	  <IncludeSymbols>true</IncludeSymbols>
 	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -26,5 +26,11 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
 	</ItemGroup>
-	
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="4.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>	
 </Project>

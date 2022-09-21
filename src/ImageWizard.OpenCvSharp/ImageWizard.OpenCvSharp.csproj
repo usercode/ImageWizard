@@ -3,13 +3,13 @@
   <PropertyGroup>
 	  <TargetFramework>net6.0</TargetFramework>
 	  <Authors>usercode</Authors>
-	  <Version>3.7.1</Version>
 	  <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>	  
 	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
 	  <PackageIcon>usercode.png</PackageIcon>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <IncludeSymbols>true</IncludeSymbols>
 	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -28,4 +28,10 @@
     <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="4.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

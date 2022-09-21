@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>usercode</Authors>
-    <Version>3.7.1</Version>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
     <Description>Image processing middleware based on ASP.NET and ImageSharp / SkiaSharp / SvgNet.</Description>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -15,11 +14,12 @@
     <PackageTags>image processing</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.1" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />    
   </ItemGroup>
   
   <ItemGroup>
@@ -34,10 +34,16 @@
     <None Include="..\usercode.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
-    <ItemGroup>
-	    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-		    <_Parameter1>ImageWizard.Tests</_Parameter1>
-	    </AssemblyAttribute>
-    </ItemGroup>
+  <ItemGroup>
+	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+		  <_Parameter1>ImageWizard.Tests</_Parameter1>
+	  </AssemblyAttribute>
+  </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="4.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
