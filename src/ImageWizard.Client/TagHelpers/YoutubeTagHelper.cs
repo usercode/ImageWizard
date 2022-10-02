@@ -92,7 +92,7 @@ public class YoutubeTagHelper : TagHelper
         output.PreElement.AppendHtml($"<style>{css}</style>");
         output.PreElement.AppendHtml($"<script>{js}</script>");
         
-        string elementId = $"yt_{context.UniqueId}";
+        string elementId = $"yt_{context.UniqueId}_{VideoId}";
 
         output.TagName = "div";
         output.TagMode = TagMode.StartTagAndEndTag;
