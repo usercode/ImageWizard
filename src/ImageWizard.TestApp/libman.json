@@ -9,7 +9,7 @@
   ,
 {
   "provider": "cdnjs",
-  "library": "leaflet@1.8.0",
+  "library": "leaflet@1.9.1",
   "destination": "wwwroot/lib/leaflet/"
 }
 ]
