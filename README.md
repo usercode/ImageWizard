@@ -107,8 +107,8 @@ services.AddImageWizard(options =>
 				//load fallback image
 				FileInfo fallbackImage = state switch
 				{
-				    LoaderResultState.NotFound => new FileInfo(@"C:\notfound.jpg"),
-				    LoaderResultState.Failed => new FileInfo(@"C:\failed.jpg"),
+				    LoaderResultState.NotFound => new FileInfo(@"notfound.jpg"),
+				    LoaderResultState.Failed => new FileInfo(@"failed.jpg"),
 				   _ => throw new Exception()
 				};
 
@@ -117,6 +117,7 @@ services.AddImageWizard(options =>
 				    return null;
 				}
 
+				//convert FileInfo to CachedData
 				return fallbackImage.ToCachedData();
 			    };
                        })
