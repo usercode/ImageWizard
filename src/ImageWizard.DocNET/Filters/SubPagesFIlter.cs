@@ -3,12 +3,9 @@
 // MIT License
 
 using Docnet.Core;
-using Docnet.Core.Readers;
 using ImageWizard.Attributes;
 using ImageWizard.DocNET.Filters.Base;
 using ImageWizard.Processing.Results;
-using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace ImageWizard.DocNET.Filters;

@@ -2,9 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 

@@ -2,13 +2,10 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using ImageWizard.Core.Processing.Builder;
 using ImageWizard.DocNET;
 using ImageWizard.DocNET.Builder;
 using ImageWizard.DocNET.Filters;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageWizard;
 

@@ -9,13 +9,11 @@ using ImageWizard.Processing.Results;
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Headers;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using System.Globalization;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace ImageWizard;

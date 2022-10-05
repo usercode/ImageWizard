@@ -3,13 +3,8 @@
 // MIT License
 
 using ImageWizard.Attributes;
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters;
 

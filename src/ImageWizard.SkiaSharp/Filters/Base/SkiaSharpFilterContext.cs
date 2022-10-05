@@ -5,11 +5,6 @@
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageWizard.SkiaSharp.Filters.Base;
 

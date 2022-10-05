@@ -2,14 +2,9 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using Docnet.Core.Readers;
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ImageWizard.DocNET.Filters.Base;

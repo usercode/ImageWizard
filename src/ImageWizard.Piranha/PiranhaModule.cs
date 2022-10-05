@@ -5,9 +5,6 @@
 using Piranha;
 using Piranha.Extend;
 using Piranha.Extend.Blocks;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageWizard.Piranha;
 

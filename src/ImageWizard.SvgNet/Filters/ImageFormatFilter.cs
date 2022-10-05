@@ -5,10 +5,8 @@
 using ImageWizard.Attributes;
 using ImageWizard.Processing.Results;
 using System;
-using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Text;
 
 namespace ImageWizard.SvgNet.Filters;
 

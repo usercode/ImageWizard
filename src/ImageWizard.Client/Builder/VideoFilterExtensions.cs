@@ -2,15 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using ImageWizard.Utils;
-using Microsoft.AspNetCore.WebUtilities;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Security.Cryptography;
-using System.Text;
-
 namespace ImageWizard.Client;
 
 /// <summary>

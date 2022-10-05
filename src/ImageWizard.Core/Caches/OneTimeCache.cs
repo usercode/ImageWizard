@@ -2,12 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using ImageWizard.Cleanup;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace ImageWizard.Caches;
 
 /// <summary>

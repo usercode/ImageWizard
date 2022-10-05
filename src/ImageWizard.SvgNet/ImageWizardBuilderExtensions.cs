@@ -5,8 +5,6 @@
 using ImageWizard.SvgNet.Builder;
 using ImageWizard.SvgNet.Filters;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageWizard;
 

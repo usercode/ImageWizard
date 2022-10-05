@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 

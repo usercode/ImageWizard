@@ -6,16 +6,11 @@ using Docnet.Core;
 using Docnet.Core.Models;
 using Docnet.Core.Readers;
 using ImageWizard.Attributes;
-using ImageWizard.Core;
 using ImageWizard.DocNET.Filters.Base;
 using ImageWizard.Processing.Results;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageWizard.DocNET.Filters;
 

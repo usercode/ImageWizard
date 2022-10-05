@@ -2,12 +2,8 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageWizard.Piranha.Fields;
 

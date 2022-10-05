@@ -5,7 +5,6 @@
 using ImageWizard.Cleanup;
 using ImageWizard.Caches;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace ImageWizard;
 

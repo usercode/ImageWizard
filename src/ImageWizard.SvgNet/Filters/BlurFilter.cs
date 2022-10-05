@@ -3,13 +3,8 @@
 // MIT License
 
 using ImageWizard.Attributes;
-using ImageWizard.Filters;
 using Svg;
 using Svg.FilterEffects;
-using Svg.Transforms;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageWizard.SvgNet.Filters;
 

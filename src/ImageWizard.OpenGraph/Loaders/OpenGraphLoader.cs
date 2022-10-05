@@ -2,12 +2,10 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using ImageWizard.Loaders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenGraphNet;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 

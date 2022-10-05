@@ -2,15 +2,11 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using ImageWizard.Core;
 using ImageWizard.FFMpegCore.Filters.Base;
 using ImageWizard.Processing;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ImageWizard.FFMpegCore;

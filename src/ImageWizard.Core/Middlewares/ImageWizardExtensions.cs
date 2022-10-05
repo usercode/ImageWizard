@@ -3,14 +3,12 @@
 // MIT License
 
 using ImageWizard.Caches;
-using ImageWizard.Core;
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace ImageWizard;
 

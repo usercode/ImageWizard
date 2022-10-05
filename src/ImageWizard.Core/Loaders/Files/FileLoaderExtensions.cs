@@ -2,9 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using ImageWizard.Loaders;
 

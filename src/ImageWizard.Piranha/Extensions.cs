@@ -4,8 +4,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Extend.Fields;
-using System;
-using Microsoft.AspNetCore.Html;
 using System.Web;
 using Microsoft.Extensions.DependencyInjection;
 using ImageWizard.Client;

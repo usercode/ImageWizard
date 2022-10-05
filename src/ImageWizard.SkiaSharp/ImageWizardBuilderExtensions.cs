@@ -5,10 +5,6 @@
 using ImageWizard.SkiaSharp;
 using ImageWizard.SkiaSharp.Builder;
 using ImageWizard.SkiaSharp.Filters;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageWizard;
 

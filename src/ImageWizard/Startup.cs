@@ -4,22 +4,16 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using ImageWizard.DocNET;
 using Microsoft.AspNetCore.HttpOverrides;
 using ImageWizard.Caches;
 using ImageWizard.Loaders;
 using ImageWizard.Azure;
-using ImageWizard.Analytics;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
 using ImageWizard.ImageSharp;
 using JpegFormat = ImageWizard.ImageSharp.JpegFormat;
 using PngFormat = ImageWizard.ImageSharp.PngFormat;

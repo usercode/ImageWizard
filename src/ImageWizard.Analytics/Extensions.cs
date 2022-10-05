@@ -6,7 +6,6 @@ using ImageWizard.Analytics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Text.Json;
 
 namespace ImageWizard;

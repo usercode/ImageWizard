@@ -4,12 +4,7 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Piranha;
-using Piranha.Extend.Blocks;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageWizard.Piranha;
 

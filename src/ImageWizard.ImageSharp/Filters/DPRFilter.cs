@@ -3,9 +3,6 @@
 // MIT License
 
 using ImageWizard.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageWizard.ImageSharp.Filters;
 

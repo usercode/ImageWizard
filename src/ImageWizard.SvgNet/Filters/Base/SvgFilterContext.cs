@@ -6,7 +6,6 @@ using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
 using Svg;
 using Svg.FilterEffects;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

@@ -4,9 +4,6 @@
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Processing.Processors.Transforms;
-using System;
-using System.Threading.Tasks;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp.Drawing.Processing;
 using ImageWizard.Attributes;

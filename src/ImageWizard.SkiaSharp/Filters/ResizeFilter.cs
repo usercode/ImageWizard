@@ -6,9 +6,6 @@ using ImageWizard.Attributes;
 using ImageWizard.SkiaSharp.Filters.Base;
 using ImageWizard.Utils;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageWizard.SkiaSharp.Filters;
 

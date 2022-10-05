@@ -8,10 +8,7 @@ using FFMpegCore.Pipes;
 using ImageWizard.Attributes;
 using ImageWizard.FFMpegCore.Filters.Base;
 using ImageWizard.Processing.Results;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace ImageWizard.FFMpegCore.Filters;
 

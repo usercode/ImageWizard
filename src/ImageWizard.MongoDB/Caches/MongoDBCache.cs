@@ -4,18 +4,11 @@
 
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Linq;
-using System;
-using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
 using MongoDB.Driver.GridFS;
 using ImageWizard.MongoDB.Models;
-using System.IO;
 using ImageWizard.Caches;
-using System.Collections.Generic;
 using ImageWizard.Cleanup;
-using System.Threading;
-using ImageWizard.Core;
 
 namespace ImageWizard.MongoDB;
 

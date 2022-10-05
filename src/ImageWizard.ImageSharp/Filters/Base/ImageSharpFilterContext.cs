@@ -4,16 +4,9 @@
 
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters;
 

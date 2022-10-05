@@ -2,20 +2,10 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using ImageWizard.Core;
 using ImageWizard.Processing;
 using ImageWizard.SkiaSharp.Filters.Base;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ImageWizard.SkiaSharp;
 
