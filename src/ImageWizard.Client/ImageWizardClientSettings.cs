@@ -13,6 +13,7 @@ public class ImageWizardClientSettings : ImageWizardBaseOptions
         UseUnsafeUrl = false;
         Enabled = true;
         BaseUrl = ImageWizardDefaults.BasePath;
+        Host = string.Empty;
     }
 
     public bool Enabled { get; set; }

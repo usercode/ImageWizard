@@ -32,16 +32,14 @@ public class ScreenshotLoader : Loader<PuppeteerOptions>
         using BrowserFetcher browserFetcher = new BrowserFetcher();
         await browserFetcher.DownloadAsync();
 
-        await using Browser browser = await Puppeteer.LaunchAsync(
+        await using IBrowser browser = await Puppeteer.LaunchAsync(
                                                                     new LaunchOptions()
                                                                     { 
                                                                         Headless = true,
                                                                         Args = new[] { "--no-sandbox" }
                                                                     });
 
-        Logger.LogInformation("Chrome version: {version}", await browser.GetVersionAsync());
-
-        await using Page page = await browser.NewPageAsync();
+        await using IPage page = await browser.NewPageAsync();
 
         await page.SetViewportAsync(new ViewPortOptions() 
                                     { 
