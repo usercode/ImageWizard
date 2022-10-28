@@ -70,7 +70,8 @@ public class ResizeFilter : ImageSharpFilter
         {
             Position = anchorPositionMode,
             Mode = mode2,
-            Size = new Size(width, height)
+            Size = new Size(width, height),
+            PadColor = Color.White
         }));
     }
 }
