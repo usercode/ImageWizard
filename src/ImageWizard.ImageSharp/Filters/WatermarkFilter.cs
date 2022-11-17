@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Attributes;
+using ImageWizard.Utils;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;

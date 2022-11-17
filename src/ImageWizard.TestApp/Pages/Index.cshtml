@@ -153,26 +153,6 @@
         </div>
     </div>
 
-    <h2>Watermark</h2>
-    <p>@@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Watermark().BuildUrl()</p>
-    <p>@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Watermark().BuildUrl()</p>
-
-    <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).Watermark().BuildUrl()" />
-
-    <h2>Draw text</h2>
-    <p>@@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
-    <p>@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
-
-    <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" />
- 
-
-   @* <h2>Resize WebP image with SkiaSharp</h2>
-    <div class="row">
-        <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("/img/raccoon.webp").AsImage().Resize(400,400).BuildUrl()" />
-        </div>
-    </div>*@
-
     <h2>Fetch local file (from wwwroot folder)</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
     <p>@Url.ImageWizard().FetchLocalFile("img/meerkat.jpg").AsImage().Resize(400, 400).BuildUrl()</p>
@@ -244,6 +224,18 @@
             <img src="@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" />
         </div>
     </div>
+
+    <h2>Watermark</h2>
+    <p>@@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Watermark().BuildUrl()</p>
+    <p>@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Watermark().BuildUrl()</p>
+
+    <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).Watermark().BuildUrl()" />
+
+    <h2>Draw text</h2>
+    <p>@@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
+    <p>@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
+
+    <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" />
 
     <h2>Fetch youtube thumbnail</h2>
 

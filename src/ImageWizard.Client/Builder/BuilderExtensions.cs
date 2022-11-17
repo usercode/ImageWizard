@@ -16,6 +16,6 @@ static class BuilderExtensions
 
     public static string ToUrlString(this Enum value)
     {
-        return value.ToString().ToLower();
+        return value.ToString().ToLowerInvariant();
     }
 }

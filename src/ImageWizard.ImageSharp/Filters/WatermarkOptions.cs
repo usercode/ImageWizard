@@ -2,6 +2,8 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Utils;
+
 namespace ImageWizard.ImageSharp.Filters;
 
 public class WatermarkOptions
