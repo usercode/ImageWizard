@@ -520,8 +520,8 @@ static:
       - General__CacheControl__Public=true
       - General__CacheControl__MaxAge=60
       - General__CacheControl__MustRevalidate=false
-      - General__CacheControl__NoCache=true
-      - General__CacheControl__NoStore=true      
+      - General__CacheControl__NoCache=false
+      - General__CacheControl__NoStore=false      
       - FileCache__Folder=/cache
       - FileLoader__Folder=/data
       - HttpLoader__DefaultBaseUrl=https://domain.tld
