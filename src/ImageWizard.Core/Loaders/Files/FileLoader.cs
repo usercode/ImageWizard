@@ -18,7 +18,14 @@ public class FileLoader : Loader<FileLoaderOptions>
     {
         HostingEnvironment = hostingEnvironment;
 
-        FileProvider = new PhysicalFileProvider(Path.Join(HostingEnvironment.ContentRootPath, options.Value.Folder));
+        if (Path.IsPathRooted(options.Value.Folder))
+        {
+            FileProvider = new PhysicalFileProvider(options.Value.Folder);            
+        }
+        else
+        {
+            FileProvider = new PhysicalFileProvider(Path.Join(HostingEnvironment.ContentRootPath, options.Value.Folder));
+        }
     }
 
     /// <summary>
