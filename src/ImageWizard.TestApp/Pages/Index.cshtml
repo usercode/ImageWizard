@@ -39,24 +39,7 @@
     <p>@@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()</p>
     <p>@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()</p>
        
-    <img src="@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()" />       
-
-    <h2>OpenStreetMap</h2>
-    <p>Use as relay to openstreetmap server. </p>
-   
-   @* <img src="@Url.ImageWizard().OpenStreetMap(1,1,1).BuildUrl()" />*@
-
-    <div tabindex="650" id="map" style="height:600px"></div>
-     
-    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
-    <script src="~/lib/leaflet/leaflet.js" asp-append-version="true" ></script>
-    <script>
-        // Create the map
-        var map = L.map('map').setView([45, 10], 4);
-
-        // Set up the OSM layer
-        L.tileLayer('https://' + window.location.host + '/image/osm/{z}/{x}/{y}.png').addTo(map);
-    </script>
+    <img src="@Url.ImageWizard().Screenshot("https://github.com").BuildUrl()" /> 
 
     <h2>SVG transforming</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").BuildUrl()</p>
@@ -170,15 +153,18 @@
         </div>
     </div>
 
+    <h2>Watermark</h2>
+    <p>@@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Watermark().BuildUrl()</p>
+    <p>@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Watermark().BuildUrl()</p>
+
+    <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).Watermark().BuildUrl()" />
+
     <h2>Draw text</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
     <p>@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
 
-    <div class="row">
-        <div class="col-lg-4">
-            <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" />
-        </div>
-    </div>
+    <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" />
+ 
 
    @* <h2>Resize WebP image with SkiaSharp</h2>
     <div class="row">
@@ -247,17 +233,17 @@
     <p>@@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()</p>
     <p>@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400, 400).BuildUrl()</p>
 
-    @*<div class="row">
+    <div class="row">
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()" />
+            <img src="@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400,400).BuildUrl()" />
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).Grayscale().BuildUrl()" />
+            <img src="@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400,400).Grayscale().BuildUrl()" />
         </div>
         <div class="col-lg-4">
-            <img src="@Url.ImageWizard().File("/img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" />
+            <img src="@Url.ImageWizard().File("img/meerkat.jpg").AsImage().Resize(400,400).Blur().BuildUrl()" />
         </div>
-    </div>*@
+    </div>
 
     <h2>Fetch youtube thumbnail</h2>
 
@@ -319,4 +305,19 @@
     <p>@Url.ImageWizard().FetchLocalFile("/pdf/earth.pdf").AsPdf().PageToImage(0).BuildUrl()</p>
 
     <img src="@Url.ImageWizard().FetchLocalFile("/pdf/earth.pdf").AsPdf().PageToImage(0).BuildUrl()" />
+
+    <h2>OpenStreetMap</h2>
+    <p>Use as relay to openstreetmap server. </p>   
+
+    <div tabindex="650" id="map" style="height:600px"></div>
+
+    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
+    <script src="~/lib/leaflet/leaflet.js" asp-append-version="true" ></script>
+    <script>
+        // Create the map
+        var map = L.map('map').setView([45, 10], 4);
+
+        // Set up the OSM layer
+        L.tileLayer('https://' + window.location.host + '/image/osm/{z}/{x}/{y}.png').addTo(map);
+    </script>
 </div>

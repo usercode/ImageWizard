@@ -17,6 +17,7 @@ using SixLabors.ImageSharp.Processing;
 using ImageWizard.ImageSharp;
 using JpegFormat = ImageWizard.ImageSharp.JpegFormat;
 using PngFormat = ImageWizard.ImageSharp.PngFormat;
+using ImageWizard.ImageSharp.Filters;
 
 namespace ImageWizard;
 
@@ -34,12 +35,13 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.Configure<ImageWizardAppOptions>(Configuration.GetSection("App"));
         services.Configure<ImageWizardOptions>(Configuration.GetSection("General"));
         services.Configure<HttpLoaderOptions>(Configuration.GetSection("HttpLoader"));
         services.Configure<FileCacheOptions>(Configuration.GetSection("FileCache"));
         services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
         services.Configure<AzureBlobOptions>(Configuration.GetSection("Azure"));
-        services.Configure<ImageWizardAppOptions>(Configuration.GetSection("App"));
+        services.Configure<WatermarkOptions>(Configuration.GetSection("Watermark"));
 
         IImageWizardBuilder imageWizard = services.AddImageWizard()
                                                     .AddImageSharp(i => i

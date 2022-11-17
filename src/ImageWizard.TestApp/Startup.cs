@@ -19,6 +19,8 @@ using System;
 using ImageWizard.MongoDB;
 using ImageWizard.ImageSharp;
 using System.IO;
+using Microsoft.Extensions.Options;
+using ImageWizard.Caches;
 
 namespace ImageWizard.TestApp;
 
@@ -35,6 +37,10 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.Configure<ImageWizardOptions>(Configuration.GetSection("General"));
+        services.Configure<HttpLoaderOptions>(Configuration.GetSection("HttpLoader"));
+        services.Configure<FileCacheOptions>(Configuration.GetSection("FileCache"));
+        services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
+        services.Configure<WatermarkOptions>(Configuration.GetSection("Watermark"));
 
         //generate random key
         byte[] key = RandomNumberGenerator.GetBytes(64);
@@ -49,29 +55,29 @@ public class Startup
             x.UseETag = true;
             x.Key = key;
             x.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
-            x.FallbackHandler = (state, url, cachedData) =>
-            {
-                //use the existing cached data if available?
-                if (cachedData != null)
-                {
-                    return cachedData;
-                }
+            //x.FallbackHandler = (state, url, cachedData) =>
+            //{
+            //    //use the existing cached data if available?
+            //    if (cachedData != null)
+            //    {
+            //        return cachedData;
+            //    }
 
-                //load fallback image
-                FileInfo fallbackImage = state switch
-                {
-                    LoaderResultState.NotFound => new FileInfo(@"C:\notfound.jpg"),
-                    LoaderResultState.Failed => new FileInfo(@"C:\failed.jpg"),
-                   _ => throw new Exception()
-                };
+            //    //load fallback image
+            //    FileInfo fallbackImage = state switch
+            //    {
+            //        LoaderResultState.NotFound => new FileInfo(@"C:\notfound.jpg"),
+            //        LoaderResultState.Failed => new FileInfo(@"C:\failed.jpg"),
+            //       _ => throw new Exception()
+            //    };
 
-                if (fallbackImage.Exists == false)
-                {
-                    return null;
-                }
+            //    if (fallbackImage.Exists == false)
+            //    {
+            //        return null;
+            //    }
 
-                return fallbackImage.ToCachedData();
-            };
+            //    return fallbackImage.ToCachedData();
+            //};
         })
             .AddImageSharp(c => c
                 .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)

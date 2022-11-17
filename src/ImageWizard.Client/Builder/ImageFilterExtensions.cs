@@ -161,6 +161,13 @@ public static class ImageFilterExtensions
         return image;
     }
 
+    public static Image Watermark(this Image image)
+    {
+        image.Filter($"watermark()");
+
+        return image;
+    }
+
     public static Image Saturate(this Image image, double value)
     {
         image.Filter($"saturate({value.ToUrlString()})");

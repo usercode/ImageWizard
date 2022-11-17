@@ -38,6 +38,7 @@ public static class ImageWizardBuilderExtensions
         pipelineBuilder.WithFilter<MetadataFilter>();
         pipelineBuilder.WithFilter<ImageFormatFilter>();
         pipelineBuilder.WithFilter<TextFilter>();
+        pipelineBuilder.WithFilter<WatermarkFilter>();
 
         pipelineBuilder.WithMimeTypes(new[] { MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Tga, MimeTypes.Bmp });
 
