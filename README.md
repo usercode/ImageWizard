@@ -522,7 +522,8 @@ static:
       - General__CacheControl__MustRevalidate=false
       - General__CacheControl__NoCache=true
       - General__CacheControl__NoStore=true      
-      - FileCache__Folder=/data
+      - FileCache__Folder=/cache
+      - FileLoader__Folder=/data
       - HttpLoader__DefaultBaseUrl=https://domain.tld
       - HttpLoader__AllowAbsoluteUrls=false
       - HttpLoader__AllowedHosts__0=domain.tld
