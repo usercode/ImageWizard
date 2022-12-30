@@ -59,13 +59,6 @@ public class TypeManager
     /// <param name="loader"></param>
     public void Register(string key, Type type)
     {
-        if(LoaderTypes.ContainsKey(key) == false)
-        {
-            LoaderTypes.Add(key, type);
-        }
-        else
-        {
-            LoaderTypes[key] = type;
-        }
+        LoaderTypes[key] = type;
     }
 }

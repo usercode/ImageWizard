@@ -25,6 +25,7 @@
     <ProjectReference Include="..\ImageWizard.OpenCvSharp\ImageWizard.OpenCvSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.OpenGraph\ImageWizard.OpenGraph.csproj" />
     <ProjectReference Include="..\ImageWizard.OpenStreetMap\ImageWizard.OpenStreetMap.csproj" />
+    <ProjectReference Include="..\ImageWizard.Playwright\ImageWizard.Playwright.csproj" />
     <ProjectReference Include="..\ImageWizard.PuppeteerSharp\ImageWizard.PuppeteerSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.SkiaSharp\ImageWizard.SkiaSharp.csproj" />
     <ProjectReference Include="..\ImageWizard.SvgNet\ImageWizard.SvgNet.csproj" />

@@ -18,8 +18,6 @@ using ImageWizard.Loaders;
 using System;
 using ImageWizard.MongoDB;
 using ImageWizard.ImageSharp;
-using System.IO;
-using Microsoft.Extensions.Options;
 using ImageWizard.Caches;
 
 namespace ImageWizard.TestApp;
@@ -55,6 +53,8 @@ public class Startup
             x.UseETag = true;
             x.Key = key;
             x.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
+            x.WhenLoaderFailedUseExistingCachedData();
+
             //x.FallbackHandler = (state, url, cachedData) =>
             //{
             //    //use the existing cached data if available?
@@ -128,6 +128,7 @@ public class Startup
             .AddYoutubeLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddGravatarLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddPuppeteerLoader(x => x.RefreshMode = LoaderRefreshMode.None)
+            //.AddPlaywrightLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddOpenGraphLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddFFMpegCore()
             .AddDocNET()

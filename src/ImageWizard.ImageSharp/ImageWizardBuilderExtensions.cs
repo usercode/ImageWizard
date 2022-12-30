@@ -40,7 +40,7 @@ public static class ImageWizardBuilderExtensions
         pipelineBuilder.WithFilter<TextFilter>();
         pipelineBuilder.WithFilter<WatermarkFilter>();
 
-        pipelineBuilder.WithMimeTypes(new[] { MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Tga, MimeTypes.Bmp });
+        pipelineBuilder.WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Tga, MimeTypes.Bmp);
 
         options?.Invoke(pipelineBuilder);
 

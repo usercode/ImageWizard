@@ -20,7 +20,7 @@ public static class Extensions
         wizardConfiguration.Services.Configure(setup);
 
         wizardConfiguration.Services.AddTransient<ScreenshotLoader>();
-        wizardConfiguration.LoaderManager.Register<ScreenshotLoader>("playwright");
+        wizardConfiguration.LoaderManager.Register<ScreenshotLoader>("screenshot");
 
         return wizardConfiguration;
     }

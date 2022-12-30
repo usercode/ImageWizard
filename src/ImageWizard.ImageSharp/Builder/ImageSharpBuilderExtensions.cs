@@ -16,7 +16,8 @@ public static class ImageSharpBuilderExtensions
     /// <typeparam name="TFilter"></typeparam>
     /// <param name="builder"></param>
     /// <returns></returns>
-    public static IImageSharpBuilder WithFilter<TFilter>(this IImageSharpBuilder builder) where TFilter : ImageSharpFilter
+    public static IImageSharpBuilder WithFilter<TFilter>(this IImageSharpBuilder builder) 
+        where TFilter : ImageSharpFilter
     {
         builder.Services.AddTransient<TFilter>();
         builder.Services.AddSingleton(new PipelineAction<ImageSharpPipeline>(x => x.AddFilter<TFilter>()));
