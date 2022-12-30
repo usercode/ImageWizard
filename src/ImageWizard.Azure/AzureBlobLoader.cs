@@ -35,18 +35,16 @@ public class AzureBlobLoader : Loader<AzureBlobOptions>
             conditions.IfNoneMatch = new ETag(existingCachedImage.Metadata.Cache.ETag);
         }
 
-        var response = await blob.DownloadStreamingAsync(conditions: conditions);
+        var response = await blob.DownloadContentAsync(new BlobDownloadOptions() { Conditions = conditions });
 
         if (response.GetRawResponse().Status == (int)System.Net.HttpStatusCode.NotModified)
         {
-            response.Value.Dispose();
-
             return LoaderResult.NotModified();
         }
 
         return LoaderResult.Success(new OriginalData(
                     response.Value.Details.ContentType,
-                    response.Value.Content,
+                    response.Value.Content.ToStream(),
                     new CacheSettings() { ETag = response.Value.Details.ETag.ToString().GetTagUnquoted() }));
     }
 }
