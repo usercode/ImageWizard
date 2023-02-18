@@ -23,9 +23,9 @@
   </ItemGroup>
   
   <ItemGroup>    
-    <PackageReference Include="Piranha" Version="10.2.0" />
-    <PackageReference Include="Piranha.AspNetCore" Version="10.2.0" />
-    <PackageReference Include="Piranha.Manager" Version="10.2.0" />
+    <PackageReference Include="Piranha" Version="10.3.0" />
+    <PackageReference Include="Piranha.AspNetCore" Version="10.3.0" />
+    <PackageReference Include="Piranha.Manager" Version="10.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MinVer" Version="4.2.0">
+    <PackageReference Include="MinVer" Version="4.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
