@@ -7,7 +7,7 @@
 	  <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
 	  <Description>Image processing middleware based on ASP.NET and ImageSharp / SkiaSharp / SvgNet.</Description>
 	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
-	  <PackageIcon>usercode.png</PackageIcon>
+	  <PackageIcon>logo.png</PackageIcon>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <PackageTags>image processing</PackageTags>
 	  <IncludeSymbols>true</IncludeSymbols>
@@ -20,9 +20,9 @@
 		<PackageReference Include="OpenGraph-Net" Version="4.0.1" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Include="..\usercode.png" Pack="true" PackagePath="" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\logo.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />

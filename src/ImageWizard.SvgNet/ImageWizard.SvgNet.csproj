@@ -6,7 +6,7 @@
     <Authors>usercode</Authors>
     <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>    
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageIcon>usercode.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\usercode.png" Pack="true" PackagePath="" />
+    <None Include="..\..\logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

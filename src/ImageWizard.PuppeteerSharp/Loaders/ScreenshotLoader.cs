@@ -6,8 +6,6 @@ using ImageWizard.Loaders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PuppeteerSharp;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace ImageWizard.PuppeteerSharp;
 
@@ -51,6 +49,9 @@ public class ScreenshotLoader : Loader<PuppeteerOptions>
 
         byte[] buffer = await page.ScreenshotDataAsync(new ScreenshotOptions() { Type = ScreenshotType.Png });
 
-        return LoaderResult.Success(new OriginalData(MimeTypes.Png, new MemoryStream(buffer), new CacheSettings().ApplyLoaderOptions(Options.Value)));
+        return LoaderResult.Success(new OriginalData(
+                                                    MimeTypes.Png, 
+                                                    new MemoryStream(buffer), 
+                                                    new CacheSettings().ApplyLoaderOptions(Options.Value)));
     }
 }

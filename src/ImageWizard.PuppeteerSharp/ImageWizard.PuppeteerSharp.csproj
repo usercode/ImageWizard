@@ -3,10 +3,11 @@
   <PropertyGroup>
 	  <TargetFramework>net6.0</TargetFramework>
 	  <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
 	  <Authors>usercode</Authors>
 	  <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
 	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
-	  <PackageIcon>usercode.png</PackageIcon>
+	  <PackageIcon>logo.png</PackageIcon>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <IncludeSymbols>true</IncludeSymbols>
 	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -17,12 +18,12 @@
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Include="..\usercode.png" Pack="true" PackagePath="" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\logo.png" Pack="true" PackagePath="" />
+  </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PuppeteerSharp" Version="8.0.0" />
+		<PackageReference Include="PuppeteerSharp" Version="9.0.0" />
 	</ItemGroup>
 	
   <ItemGroup>
