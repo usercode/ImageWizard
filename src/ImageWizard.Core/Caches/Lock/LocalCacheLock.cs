@@ -2,7 +2,7 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using AsyncLock;
+using AsyncKeyLock;
 
 namespace ImageWizard.Caches;
 
