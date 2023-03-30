@@ -17,7 +17,7 @@
 	</ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="FFMpegCore" Version="5.0.1" />
+    <PackageReference Include="FFMpegCore" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
