@@ -30,14 +30,8 @@ Demo: [imagewizard.net](https://imagewizard.net)
 - cleanup service
 
 ## Example
-<p align="center">
-https://localhost/  <br/>
-image/  <br/>
-cGiAwFYGYWx0SzO0YyCidWIfkdlUYrVgBwbm7bcTOjE/  <br/>
-resize(200,200)/grayscale()/jpg(90)/  <br/>
-fetch/  <br/>
-https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
-</p>
+
+https://localhost/image/cGiAwFYGYWx0SzO0YyCidWIfkdlUYrVgBwbm7bcTOjE/resize(200,200)/grayscale()/jpg(90)/fetch/https://upload.wikimedia.org/wikipedia/commons/b/b7/Europe_topography_map.png
 
 | Description         | Url segment |
 |---------------------------------|-----------------|
