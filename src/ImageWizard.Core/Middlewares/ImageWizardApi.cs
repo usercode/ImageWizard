@@ -26,7 +26,7 @@ public class ImageWizardApi
     /// <summary>
     /// ExecuteAsync
     /// </summary>
-    public async Task ExecuteAsync(
+    public static async Task ExecuteAsync(
                                     HttpContext context,
                                     IOptions<ImageWizardOptions> options,
                                     ILogger<ImageWizardApi> logger,

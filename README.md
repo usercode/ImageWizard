@@ -211,12 +211,18 @@ services.AddImageWizard(options =>
 ```
 
 ```csharp
-//default path: /image
+//default path ("/image")
+
+//use middleware
 app.UseImageWizard(x =>
 		{
-			//default path: /analytics
+			//default path  ("/analytics")
 			x.MapAnalytics();
 		});
+
+//or use endpoint
+app.Endpoints(e => e.MapImageWizard("/image"));
+
 ```
 
 ## Internal services

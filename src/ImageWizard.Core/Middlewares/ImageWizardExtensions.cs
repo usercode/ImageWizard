@@ -15,24 +15,37 @@ namespace ImageWizard;
 public static class ImageWizardExtensions
 {
     /// <summary>
-    /// Maps ImageWizard API with specified base path.
+    /// Maps ImageWizard endpoint with specified base path.
     /// </summary>
     /// <param name="endpoints"></param>
     /// <param name="path"></param>
     /// <returns></returns>
-    private static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints)
+    public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, string path = ImageWizardDefaults.BasePath)
     {
         return endpoints
-                    .MapMethods("{signature}/{*path}", new[] { HttpMethods.Get, HttpMethods.Head }, new ImageWizardApi().ExecuteAsync)
+                    .MapMethods($"{path}/{{signature}}/{{*path}}", new[] { HttpMethods.Get, HttpMethods.Head }, ImageWizardApi.ExecuteAsync)
                     .WithName("ImageWizard");
     }
 
+    /// <summary>
+    /// Use ImageWizard middleware.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="endpointsHandler"></param>
+    /// <returns></returns>
     public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
     {
         return UseImageWizard(builder, ImageWizardDefaults.BasePath, endpointsHandler);
     }
 
-    public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, PathString path, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
+    /// <summary>
+    /// Use ImageWizard middleware with specified base path.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="path"></param>
+    /// <param name="endpointsHandler"></param>
+    /// <returns></returns>
+    public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, string path, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
     {
         builder.Map(path, x =>
         {
@@ -41,7 +54,7 @@ public static class ImageWizardExtensions
             {
                 endpointsHandler?.Invoke(new ImageWizardEndpointBuilder(endpoints));
 
-                endpoints.MapImageWizard();
+                endpoints.MapImageWizard(string.Empty);
             });
         });
 
