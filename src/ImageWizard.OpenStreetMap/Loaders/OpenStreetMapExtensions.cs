@@ -27,9 +27,9 @@ public static class OpenStreetMapExtensions
         return wizardConfiguration;
     }
 
-    public static void MapOpenStreetMap(this IImageWizardEndpointBuilder endpoints)
+    public static IEndpointConventionBuilder MapOpenStreetMap(this IImageWizardEndpointBuilder endpoints)
     {
-        endpoints.MapGet("osm/{**path}", async (
+        return endpoints.MapGet("osm/{**path}", async (
             string path, 
             HttpClient client, 
             HttpResponse response,

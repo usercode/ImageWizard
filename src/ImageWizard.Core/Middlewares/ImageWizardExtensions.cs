@@ -28,7 +28,7 @@ public static class ImageWizardExtensions
     }
 
     /// <summary>
-    /// Use ImageWizard middleware.
+    /// Use ImageWizard middleware with default base path. ("/image")
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="endpointsHandler"></param>

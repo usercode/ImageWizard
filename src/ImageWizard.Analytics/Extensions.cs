@@ -22,8 +22,8 @@ public static class Extensions
         return builder;
     }
 
-    public static void MapAnalytics(this IImageWizardEndpointBuilder endpoints)
+    public static IEndpointConventionBuilder MapAnalytics(this IImageWizardEndpointBuilder endpoints)
     {
-        endpoints.MapGet("analytics", (AnalyticsData data) => Results.Json(data, JsonOptions));
+        return endpoints.MapGet("analytics", (AnalyticsData data) => Results.Json(data, JsonOptions));
     }
 }

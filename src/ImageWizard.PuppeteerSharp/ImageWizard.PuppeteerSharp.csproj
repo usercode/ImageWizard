@@ -23,7 +23,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PuppeteerSharp" Version="9.0.2" />
+		<PackageReference Include="PuppeteerSharp" Version="10.0.0" />
 	</ItemGroup>
 	
   <ItemGroup>
