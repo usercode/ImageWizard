@@ -9,6 +9,7 @@
     <Description>Image processing middleware based on ASP.NET and ImageSharp / SkiaSharp / SvgNet.</Description>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageIcon>logo.png</PackageIcon>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>image processing</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
@@ -32,6 +33,7 @@
 
   <ItemGroup>
     <None Include="..\..\logo.png" Pack="true" PackagePath="" />
+    <None Include="..\..\readme.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
