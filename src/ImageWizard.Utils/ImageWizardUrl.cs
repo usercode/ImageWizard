@@ -9,9 +9,10 @@ namespace ImageWizard;
 /// <summary>
 /// ImageWizardUrl
 /// </summary>
-public readonly struct ImageWizardUrl
+public readonly partial struct ImageWizardUrl
 {
-    private readonly static Regex Regex = new Regex($@"^(?<path>(?<filter>[a-z]+\([^)]*\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+	[GeneratedRegex("^(?<path>(?<filter>[a-z]+\\([^)]*\\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.IgnoreCase)]
+	private static partial Regex MyRegex();
 
     public ImageWizardUrl(string loaderType, string loaderSource, string[] filters)
     {
@@ -39,7 +40,7 @@ public readonly struct ImageWizardUrl
 
     public static bool TryParse(string path, out ImageWizardUrl url)
     {
-        Match match = Regex.Match(path);
+        Match match = MyRegex().Match(path);
 
         if (match.Success == false)
         {

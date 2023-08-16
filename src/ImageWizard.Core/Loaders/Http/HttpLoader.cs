@@ -12,9 +12,10 @@ namespace ImageWizard.Loaders;
 /// <summary>
 /// HttpLoader
 /// </summary>
-public class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
+public partial class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
 {
-    private static readonly Regex AbsoluteUrlRegex = new Regex("^https?://", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    [GeneratedRegex("^https?://", RegexOptions.IgnoreCase)]
+    private static partial Regex AbsoluteUrlRegex();
 
     public HttpLoader(
                 HttpClient client,
@@ -42,7 +43,7 @@ public class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
         Uri sourceUri;
 
         //is relative url?
-        if (AbsoluteUrlRegex.Match(source).Success == false)
+        if (AbsoluteUrlRegex().Match(source).Success == false)
         {
             if (string.IsNullOrWhiteSpace(Options.Value.DefaultBaseUrl) == false)
             {
@@ -74,5 +75,5 @@ public class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
         }
 
         return Task.FromResult<Uri?>(sourceUri);
-    }
+    }   
 }

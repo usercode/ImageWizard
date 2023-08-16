@@ -11,6 +11,9 @@ namespace ImageWizard.Loaders;
 /// </summary>
 public interface ILoader
 {
+    /// <summary>
+    /// Options
+    /// </summary>
     IOptions<LoaderOptions> Options { get; }
 
     /// <summary>
