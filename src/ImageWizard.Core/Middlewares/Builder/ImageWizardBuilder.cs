@@ -17,9 +17,6 @@ public class ImageWizardBuilder : IImageWizardBuilder
     public ImageWizardBuilder(IServiceCollection services)
     {
         Services = services;
-
-        LoaderManager = new TypeManager();
-        PipelineManager = new TypeManager();
     }
 
     /// <summary>
@@ -30,12 +27,12 @@ public class ImageWizardBuilder : IImageWizardBuilder
     /// <summary>
     /// LoaderManager
     /// </summary>
-    public TypeManager LoaderManager { get; }
+    public TypeManager LoaderManager { get; } = new TypeManager();
 
     /// <summary>
     /// PipelineManager
     /// </summary>
-    public TypeManager PipelineManager { get; }
+    public TypeManager PipelineManager { get; } = new TypeManager();
 
     public void AddPipeline<T>(IEnumerable<string> mimeTypes) 
         where T : class, IPipeline

@@ -34,11 +34,11 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.Configure<ImageWizardOptions>(Configuration.GetSection("General"));
-        services.Configure<HttpLoaderOptions>(Configuration.GetSection("HttpLoader"));
-        services.Configure<FileCacheOptions>(Configuration.GetSection("FileCache"));
-        services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
-        services.Configure<WatermarkOptions>(Configuration.GetSection("Watermark"));
+        services.AddOptions<ImageWizardOptions>().BindConfiguration("General");
+        services.AddOptions<HttpLoaderOptions>().BindConfiguration("HttpLoader");
+        services.AddOptions<FileCacheOptions>().BindConfiguration("FileCache");
+        services.AddOptions<FileLoaderOptions>().BindConfiguration("FileLoader");
+        services.AddOptions<WatermarkOptions>().BindConfiguration("Watermark");
 
         //generate random key
         byte[] key = RandomNumberGenerator.GetBytes(64);

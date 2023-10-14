@@ -35,13 +35,13 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.Configure<ImageWizardAppOptions>(Configuration.GetSection("App"));
-        services.Configure<ImageWizardOptions>(Configuration.GetSection("General"));
-        services.Configure<HttpLoaderOptions>(Configuration.GetSection("HttpLoader"));
-        services.Configure<FileCacheOptions>(Configuration.GetSection("FileCache"));
-        services.Configure<FileLoaderOptions>(Configuration.GetSection("FileLoader"));
-        services.Configure<AzureBlobOptions>(Configuration.GetSection("Azure"));
-        services.Configure<WatermarkOptions>(Configuration.GetSection("Watermark"));
+        services.AddOptions<ImageWizardAppOptions>().BindConfiguration("App");
+        services.AddOptions<ImageWizardOptions>().BindConfiguration("General");
+        services.AddOptions<HttpLoaderOptions>().BindConfiguration("HttpLoader");
+        services.AddOptions<FileCacheOptions>().BindConfiguration("FileCache");
+        services.AddOptions<FileLoaderOptions>().BindConfiguration("FileLoader");
+        services.AddOptions<AzureBlobOptions>().BindConfiguration("Azure");
+        services.AddOptions<WatermarkOptions>().BindConfiguration("Watermark");
 
         IImageWizardBuilder imageWizard = services.AddImageWizard()
                                                     .AddImageSharp(i => i
