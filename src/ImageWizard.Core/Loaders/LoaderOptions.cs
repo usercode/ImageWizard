@@ -9,16 +9,10 @@ namespace ImageWizard.Loaders;
 /// </summary>
 public class LoaderOptions
 {
-    public LoaderOptions()
-    {
-        RefreshMode = LoaderRefreshMode.None;
-        MaxLoaderSourceLength = 1024 * 1024 * 25; //25 MB
-    }
-
     /// <summary>
     /// Refresh strategy for the original data.
     /// </summary>
-    public LoaderRefreshMode RefreshMode { get; set; }
+    public LoaderRefreshMode RefreshMode { get; set; } = LoaderRefreshMode.None;
 
     /// <summary>
     /// Overrides max-age value from original source.
@@ -28,5 +22,5 @@ public class LoaderOptions
     /// <summary>
     /// Maximum loader source content length (Default: 25 MB)
     /// </summary>
-    public long MaxLoaderSourceLength { get; set; }
+    public long MaxLoaderSourceLength { get; set; } = 1024 * 1024 * 25; //25 MB
 }

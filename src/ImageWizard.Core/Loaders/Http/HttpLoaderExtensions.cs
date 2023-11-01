@@ -9,14 +9,12 @@ namespace ImageWizard;
 
 public static class HttpLoaderExtensions
 {
-    public static IImageWizardBuilder AddHttpLoader(this IImageWizardBuilder wizardConfiguration)
+    public static IImageWizardBuilder AddHttpLoader(this IImageWizardBuilder wizardConfiguration, Action<HttpLoaderOptions>? options = null)
     {
-        return AddHttpLoader(wizardConfiguration, options => { });
-    }
-
-    public static IImageWizardBuilder AddHttpLoader(this IImageWizardBuilder wizardConfiguration, Action<HttpLoaderOptions> setup)
-    {
-        wizardConfiguration.Services.Configure(setup);
+        if (options != null)
+        {
+            wizardConfiguration.Services.Configure(options);
+        }
 
         wizardConfiguration.Services.AddHttpClient<HttpLoader>();
         wizardConfiguration.LoaderManager.Register<HttpLoader>("fetch");

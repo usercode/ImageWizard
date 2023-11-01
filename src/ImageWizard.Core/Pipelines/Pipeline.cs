@@ -49,7 +49,6 @@ public abstract class Pipeline<TFilterBase, TFilterContext> : IPipeline
     /// <summary>
     /// Adds filter to pipeline.
     /// </summary>
-    /// <typeparam name="TFilterBase"></typeparam>
     public void AddFilter<TFilter>()
         where TFilter : TFilterBase
     {
@@ -63,8 +62,8 @@ public abstract class Pipeline<TFilterBase, TFilterContext> : IPipeline
         {
             ParameterInfo[] parameters = method.GetParameters();
 
-            Type[] integerTypes = new Type[] { typeof(byte), typeof(short), typeof(int), typeof(long) };
-            Type[] floatingNumberTypes = new Type[] { typeof(float), typeof(double), typeof(decimal) };
+            Type[] integerTypes = [typeof(byte), typeof(short), typeof(int), typeof(long)];
+            Type[] floatingNumberTypes = [typeof(float), typeof(double), typeof(decimal)];
 
             static ParameterItem CreateParameter(ParameterInfo pi, string pattern)
             {
@@ -117,9 +116,9 @@ public abstract class Pipeline<TFilterBase, TFilterContext> : IPipeline
             //function begin
             builder.Append($@"{method.Name.ToLowerInvariant()}\(");
 
-            bool optionalParmeterCall = parameters.All(x => (x.DefaultValue is DBNull) == false);
+            bool optionalParameterCall = parameters.All(x => (x.DefaultValue is DBNull) == false);
 
-            if (optionalParmeterCall)
+            if (optionalParameterCall)
             {
                 //add optional parameters
                 builder.Append($"(,|{string.Join("|", pp.Select(x => $"({x.Name}={x.Pattern})").ToArray())})*");

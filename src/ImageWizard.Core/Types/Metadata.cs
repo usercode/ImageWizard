@@ -9,18 +9,6 @@ namespace ImageWizard;
 /// </summary>
 public class Metadata : IMetadata
 {
-    public Metadata()
-    {
-        Key = string.Empty;
-        Hash = string.Empty;        
-        Filters = Array.Empty<string>();
-        LoaderType = string.Empty;
-        LoaderSource = string.Empty;
-        MimeType = MimeTypes.Object;
-
-        Cache = new CacheSettings();
-    }
-
     /// <summary>
     /// CreatedAt
     /// </summary>
@@ -34,17 +22,17 @@ public class Metadata : IMetadata
     /// <summary>
     /// Signature
     /// </summary>
-    public string Key { get; set; }
+    public string Key { get; set; } = string.Empty;
 
     /// <summary>
     /// Hash
     /// </summary>
-    public string Hash { get; set; }
+    public string Hash { get; set; } = string.Empty;
 
     /// <summary>
     /// MimeType
     /// </summary>
-    public string MimeType { get; set; }
+    public string MimeType { get; set; } = MimeTypes.Object;
 
     /// <summary>
     /// Width
@@ -64,20 +52,20 @@ public class Metadata : IMetadata
     /// <summary>
     /// CacheSettings
     /// </summary>
-    public CacheSettings Cache { get; set; }
+    public CacheSettings Cache { get; set; } = new CacheSettings();
 
     /// <summary>
     /// Filters
     /// </summary>
-    public IEnumerable<string> Filters { get; set; }
+    public IEnumerable<string> Filters { get; set; } = Array.Empty<string>();
 
     /// <summary>
     /// LoaderType
     /// </summary>
-    public string LoaderType { get; set; }
+    public string LoaderType { get; set; } = string.Empty;
 
     /// <summary>
     /// LoaderSource
     /// </summary>
-    public string LoaderSource { get; set; }
+    public string LoaderSource { get; set; } = string.Empty;
 }

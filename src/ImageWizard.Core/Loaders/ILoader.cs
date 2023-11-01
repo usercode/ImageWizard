@@ -19,7 +19,5 @@ public interface ILoader
     /// <summary>
     /// GetAsync
     /// </summary>
-    /// <param name="requestUri"></param>
-    /// <returns></returns>
     Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData = null);
 }

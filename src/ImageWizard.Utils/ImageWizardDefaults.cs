@@ -4,10 +4,10 @@
 
 namespace ImageWizard.Utils;
 
-public class ImageWizardDefaults
+public static class ImageWizardDefaults
 {
     public const string Unsafe = "unsafe";
     public const string BasePath = "/image";
 
-    public readonly static double[] AllowedDPR = new[] { 1.0, 1.5, 2.0, 3.0 };
+    public readonly static double[] AllowedDPR = [1.0, 1.5, 2.0, 3.0];
 }

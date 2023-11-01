@@ -12,8 +12,5 @@ public interface IUrlSignature
     /// <summary>
     /// Encrypt
     /// </summary>
-    /// <param name="key"></param>
-    /// <param name="input"></param>
-    /// <returns></returns>
     string Encrypt(byte[] key, ImageWizardRequest request);
 }

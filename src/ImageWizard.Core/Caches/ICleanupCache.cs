@@ -16,6 +16,4 @@ public interface ICleanupCache : ICache
     /// </summary>
     /// <returns></returns>
     Task CleanupAsync(CleanupReason reason, CancellationToken cancellationToken = default);
-
-
 }

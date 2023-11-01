@@ -36,7 +36,7 @@ public class DistributedCache : ICache
 
     public async Task<ICachedData?> ReadAsync(string key)
     {
-        byte[] json = await Cache.GetAsync(GetMetaKey(key));
+        byte[]? json = await Cache.GetAsync(GetMetaKey(key));
 
         if (json == null)
         {
@@ -52,7 +52,12 @@ public class DistributedCache : ICache
 
         return new CachedData(metadata, async () =>
         {
-            byte[] b = await Cache.GetAsync(GetBlobKey(key));
+            byte[]? b = await Cache.GetAsync(GetBlobKey(key));
+
+            if (b == null)
+            {
+                throw new Exception();
+            }
 
             return new MemoryStream(b);
         });

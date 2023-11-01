@@ -18,9 +18,13 @@ public static class CleanupExtensions
     /// <param name="builder"></param>
     /// <param name="options"></param>
     /// <returns></returns>
-    public static IImageWizardBuilder AddCleanupService(this IImageWizardBuilder builder, Action<CleanupOptions> options)
+    public static IImageWizardBuilder AddCleanupService(this IImageWizardBuilder builder, Action<CleanupOptions>? options = null)
     {
-        builder.Services.Configure(options);
+        if (options != null)
+        {
+            builder.Services.Configure(options);
+        }
+
         builder.Services.AddHostedService<CleanupBackgroundService>();
 
         return builder;

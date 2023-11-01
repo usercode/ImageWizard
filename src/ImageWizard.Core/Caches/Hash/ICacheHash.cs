@@ -12,7 +12,5 @@ public interface ICacheHash
     /// <summary>
     /// Create
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     Task<string> CreateAsync(Stream stream);
 }

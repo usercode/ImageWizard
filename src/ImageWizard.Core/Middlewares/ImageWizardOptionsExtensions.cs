@@ -2,9 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using ImageWizard.Utils;
-using System.Runtime.CompilerServices;
-
 namespace ImageWizard;
 
 /// <summary>

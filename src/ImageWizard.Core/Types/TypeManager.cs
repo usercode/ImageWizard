@@ -5,22 +5,20 @@
 namespace ImageWizard;
 
 /// <summary>
-/// ImageLoadManager
+/// TypeManager
 /// </summary>
-public class TypeManager
+public sealed class TypeManager
 {
-    private IDictionary<string, Type> LoaderTypes;
-
-    public TypeManager()
-    {
-        LoaderTypes = new Dictionary<string, Type>();
-    }
+    private IDictionary<string, Type> LoaderTypes = new Dictionary<string, Type>();
 
     public IEnumerable<string> GetAllKeys()
     {
         return LoaderTypes.Keys;
     }
 
+    /// <summary>
+    /// Determines whether the TypeManager contains an element with the specified key.
+    /// </summary>
     public bool ContainsKey(string key)
     {
         return LoaderTypes.ContainsKey(key);
@@ -29,8 +27,6 @@ public class TypeManager
     /// <summary>
     /// Get
     /// </summary>
-    /// <param name="deliveryType"></param>
-    /// <returns></returns>
     public Type Get(string key)
     {
         if (LoaderTypes.TryGetValue(key, out Type? loaderType) == false)
@@ -44,8 +40,6 @@ public class TypeManager
     /// <summary>
     /// Register
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="key"></param>
     public void Register<T>(string key)
     {
         Register(key, typeof(T));
@@ -54,9 +48,6 @@ public class TypeManager
     /// <summary>
     /// Register
     /// </summary>
-    /// <typeparam name="TLoader"></typeparam>
-    /// <param name="deliveryType"></param>
-    /// <param name="loader"></param>
     public void Register(string key, Type type)
     {
         LoaderTypes[key] = type;

@@ -9,13 +9,8 @@ namespace ImageWizard.Caches;
 /// </summary>
 class OneTimeCache : ICache
 {
-    public OneTimeCache()
-    {
-        _data = Array.Empty<byte>();
-    }
-
     private IMetadata? _metadata;
-    private byte[] _data;
+    private byte[] _data = Array.Empty<byte>();
 
     public async Task<ICachedData?> ReadAsync(string key)
     {

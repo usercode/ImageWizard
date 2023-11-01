@@ -9,13 +9,8 @@ namespace ImageWizard.Caches;
 /// </summary>
 public class FileCacheOptions
 {
-    public FileCacheOptions()
-    {
-        Folder = "FileCache";
-    }
-
     /// <summary>
     /// RootFolder
     /// </summary>
-    public string Folder { get; set; }
+    public string Folder { get; set; } = "FileCache";
 }

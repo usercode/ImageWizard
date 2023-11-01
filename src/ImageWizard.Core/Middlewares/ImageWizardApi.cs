@@ -265,7 +265,7 @@ public class ImageWizardApi
                                     return;
                                 }
 
-                                logger.LogTrace("Start pipline: {pipeline}", processingPipelineType.Name);
+                                logger.LogTrace("Start pipeline: {pipeline}", processingPipelineType.Name);
 
                                 //start processing
                                 processingContext.Result = await processingPipeline.StartAsync(processingContext);

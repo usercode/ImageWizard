@@ -19,17 +19,14 @@ public static class FileCacheExtensions
     }
 
     /// <summary>
-    /// Adds file cache (<see cref="FileCacheV1">):<br/>
+    /// Adds file cache:<br/>
     /// Meta and blob file path based on cache id.
     /// </summary>
-    /// <param name="wizardBuilder"></param>
-    /// <param name="fileCacheSettingsSetup"></param>
-    /// <returns></returns>
-    public static IImageWizardBuilder SetFileCache(this IImageWizardBuilder wizardBuilder, Action<FileCacheOptions>? fileCacheSettingsSetup = null)
+    public static IImageWizardBuilder SetFileCache(this IImageWizardBuilder wizardBuilder, Action<FileCacheOptions>? options = null)
     {
-        if (fileCacheSettingsSetup != null)
+        if (options != null)
         {
-            wizardBuilder.Services.Configure(fileCacheSettingsSetup);
+            wizardBuilder.Services.Configure(options);
         }
 
         wizardBuilder.Services.RemoveAll<ICache>();

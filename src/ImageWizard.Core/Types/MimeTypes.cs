@@ -35,12 +35,12 @@ public static class MimeTypes
 
     public static string[] GetVideoMimeTypes()
     {
-        return new [] { Mpeg, Mp4, Ogg,Webm, Avi, Mobile3GP };
+        return [Mpeg, Mp4, Ogg,Webm, Avi, Mobile3GP];
     }
 
     public static string[] GetImageMimeTypes()
     {
-        return new [] { Jpeg, Png, Gif, Bmp, WebP, Avif, Svg };
+        return [Jpeg, Png, Gif, Bmp, WebP, Avif, Svg];
     }
 
     public static string GetByExtension(string path)

@@ -12,11 +12,6 @@ namespace ImageWizard.Cleanup;
 /// </summary>
 public abstract class CleanupReason
 {
-    public CleanupReason()
-    {
-
-    }
-
     private IDictionary<Type, object> _cache = new Dictionary<Type, object>();
 
     /// <summary>

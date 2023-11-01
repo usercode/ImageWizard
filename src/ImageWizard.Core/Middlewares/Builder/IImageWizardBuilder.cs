@@ -27,5 +27,10 @@ public interface IImageWizardBuilder
     /// </summary>
     TypeManager PipelineManager { get; }
 
+    /// <summary>
+    /// Adds a pipeline.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="mimeTypes"></param>
     void AddPipeline<T>(IEnumerable<string> mimeTypes) where T : class, IPipeline;
 }

@@ -9,14 +9,13 @@ namespace ImageWizard;
 
 public static class GravatarExtensions
 {
-    public static IImageWizardBuilder AddGravatarLoader(this IImageWizardBuilder wizardConfiguration)
+    public static IImageWizardBuilder AddGravatarLoader(this IImageWizardBuilder wizardConfiguration, Action<GravatarOptions>? options = null)
     {
-        return AddGravatarLoader(wizardConfiguration, x => { });
-    }
+        if (options != null)
+        {
+            wizardConfiguration.Services.Configure(options);
+        }
 
-    public static IImageWizardBuilder AddGravatarLoader(this IImageWizardBuilder wizardConfiguration, Action<GravatarOptions> options)
-    {
-        wizardConfiguration.Services.Configure(options);
         wizardConfiguration.Services.AddHttpClient<GravatarLoader>();
         wizardConfiguration.LoaderManager.Register<GravatarLoader>("gravatar");
 

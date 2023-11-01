@@ -4,7 +4,7 @@
 
 namespace ImageWizard.Utils;
 
-public class Base64Url
+public static class Base64Url
 {
     public static string Encode(byte[] buffer)
     {

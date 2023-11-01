@@ -9,21 +9,13 @@ namespace ImageWizard.Cleanup;
 /// </summary>
 public class CleanupOptions
 {
-    public CleanupOptions()
-    {
-        Interval = TimeSpan.FromDays(1);
-        Reasons = new List<CleanupReason>();
-    }
-
     /// <summary>
-    /// Reasons
+    /// Cleanup reasons
     /// </summary>
-    public IList<CleanupReason> Reasons { get; }
+    public IList<CleanupReason> Reasons { get; } = new List<CleanupReason>();
 
     /// <summary>
     /// Duration between the cleanup actions. (Default: 1 day)
     /// </summary>
-    public TimeSpan Interval { get; set; }
-
-    
+    public TimeSpan Interval { get; set; } = TimeSpan.FromDays(1);
 }

@@ -9,14 +9,13 @@ namespace ImageWizard;
 
 public static class FileLoaderExtensions
 {
-    public static IImageWizardBuilder AddFileLoader(this IImageWizardBuilder wizardConfiguration)
+    public static IImageWizardBuilder AddFileLoader(this IImageWizardBuilder wizardConfiguration, Action<FileLoaderOptions>? options = null)
     {
-        return AddFileLoader(wizardConfiguration, setup => { });
-    }
+        if (options != null)
+        {
+            wizardConfiguration.Services.Configure(options);
+        }
 
-    public static IImageWizardBuilder AddFileLoader(this IImageWizardBuilder wizardConfiguration, Action<FileLoaderOptions> setup)
-    {
-        wizardConfiguration.Services.Configure(setup);
         wizardConfiguration.Services.AddSingleton<FileLoader>();
         wizardConfiguration.LoaderManager.Register<FileLoader>("file");
 

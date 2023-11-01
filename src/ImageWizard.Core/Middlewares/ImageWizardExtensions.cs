@@ -24,7 +24,7 @@ public static class ImageWizardExtensions
     {
         return endpoints
                     .MapMethods($"{path}/{{signature}}/{{*path}}", new[] { HttpMethods.Get, HttpMethods.Head }, ImageWizardApi.ExecuteAsync)
-                    .WithName("ImageWizard");
+                    .WithDisplayName("ImageWizard");
     }
 
     /// <summary>

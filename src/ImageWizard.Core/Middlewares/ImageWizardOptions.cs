@@ -13,53 +13,40 @@ public delegate ICachedData? FallbackHandler(LoaderResultState state, ImageWizar
 /// </summary>
 public class ImageWizardOptions : ImageWizardBaseOptions
 {
-    public ImageWizardOptions()
-    {
-        UseETag = true;
-        UseClientHints = false;
-        AllowUnsafeUrl = false;
-        UseAcceptHeader = false;
-        RefreshLastAccessInterval = TimeSpan.FromDays(1);
-
-        AllowedDPR = ImageWizardDefaults.AllowedDPR;
-
-        CacheControl = new CacheControl();
-    }
-
     /// <summary>
     /// CacheControl
     /// </summary>
-    public CacheControl CacheControl { get; }
+    public CacheControl CacheControl { get; } = new CacheControl();
 
     /// <summary>
     /// Allows unsafe url.
     /// </summary>
-    public bool AllowUnsafeUrl { get; set; }
+    public bool AllowUnsafeUrl { get; set; } = false;
 
     /// <summary>
     /// Selects automatically the compatible mime type by request header. (Default: false)
     /// </summary>
-    public bool UseAcceptHeader { get; set; }
+    public bool UseAcceptHeader { get; set; } = false;
 
     /// <summary>
     /// Uses ETag. (Default: true)
     /// </summary>
-    public bool UseETag { get; set; }
+    public bool UseETag { get; set; } = true;
 
     /// <summary>
     /// Duration when the last-access time (metadata) should be refreshed.
     /// </summary>
-    public TimeSpan? RefreshLastAccessInterval { get; set; }
+    public TimeSpan? RefreshLastAccessInterval { get; set; } = TimeSpan.FromDays(1);
 
     /// <summary>
     /// Use client hints. (Default: false)
     /// </summary>
-    public bool UseClientHints { get; set; }        
+    public bool UseClientHints { get; set; } = false;
 
     /// <summary>
     /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0)
     /// </summary>
-    public double[] AllowedDPR { get; set; }
+    public double[] AllowedDPR { get; set; } = ImageWizardDefaults.AllowedDPR;
 
     /// <summary>
     /// FallbackHandler

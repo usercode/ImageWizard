@@ -9,14 +9,13 @@ namespace ImageWizard;
 
 public static class YouTubeExtensions
 {
-    public static IImageWizardBuilder AddYoutubeLoader(this IImageWizardBuilder wizardConfiguration)
+    public static IImageWizardBuilder AddYoutubeLoader(this IImageWizardBuilder wizardConfiguration, Action<YouTubeOptions>? options = null)
     {
-        return AddYoutubeLoader(wizardConfiguration, x => { });
-    }
+        if (options != null)
+        {
+            wizardConfiguration.Services.Configure(options);
+        }
 
-    public static IImageWizardBuilder AddYoutubeLoader(this IImageWizardBuilder wizardConfiguration, Action<YouTubeOptions> options)
-    {
-        wizardConfiguration.Services.Configure(options);
         wizardConfiguration.Services.AddHttpClient<YouTubeLoader>();
         wizardConfiguration.LoaderManager.Register<YouTubeLoader>("youtube");
 
