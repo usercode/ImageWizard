@@ -10,9 +10,7 @@ public class SHA256CacheHash : ICacheHash
 {
     public async Task<string> CreateAsync(Stream stream)
     {
-        using SHA256 sha256 = SHA256.Create();
-
-        byte[] hash = await sha256.ComputeHashAsync(stream);
+        byte[] hash = await SHA256.HashDataAsync(stream);
 
         return Convert.ToHexString(hash);
     }
