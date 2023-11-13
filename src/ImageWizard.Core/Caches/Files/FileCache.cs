@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Cleanup;
+using ImageWizard.Core.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
@@ -14,8 +15,6 @@ namespace ImageWizard.Caches;
 /// </summary>
 public class FileCache : ICache, ICleanupCache, ILastAccessCache
 {
-    protected static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
-
     public FileCache(IOptions<FileCacheOptions> options, IWebHostEnvironment hostingEnvironment, ICacheLock cacheLock)
     {
         Options = options;
@@ -114,7 +113,7 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
 
         using Stream metadataStream = metaFile.OpenRead();
 
-        Metadata? metadata = await JsonSerializer.DeserializeAsync<Metadata>(metadataStream, JsonSerializerOptions);
+        Metadata? metadata = await JsonSerializer.DeserializeAsync(metadataStream, ImageWizardJsonSerializerContext.Default.Metadata);
 
         return metadata;
     }
@@ -134,7 +133,7 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
         //delete existing data
         metadataStream.SetLength(0);
 
-        await JsonSerializer.SerializeAsync(metadataStream, metadata, JsonSerializerOptions);
+        await JsonSerializer.SerializeAsync(metadataStream, metadata, ImageWizardJsonSerializerContext.Default.Metadata);
     }
 
     private void Delete(IMetadata metadata)

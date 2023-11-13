@@ -2,6 +2,7 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Core.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -43,7 +44,7 @@ public class DistributedCache : ICache
             return null;
         }
 
-        Metadata? metadata = JsonSerializer.Deserialize<Metadata>(json);
+        Metadata? metadata = JsonSerializer.Deserialize(json, ImageWizardJsonSerializerContext.Default.Metadata);
 
         if (metadata == null)
         {
@@ -65,7 +66,7 @@ public class DistributedCache : ICache
 
     public async Task WriteAsync(IMetadata metadata, Stream stream)
     {
-        byte[] json = JsonSerializer.SerializeToUtf8Bytes(metadata);
+        byte[] json = JsonSerializer.SerializeToUtf8Bytes(metadata, ImageWizardJsonSerializerContext.Default.Metadata);
 
         await Cache.SetAsync(GetMetaKey(metadata.Key), json);
 
