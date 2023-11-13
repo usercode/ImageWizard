@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -20,8 +19,6 @@ public static class DeliveryTypeExtensions
     /// <summary>
     /// Fetch file from absolute or relative url.
     /// </summary>
-    /// <param name="url"></param>
-    /// <returns></returns>
     public static IFilter Fetch(this ILoader imageUrlBuilder, string url)
     {
         return imageUrlBuilder.LoadData("fetch", url);
@@ -30,18 +27,8 @@ public static class DeliveryTypeExtensions
     /// <summary>
     /// Fetch file from wwwroot folder with fingerprint.
     /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    public static IFilter FetchLocalFile(this ILoader imageBuilder, string path, int? hashNameLength = null)
+    public static IFilter FetchLocalFile(this ILoader imageBuilder, string path, int maxVersionLength = 8)
     {
-        if (hashNameLength != null)
-        {
-            if (hashNameLength < 1 || hashNameLength > 43)
-            {
-                throw new ArgumentOutOfRangeException(nameof(hashNameLength));
-            }
-        }
-
         path = path.TrimStart('/');
 
         IWebHostEnvironment env = imageBuilder.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
@@ -55,14 +42,7 @@ public static class DeliveryTypeExtensions
 
         string hashBase64 = WebEncoders.Base64UrlEncode(hashBufferSpan);
 
-        if (hashNameLength == null)
-        {
-            path += $"?v={hashBase64}";
-        }
-        else
-        {
-            path += $"?v={hashBase64.AsSpan(0, hashNameLength.Value)}";
-        }
+        path += $"?v={hashBase64.AsSpan(0, maxVersionLength)}";
 
         return imageBuilder.LoadData("fetch", path);
     }

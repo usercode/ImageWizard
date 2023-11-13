@@ -5,8 +5,6 @@
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 
 namespace ImageWizard.Client;
 
@@ -18,13 +16,12 @@ class UrlBuilderContext : ILoader, IFilter, IBuildUrl
     public UrlBuilderContext(UrlBuilder imageUrlBuilder)
     {
         ImageUrlBuilder = imageUrlBuilder;
-        Filters = new List<string>();
     }
 
     public UrlBuilder ImageUrlBuilder { get; }
-    private List<string> Filters { get; }
-    private string LoaderSource { get; set; }
-    private string LoaderType { get; set; }
+    private List<string> Filters { get; } = new List<string>();
+    private string? LoaderSource { get; set; }
+    private string? LoaderType { get; set; }
 
     public ImageWizardClientSettings Settings => ImageUrlBuilder.Settings;
     public IServiceProvider ServiceProvider => ImageUrlBuilder.ServiceProvider;
@@ -46,10 +43,8 @@ class UrlBuilderContext : ILoader, IFilter, IBuildUrl
 
     public string BuildUrl()
     {
-        if (string.IsNullOrEmpty(LoaderSource))
-        {
-            throw new Exception("No image is selected.");
-        }
+        ArgumentException.ThrowIfNullOrEmpty(LoaderType);
+        ArgumentException.ThrowIfNullOrEmpty(LoaderSource);
 
         if (ImageUrlBuilder.Settings.Enabled == false)
         {

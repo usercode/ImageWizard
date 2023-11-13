@@ -9,7 +9,7 @@ namespace ImageWizard.Client;
 /// </summary>
 public static class YouTubeExtensions
 {
-    public static Image Youtube(this ILoader imageUrlBuilder, string id)
+    public static Image YouTube(this ILoader imageUrlBuilder, string id)
     {
         return new Image(imageUrlBuilder.LoadData("youtube", id));
     }

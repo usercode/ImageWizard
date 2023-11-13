@@ -23,7 +23,7 @@ public static class ImageWizardExtensions
     public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, string path = ImageWizardDefaults.BasePath)
     {
         return endpoints
-                    .MapMethods($"{path}/{{signature}}/{{*path}}", new[] { HttpMethods.Get, HttpMethods.Head }, ImageWizardApi.ExecuteAsync)
+                    .MapMethods($"{path}/{{signature}}/{{*path}}", [HttpMethods.Get, HttpMethods.Head], ImageWizardApi.ExecuteAsync)
                     .WithDisplayName("ImageWizard");
     }
 

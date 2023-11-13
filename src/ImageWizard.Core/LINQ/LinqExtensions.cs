@@ -4,7 +4,7 @@
 
 namespace ImageWizard;
 
-public static class LinqExtenions
+public static class LinqExtensions
 {
     public static void Foreach<T>(this IEnumerable<T> items, Action<T> action)
     {

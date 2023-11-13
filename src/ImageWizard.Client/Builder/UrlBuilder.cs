@@ -3,7 +3,6 @@
 // MIT License
 
 using Microsoft.Extensions.Options;
-using System;
 
 namespace ImageWizard.Client;
 

@@ -5,7 +5,6 @@
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SixLabors.ImageSharp;
 
 namespace ImageWizard.ImageSharp.Filters;
 
@@ -45,6 +44,11 @@ public class ImageSharpPipeline : Pipeline<ImageSharpFilter, ImageSharpFilterCon
         if (targetFormat == null)
         {
             targetFormat = ImageFormatHelper.FirstOrDefault(context.Result.MimeType);
+        }
+
+        if (targetFormat == null)
+        {
+            throw new Exception("No image format is selected.");
         }
 
         ImageSharpFilterContext imageSharpContext = new ImageSharpFilterContext(context, image, targetFormat, Options);

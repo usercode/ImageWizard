@@ -15,14 +15,12 @@ namespace ImageWizard.Client;
 /// </summary>
 public static class Extensions
 {
-    public static IServiceCollection AddImageWizardClient(this IServiceCollection services)
+    public static IServiceCollection AddImageWizardClient(this IServiceCollection services, Action<ImageWizardClientSettings>? options = null)
     {
-        return AddImageWizardClient(services, x => { });
-    }
-
-    public static IServiceCollection AddImageWizardClient(this IServiceCollection services, Action<ImageWizardClientSettings> setup)
-    {
-        services.Configure(setup);
+        if (options != null)
+        {
+            services.Configure(options);
+        }
 
         services.AddHttpContextAccessor();
         services.AddTransient<IImageWizardUrlBuilder, UrlBuilder>();

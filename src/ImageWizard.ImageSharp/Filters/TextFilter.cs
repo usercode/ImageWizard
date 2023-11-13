@@ -2,8 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp.Drawing.Processing;
 using ImageWizard.Attributes;

@@ -4,7 +4,6 @@
 
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Collections.Generic;
 using System.Text;
 
 namespace ImageWizard.Client;

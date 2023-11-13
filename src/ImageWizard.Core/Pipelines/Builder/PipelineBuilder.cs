@@ -14,13 +14,12 @@ public class PipelineBuilder : IPipelineBuilder
     public PipelineBuilder(IServiceCollection services)
     {
         Services = services;
-        MimeTypes = new List<string>();
     }
 
     /// <summary>
     /// MimeTypes
     /// </summary>
-    public IList<string> MimeTypes { get; private set; }
+    public IList<string> MimeTypes { get; private set; } = new List<string>();
 
     /// <summary>
     /// ServiceProvider

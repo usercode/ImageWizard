@@ -24,8 +24,8 @@ public static class GravatarExtensions
 
             return sb.ToString();
         }
-
-        byte[] hashBuffer = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
+        
+        byte[] hashBuffer = MD5.HashData(Encoding.UTF8.GetBytes(email.Trim().ToLower()));
 
         return new Image(imageUrlBuilder.LoadData("gravatar", GetHashString(hashBuffer)));
     }

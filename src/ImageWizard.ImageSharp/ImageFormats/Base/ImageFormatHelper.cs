@@ -6,16 +6,16 @@ namespace ImageWizard.ImageSharp;
 
 public class ImageFormatHelper
 {
-    public static IImageFormat FirstOrDefault(string mimeType)
+    public static IImageFormat? FirstOrDefault(string mimeType)
     {
         return FirstOrDefault(new[] { mimeType });
     }
 
-    public static IImageFormat FirstOrDefault(IEnumerable<string> mimeTypes)
+    public static IImageFormat? FirstOrDefault(IEnumerable<string> mimeTypes)
     {
         foreach (string mimeType in mimeTypes)
         {
-            IImageFormat imageFormat = mimeType switch
+            IImageFormat? imageFormat = mimeType switch
             {
                 MimeTypes.WebP => new WebPFormat(),
                 MimeTypes.Jpeg => new JpegFormat(),

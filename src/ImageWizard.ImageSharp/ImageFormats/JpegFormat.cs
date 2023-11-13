@@ -2,7 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace ImageWizard.ImageSharp;

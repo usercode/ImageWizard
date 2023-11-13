@@ -36,8 +36,6 @@ public class HMACSHA256UrlSignature : IUrlSignature
     /// <summary>
     /// Selects part of the url.
     /// </summary>
-    /// <param name="url"></param>
-    /// <returns></returns>
     protected virtual string GetUrlValue(ImageWizardUrl url)
     {
         return url.Path;
@@ -46,8 +44,6 @@ public class HMACSHA256UrlSignature : IUrlSignature
     /// <summary>
     /// Selects part of the host.
     /// </summary>
-    /// <param name="host"></param>
-    /// <returns></returns>
     protected virtual string GetHostValue(HostString host)
     {
         return host.Value;
@@ -56,8 +52,6 @@ public class HMACSHA256UrlSignature : IUrlSignature
     /// <summary>
     /// Encrypt
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     public string Encrypt(byte[] key, ImageWizardRequest request)
     {
         //build data string

@@ -3,7 +3,6 @@
 // MIT License
 
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Xml.Linq;
@@ -94,7 +93,7 @@ public class YoutubeTagHelper : TagHelper
         output.Attributes.SetAttribute("data-embeded", HttpUtility.HtmlEncode(responsiveTag.ToString()));
 
         Image image = UrlBuilder
-                            .Youtube(VideoId)
+                            .YouTube(VideoId)
                             .Resize(Width, Height);
 
         if (Grayscale)

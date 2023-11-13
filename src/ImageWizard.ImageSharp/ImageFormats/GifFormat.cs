@@ -2,8 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using SixLabors.ImageSharp;
-
 namespace ImageWizard.ImageSharp;
 
 public class GifFormat : IImageFormat

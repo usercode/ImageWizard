@@ -106,7 +106,7 @@ public class ImageWizardApi
         StringBuilder pathBuilder = new StringBuilder(url.Path);
 
         //get compatible mime types by the accept header
-        IEnumerable<string> acceptMimeTypes = context.Request.GetTypedHeaders().Accept
+        IEnumerable<string?> acceptMimeTypes = context.Request.GetTypedHeaders().Accept
                                                                     .Where(x => x.MatchesAllSubTypes == false)
                                                                     .Select(x => x.MediaType.Value)
                                                                     //filter unknown mime types
