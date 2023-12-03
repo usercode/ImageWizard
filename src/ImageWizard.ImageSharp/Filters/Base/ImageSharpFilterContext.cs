@@ -5,6 +5,8 @@
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
 using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 

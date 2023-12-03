@@ -5,6 +5,7 @@
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp;
 
 namespace ImageWizard.ImageSharp.Filters;
 

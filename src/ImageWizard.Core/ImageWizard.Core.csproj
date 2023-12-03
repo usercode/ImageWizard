@@ -22,7 +22,7 @@
   <ItemGroup>
     <PackageReference Include="AsyncKeyLock" Version="1.0.4" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
   
   <ItemGroup>

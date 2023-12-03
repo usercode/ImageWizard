@@ -5,6 +5,8 @@
 using SixLabors.Fonts;
 using SixLabors.ImageSharp.Drawing.Processing;
 using ImageWizard.Attributes;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp;
 
 namespace ImageWizard.ImageSharp.Filters;
 
