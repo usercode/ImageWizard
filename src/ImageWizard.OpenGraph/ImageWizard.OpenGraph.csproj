@@ -1,38 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Authors>usercode</Authors>
+		<PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
+		<Description>Image processing middleware based on ASP.NET and ImageSharp / SkiaSharp / SvgNet.</Description>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>image processing</PackageTags>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<MinVerTagPrefix>v</MinVerTagPrefix>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<NoWarn>CS1591</NoWarn>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
 
-  <PropertyGroup>
-	  <TargetFramework>net8.0</TargetFramework>
-	  <Nullable>enable</Nullable>
-	  <Authors>usercode</Authors>
-	  <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
-	  <Description>Image processing middleware based on ASP.NET and ImageSharp / SkiaSharp / SvgNet.</Description>
-	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
-	  <PackageIcon>logo.png</PackageIcon>
-	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-	  <PackageTags>image processing</PackageTags>
-	  <IncludeSymbols>true</IncludeSymbols>
-	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <MinVerTagPrefix>v</MinVerTagPrefix> <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <NoWarn>CS1591</NoWarn>
-  </PropertyGroup>
-	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="OpenGraph-Net" Version="4.0.1" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\logo.png" Pack="true" PackagePath="" />
-  </ItemGroup>
-
 	<ItemGroup>
-	  <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+		<None Include="..\..\logo.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MinVer" Version="4.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MinVer" Version="4.3.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 </Project>

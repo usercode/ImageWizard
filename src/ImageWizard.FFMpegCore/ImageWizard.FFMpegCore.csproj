@@ -1,40 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Authors>usercode</Authors>
-    <PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>    
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageIcon>logo.png</PackageIcon>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <MinVerTagPrefix>v</MinVerTagPrefix>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <NoWarn>CS1591</NoWarn>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Authors>usercode</Authors>
+		<PackageProjectUrl>https://github.com/usercode/ImageWizard</PackageProjectUrl>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<PackageIcon>logo.png</PackageIcon>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<MinVerTagPrefix>v</MinVerTagPrefix>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<NoWarn>CS1591</NoWarn>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 	</ItemGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="FFMpegCore" Version="5.1.0" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
-    <ProjectReference Include="..\ImageWizard.Utils\ImageWizard.Utils.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FFMpegCore" Version="5.1.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\logo.png" Pack="true" PackagePath="" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
+		<ProjectReference Include="..\ImageWizard.Utils\ImageWizard.Utils.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MinVer" Version="4.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\logo.png" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MinVer" Version="4.3.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 </Project>
