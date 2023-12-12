@@ -14,7 +14,7 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<MinVerTagPrefix>v</MinVerTagPrefix>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>CS1591</NoWarn>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
