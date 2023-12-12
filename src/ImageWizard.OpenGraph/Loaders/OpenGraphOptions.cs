@@ -2,8 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using System;
-
 namespace ImageWizard.Loaders;
 
 public class OpenGraphOptions : LoaderOptions

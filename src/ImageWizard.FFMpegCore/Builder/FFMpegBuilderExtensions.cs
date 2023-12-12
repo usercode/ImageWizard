@@ -6,7 +6,6 @@ using ImageWizard.FFMpegCore;
 using ImageWizard.FFMpegCore.Builder;
 using ImageWizard.FFMpegCore.Filters.Base;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace ImageWizard;
 

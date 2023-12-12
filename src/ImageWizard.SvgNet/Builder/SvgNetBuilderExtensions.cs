@@ -7,7 +7,6 @@ using ImageWizard.SvgNet;
 using ImageWizard.SvgNet.Builder;
 using ImageWizard.SvgNet.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace ImageWizard;
 

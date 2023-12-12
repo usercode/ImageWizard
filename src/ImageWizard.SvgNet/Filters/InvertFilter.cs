@@ -3,7 +3,7 @@
 // MIT License
 
 using ImageWizard.Attributes;
-using Svg.FilterEffects;
+using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
@@ -12,9 +12,9 @@ public class InvertFilter : ImageWizard.Filters.SvgFilter
     [Filter]
     public void Invert()
     {
-        Context.Filters.Add(new SvgColourMatrix() { Type = SvgColourMatrixType.Matrix, 
-                                    Values = "-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 "
-        });
+        Context.Filters.Add(new XElement(SvgConstants.SvgNs + "feColorMatrix",
+                                    new XAttribute("type", "matrix"),
+                                    new XAttribute("values", "-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0")));
     }
 
 }

@@ -4,7 +4,6 @@
 
 using ImageWizard.Loaders;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace ImageWizard;
 

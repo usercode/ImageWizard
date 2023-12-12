@@ -2,8 +2,6 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
-using System.Collections.Generic;
-
 namespace ImageWizard.Analytics;
 
 /// <summary>

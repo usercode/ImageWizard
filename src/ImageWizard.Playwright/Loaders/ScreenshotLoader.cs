@@ -5,7 +5,6 @@
 using ImageWizard.Loaders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Playwright;
 
 namespace ImageWizard.Playwright;
 

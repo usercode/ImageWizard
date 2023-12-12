@@ -5,9 +5,6 @@
 using ImageWizard.FFMpegCore.Filters.Base;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ImageWizard.FFMpegCore;
 

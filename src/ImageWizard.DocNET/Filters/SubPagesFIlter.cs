@@ -6,7 +6,6 @@ using Docnet.Core;
 using ImageWizard.Attributes;
 using ImageWizard.DocNET.Filters.Base;
 using ImageWizard.Processing.Results;
-using System.IO;
 
 namespace ImageWizard.DocNET.Filters;
 

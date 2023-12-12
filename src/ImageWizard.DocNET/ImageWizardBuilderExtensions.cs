@@ -5,7 +5,6 @@
 using ImageWizard.DocNET;
 using ImageWizard.DocNET.Builder;
 using ImageWizard.DocNET.Filters;
-using System;
 
 namespace ImageWizard;
 

@@ -3,8 +3,8 @@
 // MIT License
 
 using ImageWizard.Attributes;
-using Svg.FilterEffects;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
@@ -13,8 +13,8 @@ public class SaturateFilter : ImageWizard.Filters.SvgFilter
     [Filter]
     public void Saturate(float value)
     {
-        Context.Filters.Add(new SvgColourMatrix() { Type = SvgColourMatrixType.Saturate, 
-                                    Values = value.ToString("0.0##", CultureInfo.InvariantCulture)
-        });
+        Context.Filters.Add(new XElement(SvgConstants.SvgNs + "feColorMatrix",
+                                    new XAttribute("type", "saturate"),
+                                    new XAttribute("values", value.ToString(CultureInfo.InvariantCulture))));
     }
 }

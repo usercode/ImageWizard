@@ -5,11 +5,7 @@
 using ImageWizard.Filters;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
-using Svg;
-using Svg.Transforms;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
@@ -30,9 +26,7 @@ public class SvgPipeline : Pipeline<SvgFilter, SvgFilterContext>
     protected override async Task<SvgFilterContext> CreateFilterContext(PipelineContext context)
     {
         //load image
-        SvgDocument svg = SvgDocument.Open<SvgDocument>(context.Result.Data);
-
-        svg.Transforms = new SvgTransformCollection();
+        XDocument svg = XDocument.Load(context.Result.Data);
 
         return new SvgFilterContext(context, svg);
     }

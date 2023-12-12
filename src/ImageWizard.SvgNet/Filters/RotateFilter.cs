@@ -3,7 +3,8 @@
 // MIT License
 
 using ImageWizard.Attributes;
-using Svg.Transforms;
+using System.Globalization;
+using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
@@ -12,7 +13,8 @@ public class RotateFilter : ImageWizard.Filters.SvgFilter
     [Filter]
     public void Rotate(float angle)
     {
-        Context.Image.Transforms.Add(new SvgRotate(angle));
+        Context.Root.Add(new XAttribute("transform", 
+                                    $"rotate({angle.ToString(CultureInfo.InvariantCulture)})"));
     }
 
 }

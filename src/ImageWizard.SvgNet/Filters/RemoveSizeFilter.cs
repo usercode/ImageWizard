@@ -4,7 +4,7 @@
 
 using ImageWizard.Attributes;
 using ImageWizard.Filters;
-using Svg;
+using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
@@ -13,8 +13,18 @@ public class RemoveSizeFilter : SvgFilter
     [Filter]
     public void RemoveSize()
     {
-        Context.Image.Width = SvgUnit.None;
-        Context.Image.Height = SvgUnit.None;
-    }
+        XAttribute? width = Context.Root.Attribute("width");
 
+        if (width != null)
+        {
+            width.Remove();
+        }
+
+        XAttribute? height = Context.Root.Attribute("height");
+
+        if (height != null)
+        {
+            height.Remove();
+        }
+    }
 }

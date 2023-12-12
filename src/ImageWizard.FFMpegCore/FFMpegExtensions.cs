@@ -5,7 +5,6 @@
 using ImageWizard.FFMpegCore;
 using ImageWizard.FFMpegCore.Builder;
 using ImageWizard.FFMpegCore.Filters;
-using System;
 
 namespace ImageWizard;
 

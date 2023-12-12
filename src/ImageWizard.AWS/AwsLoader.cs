@@ -6,7 +6,6 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using ImageWizard.Loaders;
 using Microsoft.Extensions.Options;
-using System.Threading.Tasks;
 
 namespace ImageWizard.AWS;
 

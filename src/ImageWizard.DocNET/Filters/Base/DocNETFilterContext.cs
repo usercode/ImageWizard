@@ -4,8 +4,6 @@
 
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace ImageWizard.DocNET.Filters.Base;
 

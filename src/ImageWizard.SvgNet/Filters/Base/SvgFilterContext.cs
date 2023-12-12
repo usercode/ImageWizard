@@ -4,12 +4,8 @@
 
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using Svg;
-using Svg.FilterEffects;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using ImageWizard.SvgNet;
+using System.Xml.Linq;
 
 namespace ImageWizard.Filters;
 
@@ -19,53 +15,68 @@ namespace ImageWizard.Filters;
 public class SvgFilterContext : FilterContext
 {
     public SvgFilterContext(
-        PipelineContext processingContext, 
-        SvgDocument image)
+        PipelineContext processingContext,
+        XDocument image)
         : base(processingContext)
     {
-        Image = image;
-        Filters = new List<SvgFilterPrimitive>();
+        Document = image;
+
+        Root = Document.Root ?? throw new ArgumentNullException();
     }
 
     /// <summary>
     /// Image
     /// </summary>
-    public SvgDocument Image { get; }
+    public XDocument Document { get; }
+
+    /// <summary>
+    /// Image
+    /// </summary>
+    public XElement Root { get; }
 
     /// <summary>
     /// Filters
     /// </summary>
-    public IList<SvgFilterPrimitive> Filters { get; set; }
+    public IList<XElement> Filters { get; set; } = new List<XElement>();
 
     public override async Task<DataResult> BuildResultAsync()
     {
         //apply filters
         if (Filters.Any())
         {
-            var defs = Image.Children.GetSvgElementOf<SvgDefinitionList>();
-
-            if (defs == null)
+            if (Root.Attribute("filter") == null)
             {
-                defs = new SvgDefinitionList();
-                Image.Children.Add(defs);
+                Root.Add(new XAttribute("filter", $"url(#filter01)"));
             }
 
-            var filterElement = new Svg.FilterEffects.SvgFilter();
-            filterElement.ID = "filter01";
+            XName defName = SvgConstants.SvgNs + "defs";
+            XName filterName = SvgConstants.SvgNs + "filter";
 
-            defs.Children.Add(filterElement);
+            XElement? def = Root.Element(defName);
 
-            foreach (var f in Filters)
+            if (def == null)
             {
-                filterElement.Children.Add(f);
+                def = new XElement(defName);
+                Root.Add(def);
             }
 
-            Image.CustomAttributes.Add("filter", $"url(#{filterElement.ID})");
+            XElement? filter = def.Element(filterName);
+
+            if (filter == null)
+            {
+                filter = new XElement(filterName, new XAttribute("id", "filter01"));
+                def.Add(filter);
+            }
+
+            foreach (XElement f in Filters)
+            {
+                filter.Add(f);
+            }
         }
 
         Stream mem = ProcessingContext.StreamPool.GetStream();
 
-        Image.Write(mem);
+        Document.Save(mem);
 
         mem.Seek(0, SeekOrigin.Begin);
 

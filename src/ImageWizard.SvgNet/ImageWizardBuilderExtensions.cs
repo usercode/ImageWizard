@@ -4,7 +4,6 @@
 
 using ImageWizard.SvgNet.Builder;
 using ImageWizard.SvgNet.Filters;
-using System;
 
 namespace ImageWizard;
 
@@ -23,7 +22,6 @@ public static class ImageWizardBuilderExtensions
         pipelineBuilder.WithFilter<GrayscaleFilter>();
         pipelineBuilder.WithFilter<InvertFilter>();
         pipelineBuilder.WithFilter<SaturateFilter>();
-        pipelineBuilder.WithFilter<ImageFormatFilter>();
 
         pipelineBuilder.WithMimeTypes(MimeTypes.Svg);
 

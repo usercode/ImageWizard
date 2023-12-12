@@ -8,7 +8,6 @@ using FFMpegCore.Pipes;
 using ImageWizard.Attributes;
 using ImageWizard.FFMpegCore.Filters.Base;
 using ImageWizard.Processing.Results;
-using System.IO;
 
 namespace ImageWizard.FFMpegCore.Filters;
 

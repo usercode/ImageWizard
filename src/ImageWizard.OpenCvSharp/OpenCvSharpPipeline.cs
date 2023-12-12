@@ -5,9 +5,6 @@
 using ImageWizard.OpenCvSharp.Filters;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ImageWizard.ImageSharp.Filters;
 

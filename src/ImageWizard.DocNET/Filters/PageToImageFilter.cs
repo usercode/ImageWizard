@@ -10,7 +10,6 @@ using ImageWizard.DocNET.Filters.Base;
 using ImageWizard.Processing.Results;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.IO;
 
 namespace ImageWizard.DocNET.Filters;
 

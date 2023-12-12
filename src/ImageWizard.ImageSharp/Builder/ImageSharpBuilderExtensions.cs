@@ -11,11 +11,8 @@ namespace ImageWizard;
 public static class ImageSharpBuilderExtensions
 {
     /// <summary>
-    /// Registers an ImageSharp filter.
+    /// Registers the <typeparamref name="TFilter"/> filter.
     /// </summary>
-    /// <typeparam name="TFilter"></typeparam>
-    /// <param name="builder"></param>
-    /// <returns></returns>
     public static IImageSharpBuilder WithFilter<TFilter>(this IImageSharpBuilder builder) 
         where TFilter : ImageSharpFilter
     {

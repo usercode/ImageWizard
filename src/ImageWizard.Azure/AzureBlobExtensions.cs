@@ -4,7 +4,6 @@
 
 using ImageWizard.Azure;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace ImageWizard;
 

@@ -4,7 +4,6 @@
 
 using ImageWizard.PuppeteerSharp;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace ImageWizard;
 

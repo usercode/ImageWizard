@@ -5,9 +5,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenGraphNet;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace ImageWizard.Loaders;
 

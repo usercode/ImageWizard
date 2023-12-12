@@ -4,8 +4,6 @@
 
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
-using System;
-using System.Threading.Tasks;
 
 namespace ImageWizard.FFMpegCore.Filters.Base;
 

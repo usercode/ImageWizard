@@ -3,7 +3,6 @@
 // MIT License
 
 using ImageWizard.Loaders;
-using System;
 
 namespace ImageWizard.OpenStreetMap;
 

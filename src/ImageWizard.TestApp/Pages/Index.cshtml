@@ -74,6 +74,10 @@
             <p>Saturate(0.3) </p>
             <img src="@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").AsSvg().Saturate(0.3).BuildUrl()" />
         </div>
+        <div class="col-lg-3">
+            <p>Combine filters (grayscale, rotate, invert)</p>
+            <img src="@Url.ImageWizard().FetchLocalFile("img/dot-net-core.svg").AsSvg().Grayscale().Rotate(90).Invert().BuildUrl()" />
+        </div>
     </div>
 
     <h2>ImageSharp filters</h2>

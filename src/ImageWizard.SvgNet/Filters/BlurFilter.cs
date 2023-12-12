@@ -3,8 +3,8 @@
 // MIT License
 
 using ImageWizard.Attributes;
-using Svg;
-using Svg.FilterEffects;
+using System.Globalization;
+using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
@@ -19,9 +19,7 @@ public class BlurFilter : ImageWizard.Filters.SvgFilter
     [Filter]
     public void Blur(float deviation)
     {
-        var l = new SvgNumberCollection();
-        l.Add(deviation);
-
-        Context.Filters.Add(new SvgGaussianBlur() { StdDeviation = l });
+        Context.Filters.Add(new XElement(SvgConstants.SvgNs + "feGaussianBlur", 
+                                    new XAttribute("stdDeviation", deviation.ToString(CultureInfo.InvariantCulture))));
     }
 }

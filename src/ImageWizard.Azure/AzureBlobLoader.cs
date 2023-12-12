@@ -7,7 +7,6 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using ImageWizard.Loaders;
 using Microsoft.Extensions.Options;
-using System.Threading.Tasks;
 
 namespace ImageWizard.Azure;
 
