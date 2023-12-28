@@ -119,6 +119,7 @@ builder.Services.AddImageWizard(x =>
             .AddPuppeteerLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             //.AddPlaywrightLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddOpenGraphLoader(x => x.RefreshMode = LoaderRefreshMode.None)
+            .AddPlaceholder(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddFFMpegCore()
             .AddDocNET()
             .AddOpenCvSharp()

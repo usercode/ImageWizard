@@ -193,6 +193,17 @@
         </div>
     </div>
 
+    <h2>Placeholder</h2>
+    <p>@@Url.ImageWizard().Placeholder(600, 300).BuildUrl()</p>
+    <p>@Url.ImageWizard().Placeholder(600, 300).BuildUrl()</p>
+
+    <div class="row">
+        <div class="col">
+            <img src="@Url.ImageWizard().Placeholder(600, 300).BuildUrl()" />
+            <p>600x300</p>
+        </div>
+    </div>   
+
     <h2>DPR (Device Pixel Ratio)</h2>
 
     <p>@@Url.ImageWizard().Fetch("lion.jpg").AsImage().DPR(1).Resize(100,100).BuildUrl()</p>
@@ -261,7 +272,7 @@
         </div>
     </div>
 
-    <h2>Use youtube taghelper (DSGVO friendly)</h2>
+    <h2>Use youtube taghelper (GDPR friendly)</h2>
 
    <div class="alert alert-secondary">
         @("<youtube video-id=\"AQHZQ8p6FCA\" width=\"1920\" height=\"1080\" grayscale=\"true\" blur=\"true\" use-no-cookie=\"true\" />")
