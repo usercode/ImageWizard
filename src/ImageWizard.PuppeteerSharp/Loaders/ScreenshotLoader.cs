@@ -27,14 +27,14 @@ public class ScreenshotLoader : Loader<PuppeteerOptions>
 
     public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData)
     {
-        using BrowserFetcher browserFetcher = new BrowserFetcher();
+        BrowserFetcher browserFetcher = new BrowserFetcher();
         await browserFetcher.DownloadAsync();
 
         await using IBrowser browser = await Puppeteer.LaunchAsync(
                                                                     new LaunchOptions()
                                                                     { 
                                                                         Headless = true,
-                                                                        Args = new[] { "--no-sandbox" }
+                                                                        Args = ["--no-sandbox"]
                                                                     });
 
         await using IPage page = await browser.NewPageAsync();

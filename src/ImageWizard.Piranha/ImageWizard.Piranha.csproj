@@ -25,9 +25,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Piranha" Version="11.0.0" />
-		<PackageReference Include="Piranha.AspNetCore" Version="11.0.0" />
-		<PackageReference Include="Piranha.Manager" Version="11.0.0" />
+		<PackageReference Include="Piranha" Version="11.1.0" />
+		<PackageReference Include="Piranha.AspNetCore" Version="11.1.0" />
+		<PackageReference Include="Piranha.Manager" Version="11.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
