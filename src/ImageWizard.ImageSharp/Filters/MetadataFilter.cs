@@ -6,7 +6,7 @@ using ImageWizard.Attributes;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class MetadataFilter : ImageSharpFilter
+public partial class MetadataFilter : ImageSharpFilter
 {
     [Filter]
     public void RemoveExif()

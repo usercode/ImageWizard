@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class BlackWhiteFilter : ImageSharpFilter
+public partial class BlackWhiteFilter : ImageSharpFilter
 {
     [Filter]
     public void BlackWhite()

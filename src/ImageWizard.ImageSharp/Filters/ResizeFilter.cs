@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class ResizeFilter : ImageSharpFilter
+public partial class ResizeFilter : ImageSharpFilter
 {
     [Filter]
     public void Resize([DPR]int size)

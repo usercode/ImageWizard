@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class AutoOrientFilter : ImageSharpFilter
+public partial class AutoOrientFilter : ImageSharpFilter
 {
     [Filter]
     public void AutoOrient()

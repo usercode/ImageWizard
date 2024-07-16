@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
-public class BlurFilter : ImageWizard.Filters.SvgFilter
+public partial class BlurFilter : ImageWizard.Filters.SvgFilter
 {
     [Filter]
     public void Blur()

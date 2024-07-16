@@ -4,6 +4,7 @@
 
 using ImageWizard.ImageSharp;
 using ImageWizard.ImageSharp.Filters;
+using ImageWizard.Processing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ImageWizard;
@@ -14,7 +15,7 @@ public static class ImageSharpBuilderExtensions
     /// Registers the <typeparamref name="TFilter"/> filter.
     /// </summary>
     public static IImageSharpBuilder WithFilter<TFilter>(this IImageSharpBuilder builder) 
-        where TFilter : ImageSharpFilter
+        where TFilter : ImageSharpFilter, IFilterFactory
     {
         builder.Services.AddTransient<TFilter>();
         builder.Services.AddSingleton(new PipelineAction<ImageSharpPipeline>(x => x.AddFilter<TFilter>()));

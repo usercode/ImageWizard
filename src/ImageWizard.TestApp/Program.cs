@@ -2,24 +2,23 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard;
+using ImageWizard.Caches;
+using ImageWizard.Client;
+using ImageWizard.ImageSharp;
+using ImageWizard.ImageSharp.Filters;
+using ImageWizard.Loaders;
+using ImageWizard.MongoDB;
+using ImageWizard.OpenCvSharp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Security.Cryptography;
-using ImageWizard.ImageSharp.Filters;
-using Microsoft.AspNetCore.HttpOverrides;
-using ImageWizard.Client;
-using ImageWizard.OpenCvSharp;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
-using ImageWizard.Loaders;
+using SixLabors.ImageSharp.Processing;
 using System;
-using ImageWizard.MongoDB;
-using ImageWizard.ImageSharp;
-using ImageWizard.Caches;
-using ImageWizard;
+using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 

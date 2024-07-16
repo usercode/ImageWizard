@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Processing.Results;
+using ImageWizard.Utils;
 
 namespace ImageWizard.Processing;
 
@@ -18,14 +19,14 @@ public class PipelineContext : IDisposable
         ClientHints clientHints, 
         ImageWizardOptions imageWizardOptions,
         IEnumerable<string> acceptMimeTypes,
-        IEnumerable<string> urlFilters)
+        IEnumerable<FilterSegment> urlFilters)
     {
         ServiceProvider = serviceProvider;
         StreamPool = streamPool;
         ClientHints = clientHints;
         ImageWizardOptions = imageWizardOptions;
         AcceptMimeTypes = acceptMimeTypes;
-        UrlFilters = new Queue<string>(urlFilters);
+        UrlFilters = new Queue<FilterSegment>(urlFilters);
 
         _dataResult = result;
     }
@@ -74,7 +75,7 @@ public class PipelineContext : IDisposable
     /// <summary>
     /// UrlFilters
     /// </summary>
-    public Queue<string> UrlFilters { get; }
+    public Queue<FilterSegment> UrlFilters { get; }
 
     private bool _disposed;
 

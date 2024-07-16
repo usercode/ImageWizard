@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
-public class InvertFilter : ImageWizard.Filters.SvgFilter
+public partial class InvertFilter : ImageWizard.Filters.SvgFilter
 {
     [Filter]
     public void Invert()

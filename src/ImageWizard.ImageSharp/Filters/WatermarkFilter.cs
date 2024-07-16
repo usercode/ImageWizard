@@ -10,7 +10,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class WatermarkFilter : ImageSharpFilter
+public partial class WatermarkFilter : ImageSharpFilter
 {
     public WatermarkFilter(IOptions<WatermarkOptions> options)
     {

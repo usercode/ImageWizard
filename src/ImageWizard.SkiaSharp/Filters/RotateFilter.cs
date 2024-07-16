@@ -8,7 +8,7 @@ using SkiaSharp;
 
 namespace ImageWizard.SkiaSharp.Filters;
 
-public class RotateFilter : SkiaSharpFilter
+public partial class RotateFilter : SkiaSharpFilter
 {
     [Filter]
     public void Rotate(float angle)

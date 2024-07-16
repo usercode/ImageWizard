@@ -57,7 +57,7 @@ public class Metadata : IMetadata
     /// <summary>
     /// Filters
     /// </summary>
-    public IEnumerable<string> Filters { get; set; } = Array.Empty<string>();
+    public IEnumerable<string> Filters { get; set; } = [];
 
     /// <summary>
     /// LoaderType

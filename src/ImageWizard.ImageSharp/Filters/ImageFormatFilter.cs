@@ -6,7 +6,7 @@ using ImageWizard.Attributes;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class ImageFormatFilter : ImageSharpFilter
+public partial class ImageFormatFilter : ImageSharpFilter
 {
     [Filter]
     public void Bmp()

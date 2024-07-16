@@ -2,6 +2,7 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Utils;
 using System.Text.RegularExpressions;
 
 namespace ImageWizard;
@@ -14,7 +15,7 @@ public readonly partial struct ImageWizardUrl
 	[GeneratedRegex("^(?<path>(?<filter>[a-z]+\\([^)]*\\)/)*(?<loaderType>[a-z]+)/(?<loaderSource>.*))$", RegexOptions.IgnoreCase)]
 	private static partial Regex MyRegex();
 
-    public ImageWizardUrl(string loaderType, string loaderSource, string[] filters)
+    public ImageWizardUrl(string loaderType, string loaderSource, FilterSegment[] filters)
     {
         LoaderType = loaderType;
         LoaderSource = loaderSource.TrimStart('/');
@@ -30,7 +31,7 @@ public readonly partial struct ImageWizardUrl
         }
     }
 
-    private ImageWizardUrl(string path, string loaderType, string loaderSource, string[] filters)
+    private ImageWizardUrl(string path, string loaderType, string loaderSource, FilterSegment[] filters)
     {
         LoaderType = loaderType;
         LoaderSource = loaderSource;
@@ -52,8 +53,9 @@ public readonly partial struct ImageWizardUrl
         string url_path = match.Groups["path"].Value;
         string url_loaderSource = match.Groups["loaderSource"].Value;
         string url_loaderType = match.Groups["loaderType"].Value;
-        string[] url_filters = match.Groups["filter"].Captures
+        FilterSegment[] url_filters = match.Groups["filter"].Captures
                                                             .Select(x => x.ValueSpan[0..^1].ToString()) //remove "/"
+                                                            .Select(x => FilterSegment.FromFilter(x))
                                                             .ToArray();
 
         url = new ImageWizardUrl(url_path, url_loaderType, url_loaderSource, url_filters);
@@ -79,7 +81,7 @@ public readonly partial struct ImageWizardUrl
     /// <summary>
     /// Filters
     /// </summary>
-    public string[] Filters { get; }
+    public FilterSegment[] Filters { get; }
 
     public override string ToString()
     {

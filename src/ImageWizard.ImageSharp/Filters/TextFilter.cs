@@ -10,7 +10,7 @@ using SixLabors.ImageSharp;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class TextFilter : ImageSharpFilter
+public partial class TextFilter : ImageSharpFilter
 {
     [Filter]
     public void DrawText(float x = 0, float y = 0, string text = "", int size = 24, string font = "Arial")

@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class CropFilter : ImageSharpFilter
+public partial class CropFilter : ImageSharpFilter
 {
     [Filter]
     public void Crop(double width, double height)

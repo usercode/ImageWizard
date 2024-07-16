@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class RotateFilter : ImageSharpFilter
+public partial class RotateFilter : ImageSharpFilter
 {
     [Filter]
     public void Rotate(float angle)

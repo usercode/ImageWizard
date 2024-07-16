@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Filters;
+using ImageWizard.Processing;
 using ImageWizard.SvgNet;
 using ImageWizard.SvgNet.Builder;
 using ImageWizard.SvgNet.Filters;
@@ -13,7 +14,7 @@ namespace ImageWizard;
 public static class SvgNetBuilderExtensions
 {
     public static ISvgNetBuilder WithFilter<TFilter>(this ISvgNetBuilder builder) 
-        where TFilter : SvgFilter, new()
+        where TFilter : SvgFilter, IFilterFactory
     {
         builder.Services.AddTransient<TFilter>();
         builder.Services.AddSingleton(new PipelineAction<SvgPipeline>(x => x.AddFilter<TFilter>()));

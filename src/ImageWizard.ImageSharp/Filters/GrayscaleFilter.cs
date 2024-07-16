@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class GrayscaleFilter : ImageSharpFilter
+public partial class GrayscaleFilter : ImageSharpFilter
 {
     [Filter]
     public void Grayscale()

@@ -8,7 +8,7 @@ using SkiaSharp;
 
 namespace ImageWizard.SkiaSharp.Filters;
 
-public class TextFilter : SkiaSharpFilter
+public partial class TextFilter : SkiaSharpFilter
 {
     [Filter]
     public void DrawText(float x = 0, float y = 0, string text = "", int size = 24, string font = "Arial", string color = "#ff000000")

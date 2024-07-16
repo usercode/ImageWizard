@@ -13,7 +13,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace ImageWizard.DocNET.Filters;
 
-public class PageToImageFilter : DocNETFilter
+public partial class PageToImageFilter : DocNETFilter
 {
     [Filter]
     public void PageToImage(int pageIndex)

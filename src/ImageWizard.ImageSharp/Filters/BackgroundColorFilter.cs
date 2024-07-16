@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class BackgroundColorFilter : ImageSharpFilter
+public partial class BackgroundColorFilter : ImageSharpFilter
 {
     [Filter]
     public void BackgroundColor(byte r, byte g, byte b)

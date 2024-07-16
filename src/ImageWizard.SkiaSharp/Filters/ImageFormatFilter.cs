@@ -7,7 +7,7 @@ using ImageWizard.SkiaSharp.Filters.Base;
 
 namespace ImageWizard.SkiaSharp.Filters;
 
-public class ImageFormatFilter : SkiaSharpFilter
+public partial class ImageFormatFilter : SkiaSharpFilter
 {
     [Filter]
     public void Bmp()

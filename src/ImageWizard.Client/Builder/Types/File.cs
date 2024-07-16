@@ -2,6 +2,8 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Utils;
+
 namespace ImageWizard.Client;
 
 public abstract class File : IFilter
@@ -19,5 +21,5 @@ public abstract class File : IFilter
 
     public string BuildUrl() => CurrentFilter.BuildUrl();
 
-    public IFilter Filter(string filter) => CurrentFilter.Filter(filter);
+    public IFilter Filter(FilterSegment filter) => CurrentFilter.Filter(filter);
 }

@@ -9,7 +9,7 @@ using SkiaSharp;
 
 namespace ImageWizard.SkiaSharp.Filters;
 
-public class FlipFilter : SkiaSharpFilter
+public partial class FlipFilter : SkiaSharpFilter
 {
     [Filter]
     public void Flip(FlipMode flipMode)

@@ -8,7 +8,7 @@ using SkiaSharp;
 
 namespace ImageWizard.SkiaSharp.Filters;
 
-public class GrayscaleFilter : SkiaSharpFilter
+public partial class GrayscaleFilter : SkiaSharpFilter
 {
     [Filter]
     public void Grayscale()

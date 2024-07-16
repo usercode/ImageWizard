@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
-public class SaturateFilter : ImageWizard.Filters.SvgFilter
+public partial class SaturateFilter : ImageWizard.Filters.SvgFilter
 {
     [Filter]
     public void Saturate(float value)

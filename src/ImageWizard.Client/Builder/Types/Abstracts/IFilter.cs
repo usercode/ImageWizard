@@ -2,6 +2,8 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Utils;
+
 namespace ImageWizard.Client;
 
 /// <summary>
@@ -12,7 +14,5 @@ public interface IFilter : IBuildUrl, IUrlBuilder
     /// <summary>
     /// Filter
     /// </summary>
-    /// <param name="filter"></param>
-    /// <returns></returns>
-    IFilter Filter(string filter);
+    IFilter Filter(FilterSegment filter);
 }

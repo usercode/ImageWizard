@@ -9,7 +9,7 @@ using ImageWizard.Processing.Results;
 
 namespace ImageWizard.DocNET.Filters;
 
-public class SubPagesFilter : DocNETFilter
+public partial class SubPagesFilter : DocNETFilter
 {
     [Filter]
     public void SubPages(int pageFromIndex, int pageToIndex)

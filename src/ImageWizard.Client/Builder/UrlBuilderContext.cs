@@ -19,7 +19,7 @@ class UrlBuilderContext : ILoader, IFilter, IBuildUrl
     }
 
     public UrlBuilder ImageUrlBuilder { get; }
-    private List<string> Filters { get; } = new List<string>();
+    private List<FilterSegment> Filters { get; } = new List<FilterSegment>();
     private string? LoaderSource { get; set; }
     private string? LoaderType { get; set; }
 
@@ -34,7 +34,7 @@ class UrlBuilderContext : ILoader, IFilter, IBuildUrl
         return this;
     }
 
-    public IFilter Filter(string filter)
+    public IFilter Filter(FilterSegment filter)
     {
         Filters.Add(filter);
 

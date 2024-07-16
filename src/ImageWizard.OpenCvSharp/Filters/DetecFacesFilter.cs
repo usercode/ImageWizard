@@ -7,7 +7,7 @@ using OpenCvSharp;
 
 namespace ImageWizard.OpenCvSharp.Filters;
 
-public class DetecFacesFilter : OpenCvSharpFilter
+public partial class DetecFacesFilter : OpenCvSharpFilter
 {
     [Filter]
     public void DetectFaces()

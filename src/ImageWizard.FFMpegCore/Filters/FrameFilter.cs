@@ -11,7 +11,7 @@ using ImageWizard.Processing.Results;
 
 namespace ImageWizard.FFMpegCore.Filters;
 
-public class FrameFilter : FFMpegFilter
+public partial class FrameFilter : FFMpegFilter
 {
     [Filter]
     public void Frame()

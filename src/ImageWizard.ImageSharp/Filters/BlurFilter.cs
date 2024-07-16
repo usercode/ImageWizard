@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class BlurFilter : ImageSharpFilter
+public partial class BlurFilter : ImageSharpFilter
 {
     [Filter]
     public void Blur()

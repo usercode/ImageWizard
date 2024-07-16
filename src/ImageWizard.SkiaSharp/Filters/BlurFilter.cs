@@ -8,7 +8,7 @@ using SkiaSharp;
 
 namespace ImageWizard.SkiaSharp.Filters;
 
-public class BlurFilter : SkiaSharpFilter
+public partial class BlurFilter : SkiaSharpFilter
 {
     [Filter]
     public void Blur()

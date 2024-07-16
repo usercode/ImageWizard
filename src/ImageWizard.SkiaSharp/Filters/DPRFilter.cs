@@ -10,7 +10,7 @@ namespace ImageWizard.SkiaSharp.Filters;
 /// <summary>
 /// DPRFilter
 /// </summary>
-public class DPRFilter : SkiaSharpFilter
+public partial class DPRFilter : SkiaSharpFilter
 {
     [Filter]
     public void DPR(double dpr)

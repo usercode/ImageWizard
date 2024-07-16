@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class BrightnessFilter : ImageSharpFilter
+public partial class BrightnessFilter : ImageSharpFilter
 {
     [Filter]
     public void Brightness(float value)

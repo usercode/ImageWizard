@@ -6,4 +6,5 @@ namespace ImageWizard;
 
 public interface IFilter
 {
+    FilterContext Context { get; set; }
 }

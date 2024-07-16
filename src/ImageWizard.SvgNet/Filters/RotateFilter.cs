@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
-public class RotateFilter : ImageWizard.Filters.SvgFilter
+public partial class RotateFilter : ImageWizard.Filters.SvgFilter
 {
     [Filter]
     public void Rotate(float angle)

@@ -9,7 +9,7 @@ using SkiaSharp;
 
 namespace ImageWizard.SkiaSharp.Filters;
 
-public class ResizeFilter : SkiaSharpFilter
+public partial class ResizeFilter : SkiaSharpFilter
 {
     [Filter]
     public void Resize([DPR]int width, [DPR]int height)

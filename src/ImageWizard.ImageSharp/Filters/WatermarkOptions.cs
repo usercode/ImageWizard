@@ -8,17 +8,10 @@ namespace ImageWizard.ImageSharp.Filters;
 
 public class WatermarkOptions
 {
-    public WatermarkOptions()
-    {
-        Margin = 10;
-        Opacity = 0.5f;
-        Location = WatermarkLocation.BottomRight;
-    }
-
     /// <summary>
     /// Margin
     /// </summary>
-    public int Margin { get; set; }
+    public int Margin { get; set; } = 10;
 
     /// <summary>
     /// Path to the watermark image
@@ -28,10 +21,10 @@ public class WatermarkOptions
     /// <summary>
     /// Opacity
     /// </summary>
-    public float Opacity { get; set; }
+    public float Opacity { get; set; } = 0.5f;
 
     /// <summary>
     /// Location
     /// </summary>
-    public WatermarkLocation Location { get; set; }
+    public WatermarkLocation Location { get; set; } = WatermarkLocation.BottomRight;
 }

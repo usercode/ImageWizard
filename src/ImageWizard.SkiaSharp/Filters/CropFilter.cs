@@ -8,7 +8,7 @@ using SkiaSharp;
 
 namespace ImageWizard.SkiaSharp.Filters;
 
-public class CropFilter : SkiaSharpFilter
+public partial class CropFilter : SkiaSharpFilter
 {
     [Filter]
     public void Crop(float width, float height)

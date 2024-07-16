@@ -10,6 +10,5 @@ public abstract class ImageSharpFilter : Filter<ImageSharpFilterContext>
     {
 
     }
-
     public override string Namespace => "imagesharp";
 }

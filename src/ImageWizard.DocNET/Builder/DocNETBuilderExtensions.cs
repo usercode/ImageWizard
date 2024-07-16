@@ -2,6 +2,7 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Processing;
 using ImageWizard.DocNET;
 using ImageWizard.DocNET.Builder;
 using ImageWizard.DocNET.Filters.Base;
@@ -12,7 +13,7 @@ namespace ImageWizard;
 public static class DocNETBuilderExtensions
 {
     public static IDocNETBuilder WithFilter<TFilter>(this IDocNETBuilder builder) 
-        where TFilter : DocNETFilter
+        where TFilter : DocNETFilter, IFilterFactory
     {
         builder.Services.AddTransient<TFilter>();
         builder.Services.AddSingleton(new PipelineAction<DocNETPipeline>(x => x.AddFilter<TFilter>()));

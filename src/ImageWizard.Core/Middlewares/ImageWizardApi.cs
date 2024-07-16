@@ -289,7 +289,7 @@ public class ImageWizardApi
                                 LastAccess = now,
                                 Key = key,
                                 Hash = hash,
-                                Filters = url.Filters,
+                                Filters = url.Filters.Select(x=> x.Fullname).ToArray(),
                                 LoaderSource = url.LoaderSource,
                                 LoaderType = url.LoaderType,
                                 MimeType = processingContext.Result.MimeType,

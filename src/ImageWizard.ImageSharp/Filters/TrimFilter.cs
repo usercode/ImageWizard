@@ -6,7 +6,7 @@ using ImageWizard.Attributes;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class TrimFilter : ImageSharpFilter
+public partial class TrimFilter : ImageSharpFilter
 {
     [Filter]
     public void Trim()

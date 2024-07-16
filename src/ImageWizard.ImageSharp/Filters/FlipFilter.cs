@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class FlipFilter : ImageSharpFilter
+public partial class FlipFilter : ImageSharpFilter
 {
     [Filter]
     public void Flip(Utils.FlipMode flippingMode)

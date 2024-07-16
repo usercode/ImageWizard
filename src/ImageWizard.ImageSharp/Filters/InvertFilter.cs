@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace ImageWizard.ImageSharp.Filters;
 
-public class InvertFilter : ImageSharpFilter
+public partial class InvertFilter : ImageSharpFilter
 {
     [Filter]
     public void Invert()

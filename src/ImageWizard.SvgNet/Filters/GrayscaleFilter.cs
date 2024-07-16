@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
-public class GrayscaleFilter : ImageWizard.Filters.SvgFilter
+public partial class GrayscaleFilter : ImageWizard.Filters.SvgFilter
 {
     [Filter]
     public void Grayscale()

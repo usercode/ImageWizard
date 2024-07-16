@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace ImageWizard.SvgNet.Filters;
 
-public class RemoveSizeFilter : SvgFilter
+public partial class RemoveSizeFilter : SvgFilter
 {
     [Filter]
     public void RemoveSize()
