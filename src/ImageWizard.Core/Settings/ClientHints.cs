@@ -36,7 +36,7 @@ public class ClientHints
 
             if (found == null)
             {
-                if (AllowedDPR.Any())
+                if (AllowedDPR.Length != 0)
                 {
                     found = AllowedDPR.Last();
                 }

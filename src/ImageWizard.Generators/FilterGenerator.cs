@@ -31,7 +31,7 @@ public class MethodIncrementalGenerator : IIncrementalGenerator
             string namespaceName = group.Key.GetNamespace();
 
             SourceBuilder builder = new SourceBuilder();
-            builder.AddUsings("System.Globalization", "System.Text", "System.Text.RegularExpressions", "Microsoft.AspNetCore.WebUtilities", "ImageWizard", "ImageWizard.Attributes", "ImageWizard.Processing");
+            builder.AddUsings("System.Globalization", "System.Text", "System.Text.RegularExpressions", "Microsoft.AspNetCore.WebUtilities", "ImageWizard", "ImageWizard.Attributes", "ImageWizard.Processing", "ImageWizard.Utils");
             builder.AddNamespace(namespaceName, x =>
             {                
                 x.AddClass(Modifier.Public, group.Key.Identifier.Text, x =>
@@ -120,7 +120,7 @@ public class MethodIncrementalGenerator : IIncrementalGenerator
             });
         }
 
-        return $@"\\({string.Join(",", parameterItems.Select(x => x.Pattern).ToArray())}\\)";
+        return $@"^\\({string.Join(",", parameterItems.Select(x => x.Pattern).ToArray())}\\)$";
     }
 
     private string CreateParameterParser(IMethodSymbol methodSymbol)
@@ -138,26 +138,55 @@ public class MethodIncrementalGenerator : IIncrementalGenerator
             }
             else
             {
-                m = parameterSymbol.Type.OriginalDefinition.SpecialType switch
+                ParameterType parameterType = parameterSymbol.Type.OriginalDefinition.SpecialType switch
                 {
-                    SpecialType.System_Byte => $"byte {parameterSymbol.Name} = byte.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan, CultureInfo.InvariantCulture);",
-                    SpecialType.System_Int16 => $"short {parameterSymbol.Name} = short.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan, CultureInfo.InvariantCulture);",
-                    SpecialType.System_Int32 => $"int {parameterSymbol.Name} = int.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan, CultureInfo.InvariantCulture);",
-                    SpecialType.System_Int64 => $"long {parameterSymbol.Name} = long.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan, CultureInfo.InvariantCulture);",
-                    SpecialType.System_Single => $"float {parameterSymbol.Name} = float.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan, CultureInfo.InvariantCulture);",
-                    SpecialType.System_Double => $"double {parameterSymbol.Name} = double.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan, CultureInfo.InvariantCulture);",
-                    SpecialType.System_Decimal => $"decimal {parameterSymbol.Name} = decimal.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan, CultureInfo.InvariantCulture);",
-                    SpecialType.System_Boolean => $"bool {parameterSymbol.Name} = bool.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan);",
-                    SpecialType.System_String => $"string {parameterSymbol.Name} = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(group[\"{parameterSymbol.Name}\"].Value));",
+                    SpecialType.System_Byte => new ParameterType("byte", true, true, true),
+                    SpecialType.System_Int16 => new ParameterType("short", true, true, true),
+                    SpecialType.System_Int32 => new ParameterType("int", true, true, true),
+                    SpecialType.System_Int64 => new ParameterType("long", true, true, true),
+                    SpecialType.System_Single => new ParameterType("float", true, true, true),
+                    SpecialType.System_Double => new ParameterType("double", true, true, true),
+                    SpecialType.System_Decimal => new ParameterType("decimal", true, true, true),
+                    SpecialType.System_Boolean => new ParameterType("bool", true, false, false),
+                    SpecialType.System_String => new ParameterType("string", false, false, false),
 
                     _ => throw new Exception()
                 };
+
+                //use string
+                if (parameterType.UseParsing == false)
+                {
+                    m = $"{parameterType.Name} {parameterSymbol.Name} = group[\"{parameterSymbol.Name}\"].Value;";
+                }
+                else
+                {
+                    //parse value
+                    if (parameterType.UseCultureInfoForParsing)
+                    {
+                        m = $"{parameterType.Name} {parameterSymbol.Name} = {parameterType.Name}.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan, CultureInfo.InvariantCulture);";
+                    }
+                    else
+                    {
+                        m = $"{parameterType.Name} {parameterSymbol.Name} = {parameterType.Name}.Parse(group[\"{parameterSymbol.Name}\"].ValueSpan);";
+                    }
+
+                    //check DPR attribute
+                    if (parameterSymbol.GetAttributes() is ImmutableArray<AttributeData> attributes && attributes.Length > 0)
+                    {
+                        string dpr = attributes[0].AttributeClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+                        if (dpr == "global::ImageWizard.Attributes.DPRAttribute")
+                        {
+                            m += $"if (filter.Context.ProcessingContext.ClientHints.DPR != null) {{ {parameterSymbol.Name} = ({parameterType.Name}) ((double){parameterSymbol.Name} * filter.Context.ProcessingContext.ClientHints.DPR.Value); }}";
+                        }
+                    }
+                }
             }
 
             builder.Append(m);
         }
 
-        builder.Append($"filter.{methodSymbol.Name}({string.Join(",", methodSymbol.Parameters.Select(x=> x.Name))});");
+        builder.Append($"filter.{methodSymbol.Name}({string.Join(",", methodSymbol.Parameters.Select(x => x.Name))});");
 
         return builder.ToString().Trim();
     }
@@ -170,4 +199,21 @@ class ParameterItem
     public string Pattern { get; set; }
 
     public string CodeLine { get; set; }   
+}
+
+class ParameterType
+{
+    public ParameterType(string name, bool useParsing, bool useCultureInfoForParsing, bool useDPR)
+    {
+        Name = name;
+        UseParsing = useParsing;
+        UseCultureInfoForParsing = useCultureInfoForParsing;
+        UseDPR = useDPR;
+    }
+
+    public string Name { get; set; }
+    public bool UseParsing { get; set; }
+    public bool UseCultureInfoForParsing { get; set; }
+
+    public bool UseDPR { get; set; }
 }
