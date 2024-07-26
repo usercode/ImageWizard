@@ -17,9 +17,6 @@ public static class ImageWizardExtensions
     /// <summary>
     /// Maps ImageWizard endpoint with specified base path.
     /// </summary>
-    /// <param name="endpoints"></param>
-    /// <param name="path"></param>
-    /// <returns></returns>
     public static IEndpointConventionBuilder MapImageWizard(this IEndpointRouteBuilder endpoints, string path = ImageWizardDefaults.BasePath)
     {
         return endpoints
@@ -30,9 +27,6 @@ public static class ImageWizardExtensions
     /// <summary>
     /// Use ImageWizard middleware with default base path. ("/image")
     /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="endpointsHandler"></param>
-    /// <returns></returns>
     public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
     {
         return UseImageWizard(builder, ImageWizardDefaults.BasePath, endpointsHandler);
@@ -41,10 +35,6 @@ public static class ImageWizardExtensions
     /// <summary>
     /// Use ImageWizard middleware with specified base path.
     /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="path"></param>
-    /// <param name="endpointsHandler"></param>
-    /// <returns></returns>
     public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, string path, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
     {
         builder.Map(path, x =>
@@ -72,9 +62,6 @@ public static class ImageWizardExtensions
     /// <see cref="IUrlSignature"/> -> <see cref="HMACSHA256UrlSignature"/><br/>
     /// <see cref="IStreamPool"/> -> <see cref="RecyclableMemoryStreamPool"/><br/>
     /// </summary>
-    /// <param name="services"></param>
-    /// <param name="options"></param>
-    /// <returns></returns>
     public static IImageWizardBuilder AddImageWizard(this IServiceCollection services, Action<ImageWizardOptions>? options = null)
     {
         if (options != null)

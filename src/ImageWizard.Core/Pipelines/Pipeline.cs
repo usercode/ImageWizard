@@ -166,10 +166,8 @@ public abstract class Pipeline<TFilterBase, TFilterContext> : IPipeline
         preProcessing?.Invoke(filterContext);
 
         //execute filters
-        while (context.UrlFilters.Count > 0)
+        while (context.UrlFilters.TryPeek(out FilterSegment segment))
         {
-            FilterSegment segment = context.UrlFilters.Peek();
-
             if (FilterFactories.TryGetValue(segment.Name, out var filters))
             {
                 //find and execute filter

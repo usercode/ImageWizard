@@ -3,7 +3,6 @@
 // MIT License
 
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace ImageWizard.Processing;
@@ -11,12 +10,12 @@ namespace ImageWizard.Processing;
 public class FilterAction<TFilter> : IFilterAction
     where TFilter : IFilter
 {
-    public delegate void FilterItemHandler(TFilter filer, GroupCollection groups);
+    public delegate void FilterActionHandler(TFilter filer, GroupCollection groups);
 
-    public FilterAction(string name, [StringSyntax(StringSyntaxAttribute.Regex)]string pattern, FilterItemHandler handler)
+    public FilterAction(string name, Regex pattern, FilterActionHandler handler)
     {
         Name = name;
-        Regex = new Regex(pattern);
+        Regex = pattern;
         Handler = handler;
     }
 
@@ -33,7 +32,7 @@ public class FilterAction<TFilter> : IFilterAction
     /// <summary>
     /// Handler
     /// </summary>
-    public FilterItemHandler Handler { get; }
+    public FilterActionHandler Handler { get; }
 
     public bool TryExecute(IServiceProvider serviceProvider, string input, FilterContext filterContext)
     {

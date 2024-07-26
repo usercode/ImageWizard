@@ -47,7 +47,7 @@ public class MethodIncrementalGenerator : IIncrementalGenerator
                             string pattern = CreateParameterRegex(methodSymbol);
                             string parser = CreateParameterParser(methodSymbol);
 
-                            x.AppendLine($"new FilterAction<{group.Key.Identifier.Text}>(\"{method.TargetSymbol.Name.ToLower()}\", \"{pattern}\", (filter, group) => {{ {parser} }}),");
+                            x.AppendLine($"new FilterAction<{group.Key.Identifier.Text}>(\"{method.TargetSymbol.Name.ToLower()}\", new Regex(@\"{pattern}\"), (filter, group) => {{ {parser} }}),");
                         }
                         x.AppendLine("];");
                     });
@@ -99,15 +99,15 @@ public class MethodIncrementalGenerator : IIncrementalGenerator
                     or SpecialType.System_Int16
                     or SpecialType.System_Int32
                     or SpecialType.System_Int64
-                    => @"-?\\d+",
+                    => @"-?\d+",
 
                     SpecialType.System_Single
                     or SpecialType.System_Double
                     or SpecialType.System_Decimal
-                    => @"-?\\d+\\.\\d+",
+                    => @"-?\d+\.\d+",
 
                     SpecialType.System_Boolean => "True|False",
-                    SpecialType.System_String => @"(('[^']*')|([A-Za-z0-9-_\\s]+))",
+                    SpecialType.System_String => @"(('[^']*')|([A-Za-z0-9-_\s]+))",
 
                     _ => throw new Exception()
                 };
@@ -120,7 +120,7 @@ public class MethodIncrementalGenerator : IIncrementalGenerator
             });
         }
 
-        return $@"^\\({string.Join(",", parameterItems.Select(x => x.Pattern).ToArray())}\\)$";
+        return $@"^\({string.Join(",", parameterItems.Select(x => x.Pattern).ToArray())}\)$";
     }
 
     private string CreateParameterParser(IMethodSymbol methodSymbol)
