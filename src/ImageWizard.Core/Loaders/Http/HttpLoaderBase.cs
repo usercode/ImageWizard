@@ -50,9 +50,6 @@ public abstract class HttpLoaderBase<TOptions> : Loader<TOptions>
     /// <summary>
     /// GetAsync
     /// </summary>
-    /// <param name="source"></param>
-    /// <param name="existingCachedData"></param>
-    /// <returns></returns>
     public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData)
     {
         Uri? url = await CreateRequestUrl(source);
