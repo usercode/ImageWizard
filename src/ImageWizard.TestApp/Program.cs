@@ -40,7 +40,7 @@ builder.Services.AddImageWizard(x =>
             x.UseClientHints = false;
             x.UseETag = true;
             x.Key = key;
-            x.RefreshLastAccessInterval = TimeSpan.FromMinutes(1);
+            x.RefreshLastAccessInterval = TimeSpan.FromHours(1);
             x.WhenLoaderFailedUseExistingCachedData();
 
             //x.FallbackHandler = (state, url, cachedData) =>
@@ -193,11 +193,7 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseImageWizard(x =>
-{
-    x.MapAnalytics();
-    x.MapOpenStreetMap();
-});
+app.UseImageWizard();
 app.MapRazorPages();
 
 await app.RunAsync();

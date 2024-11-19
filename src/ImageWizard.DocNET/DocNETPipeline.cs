@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.DocNET.Filters.Base;
+using ImageWizard.Helpers;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
 

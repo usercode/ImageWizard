@@ -9,6 +9,6 @@ public class YouTubeOptions : LoaderOptions
     public YouTubeOptions()
     {
         RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
-        CacheControlMaxAge = TimeSpan.FromDays(7);
+        CacheControlMaxAge = TimeSpan.FromDays(30);
     }
 }

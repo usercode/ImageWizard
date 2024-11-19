@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.FFMpegCore.Filters.Base;
+using ImageWizard.Helpers;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
 

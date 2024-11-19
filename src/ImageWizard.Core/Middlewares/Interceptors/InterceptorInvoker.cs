@@ -2,6 +2,8 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Helpers;
+
 namespace ImageWizard;
 
 /// <summary>

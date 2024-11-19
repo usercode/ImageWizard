@@ -19,11 +19,8 @@ public static class Extensions
         builder.Services.AddSingleton<AnalyticsData>();
         builder.Services.AddSingleton<IImageWizardInterceptor, ImageRequestAnalytics>();
 
-        return builder;
-    }
+        builder.AddEndpoint(x => x.MapGet("analytics", (AnalyticsData data) => Results.Json(data, JsonOptions)));
 
-    public static IEndpointConventionBuilder MapAnalytics(this IImageWizardEndpointBuilder endpoints)
-    {
-        return endpoints.MapGet("analytics", (AnalyticsData data) => Results.Json(data, JsonOptions));
+        return builder;
     }
 }

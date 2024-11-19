@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Filters;
+using ImageWizard.Helpers;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
 using System.Xml.Linq;

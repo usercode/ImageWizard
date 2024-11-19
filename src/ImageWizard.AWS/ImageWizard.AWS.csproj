@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AWSSDK.S3" Version="3.7.310.8" />
+		<PackageReference Include="AWSSDK.S3" Version="3.7.406.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -33,7 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MinVer" Version="5.0.0">
+		<PackageReference Include="MinVer" Version="6.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

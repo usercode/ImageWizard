@@ -2,6 +2,7 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Helpers;
 using ImageWizard.Processing;
 using ImageWizard.SkiaSharp.Filters.Base;
 using Microsoft.Extensions.Logging;

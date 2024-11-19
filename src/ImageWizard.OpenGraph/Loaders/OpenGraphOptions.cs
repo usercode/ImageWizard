@@ -9,6 +9,6 @@ public class OpenGraphOptions : LoaderOptions
     public OpenGraphOptions()
     {
         RefreshMode = LoaderRefreshMode.BasedOnCacheControl;
-        CacheControlMaxAge = TimeSpan.FromDays(7);
+        CacheControlMaxAge = TimeSpan.FromDays(30);
     }
 }

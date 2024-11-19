@@ -27,24 +27,29 @@ public static class ImageWizardExtensions
     /// <summary>
     /// Use ImageWizard middleware with default base path. ("/image")
     /// </summary>
-    public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
+    public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder)
     {
-        return UseImageWizard(builder, ImageWizardDefaults.BasePath, endpointsHandler);
+        return UseImageWizard(builder, ImageWizardDefaults.BasePath);
     }
 
     /// <summary>
     /// Use ImageWizard middleware with specified base path.
     /// </summary>
-    public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, string path, Action<IImageWizardEndpointBuilder>? endpointsHandler = null)
+    public static IApplicationBuilder UseImageWizard(this IApplicationBuilder builder, string path)
     {
         builder.Map(path, x =>
         {
             x.UseRouting();
             x.UseEndpoints(endpoints =>
             {
-                endpointsHandler?.Invoke(new ImageWizardEndpointBuilder(endpoints));
-
                 endpoints.MapImageWizard(string.Empty);
+
+                IEnumerable<ImageWizardEndpointHandler> endpointHandlers = endpoints.ServiceProvider.GetServices<ImageWizardEndpointHandler>();
+
+                foreach (ImageWizardEndpointHandler endpointHandler in endpointHandlers)
+                {
+                    endpointHandler(endpoints);
+                }
             });
         });
 
@@ -87,5 +92,14 @@ public static class ImageWizardExtensions
         services.AddSingleton(configuration);
 
         return configuration;
+    }
+
+    public delegate void ImageWizardEndpointHandler(IEndpointRouteBuilder endpointRouteBuilder);
+
+    public static IImageWizardBuilder AddEndpoint(this IImageWizardBuilder builder, Action<IEndpointRouteBuilder> endpoint)
+    {
+        builder.Services.AddTransient(x => new ImageWizardEndpointHandler(endpoint));
+
+        return builder;
     }
 }

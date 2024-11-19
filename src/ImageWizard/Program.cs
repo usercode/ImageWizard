@@ -29,7 +29,7 @@ builder.Services.AddOptions<FileLoaderOptions>().BindConfiguration("FileLoader")
 builder.Services.AddOptions<AzureBlobOptions>().BindConfiguration("Azure");
 builder.Services.AddOptions<WatermarkOptions>().BindConfiguration("Watermark");
 
-IImageWizardBuilder imageWizard = builder.Services.AddImageWizard()
+IImageWizardBuilder imageWizard = builder.Services.AddImageWizard(x => x.WhenLoaderFailedUseExistingCachedData())
                                             .AddImageSharp(i => i
                                                 .WithPreProcessing(x =>
                                                 {
@@ -90,11 +90,6 @@ if (env.IsDevelopment())
 
 app.UseForwardedHeaders();
 app.UseHttpsRedirection();
-app.UseImageWizard(x =>
-{
-    if (options.Value.UseAnalytics)
-    {
-        x.MapAnalytics();
-    }
-});
+app.UseImageWizard();
+
 await app.RunAsync();

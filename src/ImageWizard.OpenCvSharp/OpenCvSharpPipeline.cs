@@ -2,6 +2,7 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using ImageWizard.Helpers;
 using ImageWizard.OpenCvSharp.Filters;
 using ImageWizard.Processing;
 using Microsoft.Extensions.Logging;
