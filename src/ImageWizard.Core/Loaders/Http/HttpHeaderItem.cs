@@ -7,21 +7,15 @@ namespace ImageWizard.Loaders;
 /// <summary>
 /// HttpHeaderItem
 /// </summary>
-public class HttpHeaderItem
+public class HttpHeaderItem(string name, string value)
 {
-    public HttpHeaderItem(string name, string value)
-    {
-        Name = name;
-        Value = value;
-    }
-
     /// <summary>
     /// Name
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = name;
 
     /// <summary>
     /// Value
     /// </summary>
-    public string Value { get; set; }
+    public string Value { get; set; } = value;
 }

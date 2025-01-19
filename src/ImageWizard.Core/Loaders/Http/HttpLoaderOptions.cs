@@ -17,7 +17,7 @@ public class HttpLoaderOptions : LoaderOptions
     /// <summary>
     /// Custom http header entries.
     /// </summary>
-    public IList<HttpHeaderItem> Headers { get; } = new List<HttpHeaderItem>();
+    public IList<HttpHeaderItem> Headers { get; } = [];
 
     /// <summary>
     /// Sets default base url for relative urls.
@@ -32,7 +32,7 @@ public class HttpLoaderOptions : LoaderOptions
     /// <summary>
     /// Allows only specified hosts.
     /// </summary>
-    public string[] AllowedHosts { get; set; } = Array.Empty<string>();
+    public string[] AllowedHosts { get; set; } = [];
 
     public HttpLoaderOptions SetHeader(string name, string value)
     {
