@@ -5,6 +5,7 @@
 using ImageWizard.Cleanup;
 using ImageWizard.Core.Json;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
@@ -15,10 +16,15 @@ namespace ImageWizard.Caches;
 /// </summary>
 public class FileCache : ICache, ICleanupCache, ILastAccessCache
 {
-    public FileCache(IOptions<FileCacheOptions> options, IWebHostEnvironment hostingEnvironment, ICacheLock cacheLock)
+    public FileCache(
+                    IOptions<FileCacheOptions> options, 
+                    IWebHostEnvironment hostingEnvironment, 
+                    ICacheLock cacheLock,
+                    ILogger<FileCache> logger)
     {
         Options = options;
         CacheLock = cacheLock;
+        Logger = logger;
 
         if (Path.IsPathFullyQualified(options.Value.Folder))
         {
@@ -44,6 +50,11 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
     /// CacheLock
     /// </summary>
     private ICacheLock CacheLock { get; }
+
+    /// <summary>
+    /// Logger
+    /// </summary>
+    private ILogger<FileCache> Logger { get; }
 
     protected FileInfo GetFileInfo(FileType type, string key)
     {
@@ -99,7 +110,7 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
         //delete existing data
         blobStream.SetLength(0);
 
-        await stream.CopyToAsync(blobStream);    
+        await stream.CopyToAsync(blobStream);
     }
 
     private async Task<Metadata?> ReadMetadataAsync(string key)
@@ -113,9 +124,18 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
 
         using Stream metadataStream = metaFile.OpenRead();
 
-        Metadata? metadata = await JsonSerializer.DeserializeAsync(metadataStream, ImageWizardJsonSerializerContext.Default.Metadata);
+        try
+        {
+            Metadata? metadata = await JsonSerializer.DeserializeAsync(metadataStream, ImageWizardJsonSerializerContext.Default.Metadata);
 
-        return metadata;
+            return metadata;
+        }
+        catch(Exception ex)
+        {
+            Logger.LogWarning(ex, $"Reading metadata is failed for key \"{key}\"");
+
+            return null; //simulate "not found".to recreate a new cached data.
+        }
     }
 
     private async Task WriteMetadataAsync(IMetadata metadata)
