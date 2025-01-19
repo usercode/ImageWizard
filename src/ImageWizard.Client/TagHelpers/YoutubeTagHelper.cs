@@ -17,42 +17,37 @@ public class YoutubeTagHelper : TagHelper
     public YoutubeTagHelper(IImageWizardUrlBuilder imageUrlBuilder)
     {
         UrlBuilder = imageUrlBuilder;
-
-        Width = 1920;
-        Height = 1080;
-
-        UseNoCookie = true;
     }
 
     /// <summary>
     /// Width
     /// </summary>
-    public int Width { get; set; }
+    public int Width { get; set; } = 1920;
 
     /// <summary>
     /// Height
     /// </summary>
-    public int Height { get; set; }
+    public int Height { get; set; } = 1080;
 
     /// <summary>
     /// Grayscale
     /// </summary>
-    public bool Grayscale { get; set; }
+    public bool Grayscale { get; set; } = false;
 
     /// <summary>
     /// Blur
     /// </summary>
-    public bool Blur { get; set; }
+    public bool Blur { get; set; } = false;
 
     /// <summary>
     /// VideoId
     /// </summary>
-    public string VideoId { get; set; }
+    public string? VideoId { get; set; }
 
     /// <summary>
     /// Use the youtube-nocookie domain. (default: true)
     /// </summary>
-    public bool UseNoCookie { get; set; }
+    public bool UseNoCookie { get; set; } = true;
 
     /// <summary>
     /// IImageWizardUrlBuilder

@@ -51,14 +51,14 @@ class UrlBuilderContext : ILoader, IFilter, IBuildUrl
             return LoaderSource;
         }
 
-        IUrlSignature signatureService = ServiceProvider.GetRequiredService<IUrlSignature>();
-
         string signature = ImageWizardDefaults.Unsafe;
 
         ImageWizardUrl url = new ImageWizardUrl(LoaderType, LoaderSource, Filters.ToArray());
 
         if (ImageUrlBuilder.Settings.UseUnsafeUrl == false)
         {
+            IUrlSignature signatureService = ServiceProvider.GetRequiredService<IUrlSignature>();
+
             signature = signatureService.Encrypt(ImageUrlBuilder.Settings.Key, new ImageWizardRequest(url, new HostString(ImageUrlBuilder.Settings.Host)));
         }
 

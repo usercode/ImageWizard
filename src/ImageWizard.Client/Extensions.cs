@@ -22,7 +22,6 @@ public static class Extensions
             services.Configure(options);
         }
 
-        services.AddHttpContextAccessor();
         services.AddTransient<IImageWizardUrlBuilder, UrlBuilder>();
         
         services.AddSingleton<IUrlSignature, HMACSHA256UrlSignature>();

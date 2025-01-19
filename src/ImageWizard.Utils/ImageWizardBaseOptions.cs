@@ -9,5 +9,5 @@ public abstract class ImageWizardBaseOptions
     /// <summary>
     /// Key
     /// </summary>
-    public byte[] Key { get; set; } = Array.Empty<byte>();
+    public byte[] Key { get; set; } = [];
 }

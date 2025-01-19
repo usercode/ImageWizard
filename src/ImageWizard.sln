@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.OpenStreetMap",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWizard.Playwright", "ImageWizard.Playwright\ImageWizard.Playwright.csproj", "{C79344DC-4D7E-4AB1-85F7-BB063076B239}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.Generators", "ImageWizard.Generators\ImageWizard.Generators.csproj", "{F74C6227-F406-4E8A-9A9C-E6EFCE0E454F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWizard.Generator", "ImageWizard.Generator\ImageWizard.Generator.csproj", "{F74C6227-F406-4E8A-9A9C-E6EFCE0E454F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

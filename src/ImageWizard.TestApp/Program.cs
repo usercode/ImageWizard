@@ -109,7 +109,7 @@ builder.Services.AddImageWizard(x =>
 
                 x.SetHeader("Api", "XYZ");
 
-                x.AllowedHosts = new[] { "upload.wikimedia.org" };
+                x.AllowedHosts = ["upload.wikimedia.org"];
                 x.AllowAbsoluteUrls = true;
             })
             .AddFileLoader()
