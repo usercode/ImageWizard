@@ -228,6 +228,7 @@ app.Endpoints(e => e.MapImageWizard("/image"));
 
 ## Create custom filter
 
+- add ImageWizard.Generator package to project
 - add a public method which is marked with the filter attribute
   - at url level are the following types possible for method overloading: 
     - integer ("0")
@@ -257,6 +258,21 @@ app.Endpoints(e => e.MapImageWizard("/image"));
             Context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
         }
     }
+```
+
+The source generator creates the following code:
+
+```csharp
+public partial class BackgroundColorFilter : IFilterFactory
+{
+    public static IEnumerable<IFilterAction> Create()
+    {
+        return [ 
+        new FilterAction<BackgroundColorFilter>("backgroundcolor", new Regex(@"^\((?<r>-?\d+),(?<g>-?\d+),(?<b>-?\d+)\)$"), (filter, group) => { byte r = byte.Parse(group["r"].ValueSpan, CultureInfo.InvariantCulture);byte g = byte.Parse(group["g"].ValueSpan, CultureInfo.InvariantCulture);byte b = byte.Parse(group["b"].ValueSpan, CultureInfo.InvariantCulture);filter.BackgroundColor(r,g,b); }),       
+        new FilterAction<BackgroundColorFilter>("backgroundcolor", new Regex(@"^\((?<r>-?\d+\.\d+),(?<g>-?\d+\.\d+),(?<b>-?\d+\.\d+)\)$"), (filter, group) => { float r = float.Parse(group["r"].ValueSpan, CultureInfo.InvariantCulture);float g = float.Parse(group["g"].ValueSpan, CultureInfo.InvariantCulture);float b = float.Parse(group["b"].ValueSpan, CultureInfo.InvariantCulture);filter.BackgroundColor(r,g,b); }),       
+        ];
+    }
+}
 ```
 
 Register filter:
