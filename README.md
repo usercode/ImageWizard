@@ -238,7 +238,7 @@ app.Endpoints(e => e.MapImageWizard("/image"));
     - string ('Hello')
 
 ```csharp
- public class BackgroundColorFilter : ImageSharpFilter
+ public partial class BackgroundColorFilter : ImageSharpFilter
     {
         //use dependency injection
         public BackgroundColorFilter(ILogger<BackgroundColorFilter> logger)
