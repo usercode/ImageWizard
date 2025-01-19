@@ -12,7 +12,5 @@ public interface ICacheKey
     /// <summary>
     /// Create
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     string Create(string input);
 }

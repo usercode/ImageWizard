@@ -22,7 +22,7 @@ public class OpenGraphLoader : HttpLoaderBase<OpenGraphOptions>
     {
     }
 
-    protected override async Task<Uri?> CreateRequestUrl(string source)
+    protected override async ValueTask<Uri?> CreateRequestUrl(string source)
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, source);
         request.SetUserAgentHeader();

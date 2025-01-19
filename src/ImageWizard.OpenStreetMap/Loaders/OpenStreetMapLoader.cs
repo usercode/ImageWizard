@@ -19,8 +19,8 @@ class OpenStreetMapLoader : HttpLoaderBase<OpenStreetMapOptions>
     {
     }
 
-    protected override Task<Uri?> CreateRequestUrl(string source)
+    protected override ValueTask<Uri?> CreateRequestUrl(string source)
     {
-        return Task.FromResult<Uri?>(new Uri($"{Options.Value.Path.TrimEnd('/')}/{source}.png"));
+        return ValueTask.FromResult<Uri?>(new Uri($"{Options.Value.Path.TrimEnd('/')}/{source}.png"));
     }
 }

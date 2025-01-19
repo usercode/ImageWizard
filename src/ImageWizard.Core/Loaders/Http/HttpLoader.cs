@@ -38,7 +38,7 @@ public partial class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
     /// </summary>
     private IHttpContextAccessor HttpContextAccessor { get; }
 
-    protected override Task<Uri?> CreateRequestUrl(string source)
+    protected override ValueTask<Uri?> CreateRequestUrl(string source)
     {
         Uri sourceUri;
 
@@ -74,6 +74,6 @@ public partial class HttpLoader : HttpLoaderBase<HttpLoaderOptions>
             }
         }
 
-        return Task.FromResult<Uri?>(sourceUri);
+        return ValueTask.FromResult<Uri?>(sourceUri);
     }   
 }

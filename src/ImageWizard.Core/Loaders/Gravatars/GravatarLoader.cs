@@ -21,8 +21,8 @@ public class GravatarLoader : HttpLoaderBase<GravatarOptions>
     {
     }
 
-    protected override Task<Uri?> CreateRequestUrl(string source)
+    protected override ValueTask<Uri?> CreateRequestUrl(string source)
     {
-        return Task.FromResult<Uri?>(new Uri($"https://www.gravatar.com/avatar/{source}?size=512"));
+        return ValueTask.FromResult<Uri?>(new Uri($"https://www.gravatar.com/avatar/{source}?size=512"));
     }
 }

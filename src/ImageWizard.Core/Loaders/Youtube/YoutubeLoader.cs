@@ -21,16 +21,16 @@ public class YouTubeLoader : HttpLoaderBase<YouTubeOptions>
     {
     }
 
-    protected override Task<Uri?> CreateRequestUrl(string source)
+    protected override ValueTask<Uri?> CreateRequestUrl(string source)
     {
-        return Task.FromResult<Uri?>(new Uri(source));
+        return ValueTask.FromResult<Uri?>(new Uri(source));
     }
 
     public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData)
     {
         string[] quality = [
                             "maxresdefault.jpg", //1920 x 1080   
-                            "hq720.jpg", //1280  x 720 
+                            "hq720.jpg",        //1280 x 720 
                             "sddefault.jpg", //640 x 480 
                             "hqdefault.jpg", //480 x 360                            
                         ];

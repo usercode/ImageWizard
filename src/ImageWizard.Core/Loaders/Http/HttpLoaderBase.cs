@@ -44,8 +44,7 @@ public abstract class HttpLoaderBase<TOptions> : Loader<TOptions>
     /// <summary>
     /// CreateRequestUrl
     /// </summary>
-    /// <returns></returns>
-    protected abstract Task<Uri?> CreateRequestUrl(string source);
+    protected abstract ValueTask<Uri?> CreateRequestUrl(string source);
 
     /// <summary>
     /// GetAsync
