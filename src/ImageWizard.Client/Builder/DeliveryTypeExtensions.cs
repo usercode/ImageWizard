@@ -3,9 +3,9 @@
 // MIT License
 
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using System.Buffers.Text;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -40,9 +40,9 @@ public static class DeliveryTypeExtensions
 
         SHA256.HashData(Encoding.UTF8.GetBytes(hash), hashBufferSpan);
 
-        string hashBase64 = WebEncoders.Base64UrlEncode(hashBufferSpan);
+        string hashBase64 = Base64Url.EncodeToString(hashBufferSpan);
 
-        path += $"?v={hashBase64.AsSpan(0, maxVersionLength)}";
+        path = $"{path}?v={hashBase64.AsSpan(0, maxVersionLength)}";
 
         return imageBuilder.LoadData("fetch", path);
     }

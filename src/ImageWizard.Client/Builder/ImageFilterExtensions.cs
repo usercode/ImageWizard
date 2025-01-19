@@ -3,7 +3,7 @@
 // MIT License
 
 using ImageWizard.Utils;
-using Microsoft.AspNetCore.WebUtilities;
+using System.Buffers.Text;
 using System.Text;
 
 namespace ImageWizard.Client;
@@ -202,7 +202,7 @@ public static class ImageFilterExtensions
         if (useBase64Url)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(text);
-            string base64Url = WebEncoders.Base64UrlEncode(buffer);
+            string base64Url = Base64Url.EncodeToString(buffer);
 
             builder.Add($"text={base64Url}");
         }

@@ -3,9 +3,9 @@
 // MIT License
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using System.Buffers.Text;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -88,7 +88,7 @@ public class HMACSHA256UrlSignature : IUrlSignature
         HMACSHA256.HashData(key, inputBuffer, hashBuffer);
 
         //convert to Base64Url
-        string keyBase64Url = WebEncoders.Base64UrlEncode(hashBuffer);
+        string keyBase64Url = Base64Url.EncodeToString(hashBuffer);
 
         //add signature to cache
         _cache.Set(input, keyBase64Url, new MemoryCacheEntryOptions() 
