@@ -238,26 +238,26 @@ app.Endpoints(e => e.MapImageWizard("/image"));
     - string ('Hello')
 
 ```csharp
- public partial class BackgroundColorFilter : ImageSharpFilter
+public partial class BackgroundColorFilter : ImageSharpFilter
+{
+    //use dependency injection
+    public BackgroundColorFilter(ILogger<BackgroundColorFilter> logger)
     {
-        //use dependency injection
-        public BackgroundColorFilter(ILogger<BackgroundColorFilter> logger)
-        {
-          //...
-        }
-        
-        [Filter]
-        public void BackgroundColor(byte r, byte g, byte b)
-        {
-            Context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
-        }
-
-        [Filter]
-        public void BackgroundColor(float r, float g, float b)
-        {
-            Context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
-        }
+       //...
     }
+
+    [Filter]
+    public void BackgroundColor(byte r, byte g, byte b)
+    {
+        Context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
+    }
+
+    [Filter]
+    public void BackgroundColor(float r, float g, float b)
+    {
+        Context.Image.Mutate(m => m.BackgroundColor(new Rgba32(r, g, b)));
+    }
+}
 ```
 
 The source generator creates the following code:
