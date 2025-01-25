@@ -110,18 +110,18 @@ public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
         }        
     }
 
-    public async Task<ICachedData?> ReadAsync(string key)
+    public async Task<CachedData?> ReadAsync(string key)
     {
         MetadataModel foundMetadata = await Metadata
-                                                        .AsQueryable()
-                                                        .FirstOrDefaultAsync(x => x.Key == key);
+                                                    .AsQueryable()
+                                                    .FirstOrDefaultAsync(x => x.Key == key);
 
         if (foundMetadata == null)
         {
             return null;
         }
 
-        CachedData cachedImage = new CachedData(foundMetadata, async () => await Blob.OpenDownloadStreamByNameAsync(key));
+        CachedData cachedImage = new CachedData(foundMetadata.ToMetadata(), async () => await Blob.OpenDownloadStreamByNameAsync(key));
 
         return cachedImage;
     }
@@ -133,26 +133,10 @@ public class MongoDBCache : ICache, ICleanupCache, ILastAccessCache
                                 Builders<MetadataModel>.Update.Set(x => x.LastAccess, dateTime));
     }
 
-    public async Task WriteAsync(IMetadata metadata, Stream stream)
+    public async Task WriteAsync(Metadata metadata, Stream stream)
     {
-        MetadataModel model = new MetadataModel()
-        {
-            Created = metadata.Created,
-            LastAccess = metadata.LastAccess,
-            Cache = metadata.Cache,
-            Hash = metadata.Hash,
-            Key = metadata.Key,
-            LoaderSource = metadata.LoaderSource,
-            Filters = metadata.Filters,
-            LoaderType = metadata.LoaderType,
-            MimeType = metadata.MimeType,
-            Width = metadata.Width,
-            Height = metadata.Height,
-            FileLength = metadata.FileLength
-        };
-
         //upload metadata
-        await Metadata.ReplaceOneAsync(Builders<MetadataModel>.Filter.Eq(x => x.Key, metadata.Key), model, new ReplaceOptions() { IsUpsert = true });
+        await Metadata.ReplaceOneAsync(Builders<MetadataModel>.Filter.Eq(x => x.Key, metadata.Key), metadata.ToModel(), new ReplaceOptions() { IsUpsert = true });
 
         //upload cached data
         await Blob.UploadFromStreamAsync(metadata.Key, stream);

@@ -12,6 +12,5 @@ public interface ILastAccessCache : ICache
     /// <summary>
     /// SetLastAccessAsync
     /// </summary>
-    /// <returns></returns>
     Task SetLastAccessAsync(string key, DateTime dateTime);
 }

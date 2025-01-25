@@ -73,7 +73,7 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
         return new FileInfo(file);
     }
 
-    public virtual async Task<ICachedData?> ReadAsync(string key)
+    public virtual async Task<CachedData?> ReadAsync(string key)
     {
         Metadata? metadata = await ReadMetadataAsync(key);
 
@@ -92,7 +92,7 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
         return new CachedData(metadata, () => Task.FromResult<Stream>(blobFile.OpenRead()));
     }
 
-    public virtual async Task WriteAsync(IMetadata metadata, Stream stream)
+    public virtual async Task WriteAsync(Metadata metadata, Stream stream)
     {
         await WriteMetadataAsync(metadata);
 
@@ -130,15 +130,15 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
 
             return metadata;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Logger.LogWarning(ex, $"Reading metadata is failed for key \"{key}\"");
 
-            return null; //simulate "not found".to recreate a new cached data.
+            return null; //simulate "not found" to recreate a new cached data.
         }
     }
 
-    private async Task WriteMetadataAsync(IMetadata metadata)
+    private async Task WriteMetadataAsync(Metadata metadata)
     {
         FileInfo metaFile = GetFileInfo(FileType.Meta, metadata.Key);
 
@@ -156,7 +156,7 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
         await JsonSerializer.SerializeAsync(metadataStream, metadata, ImageWizardJsonSerializerContext.Default.Metadata);
     }
 
-    private void Delete(IMetadata metadata)
+    private void Delete(Metadata metadata)
     {
         FileInfo metaFile = GetFileInfo(FileType.Meta, metadata.Key);
         FileInfo blobFile = GetFileInfo(FileType.Blob, metadata.Key);
@@ -227,7 +227,7 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
                             using var w = await CacheLock.WriterLockAsync(key);
 
                             //read metadata
-                            IMetadata? metadata = await ReadMetadataAsync(key);
+                            Metadata? metadata = await ReadMetadataAsync(key);
 
                             if (metadata != null)
                             {
@@ -248,7 +248,7 @@ public class FileCache : ICache, ICleanupCache, ILastAccessCache
 
     public async Task SetLastAccessAsync(string key, DateTime dateTime)
     {
-        IMetadata? metadata = await ReadMetadataAsync(key);
+        Metadata? metadata = await ReadMetadataAsync(key);
 
         if (metadata == null)
         {

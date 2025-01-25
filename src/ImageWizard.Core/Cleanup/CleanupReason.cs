@@ -27,16 +27,12 @@ public abstract class CleanupReason
     /// <summary>
     /// CanUse
     /// </summary>
-    /// <param name="cache"></param>
-    /// <returns></returns>
     public virtual bool CanUse(ICache cache) => true;
 
     /// <summary>
     /// IsValid
     /// </summary>
-    /// <param name="cachedData"></param>
-    /// <returns></returns>
-    public bool IsValid<T>(T cachedData) where T : IMetadata
+    public bool IsValid<T>(T cachedData) where T : Metadata
     {
         if (_cache.TryGetValue(typeof(T), out object? result) == false)
         {

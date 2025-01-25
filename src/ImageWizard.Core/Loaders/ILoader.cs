@@ -19,5 +19,5 @@ public interface ILoader
     /// <summary>
     /// GetAsync
     /// </summary>
-    Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData = null);
+    Task<LoaderResult> GetAsync(string source, CachedData? existingCachedData = null);
 }

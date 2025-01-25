@@ -9,10 +9,10 @@ namespace ImageWizard.Caches;
 /// </summary>
 class OneTimeCache : ICache
 {
-    private IMetadata? _metadata;
+    private Metadata? _metadata;
     private byte[] _data = [];
 
-    public async Task<ICachedData?> ReadAsync(string key)
+    public async Task<CachedData?> ReadAsync(string key)
     {
         if (_metadata == null)
         {
@@ -27,7 +27,7 @@ class OneTimeCache : ICache
         return new CachedData(_metadata, () => Task.FromResult<Stream>(new MemoryStream(_data)));
     }
 
-    public async Task WriteAsync(IMetadata metadata, Stream stream)
+    public async Task WriteAsync(Metadata metadata, Stream stream)
     {
         _metadata = metadata;
 

@@ -23,7 +23,7 @@ public class AzureBlobLoader : Loader<AzureBlobOptions>
 
     private BlobContainerClient Client { get; }
 
-    public override async Task<LoaderResult> GetAsync(string source, ICachedData existingCachedImage)
+    public override async Task<LoaderResult> GetAsync(string source, CachedData existingCachedImage)
     {
         BlobClient blob = Client.GetBlobClient(source);
 

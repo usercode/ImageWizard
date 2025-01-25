@@ -23,7 +23,7 @@ public partial class PlaceholderLoader : Loader<PlaceholderOptions>
     [GeneratedRegex("^(?<width>[0-9]+)x(?<height>[0-9]+)$")]
     private partial Regex RegexSource();
 
-    public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData)
+    public override async Task<LoaderResult> GetAsync(string source, CachedData? existingCachedData)
     {
         Match match = RegexSource().Match(source);
 

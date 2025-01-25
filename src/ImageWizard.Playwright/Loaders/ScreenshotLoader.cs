@@ -24,7 +24,7 @@ public class ScreenshotLoader : Loader<PlaywrightOptions>
     /// </summary>
     public ILogger<ScreenshotLoader> Logger { get; }
 
-    public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData)
+    public override async Task<LoaderResult> GetAsync(string source, CachedData? existingCachedData)
     {
         using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new() { Headless = false });

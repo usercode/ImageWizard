@@ -38,7 +38,7 @@ public class FileLoader : Loader<FileLoaderOptions>
     /// </summary>
     private IWebHostEnvironment HostingEnvironment { get; }
 
-    public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedImage)
+    public override async Task<LoaderResult> GetAsync(string source, CachedData? existingCachedImage)
     {
         IFileInfo fileInfo = FileProvider.GetFileInfo(source);
 

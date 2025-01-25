@@ -9,9 +9,9 @@ public delegate Task<Stream> OpenStreamHandler();
 /// <summary>
 /// CachedData
 /// </summary>
-public class CachedData : ICachedData
+public class CachedData
 {
-    public CachedData(IMetadata metadata, OpenStreamHandler streamTask)
+    public CachedData(Metadata metadata, OpenStreamHandler streamTask)
     {
         Metadata = metadata;
         StreamTask = streamTask;
@@ -20,7 +20,7 @@ public class CachedData : ICachedData
     /// <summary>
     /// Metadata
     /// </summary>
-    public IMetadata Metadata { get; }
+    public Metadata Metadata { get; }
 
     /// <summary>
     /// Buffer

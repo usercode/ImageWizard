@@ -42,7 +42,7 @@ class ImageRequestAnalytics : IImageWizardInterceptor
         }
     }
 
-    public void OnCachedDataSent(ICachedData cachedData, bool notModified)
+    public void OnCachedDataSent(CachedData cachedData, bool notModified)
     {
         SetData(cachedData.Metadata.MimeType, x =>
         {
@@ -59,7 +59,7 @@ class ImageRequestAnalytics : IImageWizardInterceptor
         });
     }
 
-    public void OnCachedDataCreated(ICachedData cachedData)
+    public void OnCachedDataCreated(CachedData cachedData)
     {
         SetData(cachedData.Metadata.MimeType, x =>
         {
@@ -85,7 +85,7 @@ class ImageRequestAnalytics : IImageWizardInterceptor
         });
     }
 
-    public void OnCachedDataDeleted(ICachedData cachedData)
+    public void OnCachedDataDeleted(CachedData cachedData)
     {
         SetData(cachedData.Metadata.MimeType, x =>
         {

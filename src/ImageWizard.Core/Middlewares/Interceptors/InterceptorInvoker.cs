@@ -21,17 +21,17 @@ public class InterceptorInvoker : IImageWizardInterceptor
     /// </summary>
     private IEnumerable<IImageWizardInterceptor> Items { get; }
 
-    public void OnCachedDataCreated(ICachedData cachedData)
+    public void OnCachedDataCreated(CachedData cachedData)
     {
         Items.Foreach(x => x.OnCachedDataCreated(cachedData));
     }
 
-    public void OnCachedDataDeleted(ICachedData cachedData)
+    public void OnCachedDataDeleted(CachedData cachedData)
     {
         Items.Foreach(x => x.OnCachedDataDeleted(cachedData));
     }
 
-    public void OnCachedDataSent(ICachedData cachedData, bool notModified)
+    public void OnCachedDataSent(CachedData cachedData, bool notModified)
     {
         Items.Foreach(x => x.OnCachedDataSent(cachedData, notModified));
     }

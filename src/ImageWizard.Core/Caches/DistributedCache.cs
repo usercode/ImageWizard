@@ -35,7 +35,7 @@ public class DistributedCache : ICache
         return $"{KeyPrefix}_{key}_meta";
     }
 
-    public async Task<ICachedData?> ReadAsync(string key)
+    public async Task<CachedData?> ReadAsync(string key)
     {
         byte[]? json = await Cache.GetAsync(GetMetaKey(key));
 
@@ -64,7 +64,7 @@ public class DistributedCache : ICache
         });
     }
 
-    public async Task WriteAsync(IMetadata metadata, Stream stream)
+    public async Task WriteAsync(Metadata metadata, Stream stream)
     {
         byte[] json = JsonSerializer.SerializeToUtf8Bytes(metadata, ImageWizardJsonSerializerContext.Default.Metadata);
 

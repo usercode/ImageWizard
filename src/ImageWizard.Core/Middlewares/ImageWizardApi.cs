@@ -163,7 +163,7 @@ public class ImageWizardApi
         string key = cacheKey.Create(pathBuilder.ToString());
 
         bool createCachedData = true;
-        ICachedData? cachedData;
+        CachedData? cachedData;
 
         //create reader lock
         using (await cacheLock.ReaderLockAsync(key))
@@ -194,7 +194,7 @@ public class ImageWizardApi
             using var w = await cacheLock.WriterLockAsync(key);
 
             //read cached data again
-            ICachedData? cachedDataAfterWriteLock = await cache.ReadAsync(key);
+            CachedData? cachedDataAfterWriteLock = await cache.ReadAsync(key);
 
             //cached data hasn't changed after writer lock?
             if (cachedDataAfterWriteLock == null || cachedData?.Metadata.Hash == cachedDataAfterWriteLock.Metadata.Hash)

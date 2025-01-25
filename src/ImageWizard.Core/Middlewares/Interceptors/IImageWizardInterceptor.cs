@@ -6,11 +6,11 @@ namespace ImageWizard;
 
 public interface IImageWizardInterceptor
 {
-    void OnCachedDataSent(ICachedData cachedData, bool notModified);
+    void OnCachedDataSent(CachedData cachedData, bool notModified);
 
-    void OnCachedDataCreated(ICachedData cachedData);
+    void OnCachedDataCreated(CachedData cachedData);
 
-    void OnCachedDataDeleted(ICachedData cachedData);
+    void OnCachedDataDeleted(CachedData cachedData);
 
     void OnValidSignature(ImageWizardUrl url);
 

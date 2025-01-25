@@ -13,7 +13,7 @@ public static class HttpClientExtensions
         request.Headers.UserAgent.Add(new ProductInfoHeaderValue("ImageWizard", "3.0"));
     }
 
-    public static void SetIfNoneMatch(this HttpRequestMessage request, ICachedData? cachedData)
+    public static void SetIfNoneMatch(this HttpRequestMessage request, CachedData? cachedData)
     {
         if (cachedData != null)
         {

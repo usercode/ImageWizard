@@ -6,7 +6,7 @@ using ImageWizard.Utils;
 
 namespace ImageWizard;
 
-public delegate ICachedData? FallbackHandler(LoaderResultState state, ImageWizardUrl url, ICachedData? existingCachedData);
+public delegate CachedData? FallbackHandler(LoaderResultState state, ImageWizardUrl url, CachedData? existingCachedData);
 
 /// <summary>
 /// ImageWizardOptions

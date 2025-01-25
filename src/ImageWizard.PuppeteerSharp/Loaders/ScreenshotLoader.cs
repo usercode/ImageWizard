@@ -25,7 +25,7 @@ public class ScreenshotLoader : Loader<PuppeteerOptions>
     /// </summary>
     public ILogger<ScreenshotLoader> Logger { get; }
 
-    public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedData)
+    public override async Task<LoaderResult> GetAsync(string source, CachedData? existingCachedData)
     {
         BrowserFetcher browserFetcher = new BrowserFetcher();
         await browserFetcher.DownloadAsync();

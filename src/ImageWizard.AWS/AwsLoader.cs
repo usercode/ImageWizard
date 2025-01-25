@@ -25,7 +25,7 @@ public class AwsLoader : Loader<AwsOptions>
     /// </summary>
     public IAmazonS3 Client { get; }
 
-    public override async Task<LoaderResult> GetAsync(string source, ICachedData? existingCachedImage)
+    public override async Task<LoaderResult> GetAsync(string source, CachedData? existingCachedImage)
     {
         GetObjectRequest request = new GetObjectRequest()
         {

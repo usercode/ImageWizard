@@ -12,15 +12,10 @@ public interface ICache
     /// <summary>
     /// ReadAsync
     /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    Task<ICachedData?> ReadAsync(string key);
+    Task<CachedData?> ReadAsync(string key);
 
     /// <summary>
     /// WriteAsync
     /// </summary>
-    /// <param name="metadata"></param>
-    /// <param name="stream"></param>
-    /// <returns></returns>
-    Task WriteAsync(IMetadata metadata, Stream stream);
+    Task WriteAsync(Metadata metadata, Stream stream);
 }
