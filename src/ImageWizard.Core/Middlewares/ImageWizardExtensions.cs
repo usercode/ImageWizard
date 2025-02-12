@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Caches;
+using ImageWizard.Core.Loaders;
 using ImageWizard.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -83,6 +84,8 @@ public static class ImageWizardExtensions
         services.AddTransient<ICache, OneTimeCache>();
         services.AddTransient<ICacheKey, SHA256CacheKey>();
         services.AddTransient<ICacheHash, SHA256CacheHash>();
+
+        services.AddTransient<ILoaderCacheKey, LoaderCacheKey>();
 
         services.AddSingleton<IUrlSignature, HMACSHA256UrlSignature>();
 

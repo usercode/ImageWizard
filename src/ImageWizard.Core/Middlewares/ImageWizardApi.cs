@@ -3,6 +3,7 @@
 // MIT License
 
 using ImageWizard.Caches;
+using ImageWizard.Core.Loaders;
 using ImageWizard.Loaders;
 using ImageWizard.Processing;
 using ImageWizard.Processing.Results;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using System.Buffers;
 using System.Globalization;
 using System.Text;
 
@@ -35,6 +37,7 @@ public class ImageWizardApi
                                     ICacheKey cacheKey,
                                     ICacheHash cacheHash,
                                     ICacheLock cacheLock,
+                                    ILoaderCacheKey loaderCacheKey,
                                     InterceptorInvoker interceptor,
                                     ImageWizardBuilder builder,
                                     string signature,
@@ -383,11 +386,11 @@ public class ImageWizardApi
         {
             responseHeaders.AppendList(
                                         HeaderNames.Vary,
-                                        new[] {
+                                        [
                                             ClientHints.DPRHeader,
                                             ClientHints.WidthHeader,
                                             ClientHints.ViewportWidthHeader
-                                        });
+                                        ]);
 
             //is image?
             if (cachedData.Metadata.Width != null)
@@ -442,5 +445,55 @@ public class ImageWizardApi
         interceptor.OnCachedDataSent(cachedData, false);
 
         logger.LogTrace("Operation completed");
+    }
+
+    private static async Task<LoaderResult> GetLoaderDataAsync(
+                                                    ILoaderCacheKey loaderCacheKey, 
+                                                    ILoader loader, 
+                                                    ICache cache, 
+                                                    ImageWizardUrl url,
+                                                    CachedData? cachedData)
+    {
+        string loaderKey = loaderCacheKey.Create(url.LoaderType, url.LoaderSource);
+
+        CachedData? cacheResult = await cache.ReadAsync(loaderKey);
+
+        if (cacheResult != null)
+        {
+            //original data modified?
+            if (cachedData != null && cachedData.Metadata.Cache.ETag == cachedData.Metadata.Cache.ETag)
+            {
+                return LoaderResult.NotModified();
+            }
+
+            Stream stream = await cacheResult.OpenReadAsync();
+
+            return LoaderResult.Success(new OriginalData(cacheResult.Metadata.MimeType, stream));
+        }
+
+        LoaderResult result = await loader.GetAsync(url.LoaderSource, cachedData);
+
+        if (result.State == LoaderResultState.Success && result.Result != null)
+        {
+            DateTime now = DateTime.UtcNow;
+
+            Metadata metadata = new Metadata()
+            {
+                Cache = result.Result.Cache,
+                Created = now,
+                LastAccess = now,
+                Key = loaderKey,
+                //Hash = hash,
+                //Filters = url.Filters.Select(x => x.Fullname).ToArray(),
+                LoaderSource = url.LoaderSource,
+                LoaderType = url.LoaderType,
+                MimeType = result.Result.MimeType,
+                //FileLength = processingContext.Result.Data.Length
+            };
+
+            await cache.WriteAsync(metadata, result.Result.Data);
+        }
+
+        return result;
     }
 }
