@@ -89,7 +89,6 @@ if (env.IsDevelopment())
 }
 
 app.UseForwardedHeaders();
-app.UseHttpsRedirection();
 app.UseImageWizard();
 
 await app.RunAsync();

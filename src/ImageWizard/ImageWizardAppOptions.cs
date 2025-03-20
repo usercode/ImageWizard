@@ -6,15 +6,8 @@ namespace ImageWizard;
 
 public class ImageWizardAppOptions
 {
-    public ImageWizardAppOptions()
-    {
-        AddMetadata = false;
-        UseWebP = false;
-        MetadataCopyright = string.Empty;
-    }
-
-    public bool UseAnalytics { get; set; }
-    public bool UseWebP { get; set; }
-    public bool AddMetadata { get; set; }
-    public string MetadataCopyright { get; set; }
+    public bool UseAnalytics { get; set; } = false;
+    public bool UseWebP { get; set; } = false;
+    public bool AddMetadata { get; set; } = false;
+    public string MetadataCopyright { get; set; } = string.Empty;
 }
