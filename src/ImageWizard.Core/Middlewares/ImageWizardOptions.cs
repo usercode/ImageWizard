@@ -46,7 +46,7 @@ public class ImageWizardOptions : ImageWizardBaseOptions
     /// <summary>
     /// Duration when the last-access time (metadata) should be refreshed.
     /// </summary>
-    public TimeSpan? RefreshLastAccessInterval { get; set; } = TimeSpan.FromDays(1);    
+    public TimeSpan? RefreshLastAccessInterval { get; set; } = TimeSpan.FromDays(1);
 
     /// <summary>
     /// Allowed DPR values. (Default: 1.0, 1.5, 2.0, 3.0)

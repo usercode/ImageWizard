@@ -20,7 +20,7 @@ public class LoaderOptions
     public TimeSpan? CacheControlMaxAge { get; set; }
 
     /// <summary>
-    /// Maximum loader source content length (Default: 25 MB)
+    /// Maximum loader source content length (Default: 32 MB)
     /// </summary>
-    public long MaxLoaderSourceLength { get; set; } = 1024 * 1024 * 25; //25 MB
+    public long MaxLoaderSourceLength { get; set; } = 1024 * 1024 * 32; //25 MB
 }
