@@ -2,6 +2,8 @@
 // https://github.com/usercode/ImageWizard
 // MIT License
 
+using DataUnits;
+
 namespace ImageWizard.Loaders;
 
 /// <summary>
@@ -22,5 +24,5 @@ public class LoaderOptions
     /// <summary>
     /// Maximum loader source content length (Default: 32 MB)
     /// </summary>
-    public long MaxLoaderSourceLength { get; set; } = 1024 * 1024 * 32; //25 MB
+    public ByteSize MaxLoaderSourceLength { get; set; } = ByteSize.FromMegabytes(32);
 }
