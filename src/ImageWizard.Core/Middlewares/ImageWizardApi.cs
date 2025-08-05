@@ -95,7 +95,7 @@ public class ImageWizardApi
             }
             else
             {
-                logger.LogError("Signature is invalid.");
+                logger.LogError("Signature is invalid: {url}", url);
 
                 interceptor.OnInvalidSignature(url);
 
@@ -292,7 +292,7 @@ public class ImageWizardApi
                                 LastAccess = now,
                                 Key = key,
                                 Hash = hash,
-                                Filters = url.Filters.Select(x=> x.Fullname).ToArray(),
+                                Filters = url.Filters.Select(x => x.Fullname).ToArray(),
                                 LoaderSource = url.LoaderSource,
                                 LoaderType = url.LoaderType,
                                 MimeType = processingContext.Result.MimeType,

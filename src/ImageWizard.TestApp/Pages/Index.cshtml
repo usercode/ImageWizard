@@ -246,11 +246,11 @@
 
     <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).Watermark().BuildUrl()" />
 
-    <h2>Draw text</h2>
+   @*  <h2>Draw text</h2>
     <p>@@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
-    <p>@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, false).BuildUrl()</p>
+    <p>@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg", 4).AsImage().Resize(400, 400).DrawText("bat-eared-fox", 65, 0.3, 0.1, true).BuildUrl()</p>
 
-    <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, false).BuildUrl()" />
+    <img src="@Url.ImageWizard().FetchLocalFile("img/bat-eared-fox.jpg").AsImage().Resize(400,400).DrawText("bat eared fox", 65, 0.3, 0.1, true).BuildUrl()" /> *@
 
     <h2>Fetch youtube thumbnail</h2>
 
