@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PuppeteerSharp" Version="20.2.2" />
+		<PackageReference Include="PuppeteerSharp" Version="20.2.4" />
 	</ItemGroup>
 
 	<ItemGroup>

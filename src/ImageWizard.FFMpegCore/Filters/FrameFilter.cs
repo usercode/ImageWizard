@@ -27,7 +27,7 @@ public partial class FrameFilter : FFMpegFilter
             .OutputToPipe(new StreamPipeSink(mem),
                         options => options
                             .ForceFormat("rawvideo")
-                            .WithVideoCodec(VideoCodec.Png)
+                            //.WithVideoCodec(VideoCodec.Png)
                             .WithFrameOutputCount(1))
             .ProcessSynchronously();
 
