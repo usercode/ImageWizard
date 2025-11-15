@@ -44,7 +44,7 @@ public class HMACSHA256UrlSignature : IUrlSignature
     /// <summary>
     /// Selects part of the host.
     /// </summary>
-    protected virtual string GetHostValue(HostString host)
+    protected virtual string? GetHostValue(HostString host)
     {
         return host.Value;
     }

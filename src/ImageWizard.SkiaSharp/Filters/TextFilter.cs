@@ -15,10 +15,10 @@ public partial class TextFilter : SkiaSharpFilter
     {
         using (var surface = SKSurface.Create(new SKImageInfo(Context.Image.Width, Context.Image.Height)))
         using (var canvas = surface.Canvas)
-        using (var paint = new SKPaint() { TextSize = size, IsAntialias = true, Color = SKColor.Parse(color)})
+        using (var paint = new SKPaint() { IsAntialias = true, Color = SKColor.Parse(color)})
         {
             canvas.DrawBitmap(Context.Image, 0, 0);
-            canvas.DrawText(text, Context.Image.Width * x, Context.Image.Height * y, new SKFont(SKTypeface.FromFamilyName(font)), paint);
+            canvas.DrawText(text, Context.Image.Width * x, Context.Image.Height * y, new SKFont(SKTypeface.FromFamilyName(font), size), paint);
             canvas.Flush();
 
             Context.Image = SKBitmap.FromImage(surface.Snapshot());

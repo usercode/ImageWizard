@@ -25,13 +25,6 @@ public static class Extensions
         services.AddTransient<IImageWizardUrlBuilder, UrlBuilder>();
         
         services.AddSingleton<IUrlSignature, HMACSHA256UrlSignature>();
-        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-        services.AddScoped<IUrlHelper>(x =>
-        {
-            var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
-            var factory = x.GetRequiredService<IUrlHelperFactory>();
-            return factory.GetUrlHelper(actionContext);
-        });
 
         return services;
     }

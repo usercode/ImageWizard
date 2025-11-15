@@ -23,13 +23,13 @@ public class AzureBlobLoader : Loader<AzureBlobOptions>
 
     private BlobContainerClient Client { get; }
 
-    public override async Task<LoaderResult> GetAsync(string source, CachedData existingCachedImage)
+    public override async Task<LoaderResult> GetAsync(string source, CachedData? existingCachedImage)
     {
         BlobClient blob = Client.GetBlobClient(source);
 
         BlobRequestConditions conditions = new BlobRequestConditions();
 
-        if (existingCachedImage != null)
+        if (existingCachedImage?.Metadata.Cache.ETag != null)
         {
             conditions.IfNoneMatch = new ETag(existingCachedImage.Metadata.Cache.ETag);
         }

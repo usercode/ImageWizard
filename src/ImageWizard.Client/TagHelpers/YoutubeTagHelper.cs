@@ -42,7 +42,7 @@ public class YoutubeTagHelper : TagHelper
     /// <summary>
     /// VideoId
     /// </summary>
-    public string? VideoId { get; set; }
+    public string VideoId { get; set; } = string.Empty;
 
     /// <summary>
     /// Use the youtube-nocookie domain. (default: true)
@@ -107,7 +107,10 @@ public class YoutubeTagHelper : TagHelper
 
     private string ReadResource(string name)
     {
-        using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
+        using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
+
+        ArgumentNullException.ThrowIfNull(stream);
+
         using StreamReader readerCss = new StreamReader(stream);
 
         return readerCss.ReadToEnd();

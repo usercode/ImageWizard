@@ -109,9 +109,11 @@ public class ImageWizardApi
         StringBuilder pathBuilder = new StringBuilder(url.Path);
 
         //get compatible mime types by the accept header
-        IEnumerable<string?> acceptMimeTypes = context.Request.GetTypedHeaders().Accept
+        IEnumerable<string> acceptMimeTypes = context.Request.GetTypedHeaders().Accept
                                                                     .Where(x => x.MatchesAllSubTypes == false)
                                                                     .Select(x => x.MediaType.Value)
+                                                                    .Where(x => x != null)
+                                                                    .Cast<string>()
                                                                     //filter unknown mime types
                                                                     .Where(x => builder.PipelineManager.ContainsKey(x))
                                                                     .ToList();
@@ -182,8 +184,8 @@ public class ImageWizardApi
                     LoaderRefreshMode.None => false,
                     LoaderRefreshMode.EveryTime => true,
                     LoaderRefreshMode.BasedOnCacheControl => cachedData.Metadata.Cache.NoStore == true
-                                                                    || cachedData.Metadata.Cache.NoCache == true
-                                                                    || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
+                                                          || cachedData.Metadata.Cache.NoCache == true
+                                                          || (cachedData.Metadata.Cache.Expires != null && cachedData.Metadata.Cache.Expires < DateTime.UtcNow),
                     _ => throw new Exception($"Unknown refresh mode: {loader.Options.Value.RefreshMode}")
                 };
             }

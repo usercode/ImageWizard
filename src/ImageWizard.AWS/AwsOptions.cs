@@ -19,15 +19,15 @@ public class AwsOptions : LoaderOptions
     /// <summary>
     /// AccessKeyId
     /// </summary>
-    public string AccessKeyId { get; set; }
+    public string AccessKeyId { get; set; } = string.Empty;
 
     /// <summary>
     /// SecretAccessKey
     /// </summary>
-    public string SecretAccessKey { get; set; }
+    public string SecretAccessKey { get; set; } = string.Empty;
 
     /// <summary>
     /// BucketName
     /// </summary>
-    public string BucketName { get; set; }
+    public string BucketName { get; set; } = string.Empty;
 }

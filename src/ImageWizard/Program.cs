@@ -73,7 +73,7 @@ IImageWizardBuilder imageWizard = builder.Services.AddImageWizard(x => x.WhenLoa
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
-    options.KnownNetworks.Clear();
+    options.KnownIPNetworks.Clear();
     options.KnownProxies.Clear();
 });
 builder.Services.AddHttpsRedirection(x => x.HttpsPort = 443);

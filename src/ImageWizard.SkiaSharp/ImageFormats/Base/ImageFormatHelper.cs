@@ -8,7 +8,7 @@ class ImageFormatHelper
 {
     public static IImageFormat? FirstOrDefault(string mimeType)
     {
-        return FirstOrDefault(new[] { mimeType });
+        return FirstOrDefault([mimeType]);
     }
 
     public static IImageFormat? FirstOrDefault(IEnumerable<string> mimeTypes)
