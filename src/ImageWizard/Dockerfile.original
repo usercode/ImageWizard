@@ -12,8 +12,6 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Directory.Build.props", "."]
-COPY ["Directory.Build.targets", "."]
 COPY ["ImageWizard/ImageWizard.csproj", "ImageWizard/"]
 COPY ["ImageWizard.Analytics/ImageWizard.Analytics.csproj", "ImageWizard.Analytics/"]
 COPY ["ImageWizard.Core/ImageWizard.Core.csproj", "ImageWizard.Core/"]

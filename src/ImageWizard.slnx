@@ -1,0 +1,38 @@
+<Solution>
+  <Folder Name="/Apps/">
+    <Project Path="ImageWizard.TestApp/ImageWizard.TestApp.csproj" />
+    <Project Path="ImageWizard/ImageWizard.csproj" />
+  </Folder>
+  <Folder Name="/Core/">
+    <Project Path="ImageWizard.Client/ImageWizard.Client.csproj" />
+    <Project Path="ImageWizard.Core/ImageWizard.Core.csproj" />
+    <Project Path="ImageWizard.Generator/ImageWizard.Generator.csproj" />
+    <Project Path="ImageWizard.Tests/ImageWizard.Tests.csproj" />
+    <Project Path="ImageWizard.Utils/ImageWizard.Utils.csproj" />
+  </Folder>
+  <Folder Name="/Plugins/">
+    <Project Path="ImageWizard.Analytics/ImageWizard.Analytics.csproj" />
+    <Project Path="ImageWizard.AWS/ImageWizard.AWS.csproj" />
+    <Project Path="ImageWizard.Azure/ImageWizard.Azure.csproj" />
+    <Project Path="ImageWizard.DocNET/ImageWizard.DocNET.csproj" />
+    <Project Path="ImageWizard.FFMpegCore/ImageWizard.FFMpegCore.csproj" />
+    <Project Path="ImageWizard.ImageSharp/ImageWizard.ImageSharp.csproj" />
+    <Project Path="ImageWizard.MongoDB/ImageWizard.MongoDB.csproj" />
+    <Project Path="ImageWizard.OpenCvSharp/ImageWizard.OpenCvSharp.csproj" />
+    <Project Path="ImageWizard.OpenGraph/ImageWizard.OpenGraph.csproj" />
+    <Project Path="ImageWizard.OpenStreetMap/ImageWizard.OpenStreetMap.csproj" />
+    <Project Path="ImageWizard.Playwright/ImageWizard.Playwright.csproj" />
+    <Project Path="ImageWizard.PuppeteerSharp/ImageWizard.PuppeteerSharp.csproj" />
+    <Project Path="ImageWizard.SkiaSharp/ImageWizard.SkiaSharp.csproj" />
+    <Project Path="ImageWizard.SvgNet/ImageWizard.SvgNet.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <Properties Name="FolderGlobals">
+      <Property Name="C_5_4github_4_3_4ImageWizard_4src_4_1editorconfig__JsonSchema" Value="editor" />
+    </Properties>
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>

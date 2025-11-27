@@ -47,7 +47,7 @@ public class MethodIncrementalGenerator : IIncrementalGenerator
                             string pattern = CreateParameterRegex(methodSymbol);
                             string parser = CreateParameterParser(methodSymbol);
 
-                            x.AppendLine($"new FilterAction<{group.Key.Identifier.Text}>(\"{method.TargetSymbol.Name.ToLower()}\", new Regex(@\"{pattern}\"), (filter, group) => {{ {parser} }}),");
+                            x.AppendLine($"new FilterAction<{group.Key.Identifier.Text}>(\"{method.TargetSymbol.Name.ToLower()}\", new Regex(@\"{pattern}\", RegexOptions.Compiled), (filter, group) => {{ {parser} }}),");
                         }
                         x.AppendLine("];");
                     });
