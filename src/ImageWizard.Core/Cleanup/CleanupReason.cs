@@ -32,7 +32,7 @@ public abstract class CleanupReason
     /// <summary>
     /// IsValid
     /// </summary>
-    public bool IsValid<T>(T cachedData) where T : Metadata
+    public bool IsValid<T>(T cachedData) where T : IMetadata
     {
         if (_cache.TryGetValue(typeof(T), out object? result) == false)
         {

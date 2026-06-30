@@ -3,7 +3,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PuppeteerSharp" Version="20.2.4" />
+		<PackageReference Include="PuppeteerSharp" Version="25.2.1" />
 	</ItemGroup>
 
 	<ItemGroup>
