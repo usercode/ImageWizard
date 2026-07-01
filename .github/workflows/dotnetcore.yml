@@ -25,7 +25,7 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release "./src/ImageWizard.slnx"
       - name: Run unit tests
-        run: dotnet test "./src/ImageWizard.sln"
+        run: dotnet test "./src/ImageWizard.slnx"
       - name: Create the package
         run: dotnet pack --configuration Release "./src/ImageWizard.slnx"
       - name: Publish "ImageWizard.Utils" to nuget
