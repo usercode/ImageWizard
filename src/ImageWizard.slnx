@@ -32,7 +32,4 @@
       <Property Name="C_5_4github_4_3_4ImageWizard_4src_4_1editorconfig__JsonSchema" Value="editor" />
     </Properties>
   </Folder>
-  <Project Path="docker-compose.dcproj">
-    <Build />
-  </Project>
 </Solution>

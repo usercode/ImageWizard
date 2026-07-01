@@ -7,45 +7,53 @@ on:
 
 jobs:
   build:
+    permissions:
+      id-token: write  # enable GitHub OIDC token issuance for this job
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 9.0.x
-    - name: Build with dotnet
-      run: dotnet build --configuration Release "./src/ImageWizard.sln"
-    - name: Run unit tests
-      run: dotnet test "./src/ImageWizard.sln"
-    - name: Create the package
-      run: dotnet pack --configuration Release "./src/ImageWizard.sln"
-    - name: Publish "ImageWizard.Utils" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Utils/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
-    - name: Publish "ImageWizard.Core" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}} 
-    - name: Publish "ImageWizard.ImageSharp" to nuget
-      run: dotnet nuget push "./src/ImageWizard.ImageSharp/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
-    - name: Publish "ImageWizard.SkiaSharp" to nuget
-      run: dotnet nuget push "./src/ImageWizard.SkiaSharp/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
-    - name: Publish "ImageWizard.SvgNet" to nuget
-      run: dotnet nuget push "./src/ImageWizard.SvgNet/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}   
-    - name: Publish "ImageWizard.Analytics" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Analytics/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
-    - name: Publish "ImageWizard.Azure" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Azure/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
-    - name: Publish "ImageWizard.Client" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Client/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
-    - name: Publish "ImageWizard.MongoDB" to nuget
-      run: dotnet nuget push "./src/ImageWizard.MongoDB/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
-    - name: Publish "ImageWizard.Piranha" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}
-    - name: Publish "ImageWizard.DocNET" to nuget
-      run: dotnet nuget push "./src/ImageWizard.DocNET/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}    
-    - name: Publish "ImageWizard.OpenGraph" to nuget
-      run: dotnet nuget push "./src/ImageWizard.OpenGraph/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}    
-    - name: Publish "ImageWizard.PuppeteerSharp" to nuget
-      run: dotnet nuget push "./src/ImageWizard.PuppeteerSharp/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}    
-    - name: Publish "ImageWizard.Generator" to nuget
-      run: dotnet nuget push "./src/ImageWizard.Generator/bin/Release/*.nupkg" -s "https://api.nuget.org/v3/index.json" -k ${{secrets.NUGET_API_KEY}}    
-    
+      # Get a short-lived NuGet API key
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+      - uses: actions/checkout@v6
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Build with dotnet
+        run: dotnet build --configuration Release "./src/ImageWizard.slnx"
+      - name: Run unit tests
+        run: dotnet test "./src/ImageWizard.sln"
+      - name: Create the package
+        run: dotnet pack --configuration Release "./src/ImageWizard.slnx"
+      - name: Publish "ImageWizard.Utils" to nuget
+        run: dotnet nuget push "./src/ImageWizard.Utils/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.Core" to nuget
+        run: dotnet nuget push "./src/ImageWizard.Core/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.ImageSharp" to nuget
+        run: dotnet nuget push "./src/ImageWizard.ImageSharp/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.SkiaSharp" to nuget
+        run: dotnet nuget push "./src/ImageWizard.SkiaSharp/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.SvgNet" to nuget
+        run: dotnet nuget push "./src/ImageWizard.SvgNet/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.Analytics" to nuget
+        run: dotnet nuget push "./src/ImageWizard.Analytics/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.Azure" to nuget
+        run: dotnet nuget push "./src/ImageWizard.Azure/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.Client" to nuget
+        run: dotnet nuget push "./src/ImageWizard.Client/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.MongoDB" to nuget
+        run: dotnet nuget push "./src/ImageWizard.MongoDB/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.Piranha" to nuget
+        run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.DocNET" to nuget
+        run: dotnet nuget push "./src/ImageWizard.DocNET/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.OpenGraph" to nuget
+        run: dotnet nuget push "./src/ImageWizard.OpenGraph/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.PuppeteerSharp" to nuget
+        run: dotnet nuget push "./src/ImageWizard.PuppeteerSharp/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      - name: Publish "ImageWizard.Generator" to nuget
+        run: dotnet nuget push "./src/ImageWizard.Generator/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+      
