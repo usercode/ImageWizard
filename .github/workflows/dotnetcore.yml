@@ -45,8 +45,6 @@ jobs:
         run: dotnet nuget push "./src/ImageWizard.Client/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
       - name: Publish "ImageWizard.MongoDB" to nuget
         run: dotnet nuget push "./src/ImageWizard.MongoDB/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
-      - name: Publish "ImageWizard.Piranha" to nuget
-        run: dotnet nuget push "./src/ImageWizard.Piranha/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
       - name: Publish "ImageWizard.DocNET" to nuget
         run: dotnet nuget push "./src/ImageWizard.DocNET/bin/Release/*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
       - name: Publish "ImageWizard.OpenGraph" to nuget
