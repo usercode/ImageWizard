@@ -24,7 +24,7 @@ public static class ImageWizardBuilderExtensions
         pipelineBuilder.WithFilter<ImageFormatFilter>();
         pipelineBuilder.WithFilter<TextFilter>();
 
-        pipelineBuilder.WithMimeTypes(new[] { MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp });
+        pipelineBuilder.WithMimeTypes([MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp]);
 
         options?.Invoke(pipelineBuilder);
 

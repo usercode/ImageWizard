@@ -8,8 +8,7 @@ using Docnet.Core.Readers;
 using ImageWizard.Attributes;
 using ImageWizard.DocNET.Filters.Base;
 using ImageWizard.Processing.Results;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 
 namespace ImageWizard.DocNET.Filters;
 
@@ -29,9 +28,19 @@ public partial class PageToImageFilter : DocNETFilter
 
         Stream mem = Context.ProcessingContext.StreamPool.GetStream();
 
-        Image<Bgra32> image = Image.LoadPixelData<Bgra32>(pageReader.GetImage(), pageReader.GetPageWidth(), pageReader.GetPageHeight());
+        byte[] pixels = pageReader.GetImage();
 
-        image.SaveAsPng(mem);
+        var info = new SKImageInfo(
+                                pageReader.GetPageWidth(),
+                                pageReader.GetPageHeight(),
+                                SKColorType.Bgra8888,
+                                SKAlphaType.Unpremul);
+
+        using var bitmap = new SKBitmap(info);
+        pixels.AsSpan().CopyTo(bitmap.GetPixelSpan());
+
+        using var data = bitmap.Encode(SKEncodedImageFormat.Png, 100);
+        data.SaveTo(mem);
 
         mem.Seek(0, SeekOrigin.Begin);
 
