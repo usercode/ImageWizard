@@ -29,5 +29,10 @@
 		<ProjectReference Include="..\ImageWizard.PuppeteerSharp\ImageWizard.PuppeteerSharp.csproj" />
 		<ProjectReference Include="..\ImageWizard.SkiaSharp\ImageWizard.SkiaSharp.csproj" />
 		<ProjectReference Include="..\ImageWizard.SvgNet\ImageWizard.SvgNet.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.401" />
+	  <PackageReference Update="MinVer" Version="8.0.0" />
 	</ItemGroup>	
 </Project>

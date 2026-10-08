@@ -28,7 +28,7 @@ public partial class ResizeFilter : SkiaSharpFilter
                 SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
                 SKRect destRect = new SKRect(0, 0, width, height);
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect);
+                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
 
                 // save
                 Context.Image = SKBitmap.FromImage(surface.Snapshot());
@@ -53,7 +53,7 @@ public partial class ResizeFilter : SkiaSharpFilter
                 SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
                 SKRect destRect = new SKRect(x, y, x + newWidth, y + newHeight);
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect);
+                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
 
                 // save
                 Context.Image = SKBitmap.FromImage(surface.Snapshot());
@@ -78,7 +78,7 @@ public partial class ResizeFilter : SkiaSharpFilter
                 SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
                 SKRect destRect = new SKRect(x, y, x + newWidth, y + newHeight);
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect);
+                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
 
                 // save
                 Context.Image = SKBitmap.FromImage(surface.Snapshot());
@@ -100,7 +100,7 @@ public partial class ResizeFilter : SkiaSharpFilter
                 SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
                 SKRect destRect = new SKRect(0, 0, newWidth, newHeight);
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect);
+                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
 
                 // save
                 Context.Image = SKBitmap.FromImage(surface.Snapshot());
@@ -122,7 +122,7 @@ public partial class ResizeFilter : SkiaSharpFilter
                 SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
                 SKRect destRect = new SKRect(0, 0, newWidth, newHeight);
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect);
+                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
 
                 // save
                 Context.Image = SKBitmap.FromImage(surface.Snapshot());

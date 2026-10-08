@@ -31,7 +31,7 @@ public partial class CropFilter : SkiaSharpFilter
             SKRect sourceRect = new SKRect(newX, newY, newX + newWidth, newY + newHeight);
             SKRect destRect = new SKRect(0, 0, newWidth, newHeight);
 
-            canvas.DrawBitmap(Context.Image, sourceRect, destRect);
+            canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
 
             // save
             Context.Image = SKBitmap.FromImage(surface.Snapshot());

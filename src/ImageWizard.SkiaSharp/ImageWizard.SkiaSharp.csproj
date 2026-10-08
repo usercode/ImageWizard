@@ -3,7 +3,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SkiaSharp" Version="4.148.0" />
+		<PackageReference Include="SkiaSharp" Version="4.153.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -12,5 +12,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ImageWizard.Generator\ImageWizard.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.401" />
+	  <PackageReference Update="MinVer" Version="8.0.0" />
 	</ItemGroup>
 </Project>

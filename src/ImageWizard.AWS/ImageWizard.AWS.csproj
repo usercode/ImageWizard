@@ -7,6 +7,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AWSSDK.S3" Version="4.0.100" />
+		<PackageReference Include="AWSSDK.S3" Version="4.0.104.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.401" />
+	  <PackageReference Update="MinVer" Version="8.0.0" />
 	</ItemGroup>
 </Project>

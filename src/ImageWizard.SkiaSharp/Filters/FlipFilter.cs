@@ -33,7 +33,7 @@ public partial class FlipFilter : SkiaSharpFilter
                 throw new Exception("unknown flip mode");
             }               
 
-            canvas.DrawBitmap(Context.Image, sourceRect, destRect);
+            canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
 
             // save
             Context.Image = SKBitmap.FromImage(surface.Snapshot());

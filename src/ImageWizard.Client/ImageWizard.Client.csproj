@@ -20,5 +20,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ImageWizard.Utils\ImageWizard.Utils.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.401" />
+	  <PackageReference Update="MinVer" Version="8.0.0" />
 	</ItemGroup>	
 </Project>

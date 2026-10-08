@@ -48,7 +48,7 @@ public partial class RotateFilter : SkiaSharpFilter
             canvas.Translate(Math.Abs(w - Context.Image.Width) / 2, Math.Abs(h - Context.Image.Height) / 2);
             canvas.RotateDegrees(angle, Context.Image.Width / 2, Context.Image.Height / 2);
 
-            canvas.DrawBitmap(Context.Image, 0, 0);
+            canvas.DrawBitmap(Context.Image, 0, 0, SKSamplingOptions.Default);
             canvas.Flush();
 
             // save

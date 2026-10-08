@@ -18,15 +18,15 @@ public partial class GrayscaleFilter : SkiaSharpFilter
         using (var paint = new SKPaint())
         {
             paint.ColorFilter =
-                                SKColorFilter.CreateColorMatrix(new float[]
-                                {
+                                SKColorFilter.CreateColorMatrix(
+                                [
                                     0.21f, 0.72f, 0.07f, 0, 0,
                                     0.21f, 0.72f, 0.07f, 0, 0,
                                     0.21f, 0.72f, 0.07f, 0, 0,
                                     0,     0,     0,     1, 0
-                                });
+                                ]);
 
-            canvas.DrawBitmap(Context.Image, 0, 0, paint);
+            canvas.DrawBitmap(Context.Image, 0, 0, SKSamplingOptions.Default, paint);
             canvas.Flush();
 
             // save

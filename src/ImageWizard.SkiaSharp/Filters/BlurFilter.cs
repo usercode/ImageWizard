@@ -28,7 +28,7 @@ public partial class BlurFilter : SkiaSharpFilter
             SKRect rect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
             rect.Inflate(10, 10); //removes black border
 
-            canvas.DrawBitmap(Context.Image, rect, paint);
+            canvas.DrawBitmap(Context.Image, rect, SKSamplingOptions.Default, paint);
             canvas.Flush();
 
             // save
