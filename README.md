@@ -500,17 +500,6 @@ Use IUrlHelper
 - rotate(angle)
   - value: float
 
-
-## Plugin for Piranha CMS 8.0
-
-ImageWizard.Piranha [![NuGet](https://img.shields.io/nuget/v/ImageWizard.Piranha.svg)](https://www.nuget.org/packages/ImageWizard.Piranha/)
-
-Useful to resize imagefields.
-
-```csharp
-<img src="@Url.ImageWizard().Fetch(Model.Body).Resize(900,900).Grayscale().Blur().BuildUrl()">
-```
-
 ## Docker 
 [![Docker](https://img.shields.io/docker/pulls/usercode/imagewizard)](https://hub.docker.com/r/usercode/imagewizard)
 
