@@ -7,8 +7,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-		<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.2.0" />
+		<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -16,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.401" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.403" />
 	  <PackageReference Update="MinVer" Version="8.0.0" />
 	</ItemGroup>
 </Project>

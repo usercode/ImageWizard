@@ -9,21 +9,15 @@ namespace ImageWizard.ImageSharp;
 
 public class WebPFormat : IImageFormat
 {
-    public WebPFormat()
-    {
-        Quality = 80;
-        Lossless = false;
-    }
-
     /// <summary>
     /// Quality
     /// </summary>
-    public int Quality { get; set; }
+    public int Quality { get; set; } = 80;
 
     /// <summary>
     /// Lossless
     /// </summary>
-    public bool Lossless { get; set; }
+    public bool Lossless { get; set; } = false;
 
     /// <summary>
     /// MimeType

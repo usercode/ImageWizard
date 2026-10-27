@@ -27,4 +27,18 @@ public static class SkiaSharpBuilderExtensions
 
         return builder;
     }
+
+    public static ISkiaSharpBuilder WithPreProcessing(this ISkiaSharpBuilder builder, SkiaSharpPipeline.PreProcessing action)
+    {
+        builder.Services.AddSingleton(action);
+
+        return builder;
+    }
+
+    public static ISkiaSharpBuilder WithPostProcessing(this ISkiaSharpBuilder builder, SkiaSharpPipeline.PostProcessing action)
+    {
+        builder.Services.AddSingleton(action);
+
+        return builder;
+    }
 }

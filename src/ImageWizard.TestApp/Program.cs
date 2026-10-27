@@ -5,18 +5,10 @@
 using ImageWizard;
 using ImageWizard.Caches;
 using ImageWizard.Client;
-using ImageWizard.ImageSharp;
-using ImageWizard.ImageSharp.Filters;
 using ImageWizard.Loaders;
 using ImageWizard.MongoDB;
 using ImageWizard.OpenCvSharp;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using SixLabors.ImageSharp.Metadata.Profiles.Exif;
-using SixLabors.ImageSharp.Processing;
 using System;
 using System.Security.Cryptography;
 
@@ -26,7 +18,7 @@ builder.Services.AddOptions<ImageWizardOptions>().BindConfiguration("General");
 builder.Services.AddOptions<HttpLoaderOptions>().BindConfiguration("HttpLoader");
 builder.Services.AddOptions<FileCacheOptions>().BindConfiguration("FileCache");
 builder.Services.AddOptions<FileLoaderOptions>().BindConfiguration("FileLoader");
-builder.Services.AddOptions<WatermarkOptions>().BindConfiguration("Watermark");
+//builder.Services.AddOptions<WatermarkOptions>().BindConfiguration("Watermark");
 
 //generate random key
 byte[] key = RandomNumberGenerator.GetBytes(64);
@@ -67,41 +59,41 @@ builder.Services.AddImageWizard(x =>
             //    return fallbackImage.ToCachedData();
             //};
         })
-            .AddImageSharp(c => c
-                .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
-                .WithOptions(x =>
-                            {
-                                x.ImageMaxHeight = 4000;
-                                x.ImageMaxWidth = 4000;
-                            })
-                .WithFilter<ResizeFilter>()
-                .WithPreProcessing(x =>
-                {
-                    x.Image.Mutate(m => m.AutoOrient());
-                })
-                .WithPostProcessing(x =>
-                {
-                    //override target format
-                    if (x.ImageFormat is JpegFormat)
-                    {
-                        x.ImageFormat = new WebPFormat() { Lossless = false };
-                    }
-                    else if (x.ImageFormat is PngFormat)
-                    {
-                        x.ImageFormat = new WebPFormat() { Lossless = true };
-                    }
-
-                    //override metadata
-                    x.Image.Metadata.ExifProfile = new ExifProfile();
-                    x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
-                }))
-            //.AddSkiaSharp(c => c                    
+            //.AddImageSharp(c => c
+            //    .WithMimeTypes(MimeTypes.WebP, MimeTypes.Jpeg, MimeTypes.Png, MimeTypes.Gif, MimeTypes.Bmp)
             //    .WithOptions(x =>
             //                {
             //                    x.ImageMaxHeight = 4000;
             //                    x.ImageMaxWidth = 4000;
             //                })
-            //    .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>())
+            //    .WithFilter<ResizeFilter>()
+            //    .WithPreProcessing(x =>
+            //    {
+            //        x.Image.Mutate(m => m.AutoOrient());
+            //    })
+            //    .WithPostProcessing(x =>
+            //    {
+            //        //override target format
+            //        if (x.ImageFormat is JpegFormat)
+            //        {
+            //            x.ImageFormat = new WebPFormat() { Lossless = false };
+            //        }
+            //        else if (x.ImageFormat is PngFormat)
+            //        {
+            //            x.ImageFormat = new WebPFormat() { Lossless = true };
+            //        }
+
+            //        //override metadata
+            //        x.Image.Metadata.ExifProfile = new ExifProfile();
+            //        x.Image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, "ImageWizard");
+            //    }))
+            .AddSkiaSharp(c => c
+                .WithOptions(x =>
+                            {
+                                x.ImageMaxHeight = 4000;
+                                x.ImageMaxWidth = 4000;
+                            })
+                .WithFilter<ImageWizard.SkiaSharp.Filters.ResizeFilter>())
             .AddSvgNet()
             .AddHttpLoader(x =>
             {
@@ -118,7 +110,7 @@ builder.Services.AddImageWizard(x =>
             .AddPuppeteerLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             //.AddPlaywrightLoader(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddOpenGraphLoader(x => x.RefreshMode = LoaderRefreshMode.None)
-            .AddPlaceholder(x => x.RefreshMode = LoaderRefreshMode.None)
+            //.AddPlaceholder(x => x.RefreshMode = LoaderRefreshMode.None)
             .AddFFMpegCore()
             .AddDocNET()
             .AddOpenCvSharp()

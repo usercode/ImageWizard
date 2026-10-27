@@ -9,15 +9,10 @@ namespace ImageWizard.ImageSharp;
 
 public class JpegFormat : IImageFormat
 {
-    public JpegFormat()
-    {
-        Quality = 80;
-    }
-
     /// <summary>
     /// Quality
     /// </summary>
-    public int Quality { get; set; }
+    public int Quality { get; set; } = 80;
 
     /// <summary>
     /// MimeType

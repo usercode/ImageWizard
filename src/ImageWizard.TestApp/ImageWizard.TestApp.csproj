@@ -19,8 +19,7 @@
 		<ProjectReference Include="..\ImageWizard.Client\ImageWizard.Client.csproj" />
 		<ProjectReference Include="..\ImageWizard.Core\ImageWizard.Core.csproj" />
 		<ProjectReference Include="..\ImageWizard.DocNET\ImageWizard.DocNET.csproj" />
-		<ProjectReference Include="..\ImageWizard.FFMpegCore\ImageWizard.FFMpegCore.csproj" />
-		<ProjectReference Include="..\ImageWizard.ImageSharp\ImageWizard.ImageSharp.csproj" />
+		<ProjectReference Include="..\ImageWizard.FFMpegCore\ImageWizard.FFMpegCore.csproj" />		
 		<ProjectReference Include="..\ImageWizard.MongoDB\ImageWizard.MongoDB.csproj" />
 		<ProjectReference Include="..\ImageWizard.OpenCvSharp\ImageWizard.OpenCvSharp.csproj" />
 		<ProjectReference Include="..\ImageWizard.OpenGraph\ImageWizard.OpenGraph.csproj" />
@@ -32,7 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.401" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.403" />
 	  <PackageReference Update="MinVer" Version="8.0.0" />
 	</ItemGroup>	
 </Project>
