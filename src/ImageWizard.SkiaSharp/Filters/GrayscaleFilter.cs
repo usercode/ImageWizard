@@ -13,24 +13,23 @@ public partial class GrayscaleFilter : SkiaSharpFilter
     [Filter]
     public void Grayscale()
     {
-        using (var surface = SKSurface.Create(new SKImageInfo(Context.Image.Width, Context.Image.Height)))
-        using (var canvas = surface.Canvas)
-        using (var paint = new SKPaint())
-        {
-            paint.ColorFilter =
-                                SKColorFilter.CreateColorMatrix(
-                                [
-                                    0.21f, 0.72f, 0.07f, 0, 0,
+        using var surface = SKSurface.Create(new SKImageInfo(Context.Image.Width, Context.Image.Height));
+        using var canvas = surface.Canvas;
+        using var paint = new SKPaint();
+
+        paint.ColorFilter =
+                            SKColorFilter.CreateColorMatrix(
+                            [
+                                0.21f, 0.72f, 0.07f, 0, 0,
                                     0.21f, 0.72f, 0.07f, 0, 0,
                                     0.21f, 0.72f, 0.07f, 0, 0,
                                     0,     0,     0,     1, 0
-                                ]);
+                            ]);
 
-            canvas.DrawBitmap(Context.Image, 0, 0, SKSamplingOptions.Default, paint);
-            canvas.Flush();
+        canvas.DrawBitmap(Context.Image, 0, 0, SKSamplingOptions.Default2, paint);
+        canvas.Flush();
 
-            // save
-            Context.Image = SKBitmap.FromImage(surface.Snapshot());
-        }
+        // save
+        Context.Image = SKBitmap.FromImage(surface.Snapshot());
     }
 }

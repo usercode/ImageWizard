@@ -19,20 +19,19 @@ public partial class BlurFilter : SkiaSharpFilter
     [Filter]
     public void Blur(int radius)
     {
-        using (var surface = SKSurface.Create(new SKImageInfo(Context.Image.Width, Context.Image.Height)))
-        using (var canvas = surface.Canvas)
-        using (var paint = new SKPaint())
-        {
-            paint.ImageFilter = SKImageFilter.CreateBlur(radius, radius);
+        using var surface = SKSurface.Create(new SKImageInfo(Context.Image.Width, Context.Image.Height));
+        using var canvas = surface.Canvas;
+        using var paint = new SKPaint();
 
-            SKRect rect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
-            rect.Inflate(10, 10); //removes black border
+        paint.ImageFilter = SKImageFilter.CreateBlur(radius, radius);
 
-            canvas.DrawBitmap(Context.Image, rect, SKSamplingOptions.Default, paint);
-            canvas.Flush();
+        SKRect rect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
+        rect.Inflate(10, 10); //removes black border
 
-            // save
-            Context.Image = SKBitmap.FromImage(surface.Snapshot());
-        }
+        canvas.DrawBitmap(Context.Image, rect, SKSamplingOptions.Default2, paint);
+        canvas.Flush();
+
+        // save
+        Context.Image = SKBitmap.FromImage(surface.Snapshot());
     }
 }

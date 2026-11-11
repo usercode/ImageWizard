@@ -3,8 +3,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SkiaSharp" Version="4.153.1" />
-		<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.153.1" />		
+		<PackageReference Include="SkiaSharp" Version="4.156.0" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.156.0" />		
 	</ItemGroup>
 
 	<ItemGroup>
@@ -16,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.403" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="11.0.100" />
 	  <PackageReference Update="MinVer" Version="8.0.0" />
 	</ItemGroup>
 </Project>

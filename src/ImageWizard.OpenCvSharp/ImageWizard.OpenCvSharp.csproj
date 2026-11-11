@@ -3,7 +3,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="OpenCvSharp4" Version="4.13.0.20260627" />
+		<PackageReference Include="OpenCvSharp4" Version="4.13.0.20261107" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.403" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="11.0.100" />
 	  <PackageReference Update="MinVer" Version="8.0.0" />
 	</ItemGroup>
 </Project>

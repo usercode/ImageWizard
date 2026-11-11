@@ -22,14 +22,14 @@ public partial class FrameFilter : FFMpegFilter
 
         MemoryStream mem = new MemoryStream();
 
-        FFMpegArguments
-            .FromPipeInput(new StreamPipeSource(input))
-            .OutputToPipe(new StreamPipeSink(mem),
-                        options => options
-                            .ForceFormat("rawvideo")
-                            //.WithVideoCodec(VideoCodec.Png)
-                            .WithFrameOutputCount(1))
-            .ProcessSynchronously();
+        //FFMpegArguments
+        //    .FromPipeInput(new StreamPipeSource(input))
+        //    .OutputToPipe(new StreamPipeSink(mem),
+        //                options => options
+        //                    .ForceFormat("rawvideo")
+        //                    //.WithVideoCodec(VideoCodec.Png)
+        //                    .WithFrameOutputCount(1))
+        //    .ProcessSynchronously();
 
         mem.Seek(0, SeekOrigin.Begin);
 

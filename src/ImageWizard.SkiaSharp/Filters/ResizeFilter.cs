@@ -22,17 +22,16 @@ public partial class ResizeFilter : SkiaSharpFilter
     {
         if (resizeMode == ResizeMode.Stretch)
         {
-            using (var surface = SKSurface.Create(new SKImageInfo(width, height)))
-            using (var canvas = surface.Canvas)
-            {
-                SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
-                SKRect destRect = new SKRect(0, 0, width, height);
+            using var surface = SKSurface.Create(new SKImageInfo(width, height));
+            using var canvas = surface.Canvas;
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
+            SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
+            SKRect destRect = new SKRect(0, 0, width, height);
 
-                // save
-                Context.Image = SKBitmap.FromImage(surface.Snapshot());
-            }
+            canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default2);
+
+            // save
+            Context.Image = SKBitmap.FromImage(surface.Snapshot());
         }
         else if (resizeMode == ResizeMode.Crop)
         {
@@ -44,20 +43,19 @@ public partial class ResizeFilter : SkiaSharpFilter
             int newWidth = (int)(Context.Image.Width * scale);
             int newHeight = (int)(Context.Image.Height * scale);
 
-            using (var surface = SKSurface.Create(new SKImageInfo(width, height)))
-            using (var canvas = surface.Canvas)
-            {
-                float x = (width - scale * Context.Image.Width) / 2;
-                float y = (height - scale * Context.Image.Height) / 2;
+            using var surface = SKSurface.Create(new SKImageInfo(width, height));
+            using var canvas = surface.Canvas;
 
-                SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
-                SKRect destRect = new SKRect(x, y, x + newWidth, y + newHeight);
+            float x = (width - scale * Context.Image.Width) / 2;
+            float y = (height - scale * Context.Image.Height) / 2;
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
+            SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
+            SKRect destRect = new SKRect(x, y, x + newWidth, y + newHeight);
 
-                // save
-                Context.Image = SKBitmap.FromImage(surface.Snapshot());
-            }
+            canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default2);
+
+            // save
+            Context.Image = SKBitmap.FromImage(surface.Snapshot());
         }
         else if (resizeMode == ResizeMode.Pad)
         {
@@ -69,20 +67,19 @@ public partial class ResizeFilter : SkiaSharpFilter
             int newWidth = (int)(Context.Image.Width * scale);
             int newHeight = (int)(Context.Image.Height * scale);
 
-            using (var surface = SKSurface.Create(new SKImageInfo(width, height)))
-            using (var canvas = surface.Canvas)
-            {
-                float x = (width - scale * Context.Image.Width) / 2;
-                float y = (height - scale * Context.Image.Height) / 2;
+            using var surface = SKSurface.Create(new SKImageInfo(width, height));
+            using var canvas = surface.Canvas;
 
-                SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
-                SKRect destRect = new SKRect(x, y, x + newWidth, y + newHeight);
+            float x = (width - scale * Context.Image.Width) / 2;
+            float y = (height - scale * Context.Image.Height) / 2;
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
+            SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
+            SKRect destRect = new SKRect(x, y, x + newWidth, y + newHeight);
 
-                // save
-                Context.Image = SKBitmap.FromImage(surface.Snapshot());
-            }
+            canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default2);
+
+            // save
+            Context.Image = SKBitmap.FromImage(surface.Snapshot());
         }
         else if (resizeMode == ResizeMode.Min)
         {
@@ -94,19 +91,18 @@ public partial class ResizeFilter : SkiaSharpFilter
             int newWidth = (int)(Context.Image.Width * scale);
             int newHeight = (int)(Context.Image.Height * scale);
 
-            using (var surface = SKSurface.Create(new SKImageInfo(newWidth, newHeight)))
-            using (var canvas = surface.Canvas)
-            {
-                SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
-                SKRect destRect = new SKRect(0, 0, newWidth, newHeight);
+            using var surface = SKSurface.Create(new SKImageInfo(newWidth, newHeight));
+            using var canvas = surface.Canvas;
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
+            SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
+            SKRect destRect = new SKRect(0, 0, newWidth, newHeight);
 
-                // save
-                Context.Image = SKBitmap.FromImage(surface.Snapshot());
-            }
+            canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default2);
+
+            // save
+            Context.Image = SKBitmap.FromImage(surface.Snapshot());
         }
-        else if(resizeMode == ResizeMode.Max)
+        else if (resizeMode == ResizeMode.Max)
         {
             float ratioWidth = (float)width / Context.Image.Width;
             float ratioHeight = (float)height / Context.Image.Height;
@@ -116,17 +112,16 @@ public partial class ResizeFilter : SkiaSharpFilter
             int newWidth = (int)(Context.Image.Width * scale);
             int newHeight = (int)(Context.Image.Height * scale);
 
-            using (var surface = SKSurface.Create(new SKImageInfo(newWidth, newHeight)))
-            using (var canvas = surface.Canvas)
-            {
-                SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
-                SKRect destRect = new SKRect(0, 0, newWidth, newHeight);
+            using var surface = SKSurface.Create(new SKImageInfo(newWidth, newHeight));
+            using var canvas = surface.Canvas;
 
-                canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
+            SKRect sourceRect = new SKRect(0, 0, Context.Image.Width, Context.Image.Height);
+            SKRect destRect = new SKRect(0, 0, newWidth, newHeight);
 
-                // save
-                Context.Image = SKBitmap.FromImage(surface.Snapshot());
-            }
+            canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default2);
+
+            // save
+            Context.Image = SKBitmap.FromImage(surface.Snapshot());
         }
     }
 }

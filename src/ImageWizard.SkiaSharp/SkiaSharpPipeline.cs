@@ -40,6 +40,11 @@ public class SkiaSharpPipeline : Pipeline<SkiaSharpFilter, SkiaSharpFilterContex
             targetFormat = ImageFormatHelper.FirstOrDefault(context.Result.MimeType);
         }
 
+        if (targetFormat == null)
+        {
+            throw new Exception("No image format is selected.");
+        }
+
         SKBitmap bitmap = SKBitmap.Decode(context.Result.Data);
 
         if (bitmap == null)

@@ -9,7 +9,6 @@ using ImageWizard.Loaders;
 using ImageWizard.MongoDB;
 using ImageWizard.OpenCvSharp;
 using Microsoft.AspNetCore.HttpOverrides;
-using System;
 using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);

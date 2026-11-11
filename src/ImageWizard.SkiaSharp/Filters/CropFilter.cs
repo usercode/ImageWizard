@@ -25,16 +25,15 @@ public partial class CropFilter : SkiaSharpFilter
         float newX = x * Context.Image.Width;
         float newY = y * Context.Image.Height;
 
-        using (var surface = SKSurface.Create(new SKImageInfo((int)newWidth, (int) newHeight)))
-        using (var canvas = surface.Canvas)
-        {
-            SKRect sourceRect = new SKRect(newX, newY, newX + newWidth, newY + newHeight);
-            SKRect destRect = new SKRect(0, 0, newWidth, newHeight);
+        using var surface = SKSurface.Create(new SKImageInfo((int)newWidth, (int)newHeight));
+        using var canvas = surface.Canvas;
 
-            canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default);
+        SKRect sourceRect = new SKRect(newX, newY, newX + newWidth, newY + newHeight);
+        SKRect destRect = new SKRect(0, 0, newWidth, newHeight);
 
-            // save
-            Context.Image = SKBitmap.FromImage(surface.Snapshot());
-        }
+        canvas.DrawBitmap(Context.Image, sourceRect, destRect, SKSamplingOptions.Default2);
+
+        // save
+        Context.Image = SKBitmap.FromImage(surface.Snapshot());
     }
 }
